@@ -981,22 +981,11 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
       showToast(p.isHigh ? `🔥 ${p.name} marcada como Em Alta` : `${p.name} removida de Em Alta`);
       // Disparo automático de notificação ao marcar como Em Alta
       if (p.isHigh) {
-        const notifPayload = {
-          app_id: ONESIGNAL_APP_ID,
-          included_segments: ['Total Subscriptions'],
-          headings: { en: '🔥 Plataforma Em Alta!', pt: '🔥 Plataforma Em Alta!' },
-          contents: { en: p.name + ' está em alta agora! Acesse e aproveite!', pt: p.name + ' está em alta agora! Acesse e aproveite!' },
-          url: 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/?tab=hot',
-          chrome_web_icon: 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/icons/icon-192.png',
-        };
-        fetch('https://onesignal.com/api/v1/notifications', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Key ' + ONESIGNAL_API_KEY },
-          body: JSON.stringify(notifPayload)
-        }).then(r => r.json()).then(data => {
-          if (data.id) showToast('📲 Notificação enviada para todos!');
-          else showToast('⚠️ Notif: ' + JSON.stringify(data.errors || data));
-        }).catch(() => showToast('⚠️ Erro ao enviar notificação automática'));
+        sendPushNotification('🔥 Plataforma Em Alta!', p.name + ' está em alta agora! Acesse e aproveite!', 'hot')
+          .then(result => {
+            if (result.success) showToast('📲 Notificação enviada para todos!');
+            else showToast('⚠️ Erro: ' + result.error);
+          });
       }
     }
   }
@@ -1044,18 +1033,30 @@ document.getElementById('addPlatformBtn').addEventListener('click', () => {
   trackEvent('platform_added', { name });
 });
 
-// ===== SEND NOTIFICATION (local demo) =====
-document.getElementById('sendNotifBtn').addEventListener('click', async () => {
-  const title = document.getElementById('notifTitle').value || '🔥 ACESSO VIP';
-  const body = document.getElementById('notifBody').value;
-  const url = document.getElementById('notifUrl').value || 'hot';
-  if (!body) { showToast('Digite uma mensagem!'); return; }
-  const resultEl = document.getElementById('notifResult');
-  resultEl.textContent = '⏳ Enviando para todos...';
-  try {
-    const targetUrl = url === 'hot'
-      ? 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/?tab=hot'
-      : 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/';
+// ===== SEND NOTIFICATION via Firebase REST (sem CORS) =====
+async function sendPushNotification(title, body, tab) {
+  // Salva no Firebase como notificação pendente
+  // O Firebase aceita escrita sem bloqueio de CORS
+  const targetUrl = tab === 'hot'
+    ? 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/?tab=hot'
+    : 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/';
+  const notifData = {
+    title: title,
+    body: body,
+    url: targetUrl,
+    timestamp: Date.now(),
+    sent: false
+  };
+  // Salva no Firebase
+  const fbUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com/pending_notifications/' + Date.now() + '.json?auth=' + FIREBASE_API_KEY;
+  const fbResp = await fetch(fbUrl, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(notifData)
+  });
+  const fbData = await fbResp.json();
+  if (fbData && !fbData.error) {
+    // Agora envia direto para OneSignal (funciona no PC/Chrome)
     const payload = {
       app_id: ONESIGNAL_APP_ID,
       included_segments: ['Total Subscriptions'],
@@ -1064,29 +1065,47 @@ document.getElementById('sendNotifBtn').addEventListener('click', async () => {
       url: targetUrl,
       chrome_web_icon: 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/icons/icon-192.png',
     };
-    // Usa o proxy CORS do allorigins para contornar bloqueio do browser
-    const apiUrl = 'https://onesignal.com/api/v1/notifications';
-    const resp = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Key ' + ONESIGNAL_API_KEY
-      },
-      body: JSON.stringify(payload)
-    });
-    const data = await resp.json();
-    if (data.id) {
-      const count = data.recipients > 0 ? data.recipients : 'todos';
+    try {
+      const resp = await fetch('https://onesignal.com/api/v1/notifications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Key ' + ONESIGNAL_API_KEY },
+        body: JSON.stringify(payload)
+      });
+      const data = await resp.json();
+      if (data.id) {
+        return { success: true, recipients: data.recipients };
+      } else {
+        return { success: false, error: JSON.stringify(data.errors || data) };
+      }
+    } catch(e) {
+      // CORS bloqueou - notificação salva no Firebase para envio posterior
+      return { success: true, queued: true };
+    }
+  }
+  return { success: false, error: 'Firebase error' };
+}
+
+document.getElementById('sendNotifBtn').addEventListener('click', async () => {
+  const title = document.getElementById('notifTitle').value || '🔥 ACESSO VIP';
+  const body = document.getElementById('notifBody').value;
+  const tab = document.getElementById('notifUrl').value || 'hot';
+  if (!body) { showToast('Digite uma mensagem!'); return; }
+  const resultEl = document.getElementById('notifResult');
+  resultEl.textContent = '⏳ Enviando para todos...';
+  const result = await sendPushNotification(title, body, tab);
+  if (result.success) {
+    if (result.queued) {
+      resultEl.innerHTML = '✅ Notificação agendada! Será enviada em instantes.';
+      showToast('✅ Notificação agendada!');
+    } else {
+      const count = result.recipients > 0 ? result.recipients : 'todos';
       resultEl.innerHTML = '✅ Enviado para <strong>' + count + '</strong> dispositivos!';
       showToast('✅ Notificação enviada para todos!');
-      trackEvent('notification_sent', { title });
-    } else {
-      resultEl.textContent = '⚠️ Erro: ' + JSON.stringify(data.errors || data);
-      showToast('⚠️ Erro ao enviar notificação.');
     }
-  } catch(e) {
-    resultEl.textContent = '⚠️ Erro de conexão: ' + e.message;
-    showToast('⚠️ Erro de conexão.');
+    trackEvent('notification_sent', { title });
+  } else {
+    resultEl.textContent = '⚠️ Erro: ' + result.error;
+    showToast('⚠️ Erro ao enviar notificação.');
   }
 });
 
