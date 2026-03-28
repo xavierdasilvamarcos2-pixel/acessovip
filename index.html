@@ -8,8 +8,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="ACESSO VIP" />
   <meta name="description" content="Plataformas exclusivas com bônus de registro em um só lugar" />
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <title>ACESSO VIP</title>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
@@ -739,7 +739,8 @@ document.getElementById('installBanner').addEventListener('click', async () => {
       document.getElementById('installBanner').classList.add('hidden');
     }
   } else {
-    showToast('Abra o menu do Chrome (⋮) e toque em "Adicionar à tela inicial"');
+    // Mostrar modal com instruções passo a passo
+    document.getElementById('installGuideModal').classList.add('open');
   }
 });
 document.getElementById('installGuideClose').addEventListener('click', () => {
