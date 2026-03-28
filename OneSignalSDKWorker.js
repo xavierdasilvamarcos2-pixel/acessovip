@@ -35,7 +35,7 @@ async function checkPendingNotifications() {
         body: notif.body || notif.message || '',
         icon: APP_ICON,
         badge: APP_ICON,
-        data: { url: notif.url || 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/' },
+        data: { url: notif.url || 'https://acessoplatafomas.com.br/' },
         requireInteraction: false,
         tag: key,
         vibrate: [200, 100, 200],
@@ -122,7 +122,7 @@ self.addEventListener('message', (event) => {
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   const url = (event.notification.data && event.notification.data.url) ||
-              'https://xavierdasilvamarcos2-pixel.github.io/acessovip/';
+              'https://acessoplatafomas.com.br/';
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
       for (const client of clientList) {

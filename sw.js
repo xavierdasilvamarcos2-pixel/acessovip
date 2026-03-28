@@ -1,5 +1,5 @@
 const CACHE_NAME = 'acesso-vip-v3';
-const STATIC_ASSETS = ['/acessovip/', '/acessovip/index.html', '/acessovip/manifest.json'];
+const STATIC_ASSETS = ['/', '/index.html', '/manifest.json'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

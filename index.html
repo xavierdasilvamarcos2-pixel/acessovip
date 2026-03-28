@@ -834,7 +834,7 @@ document.getElementById('installBanner').addEventListener('click', async () => {
     }
   } else {
     // Instagram/outros: usa intent:// para abrir no Chrome sem tela preta
-    const appUrl = 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/';
+    const appUrl = 'https://acessoplatafomas.com.br/';
     const intentUrl = 'intent://' + appUrl.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;end';
     const a = document.createElement('a');
     a.href = intentUrl;
@@ -1080,8 +1080,8 @@ async function sendPushNotification(title, body, tab) {
   // Salva no Firebase como notificação pendente
   // O Firebase aceita escrita sem bloqueio de CORS
   const targetUrl = tab === 'hot'
-    ? 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/?tab=hot'
-    : 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/';
+    ? 'https://acessoplatafomas.com.br/?tab=hot'
+    : 'https://acessoplatafomas.com.br/';
   const imageUrl = document.getElementById('notifImage') ? document.getElementById('notifImage').value.trim() : '';
   const notifData = {
     title: title,
@@ -1107,7 +1107,7 @@ async function sendPushNotification(title, body, tab) {
       headings: { en: title, pt: title },
       contents: { en: body, pt: body },
       url: targetUrl,
-      chrome_web_icon: 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/icons/icon-192.png',
+      chrome_web_icon: 'https://acessoplatafomas.com.br/icons/icon-192.png',
     };
     try {
       const resp = await fetch('https://onesignal.com/api/v1/notifications', {
