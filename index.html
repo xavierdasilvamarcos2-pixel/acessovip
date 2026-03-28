@@ -1093,7 +1093,7 @@ function checkWelcomeModal() {
   // 2. Viu mas ainda não ativou notificações
   if (!alreadySeen || notifStatus === 'default') {
     setTimeout(() => {
-      document.getElementById('welcomeModal').classList.add('active');
+      document.getElementById('welcomeModal').classList.add('open');
     }, 1200); // pequeno delay para o app carregar
   }
   // Atualiza ícone de notificação no header
@@ -1116,7 +1116,7 @@ function updateNotifBtn() {
 
 document.getElementById('welcomeNotifBtn').addEventListener('click', async () => {
   localStorage.setItem('av_welcome_seen', '1');
-  document.getElementById('welcomeModal').classList.remove('active');
+  document.getElementById('welcomeModal').classList.remove('open');
   // Pede permissão ao Chrome
   const permission = await Notification.requestPermission();
   if (permission === 'granted') {
@@ -1140,7 +1140,7 @@ document.getElementById('welcomeNotifBtn').addEventListener('click', async () =>
 
 document.getElementById('welcomeSkipBtn').addEventListener('click', () => {
   localStorage.setItem('av_welcome_seen', '1');
-  document.getElementById('welcomeModal').classList.remove('active');
+  document.getElementById('welcomeModal').classList.remove('open');
   showToast('💡 Você pode ativar as notificações a qualquer momento!');
 });
 
@@ -1155,7 +1155,7 @@ document.getElementById('notifHeaderBtn').addEventListener('click', async () => 
     return;
   }
   // Mostra modal novamente
-  document.getElementById('welcomeModal').classList.add('active');
+  document.getElementById('welcomeModal').classList.add('open');
 });
 
 /// ===== INIT =====
