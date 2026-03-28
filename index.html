@@ -1115,7 +1115,7 @@ document.getElementById('notifHeaderBtn').addEventListener('click', async () => 
 /// ===== INIT =====
 function init() {
   // Mostrar loading enquanto carrega do Firebase
-  document.getElementById('platformList').innerHTML = '<div style="text-align:center;padding:40px;color:#a78bfa"><div style="font-size:2rem;margin-bottom:8px">⏳</div><div>Carregando...</div></div>';
+  document.getElementById('platformGrid').innerHTML = '<div style="text-align:center;padding:40px;color:#a78bfa"><div style="font-size:2rem;margin-bottom:8px">⏳</div><div>Carregando...</div></div>';
   // Tentar carregar do Firebase primeiro
   function loadFromFirebase() {
     if (window._fbReady && window._fbDb) {
@@ -1151,7 +1151,7 @@ function init() {
     window.addEventListener('firebase-ready', loadFromFirebase, { once: true });
     // Timeout de segurança: se Firebase demorar mais de 3s, usa localStorage
     setTimeout(() => {
-      if (document.getElementById('platformList').innerHTML.includes('Carregando')) {
+      if (document.getElementById('platformGrid').innerHTML.includes('Carregando')) {
         const saved = localStorage.getItem('av_platforms');
         if (saved) { try { platforms = JSON.parse(saved); } catch(e) {} }
         renderHome();
