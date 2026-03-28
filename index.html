@@ -645,16 +645,17 @@ function renderPlatformCard(p, showFav = true) {
   const launchBadge = p.isLaunch ? `<div class="badge-launch">NOVO</div>` : '';
   const highBadge = p.isHigh ? `<div class="badge-high">EM ALTA</div>` : '';
   const favBtn = showFav ? `<button class="platform-fav" data-fav="${p.id}">${isFav ? '❤️' : '🤍'}</button>` : '';
+  // Usar <a> real para garantir que funcione em todos os navegadores (Instagram, Chrome, Safari)
   return `
     <div class="platform-card">
-      <div class="platform-icon-wrap" data-open="${p.id}">
+      <a class="platform-icon-wrap" href="${p.url}" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'${p.name.replace(/'/g,'').replace(/"/g,'')}',platform_id:${p.id}})">
         ${launchBadge}${highBadge}
         ${favBtn}
         ${imgHtml}
-      </div>
-      <button class="platform-access-btn" data-open="${p.id}">
+      </a>
+      <a class="platform-access-btn" href="${p.url}" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'${p.name.replace(/'/g,'').replace(/"/g,'')}',platform_id:${p.id}})">
         <span class="platform-access-text">ACESSAR</span>
-      </button>
+      </a>
       <span class="platform-name">${p.name}</span>
     </div>`;
 }
@@ -672,7 +673,14 @@ function openPlatform(id) {
   const p = platforms.find(x => x.id == id);
   if (!p) return;
   trackEvent('platform_click', { platform_name: p.name, platform_id: p.id });
-  window.open(p.url, '_blank');
+  // Usar location.href para evitar bloqueio de popup no Chrome/Instagram
+  const a = document.createElement('a');
+  a.href = p.url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
 
 // ===== HOME SCREEN =====
@@ -1152,37 +1160,54 @@ document.getElementById('notifHeaderBtn').addEventListener('click', async () => 
 
 /// ===== INIT =====
 function init() {
-  // Mostrar loading enquanto carrega do Firebase
-  document.getElementById('platformGrid').innerHTML = '<div style="text-align:center;padding:40px;color:#a78bfa"><div style="font-size:2rem;margin-bottom:8px">⏳</div><div>Carregando...</div></div>';
-
-  // Usar Firebase REST API (funciona em TODOS os navegadores, incluindo Instagram)
-  function loadViaREST() {
-    window._fbREST.get('/platforms').then(function(data) {
-      if (data && Array.isArray(data) && data.length > 0) {
-        platforms = data;
-        try { localStorage.setItem('av_platforms', JSON.stringify(platforms)); } catch(e) {}
-      } else if (data && typeof data === 'object' && !Array.isArray(data)) {
-        // Objeto indexado (não array)
-        const arr = Object.values(data).filter(function(x) { return x && x.url; });
-        if (arr.length > 0) {
-          platforms = arr;
-          try { localStorage.setItem('av_platforms', JSON.stringify(platforms)); } catch(e) {}
-        }
+  // PASSO 1: Renderizar IMEDIATAMENTE com dados já disponíveis (não espera Firebase)
+  // Prioridade: localStorage > PLATFORMS_DATA embutido no HTML
+  try {
+    const saved = localStorage.getItem('av_platforms');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        platforms = parsed;
       }
-      renderHome();
-    }).catch(function(e) {
-      console.log('REST load error:', e);
-      // Fallback final: localStorage
-      try {
-        const saved = localStorage.getItem('av_platforms');
-        if (saved) { platforms = JSON.parse(saved); }
-      } catch(e2) {}
-      renderHome();
-    });
-  }
+    }
+  } catch(e) {}
+  // Renderiza imediatamente - o usuário vê as plataformas sem esperar
+  renderHome();
 
-  // Carregar via REST imediatamente (não depende do SDK)
-  loadViaREST();
+  // PASSO 2: Atualizar do Firebase em SEGUNDO PLANO (sem bloquear o app)
+  // Usa AbortController para cancelar se demorar mais de 5 segundos
+  function updateFromFirebase() {
+    var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timeoutId = controller ? setTimeout(function() { controller.abort(); }, 5000) : null;
+    var fetchOptions = controller ? { signal: controller.signal } : {};
+    
+    fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/platforms.json', fetchOptions)
+      .then(function(r) {
+        if (timeoutId) clearTimeout(timeoutId);
+        return r.json();
+      })
+      .then(function(data) {
+        var newList = null;
+        if (data && Array.isArray(data) && data.length > 0) {
+          newList = data;
+        } else if (data && typeof data === 'object' && !Array.isArray(data)) {
+          var arr = Object.values(data).filter(function(x) { return x && x.url; });
+          if (arr.length > 0) newList = arr;
+        }
+        if (newList && newList.length > 0) {
+          platforms = newList;
+          try { localStorage.setItem('av_platforms', JSON.stringify(platforms)); } catch(e) {}
+          renderHome(); // Atualiza com dados mais recentes do Firebase
+        }
+      })
+      .catch(function(e) {
+        if (timeoutId) clearTimeout(timeoutId);
+        // Silencioso - já temos dados renderizados
+        console.log('Firebase update em segundo plano falhou:', e.message);
+      });
+  }
+  // Aguarda 500ms para não atrasar a renderização inicial
+  setTimeout(updateFromFirebase, 500);
   checkWelcomeModal();
   trackEvent('app_open', { source: document.referrer || 'direct' });
   // Track install count
