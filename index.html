@@ -1189,6 +1189,19 @@ if ('serviceWorker' in navigator) {
       }
     }
   });
+
+  // Avisar o SW para verificar notificações quando a página carrega
+  // e a cada 25 segundos enquanto o app está aberto
+  function pingSwForNotifications() {
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: 'CHECK_NOTIFICATIONS' });
+    }
+  }
+  // Verificar logo após o SW estar pronto
+  navigator.serviceWorker.ready.then(() => {
+    setTimeout(pingSwForNotifications, 2000);
+    setInterval(pingSwForNotifications, 25000);
+  });
 }
 
 // ===== WELCOME MODAL =====
