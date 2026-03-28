@@ -285,7 +285,18 @@
         appId: "1ee5af72-b277-4de1-9d6f-ef75b5b49e70",
         notifyButton: { enable: false },
         allowLocalhostAsSecureOrigin: true,
+        serviceWorkerPath: "OneSignalSDKWorker.js",
+        serviceWorkerParam: { scope: "/acessovip/" },
       });
+      // Registrar o usuário automaticamente quando a página carrega
+      // Isso garante que o dispositivo seja registrado no OneSignal
+      window._oneSignalReady = true;
+      window._oneSignal = OneSignal;
+      // Verificar se já tem permissão e registrar
+      const permission = await OneSignal.Notifications.permissionNative;
+      if (permission === 'granted') {
+        try { await OneSignal.User.PushSubscription.optIn(); } catch(e) {}
+      }
     });
   </script>
 </head>
@@ -585,7 +596,7 @@
 const ADMIN_PASSWORD = 'admin2025vip';
 const APP_URL = window.location.origin;
 const ONESIGNAL_APP_ID = '1ee5af72-b277-4de1-9d6f-ef75b5b49e70';
-const ONESIGNAL_API_KEY = 'os_v2_app_d3s264vso5g6dhlp5523lne6obchnm34y5xeux5oyyleshsugepqcvhun2hf7k77ggu74loj2tgituyvg5vkp73swickyia3jt45jty';
+const ONESIGNAL_API_KEY = 'os_v2_app_d3s264vso5g6dhlp5523lne6obv5feqewkuuqhvitgfm6vlzvuur7o6koe3wu5xdvwkv5he5j47kjvvp3tnihrhaub63xcwrsifrvnq';
 const GA_ID = 'G-XXXXXXXXXX'; // Substituir pelo ID real do Google Analytics
 
 // ===== PLATFORMS DATA (embedded from DB) =====
@@ -847,6 +858,34 @@ async function requestNotificationPermission() {
     showToast('Notificações não suportadas neste navegador');
     return false;
   }
+  
+  // Usar o OneSignal SDK para registrar o usuário (garante que apareça no dashboard)
+  if (window._oneSignal) {
+    try {
+      const result = await window._oneSignal.Notifications.requestPermission();
+      notifPermission = result ? 'granted' : 'denied';
+      if (result) {
+        // Registrar no OneSignal
+        try { await window._oneSignal.User.PushSubscription.optIn(); } catch(e) {}
+        document.getElementById('notifBanner').classList.add('hidden');
+        _ls.set('av_notif_asked', '1');
+        pushTokens++;
+        _ls.set('av_tokens', pushTokens);
+        showToast('🔔 Notificações ativadas!', 3000);
+        trackEvent('notification_granted');
+        updateNotifBtn();
+        return true;
+      } else {
+        showToast('Notificações bloqueadas. Ative nas configurações do Chrome.');
+        trackEvent('notification_denied');
+        return false;
+      }
+    } catch(e) {
+      console.log('OneSignal requestPermission error:', e);
+    }
+  }
+  
+  // Fallback: usar API nativa
   const perm = await Notification.requestPermission();
   notifPermission = perm;
   if (perm === 'granted') {
@@ -1059,7 +1098,7 @@ async function sendPushNotification(title, body, tab) {
     // Agora envia direto para OneSignal (funciona no PC/Chrome)
     const payload = {
       app_id: ONESIGNAL_APP_ID,
-      included_segments: ['Total Subscriptions'],
+      included_segments: ['All'],
       headings: { en: title, pt: title },
       contents: { en: body, pt: body },
       url: targetUrl,
@@ -1119,10 +1158,17 @@ function loadAdminStats() {
 document.getElementById('refreshStatsBtn').addEventListener('click', loadAdminStats);
 
 // ===== SERVICE WORKER =====
+// Nota: O OneSignal registra o OneSignalSDKWorker.js automaticamente via SDK
+// O sw.js antigo foi substituido pelo OneSignalSDKWorker.js que inclui o código do PWA
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').then(reg => {
-    console.log('SW registered');
-  }).catch(err => console.log('SW error:', err));
+  // Desregistrar o sw.js antigo se estiver registrado
+  navigator.serviceWorker.getRegistrations().then(registrations => {
+    registrations.forEach(reg => {
+      if (reg.active && reg.active.scriptURL && reg.active.scriptURL.includes('sw.js')) {
+        reg.unregister().then(() => console.log('Old SW unregistered'));
+      }
+    });
+  });
 
   navigator.serviceWorker.addEventListener('message', (event) => {
     if (event.data?.type === 'NOTIFICATION_CLICK') {
@@ -1159,25 +1205,8 @@ function updateNotifBtn() {
 document.getElementById('welcomeNotifBtn').addEventListener('click', async () => {
   _ls.set('av_welcome_seen', '1');
   document.getElementById('welcomeModal').classList.remove('open');
-  if (typeof Notification === 'undefined') { showToast('Notificações não suportadas neste navegador'); return; }
-  // Pede permissão ao Chrome
-  const permission = await Notification.requestPermission();
-  if (permission === 'granted') {
-    showToast('✅ Notificações ativadas!');
-    trackEvent('notification_granted');
-    // Registra push subscription se disponível
-    if ('serviceWorker' in navigator) {
-      const reg = await navigator.serviceWorker.ready;
-      reg.showNotification('🎉 ACESSO VIP', {
-        body: 'Notificações ativadas! Você receberá os lançamentos em primeira mão.',
-        icon: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/TxiAvJsDwfaCSimF.png',
-        badge: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/TxiAvJsDwfaCSimF.png',
-        vibrate: [200, 100, 200],
-      });
-    }
-  } else if (permission === 'denied') {
-    showToast('⚠️ Notificação bloqueada. Ative nas configurações do Chrome.');
-  }
+  // Usar o OneSignal SDK para registrar o usuário
+  await requestNotificationPermission();
   updateNotifBtn();
 });
 
