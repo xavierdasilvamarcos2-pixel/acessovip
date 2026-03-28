@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#7C3AED" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ACESSO VIP" />
+  <meta name="description" content="Plataformas exclusivas com bônus de registro em um só lugar" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <title>ACESSO VIP</title>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --bg: #0f0f1a;
+      --surface: #1a1a2e;
+      --surface2: #16213e;
+      --primary: #7C3AED;
+      --primary-light: #9F67FF;
+      --green: #10B981;
+      --green-dark: #059669;
+      --whatsapp: #25D366;
+      --gold: #FFD700;
+      --text: #ECEDEE;
+      --muted: #9BA1A6;
+      --border: #2a2a3e;
+      --red: #EF4444;
+      --orange: #F59E0B;
+      --radius: 14px;
+    }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; overflow: hidden; }
+    #app { height: 100vh; height: 100dvh; display: flex; flex-direction: column; max-width: 480px; margin: 0 auto; position: relative; }
+
+    /* ===== HEADER ===== */
+    .header { background: var(--bg); padding: 12px 16px 8px; padding-top: max(12px, env(safe-area-inset-top)); flex-shrink: 0; }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; }
+    .header-logo { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .header-logo img { width: 36px; height: 36px; border-radius: 8px; }
+    .header-title { font-size: 18px; font-weight: 900; color: var(--text); letter-spacing: 0.5px; }
+    .header-actions { display: flex; gap: 8px; }
+    .header-btn { background: var(--surface); border: none; border-radius: 10px; padding: 8px 12px; color: var(--text); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+    /* ===== TAB BAR ===== */
+    .tab-bar { background: var(--bg); border-top: 0.5px solid var(--border); display: flex; flex-shrink: 0; padding-bottom: max(8px, env(safe-area-inset-bottom)); }
+    .tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px 4px; cursor: pointer; gap: 3px; border: none; background: none; color: var(--muted); font-size: 10px; font-weight: 600; transition: color 0.2s; }
+    .tab-item.active { color: var(--primary-light); }
+    .tab-icon { font-size: 22px; }
+    .tab-badge { background: var(--red); color: #fff; border-radius: 10px; padding: 1px 5px; font-size: 9px; font-weight: 900; position: absolute; top: 4px; right: calc(50% - 20px); }
+
+    /* ===== MAIN CONTENT ===== */
+    .main { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ===== HOME SCREEN ===== */
+    .banner-img { width: calc(100% - 32px); margin: 12px 16px 0; border-radius: 20px; display: block; height: 200px; object-fit: cover; }
+    .bonus-section { margin: 12px 16px 8px; text-align: center; }
+    .bonus-title { font-size: 20px; font-weight: 900; color: var(--text); }
+    .bonus-sub { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 4px; line-height: 1.4; }
+
+    /* Install Banner */
+    .install-banner { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #7C3AED, #5B21B6); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(124,58,237,0.4); animation: pulse-install 2s ease-in-out infinite; }
+    .install-banner.hidden { display: none; }
+    @keyframes pulse-install { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+    .install-banner-text { flex: 1; }
+    .install-banner-title { font-size: 14px; font-weight: 900; color: #fff; }
+    .install-banner-sub { font-size: 11px; color: rgba(255,255,255,0.85); margin-top: 2px; }
+    .install-banner-icon { font-size: 28px; }
+    .install-banner-arrow { font-size: 20px; }
+
+    /* VIP Group Button */
+    .vip-btn { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #25D366, #128C7E); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.3); border: none; width: calc(100% - 32px); animation: pulse-vip 2.4s ease-in-out infinite; }
+    @keyframes pulse-vip { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+    .vip-btn-text { flex: 1; text-align: left; }
+    .vip-btn-title { font-size: 15px; font-weight: 900; color: #fff; letter-spacing: 0.5px; }
+    .vip-btn-sub { font-size: 11px; color: rgba(255,255,255,0.9); margin-top: 2px; font-weight: 600; }
+
+    /* Search */
+    .search-wrap { margin: 0 16px 12px; background: var(--surface); border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+    .search-input { flex: 1; background: none; border: none; outline: none; color: var(--text); font-size: 15px; }
+    .search-input::placeholder { color: var(--muted); }
+    .search-clear { background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 0 4px; }
+
+    /* Section title */
+    .section-title { display: flex; justify-content: space-between; align-items: center; padding: 0 16px 12px; }
+    .section-title-text { font-size: 18px; font-weight: 900; color: var(--text); }
+    .section-count { font-size: 13px; color: var(--muted); font-weight: 600; }
+
+    /* Platform Grid */
+    .platform-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 0; padding: 0 8px; padding-bottom: 16px; }
+    .platform-card { display: flex; flex-direction: column; align-items: center; padding: 8px 4px 16px; position: relative; cursor: pointer; }
+    .platform-icon-wrap { position: relative; width: 95px; height: 95px; }
+    .platform-icon { width: 95px; height: 95px; border-radius: 50%; object-fit: contain; background: #fff; display: block; }
+    .platform-icon-placeholder { width: 95px; height: 95px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 36px; }
+    .platform-fav { position: absolute; top: -2px; left: -2px; background: none; border: none; font-size: 16px; cursor: pointer; z-index: 2; padding: 4px; }
+    .badge-launch { position: absolute; top: -4px; right: -4px; background: var(--primary); color: #fff; font-size: 9px; font-weight: 900; padding: 2px 5px; border-radius: 6px; letter-spacing: 0.5px; z-index: 2; }
+    .badge-high { position: absolute; top: -4px; right: -4px; background: var(--red); color: #fff; font-size: 9px; font-weight: 900; padding: 2px 5px; border-radius: 6px; letter-spacing: 1px; z-index: 2; animation: blink-high 1s ease-in-out infinite; }
+    @keyframes blink-high { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .platform-access-btn { margin-top: 8px; background: var(--green); padding: 5px 12px; border-radius: 6px; border: none; cursor: pointer; }
+    .platform-access-text { color: #fff; font-size: 10px; font-weight: 900; letter-spacing: 0.5px; }
+    .platform-name { font-size: 11px; color: var(--muted); margin-top: 4px; text-align: center; max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Loading */
+    .loading-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; gap: 16px; }
+    .spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 15px; }
+
+    /* ===== FAVORITES SCREEN ===== */
+    .screen-header { padding: 16px 16px 8px; }
+    .screen-header-title { font-size: 22px; font-weight: 900; color: var(--text); }
+    .screen-header-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+    /* ===== HOT SCREEN ===== */
+    .hot-list { padding: 0 16px 16px; display: flex; flex-direction: column; gap: 12px; }
+    .hot-card { background: var(--surface); border-radius: var(--radius); padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; border: 1px solid var(--border); }
+    .hot-card-img { width: 56px; height: 56px; border-radius: 50%; object-fit: contain; background: #fff; flex-shrink: 0; }
+    .hot-card-info { flex: 1; }
+    .hot-card-name { font-size: 16px; font-weight: 800; color: var(--text); }
+    .hot-card-game { font-size: 13px; color: var(--gold); font-weight: 700; margin-top: 2px; }
+    .hot-card-badge { background: var(--red); color: #fff; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 8px; }
+    .hot-card-btn { background: var(--green); border: none; border-radius: 8px; padding: 8px 14px; color: #fff; font-size: 12px; font-weight: 900; cursor: pointer; flex-shrink: 0; }
+
+    /* ===== SHARE SCREEN ===== */
+    .share-screen { padding: 16px; }
+    .share-card { background: var(--surface); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
+    .share-card-title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+    .share-card-text { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+    .share-btn { width: 100%; padding: 14px; border-radius: var(--radius); border: none; font-size: 15px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .share-btn-whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; }
+    .share-btn-copy { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .share-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .stat-card { background: var(--surface); border-radius: var(--radius); padding: 16px; text-align: center; border: 1px solid var(--border); }
+    .stat-num { font-size: 28px; font-weight: 900; color: var(--primary-light); }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* ===== MODAL ===== */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 100; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-sheet { background: #1A1035; border-radius: 28px 28px 0 0; width: 100%; max-width: 480px; padding: 8px 20px max(36px, env(safe-area-inset-bottom)); transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1); }
+    .modal-overlay.open .modal-sheet { transform: translateY(0); }
+    .modal-handle { width: 40px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin: 0 auto 16px; }
+    .modal-title { font-size: 22px; font-weight: 900; color: var(--gold); text-align: center; margin-bottom: 8px; }
+    .modal-sub { font-size: 14px; color: rgba(255,255,255,0.8); text-align: center; margin-bottom: 16px; line-height: 1.5; }
+    .modal-steps { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 14px; margin-bottom: 16px; }
+    .modal-step { font-size: 13px; color: rgba(255,255,255,0.9); line-height: 1.8; }
+    .modal-btn { width: 100%; padding: 16px; border-radius: var(--radius); border: none; font-size: 16px; font-weight: 900; cursor: pointer; background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; margin-bottom: 10px; }
+    .modal-close { width: 100%; padding: 12px; border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.2); background: none; color: rgba(255,255,255,0.7); font-size: 14px; cursor: pointer; }
+
+    /* ===== INSTALL GUIDE MODAL ===== */
+    .install-guide { background: #0f0f1a; }
+    .install-guide-title { font-size: 20px; font-weight: 900; color: var(--text); text-align: center; margin-bottom: 12px; }
+    .install-step { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+    .install-step-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; flex-shrink: 0; }
+    .install-step-text { font-size: 14px; color: var(--text); line-height: 1.5; }
+
+    /* ===== ADMIN SCREEN ===== */
+    .admin-screen { padding: 16px; }
+    .admin-login { display: flex; flex-direction: column; gap: 12px; max-width: 320px; margin: 40px auto; }
+    .admin-login-title { font-size: 22px; font-weight: 900; color: var(--text); text-align: center; }
+    .admin-input { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; color: var(--text); font-size: 15px; outline: none; width: 100%; }
+    .admin-input::placeholder { color: var(--muted); }
+    .admin-login-btn { background: var(--primary); border: none; border-radius: 10px; padding: 14px; color: #fff; font-size: 16px; font-weight: 900; cursor: pointer; }
+    .admin-tabs { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; }
+    .admin-tab { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; color: var(--muted); font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+    .admin-tab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .admin-section { display: none; }
+    .admin-section.active { display: block; }
+    .admin-card { background: var(--surface); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; border: 1px solid var(--border); }
+    .admin-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .admin-card-img { width: 44px; height: 44px; border-radius: 50%; object-fit: contain; background: #fff; flex-shrink: 0; }
+    .admin-card-name { font-size: 15px; font-weight: 800; color: var(--text); flex: 1; }
+    .admin-card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .admin-btn { padding: 6px 10px; border-radius: 6px; border: none; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .admin-btn-high { background: var(--red); color: #fff; }
+    .admin-btn-high.active { background: #7f1d1d; }
+    .admin-btn-launch { background: var(--primary); color: #fff; }
+    .admin-btn-up { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .admin-btn-down { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .admin-btn-del { background: #7f1d1d; color: #fff; }
+    .admin-btn-edit { background: var(--orange); color: #fff; }
+    .admin-form { background: var(--surface); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); }
+    .admin-form-title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 12px; }
+    .admin-form-row { margin-bottom: 10px; }
+    .admin-form-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; display: block; font-weight: 600; }
+    .admin-form-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--text); font-size: 14px; outline: none; }
+    .admin-form-input::placeholder { color: var(--muted); }
+    .admin-form-submit { width: 100%; padding: 12px; background: var(--green); border: none; border-radius: 10px; color: #fff; font-size: 15px; font-weight: 900; cursor: pointer; margin-top: 4px; }
+    .admin-notif-textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--text); font-size: 14px; outline: none; resize: none; height: 80px; font-family: inherit; }
+    .admin-notif-send { width: 100%; padding: 14px; background: var(--primary); border: none; border-radius: 10px; color: #fff; font-size: 15px; font-weight: 900; cursor: pointer; }
+    .admin-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .admin-stat { background: var(--surface); border-radius: var(--radius); padding: 16px; text-align: center; border: 1px solid var(--border); }
+    .admin-stat-num { font-size: 32px; font-weight: 900; color: var(--primary-light); }
+    .admin-stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .admin-search { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; color: var(--text); font-size: 14px; outline: none; margin-bottom: 12px; }
+    .admin-search::placeholder { color: var(--muted); }
+    .admin-hot-input { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; color: var(--text); font-size: 12px; outline: none; width: 120px; }
+
+    /* Toast */
+    .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 14px; font-weight: 600; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
+    .toast.show { opacity: 1; }
+
+    /* Notification permission banner */
+    .notif-banner { margin: 0 16px 12px; background: linear-gradient(135deg, #1e1b4b, #312e81); border-radius: var(--radius); padding: 12px 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; border: 1px solid rgba(124,58,237,0.4); }
+    .notif-banner.hidden { display: none; }
+    .notif-banner-text { flex: 1; }
+    .notif-banner-title { font-size: 13px; font-weight: 800; color: #fff; }
+    .notif-banner-sub { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+    .notif-banner-close { background: none; border: none; color: rgba(255,255,255,0.5); font-size: 18px; cursor: pointer; padding: 0 4px; }
+
+    /* Scrollbar */
+    .main::-webkit-scrollbar { width: 0; }
+  </style>
+  <!-- OneSignal Web Push SDK -->
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "1ee5af72-b277-4de1-9d6f-ef75b5b49e70",
+        notifyButton: { enable: false },
+        allowLocalhostAsSecureOrigin: true,
+      });
+    });
+  </script>
+</head>
+<body>
+<div id="app">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-inner">
+      <div class="header-logo" id="headerLogo">
+        <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663105165765/agqsVYAvwswSLNhYS3MGCB/acesso-vip-logo-bUbTNEga7afwRGFoEPyva6.webp" alt="ACESSO VIP" onerror="this.style.display='none'" />
+        <span class="header-title">ACESSO VIP</span>
+      </div>
+      <div class="header-actions">
+        <button class="header-btn" id="notifHeaderBtn" title="Notificações">🔔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main" id="mainContent">
+    <!-- HOME SCREEN -->
+    <div class="screen active" id="screen-home">
+      <img class="banner-img" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/XAisIaYtQacAGvnq.png" alt="ACESSO VIP Banner" />
+      <div class="bonus-section">
+        <div class="bonus-title">🎁 Bônus de Registro ATIVO!</div>
+        <div class="bonus-sub">🔔 Ative a Notificação para receber o lançamento em primeira mão!</div>
+      </div>
+      <!-- Notification permission banner -->
+      <div class="notif-banner" id="notifBanner">
+        <span style="font-size:24px">🔔</span>
+        <div class="notif-banner-text">
+          <div class="notif-banner-title">Ativar Notificações</div>
+          <div class="notif-banner-sub">Receba lançamentos em primeira mão!</div>
+        </div>
+        <button class="notif-banner-close" id="notifBannerClose">✕</button>
+      </div>
+      <!-- Install PWA Banner -->
+      <div class="install-banner" id="installBanner">
+        <span class="install-banner-icon">📲</span>
+        <div class="install-banner-text">
+          <div class="install-banner-title">INSTALAR O APP GRÁTIS</div>
+          <div class="install-banner-sub">👆 Adicione à tela inicial do celular!</div>
+        </div>
+        <span class="install-banner-arrow">⬇️</span>
+      </div>
+      <!-- VIP Group Button -->
+      <button class="vip-btn" id="vipBtn">
+        <span style="font-size:24px">🏆</span>
+        <div class="vip-btn-text">
+          <div class="vip-btn-title">🎉 GRUPO DE SORTEIO VIP!</div>
+          <div class="vip-btn-sub">👆 Entre agora e participe do sorteio!</div>
+        </div>
+        <span style="font-size:20px">👉</span>
+      </button>
+      <!-- Search -->
+      <div class="search-wrap">
+        <span style="font-size:16px">🔍</span>
+        <input class="search-input" id="searchInput" type="text" placeholder="Buscar plataforma..." autocomplete="off" autocorrect="off" />
+        <button class="search-clear" id="searchClear" style="display:none">✕</button>
+      </div>
+      <!-- Section Title -->
+      <div class="section-title">
+        <span class="section-title-text">Plataformas</span>
+        <span class="section-count" id="platformCount">0 disponíveis</span>
+      </div>
+      <!-- Platform Grid -->
+      <div class="platform-grid" id="platformGrid">
+        <div class="loading-wrap"><div class="spinner"></div><span style="color:var(--muted);font-size:14px">Carregando...</span></div>
+      </div>
+    </div>
+
+    <!-- FAVORITES SCREEN -->
+    <div class="screen" id="screen-favs">
+      <div class="screen-header">
+        <div class="screen-header-title">❤️ Favoritos</div>
+        <div class="screen-header-sub">Suas plataformas salvas</div>
+      </div>
+      <div class="platform-grid" id="favsGrid">
+        <div class="empty-state" style="grid-column:span 3">Nenhum favorito ainda.<br>Toque no ❤️ para salvar.</div>
+      </div>
+    </div>
+
+    <!-- HOT SCREEN -->
+    <div class="screen" id="screen-hot">
+      <div class="screen-header">
+        <div class="screen-header-title">🔥 Mais Quentes</div>
+        <div class="screen-header-sub">Plataformas em alta hoje</div>
+      </div>
+      <div class="hot-list" id="hotList">
+        <div class="empty-state">Nenhuma plataforma em alta no momento.</div>
+      </div>
+    </div>
+
+    <!-- SHARE SCREEN -->
+    <div class="screen" id="screen-share">
+      <div class="share-screen">
+        <div class="screen-header" style="padding:0 0 16px">
+          <div class="screen-header-title">📤 Compartilhar</div>
+          <div class="screen-header-sub">Indique e ganhe!</div>
+        </div>
+        <div class="share-stats">
+          <div class="stat-card">
+            <div class="stat-num" id="statInstalls">0</div>
+            <div class="stat-label">Instalações</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="statTokens">0</div>
+            <div class="stat-label">Notificações Ativas</div>
+          </div>
+        </div>
+        <div class="share-card">
+          <div class="share-card-title">📲 Compartilhe o App</div>
+          <div class="share-card-text">Envie o link do ACESSO VIP para seus amigos e ajude mais pessoas a encontrar as melhores plataformas com bônus!</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="share-btn share-btn-whatsapp" id="shareWhatsapp">
+              <span>📱</span> Compartilhar no WhatsApp
+            </button>
+            <button class="share-btn share-btn-copy" id="shareCopy">
+              <span>📋</span> Copiar Link
+            </button>
+          </div>
+        </div>
+        <div class="share-card">
+          <div class="share-card-title">🔔 Notificações Push</div>
+          <div class="share-card-text">Ative as notificações para receber alertas de novas plataformas e promoções exclusivas em primeira mão.</div>
+          <button class="share-btn" id="enableNotifBtn" style="background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff">
+            <span>🔔</span> Ativar Notificações
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-item active" data-tab="home">
+      <span class="tab-icon">🏠</span>
+      <span>Home</span>
+    </button>
+    <button class="tab-item" data-tab="favs">
+      <span class="tab-icon">❤️</span>
+      <span>Favoritos</span>
+    </button>
+    <button class="tab-item" data-tab="hot">
+      <span class="tab-icon">🔥</span>
+      <span>Mais Quentes</span>
+    </button>
+    <button class="tab-item" data-tab="share">
+      <span class="tab-icon">📤</span>
+      <span>Compartilhar</span>
+    </button>
+  </div>
+</div>
+
+<!-- SORTEIO MODAL -->
+<div class="modal-overlay" id="sorteioModal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🎰 SORTEIOS DIÁRIOS VIP!</div>
+    <div class="modal-sub">Entre no grupo exclusivo e participe dos sorteios diários com prêmios em dinheiro!</div>
+    <div class="modal-steps">
+      <div class="modal-step">🎯 <strong>Passo 1:</strong> Entre no grupo do WhatsApp abaixo</div>
+      <div class="modal-step">📲 <strong>Passo 2:</strong> Siga as instruções do sorteio do dia</div>
+      <div class="modal-step">🏆 <strong>Passo 3:</strong> Aguarde o resultado e receba seu prêmio!</div>
+    </div>
+    <button class="modal-btn" id="sorteioJoinBtn">📱 ENTRAR NO GRUPO AGORA!</button>
+    <button class="modal-close" id="sorteioCloseBtn">Fechar</button>
+  </div>
+</div>
+
+<!-- INSTALL GUIDE MODAL -->
+<div class="modal-overlay" id="installGuideModal">
+  <div class="modal-sheet install-guide">
+    <div class="modal-handle"></div>
+    <div class="install-guide-title">📲 Como Instalar o App</div>
+    <div class="install-step">
+      <div class="install-step-num">1</div>
+      <div class="install-step-text">Toque nos <strong>3 pontinhos</strong> (⋮) no canto superior direito do Chrome</div>
+    </div>
+    <div class="install-step">
+      <div class="install-step-num">2</div>
+      <div class="install-step-text">Toque em <strong>"Adicionar à tela inicial"</strong> ou <strong>"Instalar app"</strong></div>
+    </div>
+    <div class="install-step">
+      <div class="install-step-num">3</div>
+      <div class="install-step-text">Confirme tocando em <strong>"Instalar"</strong> ou <strong>"Adicionar"</strong></div>
+    </div>
+    <div class="install-step">
+      <div class="install-step-num">4</div>
+      <div class="install-step-text">Pronto! O ícone do <strong>ACESSO VIP</strong> vai aparecer na sua tela inicial 🎉</div>
+    </div>
+    <button class="modal-btn" id="installGuideClose" style="background:var(--primary)">Entendi!</button>
+  </div>
+</div>
+
+<!-- ADMIN SCREEN (hidden, accessible via 3 taps on header) -->
+<div id="adminScreen" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:200;overflow-y:auto;">
+  <div style="padding:12px 16px;padding-top:max(12px,env(safe-area-inset-top));display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);">
+    <button id="adminBack" style="background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;">←</button>
+    <span style="font-size:18px;font-weight:900;color:var(--text);">⚙️ Admin</span>
+  </div>
+  <div id="adminLoginWrap" class="admin-screen">
+    <div class="admin-login">
+      <div class="admin-login-title">🔐 Acesso Admin</div>
+      <input class="admin-input" id="adminPassInput" type="password" placeholder="Senha de administrador" />
+      <button class="admin-login-btn" id="adminLoginBtn">Entrar</button>
+    </div>
+  </div>
+  <div id="adminPanelWrap" class="admin-screen" style="display:none;">
+    <div style="padding:16px;">
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-admin-tab="platforms">Plataformas</button>
+        <button class="admin-tab" data-admin-tab="add">Adicionar</button>
+        <button class="admin-tab" data-admin-tab="notifications">Notificações</button>
+        <button class="admin-tab" data-admin-tab="stats">Estatísticas</button>
+      </div>
+      <!-- Platforms Tab -->
+      <div class="admin-section active" id="admin-tab-platforms">
+        <input class="admin-search" id="adminSearch" type="text" placeholder="Buscar plataforma..." />
+        <div id="adminPlatformList"></div>
+      </div>
+      <!-- Add Platform Tab -->
+      <div class="admin-section" id="admin-tab-add">
+        <div class="admin-form">
+          <div class="admin-form-title">➕ Nova Plataforma</div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">URL da Logo</label>
+            <input class="admin-form-input" id="addLogoUrl" type="url" placeholder="https://..." />
+          </div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">Nome da Plataforma</label>
+            <input class="admin-form-input" id="addName" type="text" placeholder="Ex: SPIN77" />
+          </div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">URL do Link</label>
+            <input class="admin-form-input" id="addUrl" type="url" placeholder="https://..." />
+          </div>
+          <button class="admin-form-submit" id="addPlatformBtn">✅ Adicionar Plataforma</button>
+        </div>
+      </div>
+      <!-- Notifications Tab -->
+      <div class="admin-section" id="admin-tab-notifications">
+        <div class="admin-form">
+          <div class="admin-form-title">📢 Enviar Notificação</div>
+          <div style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.35);border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:#c4b5fd;line-height:1.6">
+            🔥 Ao clicar na notificação, o usuário será levado direto para a aba <strong style="color:#fff">Mais Quentes</strong> do app.
+          </div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">Título</label>
+            <input class="admin-form-input" id="notifTitle" type="text" placeholder="Ex: Plataforma Em Alta!" value="🔥 Plataforma Em Alta!" />
+          </div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">Mensagem</label>
+            <textarea class="admin-notif-textarea" id="notifBody" placeholder="Ex: Fortune Tiger pagando muito hoje! Corre lá 🐯"></textarea>
+          </div>
+          <input type="hidden" id="notifUrl" value="hot" />
+          <button class="admin-notif-send" id="sendNotifBtn">📤 Enviar para Todos</button>
+          <div id="notifResult" style="margin-top:10px;font-size:13px;color:var(--muted);text-align:center;"></div>
+        </div>
+      </div>
+      <!-- Stats Tab -->
+      <div class="admin-section" id="admin-tab-stats">
+        <div class="admin-stats-grid">
+          <div class="admin-stat"><div class="admin-stat-num" id="adminStatInstalls">-</div><div class="admin-stat-label">Instalações PWA</div></div>
+          <div class="admin-stat"><div class="admin-stat-num" id="adminStatTokens">-</div><div class="admin-stat-label">Tokens Push</div></div>
+          <div class="admin-stat"><div class="admin-stat-num" id="adminStatPlatforms">-</div><div class="admin-stat-label">Plataformas</div></div>
+          <div class="admin-stat"><div class="admin-stat-num" id="adminStatHigh">-</div><div class="admin-stat-label">Em Alta</div></div>
+        </div>
+        <button class="admin-notif-send" id="refreshStatsBtn" style="background:var(--surface);color:var(--text);border:1px solid var(--border)">🔄 Atualizar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WELCOME / NOTIFICATION MODAL -->
+<div class="modal-overlay" id="welcomeModal">
+  <div class="modal-sheet" style="background:#1A1035;padding-bottom:max(36px,env(safe-area-inset-bottom))">
+    <div class="modal-handle"></div>
+    <div style="text-align:center;margin-bottom:16px">
+      <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663105165765/agqsVYAvwswSLNhYS3MGCB/acesso-vip-logo-bUbTNEga7afwRGFoEPyva6.webp" style="width:72px;height:72px;border-radius:16px;margin-bottom:12px" />
+      <div class="modal-title" style="font-size:22px">🎉 Bem-vindo ao ACESSO VIP!</div>
+      <div class="modal-sub">Ative as notificações para receber os lançamentos exclusivos em primeira mão!</div>
+    </div>
+    <div class="modal-steps" style="margin-bottom:20px">
+      <div class="modal-step">🚀 <strong>+70 plataformas</strong> com bônus de registro</div>
+      <div class="modal-step">🔔 <strong>Alertas exclusivos</strong> de novos lançamentos</div>
+      <div class="modal-step">🏆 <strong>Sorteios VIP</strong> diários com prêmios em dinheiro</div>
+    </div>
+    <button class="modal-btn" id="welcomeNotifBtn" style="background:linear-gradient(135deg,#7C3AED,#5B21B6);font-size:17px">🔔 ATIVAR NOTIFICAÇÕES</button>
+    <button class="modal-close" id="welcomeSkipBtn">Agora não</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== CONFIG =====
+const ADMIN_PASSWORD = 'admin2025vip';
+const APP_URL = window.location.origin;
+const ONESIGNAL_APP_ID = '1ee5af72-b277-4de1-9d6f-ef75b5b49e70';
+const ONESIGNAL_API_KEY = 'os_v2_app_d3s264vso5g6dhlp5523lne6obzif67hhwpeeqncxqn7bdmk36nmnqan2do6qdzk7che4g6mgwcrco7tl3laraqa25tgib4llwkb6zi';
+const GA_ID = 'G-XXXXXXXXXX'; // Substituir pelo ID real do Google Analytics
+
+// ===== PLATFORMS DATA (embedded from DB) =====
+const PLATFORMS_DATA = [{"id":1,"name":"EE11","url":"https://ee11f.com/?pid=3127759524","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/2431520/EE112.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":30001,"name":"6615","url":"https://66e99y.com/?pid=1845365740","imageUrl":"https://upload-us.f-1-g-h.com/s2/app-icon/7176422/6615.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":120001,"name":"65H","url":"https://65h1.com/?ai=10&ic=2ynUaFade8&ch=12&ph=9bs","imageUrl":"","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150001,"name":"SPIN77","url":"https://spn977.com/?code=af4R4JJd","imageUrl":"https://dz68qzgzvzly6.cloudfront.net/spin77/uploads/setting/file/icon.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150002,"name":"6231","url":"https://5sgame.pro/?pid=3849329030","imageUrl":"https://upload-us.f-1-g-h.com/s4/1755557992297/logo480.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150003,"name":"96F","url":"https://96f1.com/?pid=3660993884","imageUrl":"https://upload-us.f-1-g-h.com/s4/1757334528977/996.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150004,"name":"99RR","url":"https://99rr885.com/?a=e6qo9c0g","imageUrl":"https://ofs.cloudofs.com/images/poster/747y1761158749631877.jpg","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150005,"name":"QQ555","url":"https://qq5557.com/?pid=3975570585","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/5821251/tuicon.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150006,"name":"9EEE","url":"https://9eee23.vip/?pid=4605515437","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/6879138/logo1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150007,"name":"58678","url":"https://58678c.win/?pid=4692313200","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/6757082/APP1.gif","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150008,"name":"7gggg","url":"https://7ggg111.vip/?pid=1275939217","imageUrl":"https://upload-us.f-1-g-h.com/s2/app-icon/6148951/XX.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150009,"name":"83H","url":"https://83hz6.com/?pid=1258279813","imageUrl":"https://upload-us.f-1-g-h.com/s2/app-icon/7673876/logo.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150010,"name":"777br","url":"https://88777br.com/?pid=3186032814","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/7955700/777br.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150011,"name":"59r","url":"https://59r35.com/?pid=3963693619","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/4384167/LOGO.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150012,"name":"5ggg","url":"https://5gg779.vip/?pid=3221742011","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/3731546/1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150013,"name":"63b","url":"https://63b85.com/?pid=4741818567","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/6791717/logo-.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150014,"name":"rree","url":"https://rree.fun/?a=8hsx4svu","imageUrl":"https://oss.topofs.net/images/poster/pdc61762084961560313.jpg","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150015,"name":"ppff","url":"https://ppff88.com/?a=06psgsoz","imageUrl":"https://oss.cloudofs.com/images/avatar/y5q71758096230840056.jpg","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150016,"name":"KA777","url":"https://ka777a6.com/?a=0ci2sd9e","imageUrl":"https://oss.cloudofs.com/images/logo/logo30009lAzj_320.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150017,"name":"68G","url":"https://68g15.com/?pid=4442489828","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/8709779/1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150018,"name":"11tt","url":"https://11tt7.com/?pid=3783700305","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/6475857/76pp.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150019,"name":"75w","url":"https://75wzm.com/?pid=2659674483","imageUrl":"https://upload-us.f-1-g-h.com/s3/app-icon/4433026/logo3.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150020,"name":"22cc","url":"https://yF2vbx.com/?pid=2496666202","imageUrl":"https://upload-us.f-1-g-h.com/s3/app-icon/3731525/ICON.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150021,"name":"95y","url":"https://95ye9.com/?pid=2490203175","imageUrl":"https://upload-us.f-1-g-h.com/s3/app-icon/7686135/11111.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150022,"name":"rr66","url":"https://rr6603.com/?pid=4123220040","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/1803215/iconArtboard-1-copy-3.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150023,"name":"kk44","url":"https://kk4401.com/?pid=4796535625","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4379055/icon.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150024,"name":"abc","url":"https://abc999.gold/?a=1oaevrfp","imageUrl":"https://oss.cloudofs.com/images/avatar/5lwt1760512882671636.jpg","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150025,"name":"59c","url":"https://59c03.cc/?pid=4330509791","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/1614740/1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150026,"name":"2uuu","url":"https://2UUU86.vip/?pid=3117560984","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/9770253/image_2025-08-26_15-40-32.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150027,"name":"8eee","url":"https://8eee33.vip/?pid=4852839003","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/2576874/8EEE.COM-applogo2.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150028,"name":"D11","url":"https://d11vips.com/?a=584bncwe","imageUrl":"https://oss.goodoss.net/images/avatar/o1ub1748862079417678.jpg","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150029,"name":"33nn","url":"https://33nn06.com/?pid=4783457761","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4077356/33NN111.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150030,"name":"45d","url":"https://45doi.com/?pid=4806028440","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/1451512/45dLOGO.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150031,"name":"72d","url":"https://72d1z.com/?pid=4663073155","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/5196855/logo.jpg","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150032,"name":"1rr","url":"https://1rr66.vip/?pid=4209607125","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/5313825/512.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150033,"name":"72e","url":"https://72e88.com/?pid=4276199883","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4651676/Rectangle.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150034,"name":"5ppp","url":"https://5ppp11.vip/?pid=2286867683","imageUrl":"https://upload-us.f-1-g-h.com/s3/app-icon/5210475/LG.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150035,"name":"73h","url":"https://73h2y.com/?pid=4456093778","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4023464/logo.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150036,"name":"26t","url":"https://26tx04.com/?pid=4422743651","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4895635/APPLOGO.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150037,"name":"68d","url":"https://68d44.com/?pid=4130118728","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/1361816/11.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150038,"name":"93d","url":"https://93d01.com/?pid=4735860756","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/9918106/aaa.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150039,"name":"44ww","url":"https://44ww07.com/?pid=4426246794","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4552161/44ww-icon-512x512.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150040,"name":"85t","url":"https://85t02.cc/?pid=4201798367","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4729049/1pp.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150041,"name":"552x","url":"https://552x002.com/?pid=4903785126","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/2576572/552X-yuanjiao.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150042,"name":"xx11","url":"https://xx11-5.com/?pid=4536553993","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/9933402/final.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150043,"name":"sp1","url":"https://sp1.games?code=f474df7s","imageUrl":"https://dz68qzgzvzly6.cloudfront.net/sp1/uploads/setting/file/icon.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150044,"name":"838x","url":"https://838x3.com/?pid=4170166547","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/3896314/838X1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150045,"name":"q8q","url":"https://q8q11.vip/?pid=3811254972","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/2301791/B1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150046,"name":"7jjjj","url":"https://7jjj06.com/?pid=3284108173","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/5416567/7JJJ-Logo-Icon1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150047,"name":"61t","url":"https://61t3z.com/?pid=4207343585","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/5682213/logo1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150048,"name":"5ttt","url":"https://5ttt55.vip/?pid=4077582316","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/3420958/LG.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150049,"name":"63v","url":"https://63v05.com/?pid=3984650262","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/8703338/C.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150050,"name":"15q","url":"https://15qx03.com/?pid=2515286760","imageUrl":"https://upload-us.f-1-g-h.com/s3/app-icon/4839541/15q.PNG","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150051,"name":"25t","url":"https://25f02.com/?pid=3261998855","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/3409648/1.png","isHigh":false,"isLaunch":true,"hot_game":"","position":0,"isNew":true},{"id":180001,"name":"Teste","url":"https://teste.com","imageUrl":"","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":180002,"name":"TestePlataforma","url":"https://teste.com","imageUrl":"","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":180003,"name":"ComImagem","url":"https://site.com","imageUrl":"https://site.com/logo.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":270002,"name":"5yyy11","url":"https://5yyy11.vip/?pid=4016851750","imageUrl":"","isHigh":true,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":270003,"name":"5yyy11","url":"https://5yyy11.vip/?pid=4016851750","imageUrl":"","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":90001,"name":"YG4","url":"https://vip.yg4.net/?param=2-R6C9M0JT","imageUrl":"https://static.9f2games.com/images/cba4f961da3ccb88d2f57a57b6e499d0.webp","isHigh":false,"isLaunch":false,"hot_game":"","position":1,"isNew":false},{"id":120002,"name":"5151","url":"https://51pg20.com/?code=Rfad4473","imageUrl":"https://d2x8e21b8kcyud.cloudfront.net/5151/uploads/setting/file/icon.png","isHigh":false,"isLaunch":false,"hot_game":"","position":1,"isNew":false}];
+
+// ===== STATE =====
+let platforms = [...PLATFORMS_DATA];
+let favorites = JSON.parse(localStorage.getItem('av_favorites') || '[]');
+let installCount = parseInt(localStorage.getItem('av_installs') || '0');
+let pushTokens = parseInt(localStorage.getItem('av_tokens') || '0');
+let deferredPrompt = null;
+let isInstalled = localStorage.getItem('av_installed') === '1';
+let notifPermission = Notification.permission;
+let adminLoggedIn = false;
+let headerTapCount = 0;
+let headerTapTimer = null;
+
+// ===== UTILS =====
+function showToast(msg, duration = 2500) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+function saveState() {
+  localStorage.setItem('av_favorites', JSON.stringify(favorites));
+  localStorage.setItem('av_platforms', JSON.stringify(platforms));
+}
+
+function trackEvent(name, params = {}) {
+  if (typeof gtag !== 'undefined') {
+    gtag('event', name, params);
+  }
+}
+
+// ===== PLATFORM CARD RENDERER =====
+function renderPlatformCard(p, showFav = true) {
+  const isFav = favorites.includes(p.id);
+  const imgHtml = p.imageUrl
+    ? `<img class="platform-icon" src="${p.imageUrl}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>`
+    : `<div class="platform-icon-placeholder">🔗</div>`;
+  const launchBadge = p.isLaunch ? `<div class="badge-launch">NOVO</div>` : '';
+  const highBadge = p.isHigh ? `<div class="badge-high">EM ALTA</div>` : '';
+  const favBtn = showFav ? `<button class="platform-fav" data-fav="${p.id}">${isFav ? '❤️' : '🤍'}</button>` : '';
+  return `
+    <div class="platform-card">
+      <div class="platform-icon-wrap" data-open="${p.id}">
+        ${launchBadge}${highBadge}
+        ${favBtn}
+        ${imgHtml}
+      </div>
+      <button class="platform-access-btn" data-open="${p.id}">
+        <span class="platform-access-text">ACESSAR</span>
+      </button>
+      <span class="platform-name">${p.name}</span>
+    </div>`;
+}
+
+function renderGrid(containerId, list, showFav = true) {
+  const el = document.getElementById(containerId);
+  if (!list.length) {
+    el.innerHTML = `<div class="empty-state" style="grid-column:span 3">Nenhuma plataforma encontrada.</div>`;
+    return;
+  }
+  el.innerHTML = list.map(p => renderPlatformCard(p, showFav)).join('');
+}
+
+function openPlatform(id) {
+  const p = platforms.find(x => x.id == id);
+  if (!p) return;
+  trackEvent('platform_click', { platform_name: p.name, platform_id: p.id });
+  window.open(p.url, '_blank');
+}
+
+// ===== HOME SCREEN =====
+function renderHome() {
+  const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  let list = [...platforms].sort((a, b) => (a.position || 0) - (b.position || 0));
+  if (q) list = list.filter(p => p.name.toLowerCase().includes(q));
+  document.getElementById('platformCount').textContent = `${list.length} disponíveis`;
+  renderGrid('platformGrid', list);
+}
+
+// ===== FAVORITES =====
+function renderFavs() {
+  const list = platforms.filter(p => favorites.includes(p.id)).sort((a, b) => (a.position || 0) - (b.position || 0));
+  renderGrid('favsGrid', list);
+}
+
+function toggleFavorite(id) {
+  const idx = favorites.indexOf(id);
+  if (idx >= 0) { favorites.splice(idx, 1); showToast('Removido dos favoritos'); }
+  else { favorites.push(id); showToast('Adicionado aos favoritos ❤️'); }
+  saveState();
+  renderHome();
+  renderFavs();
+}
+
+// ===== HOT SCREEN =====
+function renderHot() {
+  const hotList = document.getElementById('hotList');
+  const hot = platforms.filter(p => p.isHigh).sort((a, b) => (a.position || 0) - (b.position || 0));
+  if (!hot.length) {
+    hotList.innerHTML = `<div class="empty-state">Nenhuma plataforma em alta no momento.</div>`;
+    return;
+  }
+  hotList.innerHTML = hot.map(p => `
+    <div class="hot-card" data-open="${p.id}">
+      ${p.imageUrl ? `<img class="hot-card-img" src="${p.imageUrl}" alt="${p.name}" onerror="this.style.display='none'" />` : `<div class="hot-card-img" style="display:flex;align-items:center;justify-content:center;font-size:28px">🔗</div>`}
+      <div class="hot-card-info">
+        <div class="hot-card-name">${p.name}</div>
+        ${p.hot_game ? `<div class="hot-card-game">🎮 Pagando: ${p.hot_game}</div>` : ''}
+      </div>
+      <span class="hot-card-badge">EM ALTA</span>
+      <button class="hot-card-btn" data-open="${p.id}">ACESSAR</button>
+    </div>`).join('');
+}
+
+// ===== SHARE SCREEN =====
+function renderShare() {
+  document.getElementById('statInstalls').textContent = installCount.toLocaleString();
+  document.getElementById('statTokens').textContent = pushTokens.toLocaleString();
+}
+
+// ===== TAB NAVIGATION =====
+const tabs = document.querySelectorAll('.tab-item');
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const name = tab.dataset.tab;
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+    document.getElementById('mainContent').scrollTop = 0;
+    if (name === 'favs') renderFavs();
+    if (name === 'hot') renderHot();
+    if (name === 'share') renderShare();
+    trackEvent('tab_switch', { tab: name });
+  });
+});
+
+// ===== CLICK DELEGATION =====
+document.addEventListener('click', (e) => {
+  const openId = e.target.closest('[data-open]')?.dataset.open;
+  if (openId) { openPlatform(openId); return; }
+  const favId = e.target.closest('[data-fav]')?.dataset.fav;
+  if (favId) { e.stopPropagation(); toggleFavorite(parseInt(favId)); return; }
+});
+
+// ===== SEARCH =====
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  document.getElementById('searchClear').style.display = e.target.value ? 'block' : 'none';
+  renderHome();
+});
+document.getElementById('searchClear').addEventListener('click', () => {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchClear').style.display = 'none';
+  renderHome();
+});
+
+// ===== VIP GROUP MODAL =====
+document.getElementById('vipBtn').addEventListener('click', () => {
+  document.getElementById('sorteioModal').classList.add('open');
+  trackEvent('vip_group_open');
+});
+document.getElementById('sorteioCloseBtn').addEventListener('click', () => {
+  document.getElementById('sorteioModal').classList.remove('open');
+});
+document.getElementById('sorteioJoinBtn').addEventListener('click', () => {
+  window.open('https://chat.whatsapp.com/FuIMaqEeIz1Jcc2Wevvk63', '_blank');
+  document.getElementById('sorteioModal').classList.remove('open');
+  trackEvent('vip_group_join');
+});
+document.getElementById('sorteioModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('sorteioModal')) document.getElementById('sorteioModal').classList.remove('open');
+});
+
+// ===== PWA INSTALL =====
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!isInstalled) document.getElementById('installBanner').classList.remove('hidden');
+});
+
+window.addEventListener('appinstalled', () => {
+  isInstalled = true;
+  localStorage.setItem('av_installed', '1');
+  document.getElementById('installBanner').classList.add('hidden');
+  installCount++;
+  localStorage.setItem('av_installs', installCount);
+  showToast('✅ App instalado com sucesso!', 3000);
+  trackEvent('pwa_installed');
+  gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' });
+});
+
+document.getElementById('installBanner').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    if (outcome === 'accepted') {
+      trackEvent('pwa_install_accepted');
+      document.getElementById('installBanner').classList.add('hidden');
+    }
+  } else {
+    showToast('Abra o menu do Chrome (⋮) e toque em "Adicionar à tela inicial"');
+  }
+});
+document.getElementById('installGuideClose').addEventListener('click', () => {
+  document.getElementById('installGuideModal').classList.remove('open');
+});;
+
+// Hide install banner if already installed
+if (isInstalled || window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+  document.getElementById('installBanner').classList.add('hidden');
+  isInstalled = true;
+  localStorage.setItem('av_installed', '1');
+}
+
+// ===== NOTIFICATIONS =====
+async function requestNotificationPermission() {
+  if (!('Notification' in window) || !('serviceWorker' in navigator)) {
+    showToast('Notificações não suportadas neste navegador');
+    return false;
+  }
+  const perm = await Notification.requestPermission();
+  notifPermission = perm;
+  if (perm === 'granted') {
+    document.getElementById('notifBanner').classList.add('hidden');
+    localStorage.setItem('av_notif_asked', '1');
+    pushTokens++;
+    localStorage.setItem('av_tokens', pushTokens);
+    showToast('🔔 Notificações ativadas!', 3000);
+    trackEvent('notification_granted');
+    return true;
+  } else {
+    showToast('Notificações bloqueadas. Ative nas configurações do Chrome.');
+    trackEvent('notification_denied');
+    return false;
+  }
+}
+
+document.getElementById('notifHeaderBtn').addEventListener('click', requestNotificationPermission);
+document.getElementById('notifBanner').addEventListener('click', (e) => {
+  if (e.target.id !== 'notifBannerClose') requestNotificationPermission();
+});
+document.getElementById('notifBannerClose').addEventListener('click', (e) => {
+  e.stopPropagation();
+  document.getElementById('notifBanner').classList.add('hidden');
+  localStorage.setItem('av_notif_asked', '1');
+});
+document.getElementById('enableNotifBtn').addEventListener('click', requestNotificationPermission);
+
+// Hide notif banner if already granted or asked
+if (Notification.permission === 'granted' || localStorage.getItem('av_notif_asked') === '1') {
+  document.getElementById('notifBanner').classList.add('hidden');
+}
+
+// ===== SHARE =====
+document.getElementById('shareWhatsapp').addEventListener('click', () => {
+  const msg = encodeURIComponent(`🎰 ACESSO VIP - Plataformas exclusivas com bônus de registro!\n\n🎁 Bônus de Registro ATIVO!\n🔔 Ative as notificações e receba os lançamentos em primeira mão!\n\n📲 Acesse agora: ${APP_URL}`);
+  window.open(`https://wa.me/?text=${msg}`, '_blank');
+  trackEvent('share_whatsapp');
+});
+document.getElementById('shareCopy').addEventListener('click', () => {
+  navigator.clipboard.writeText(APP_URL).then(() => showToast('✅ Link copiado!')).catch(() => {
+    const input = document.createElement('input');
+    input.value = APP_URL;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    document.body.removeChild(input);
+    showToast('✅ Link copiado!');
+  });
+  trackEvent('share_copy');
+});
+
+// ===== HEADER SECRET TAP (3x = admin) =====
+document.getElementById('headerLogo').addEventListener('click', () => {
+  headerTapCount++;
+  if (headerTapTimer) clearTimeout(headerTapTimer);
+  if (headerTapCount >= 3) {
+    headerTapCount = 0;
+    document.getElementById('adminScreen').style.display = 'block';
+  } else {
+    headerTapTimer = setTimeout(() => { headerTapCount = 0; }, 1500);
+  }
+});
+document.getElementById('adminBack').addEventListener('click', () => {
+  document.getElementById('adminScreen').style.display = 'none';
+});
+
+// ===== ADMIN =====
+document.getElementById('adminLoginBtn').addEventListener('click', () => {
+  const pass = document.getElementById('adminPassInput').value;
+  if (pass === ADMIN_PASSWORD) {
+    adminLoggedIn = true;
+    document.getElementById('adminLoginWrap').style.display = 'none';
+    document.getElementById('adminPanelWrap').style.display = 'block';
+    renderAdminPlatforms();
+    loadAdminStats();
+  } else {
+    showToast('Senha incorreta!');
+  }
+});
+
+document.querySelectorAll('[data-admin-tab]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-admin-tab]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('admin-tab-' + btn.dataset.adminTab).classList.add('active');
+    if (btn.dataset.adminTab === 'stats') loadAdminStats();
+  });
+});
+
+function renderAdminPlatforms(filter = '') {
+  const list = platforms.filter(p => !filter || p.name.toLowerCase().includes(filter.toLowerCase()));
+  const el = document.getElementById('adminPlatformList');
+  el.innerHTML = list.map((p, idx) => `
+    <div class="admin-card" id="acard-${p.id}">
+      <div class="admin-card-header">
+        ${p.imageUrl ? `<img class="admin-card-img" src="${p.imageUrl}" alt="${p.name}" onerror="this.style.display='none'" />` : `<div class="admin-card-img" style="display:flex;align-items:center;justify-content:center;font-size:24px;background:var(--surface2)">🔗</div>`}
+        <span class="admin-card-name">${p.name}</span>
+      </div>
+      <div style="margin-bottom:6px">
+        <label style="font-size:11px;color:var(--muted);font-weight:600">Jogo Pagando:</label>
+        <input class="admin-hot-input" id="hotgame-${p.id}" value="${p.hot_game || ''}" placeholder="Ex: Fortune Tiger" />
+      </div>
+      <div class="admin-card-actions">
+        <button class="admin-btn admin-btn-high ${p.isHigh ? 'active' : ''}" data-toggle-high="${p.id}">${p.isHigh ? '🔥 Em Alta' : '📊 Marcar Alta'}</button>
+        <button class="admin-btn admin-btn-launch" data-toggle-launch="${p.id}">${p.isLaunch ? '✅ Lançamento' : '🚀 Lançamento'}</button>
+        <button class="admin-btn admin-btn-up" data-move-up="${p.id}">⬆️</button>
+        <button class="admin-btn admin-btn-down" data-move-down="${p.id}">⬇️</button>
+        <button class="admin-btn admin-btn-del" data-delete="${p.id}">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+document.getElementById('adminSearch').addEventListener('input', (e) => {
+  renderAdminPlatforms(e.target.value);
+});
+
+document.getElementById('adminPlatformList').addEventListener('click', (e) => {
+  const toggleHigh = e.target.closest('[data-toggle-high]')?.dataset.toggleHigh;
+  const toggleLaunch = e.target.closest('[data-toggle-launch]')?.dataset.toggleLaunch;
+  const moveUp = e.target.closest('[data-move-up]')?.dataset.moveUp;
+  const moveDown = e.target.closest('[data-move-down]')?.dataset.moveDown;
+  const del = e.target.closest('[data-delete]')?.dataset.delete;
+
+  if (toggleHigh) {
+    const p = platforms.find(x => x.id == toggleHigh);
+    if (p) {
+      p.hot_game = document.getElementById('hotgame-' + p.id)?.value || p.hot_game;
+      p.isHigh = !p.isHigh;
+      saveState(); renderAdminPlatforms(); renderHome(); renderHot();
+      showToast(p.isHigh ? `🔥 ${p.name} marcada como Em Alta` : `${p.name} removida de Em Alta`);
+    }
+  }
+  if (toggleLaunch) {
+    const p = platforms.find(x => x.id == toggleLaunch);
+    if (p) { p.isLaunch = !p.isLaunch; saveState(); renderAdminPlatforms(); renderHome(); showToast(`${p.name} ${p.isLaunch ? 'marcada como Lançamento' : 'removida de Lançamento'}`); }
+  }
+  if (moveUp) {
+    const idx = platforms.findIndex(x => x.id == moveUp);
+    if (idx > 0) {
+      const tmp = platforms[idx].position; platforms[idx].position = platforms[idx-1].position; platforms[idx-1].position = tmp;
+      platforms.sort((a,b) => (a.position||0)-(b.position||0));
+      saveState(); renderAdminPlatforms(); renderHome();
+    }
+  }
+  if (moveDown) {
+    const idx = platforms.findIndex(x => x.id == moveDown);
+    if (idx < platforms.length - 1) {
+      const tmp = platforms[idx].position; platforms[idx].position = platforms[idx+1].position; platforms[idx+1].position = tmp;
+      platforms.sort((a,b) => (a.position||0)-(b.position||0));
+      saveState(); renderAdminPlatforms(); renderHome();
+    }
+  }
+  if (del) {
+    if (confirm('Remover esta plataforma?')) {
+      platforms = platforms.filter(x => x.id != del);
+      saveState(); renderAdminPlatforms(); renderHome();
+      showToast('Plataforma removida');
+    }
+  }
+});
+
+document.getElementById('addPlatformBtn').addEventListener('click', () => {
+  const logoUrl = document.getElementById('addLogoUrl').value.trim();
+  const name = document.getElementById('addName').value.trim();
+  const url = document.getElementById('addUrl').value.trim();
+  if (!name || !url) { showToast('Preencha o nome e o link!'); return; }
+  const newP = { id: Date.now(), name, url, imageUrl: logoUrl, isHigh: false, isLaunch: true, hot_game: '', position: -1 };
+  platforms.unshift(newP);
+  saveState(); renderHome(); renderAdminPlatforms();
+  document.getElementById('addLogoUrl').value = '';
+  document.getElementById('addName').value = '';
+  document.getElementById('addUrl').value = '';
+  showToast(`✅ ${name} adicionada!`);
+  trackEvent('platform_added', { name });
+});
+
+// ===== SEND NOTIFICATION (local demo) =====
+document.getElementById('sendNotifBtn').addEventListener('click', async () => {
+  const title = document.getElementById('notifTitle').value || '🔥 ACESSO VIP';
+  const body = document.getElementById('notifBody').value;
+  const url = document.getElementById('notifUrl').value || 'hot';
+  if (!body) { showToast('Digite uma mensagem!'); return; }
+  const resultEl = document.getElementById('notifResult');
+  resultEl.textContent = '⏳ Enviando para todos...';
+  try {
+    const targetUrl = url === 'hot'
+      ? 'https://acessovip-app.netlify.app/?tab=hot'
+      : 'https://acessovip-app.netlify.app/';
+    const payload = {
+      app_id: ONESIGNAL_APP_ID,
+      included_segments: ['Total Subscriptions'],
+      headings: { en: title, pt: title },
+      contents: { en: body, pt: body },
+      url: targetUrl,
+      chrome_web_icon: 'https://acessovip-app.netlify.app/icons/icon-192.png',
+    };
+    // Usa o proxy CORS do allorigins para contornar bloqueio do browser
+    const apiUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://onesignal.com/api/v1/notifications');
+    const resp = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Key ' + ONESIGNAL_API_KEY
+      },
+      body: JSON.stringify(payload)
+    });
+    const data = await resp.json();
+    if (data.id) {
+      const count = data.recipients > 0 ? data.recipients : 'todos';
+      resultEl.innerHTML = '✅ Enviado para <strong>' + count + '</strong> dispositivos!';
+      showToast('✅ Notificação enviada para todos!');
+      trackEvent('notification_sent', { title });
+    } else {
+      resultEl.textContent = '⚠️ Erro: ' + JSON.stringify(data.errors || data);
+      showToast('⚠️ Erro ao enviar notificação.');
+    }
+  } catch(e) {
+    resultEl.textContent = '⚠️ Erro de conexão: ' + e.message;
+    showToast('⚠️ Erro de conexão.');
+  }
+});
+
+function loadAdminStats() {
+  document.getElementById('adminStatInstalls').textContent = installCount.toLocaleString();
+  document.getElementById('adminStatTokens').textContent = pushTokens.toLocaleString();
+  document.getElementById('adminStatPlatforms').textContent = platforms.length;
+  document.getElementById('adminStatHigh').textContent = platforms.filter(p => p.isHigh).length;
+}
+
+document.getElementById('refreshStatsBtn').addEventListener('click', loadAdminStats);
+
+// ===== SERVICE WORKER =====
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then(reg => {
+    console.log('SW registered');
+  }).catch(err => console.log('SW error:', err));
+
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    if (event.data?.type === 'NOTIFICATION_CLICK') {
+      const url = event.data.url;
+      if (url.includes('hot') || url.includes('quente')) {
+        document.querySelector('[data-tab="hot"]').click();
+      }
+    }
+  });
+}
+
+// ===== WELCOME MODAL =====
+function checkWelcomeModal() {
+  const alreadySeen = localStorage.getItem('av_welcome_seen');
+  const notifStatus = Notification.permission;
+  // Mostra o modal se:
+  // 1. Nunca viu antes, OU
+  // 2. Viu mas ainda não ativou notificações
+  if (!alreadySeen || notifStatus === 'default') {
+    setTimeout(() => {
+      document.getElementById('welcomeModal').classList.add('active');
+    }, 1200); // pequeno delay para o app carregar
+  }
+  // Atualiza ícone de notificação no header
+  updateNotifBtn();
+}
+
+function updateNotifBtn() {
+  const btn = document.getElementById('notifHeaderBtn');
+  if (!btn) return;
+  if (Notification.permission === 'granted') {
+    btn.textContent = '🔔';
+    btn.title = 'Notificações ativas';
+    btn.style.opacity = '1';
+  } else {
+    btn.textContent = '🔕';
+    btn.title = 'Ativar notificações';
+    btn.style.opacity = '0.7';
+  }
+}
+
+document.getElementById('welcomeNotifBtn').addEventListener('click', async () => {
+  localStorage.setItem('av_welcome_seen', '1');
+  document.getElementById('welcomeModal').classList.remove('active');
+  // Pede permissão ao Chrome
+  const permission = await Notification.requestPermission();
+  if (permission === 'granted') {
+    showToast('✅ Notificações ativadas!');
+    trackEvent('notification_granted');
+    // Registra push subscription se disponível
+    if ('serviceWorker' in navigator) {
+      const reg = await navigator.serviceWorker.ready;
+      reg.showNotification('🎉 ACESSO VIP', {
+        body: 'Notificações ativadas! Você receberá os lançamentos em primeira mão.',
+        icon: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/TxiAvJsDwfaCSimF.png',
+        badge: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/TxiAvJsDwfaCSimF.png',
+        vibrate: [200, 100, 200],
+      });
+    }
+  } else if (permission === 'denied') {
+    showToast('⚠️ Notificação bloqueada. Ative nas configurações do Chrome.');
+  }
+  updateNotifBtn();
+});
+
+document.getElementById('welcomeSkipBtn').addEventListener('click', () => {
+  localStorage.setItem('av_welcome_seen', '1');
+  document.getElementById('welcomeModal').classList.remove('active');
+  showToast('💡 Você pode ativar as notificações a qualquer momento!');
+});
+
+// Botão de notificação no header — abre modal se não ativado
+document.getElementById('notifHeaderBtn').addEventListener('click', async () => {
+  if (Notification.permission === 'granted') {
+    showToast('✅ Notificações já estão ativas!');
+    return;
+  }
+  if (Notification.permission === 'denied') {
+    showToast('⚠️ Notificação bloqueada. Vá em Configurações > Chrome > Notificações para ativar.');
+    return;
+  }
+  // Mostra modal novamente
+  document.getElementById('welcomeModal').classList.add('active');
+});
+
+// ===== INIT =====
+function init() {
+  // Load saved platforms from localStorage (admin changes persist)
+  const saved = localStorage.getItem('av_platforms');
+  if (saved) {
+    try { platforms = JSON.parse(saved); } catch(e) {}
+  }
+  renderHome();
+  checkWelcomeModal();
+  trackEvent('app_open', { source: document.referrer || 'direct' });
+
+  // Track install count
+  if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+    if (!localStorage.getItem('av_install_counted')) {
+      localStorage.setItem('av_install_counted', '1');
+      installCount++;
+      localStorage.setItem('av_installs', installCount);
+      trackEvent('pwa_launch_standalone');
+    }
+  }
+}
+
+init();
+</script>
+</body>
+</html>
