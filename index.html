@@ -819,20 +819,14 @@ document.getElementById('installBanner').addEventListener('click', async () => {
       document.getElementById('installBanner').classList.add('hidden');
     }
   } else {
-    // Instagram/outros: abre o link no Chrome para instalar
+    // Instagram/outros: usa intent:// para abrir no Chrome sem tela preta
     const appUrl = 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/';
-    // Tenta abrir no Chrome diretamente
-    const chromeUrl = 'googlechrome://' + appUrl.replace('https://', '');
+    const intentUrl = 'intent://' + appUrl.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;end';
     const a = document.createElement('a');
-    a.href = chromeUrl;
+    a.href = intentUrl;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    // Fallback: abre no navegador padrão após 500ms (caso Chrome não abra)
-    setTimeout(function() {
-      window.open(appUrl, '_blank');
-    }, 500);
-    showToast('Abrindo no Chrome para instalar...', 3000);
     trackEvent('pwa_install_chrome_redirect');
   }
 });
