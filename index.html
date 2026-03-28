@@ -585,7 +585,7 @@
 const ADMIN_PASSWORD = 'admin2025vip';
 const APP_URL = window.location.origin;
 const ONESIGNAL_APP_ID = '1ee5af72-b277-4de1-9d6f-ef75b5b49e70';
-const ONESIGNAL_API_KEY = 'os_v2_app_d3s264vso5g6dhlp5523lne6obzif67hhwpeeqncxqn7bdmk36nmnqan2do6qdzk7che4g6mgwcrco7tl3laraqa25tgib4llwkb6zi';
+const ONESIGNAL_API_KEY = 'os_v2_app_d3s264vso5g6dhlp5523lne6obchnm34y5xeux5oyyleshsugepqcvhun2hf7k77ggu74loj2tgituyvg5vkp73swickyia3jt45jty';
 const GA_ID = 'G-XXXXXXXXXX'; // Substituir pelo ID real do Google Analytics
 
 // ===== PLATFORMS DATA (embedded from DB) =====
@@ -979,6 +979,25 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
       p.isHigh = !p.isHigh;
       saveState(); renderAdminPlatforms(); renderHome(); renderHot();
       showToast(p.isHigh ? `🔥 ${p.name} marcada como Em Alta` : `${p.name} removida de Em Alta`);
+      // Disparo automático de notificação ao marcar como Em Alta
+      if (p.isHigh) {
+        const notifPayload = {
+          app_id: ONESIGNAL_APP_ID,
+          included_segments: ['Total Subscriptions'],
+          headings: { en: '🔥 Plataforma Em Alta!', pt: '🔥 Plataforma Em Alta!' },
+          contents: { en: p.name + ' está em alta agora! Acesse e aproveite!', pt: p.name + ' está em alta agora! Acesse e aproveite!' },
+          url: 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/?tab=hot',
+          chrome_web_icon: 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/icons/icon-192.png',
+        };
+        fetch('https://onesignal.com/api/v1/notifications', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Key ' + ONESIGNAL_API_KEY },
+          body: JSON.stringify(notifPayload)
+        }).then(r => r.json()).then(data => {
+          if (data.id) showToast('📲 Notificação enviada para todos!');
+          else showToast('⚠️ Notif: ' + JSON.stringify(data.errors || data));
+        }).catch(() => showToast('⚠️ Erro ao enviar notificação automática'));
+      }
     }
   }
   if (toggleLaunch) {
