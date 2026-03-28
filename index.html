@@ -9,15 +9,38 @@
   <meta name="apple-mobile-web-app-title" content="ACESSO VIP" />
   <meta name="description" content="Plataformas exclusivas com bônus de registro em um só lugar" />
   <link rel="manifest" href="manifest.json" />
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getDatabase, ref, set, get, onValue } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+    const firebaseConfig = {
+      apiKey: "AIzaSyD5rgvnm8Ytu0XqISzq7fYCk0p_PYEiuI4",
+      authDomain: "acessovip-fb4c3.firebaseapp.com",
+      databaseURL: "https://acessovip-fb4c3-default-rtdb.firebaseio.com",
+      projectId: "acessovip-fb4c3",
+      storageBucket: "acessovip-fb4c3.firebasestorage.app",
+      messagingSenderId: "529494066618",
+      appId: "1:529494066618:web:c714b532579a1916390983"
+    };
+    const fbApp = initializeApp(firebaseConfig);
+    const db = getDatabase(fbApp);
+    window._fbDb = db;
+    window._fbRef = ref;
+    window._fbSet = set;
+    window._fbGet = get;
+    window._fbOnValue = onValue;
+    window._fbReady = true;
+    window.dispatchEvent(new Event('firebase-ready'));
+  </script>
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <title>ACESSO VIP</title>
   <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SHTD5Q4Z9Z"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');
+    gtag('config', 'G-SHTD5Q4Z9Z');
   </script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -561,6 +584,12 @@ function showToast(msg, duration = 2500) {
 function saveState() {
   localStorage.setItem('av_favorites', JSON.stringify(favorites));
   localStorage.setItem('av_platforms', JSON.stringify(platforms));
+  // Salvar no Firebase também
+  if (window._fbReady && window._fbDb) {
+    try {
+      window._fbSet(window._fbRef(window._fbDb, 'platforms'), platforms);
+    } catch(e) { console.log('Firebase save error:', e); }
+  }
 }
 
 function trackEvent(name, params = {}) {
@@ -948,18 +977,18 @@ document.getElementById('sendNotifBtn').addEventListener('click', async () => {
   resultEl.textContent = '⏳ Enviando para todos...';
   try {
     const targetUrl = url === 'hot'
-      ? 'https://acessovip-app.netlify.app/?tab=hot'
-      : 'https://acessovip-app.netlify.app/';
+      ? 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/?tab=hot'
+      : 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/';
     const payload = {
       app_id: ONESIGNAL_APP_ID,
       included_segments: ['Total Subscriptions'],
       headings: { en: title, pt: title },
       contents: { en: body, pt: body },
       url: targetUrl,
-      chrome_web_icon: 'https://acessovip-app.netlify.app/icons/icon-192.png',
+      chrome_web_icon: 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/icons/icon-192.png',
     };
     // Usa o proxy CORS do allorigins para contornar bloqueio do browser
-    const apiUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://onesignal.com/api/v1/notifications');
+    const apiUrl = 'https://onesignal.com/api/v1/notifications';
     const resp = await fetch(apiUrl, {
       method: 'POST',
       headers: {
@@ -995,7 +1024,7 @@ document.getElementById('refreshStatsBtn').addEventListener('click', loadAdminSt
 
 // ===== SERVICE WORKER =====
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').then(reg => {
+  navigator.serviceWorker.register('./sw.js').then(reg => {
     console.log('SW registered');
   }).catch(err => console.log('SW error:', err));
 
@@ -1083,17 +1112,54 @@ document.getElementById('notifHeaderBtn').addEventListener('click', async () => 
   document.getElementById('welcomeModal').classList.add('active');
 });
 
-// ===== INIT =====
+/// ===== INIT =====
 function init() {
-  // Load saved platforms from localStorage (admin changes persist)
-  const saved = localStorage.getItem('av_platforms');
-  if (saved) {
-    try { platforms = JSON.parse(saved); } catch(e) {}
+  // Mostrar loading enquanto carrega do Firebase
+  document.getElementById('platformList').innerHTML = '<div style="text-align:center;padding:40px;color:#a78bfa"><div style="font-size:2rem;margin-bottom:8px">⏳</div><div>Carregando...</div></div>';
+  // Tentar carregar do Firebase primeiro
+  function loadFromFirebase() {
+    if (window._fbReady && window._fbDb) {
+      window._fbGet(window._fbRef(window._fbDb, 'platforms')).then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          if (Array.isArray(data) && data.length > 0) {
+            platforms = data;
+            localStorage.setItem('av_platforms', JSON.stringify(platforms));
+          }
+        } else {
+          // Firebase vazio - salvar dados padrão
+          window._fbSet(window._fbRef(window._fbDb, 'platforms'), platforms);
+        }
+        renderHome();
+      }).catch((e) => {
+        console.log('Firebase load error:', e);
+        // Fallback: localStorage
+        const saved = localStorage.getItem('av_platforms');
+        if (saved) { try { platforms = JSON.parse(saved); } catch(e2) {} }
+        renderHome();
+      });
+    } else {
+      // Fallback: localStorage
+      const saved = localStorage.getItem('av_platforms');
+      if (saved) { try { platforms = JSON.parse(saved); } catch(e) {} }
+      renderHome();
+    }
   }
-  renderHome();
+  if (window._fbReady) {
+    loadFromFirebase();
+  } else {
+    window.addEventListener('firebase-ready', loadFromFirebase, { once: true });
+    // Timeout de segurança: se Firebase demorar mais de 3s, usa localStorage
+    setTimeout(() => {
+      if (document.getElementById('platformList').innerHTML.includes('Carregando')) {
+        const saved = localStorage.getItem('av_platforms');
+        if (saved) { try { platforms = JSON.parse(saved); } catch(e) {} }
+        renderHome();
+      }
+    }, 3000);
+  }
   checkWelcomeModal();
   trackEvent('app_open', { source: document.referrer || 'direct' });
-
   // Track install count
   if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
     if (!localStorage.getItem('av_install_counted')) {
@@ -1104,8 +1170,7 @@ function init() {
     }
   }
 }
-
-init();
+init();;
 </script>
 </body>
 </html>
