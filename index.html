@@ -548,6 +548,11 @@
             <label class="admin-form-label">Mensagem</label>
             <textarea class="admin-notif-textarea" id="notifBody" placeholder="Ex: Fortune Tiger pagando muito hoje! Corre lá 🐯"></textarea>
           </div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">Imagem (opcional)</label>
+            <input class="admin-form-input" id="notifImage" type="url" placeholder="Cole a URL de uma imagem (https://...)" />
+            <div style="font-size:11px;color:var(--muted);margin-top:4px;">A imagem aparece em destaque abaixo do texto da notificação</div>
+          </div>
           <input type="hidden" id="notifUrl" value="hot" />
           <button class="admin-notif-send" id="sendNotifBtn">📤 Enviar para Todos</button>
           <div id="notifResult" style="margin-top:10px;font-size:13px;color:var(--muted);text-align:center;"></div>
@@ -1077,6 +1082,7 @@ async function sendPushNotification(title, body, tab) {
   const targetUrl = tab === 'hot'
     ? 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/?tab=hot'
     : 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/';
+  const imageUrl = document.getElementById('notifImage') ? document.getElementById('notifImage').value.trim() : '';
   const notifData = {
     title: title,
     body: body,
@@ -1084,6 +1090,7 @@ async function sendPushNotification(title, body, tab) {
     timestamp: Date.now(),
     sent: false
   };
+  if (imageUrl) notifData.image = imageUrl;
   // Salva no Firebase
   const fbUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com/pending_notifications/' + Date.now() + '.json?auth=' + FIREBASE_API_KEY;
   const fbResp = await fetch(fbUrl, {
@@ -1127,6 +1134,9 @@ document.getElementById('sendNotifBtn').addEventListener('click', async () => {
   const body = document.getElementById('notifBody').value;
   const tab = document.getElementById('notifUrl').value || 'hot';
   if (!body) { showToast('Digite uma mensagem!'); return; }
+  // Limpar campo de imagem após envio
+  const imgField = document.getElementById('notifImage');
+  const imgValue = imgField ? imgField.value.trim() : '';
   const resultEl = document.getElementById('notifResult');
   resultEl.textContent = '⏳ Enviando para todos...';
   const result = await sendPushNotification(title, body, tab);
@@ -1140,6 +1150,9 @@ document.getElementById('sendNotifBtn').addEventListener('click', async () => {
       showToast('✅ Notificação enviada para todos!');
     }
     trackEvent('notification_sent', { title });
+    // Limpar campos após envio
+    document.getElementById('notifBody').value = '';
+    if (imgField) imgField.value = '';
   } else {
     resultEl.textContent = '⚠️ Erro: ' + result.error;
     showToast('⚠️ Erro ao enviar notificação.');

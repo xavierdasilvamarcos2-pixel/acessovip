@@ -23,14 +23,19 @@ async function checkPendingNotifications() {
       // Só processar notificações novas (últimos 5 minutos) e não enviadas
       if (notif && !notif.sent && notif.timestamp && (now - notif.timestamp) < 300000) {
         // Mostrar a notificação
-        await self.registration.showNotification(notif.title || 'ACESSO VIP', {
+        const notifOptions = {
           body: notif.body || notif.message || '',
-          icon: 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/icons/icon-192.png',
+          icon: 'https://d2xsxph8kpxj0f.cloudfront.net/310519663105165765/agqsVYAvwswSLNhYS3MGCB/acesso-vip-logo-bUbTNEga7afwRGFoEPyva6.webp',
           badge: 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/icons/icon-72.png',
           data: { url: notif.url || 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/' },
           requireInteraction: false,
           tag: key,
-        });
+        };
+        // Adicionar imagem grande se fornecida
+        if (notif.image) {
+          notifOptions.image = notif.image;
+        }
+        await self.registration.showNotification(notif.title || 'ACESSO VIP', notifOptions);
 
         // Marcar como enviada no Firebase
         try {
