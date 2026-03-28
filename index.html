@@ -810,6 +810,7 @@ window.addEventListener('appinstalled', () => {
 
 document.getElementById('installBanner').addEventListener('click', async () => {
   if (deferredPrompt) {
+    // Chrome: instala direto
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     deferredPrompt = null;
@@ -818,8 +819,21 @@ document.getElementById('installBanner').addEventListener('click', async () => {
       document.getElementById('installBanner').classList.add('hidden');
     }
   } else {
-    // Mostrar modal com instruções passo a passo
-    document.getElementById('installGuideModal').classList.add('open');
+    // Instagram/outros: abre o link no Chrome para instalar
+    const appUrl = 'https://xavierdasilvamarcos2-pixel.github.io/acessovip/';
+    // Tenta abrir no Chrome diretamente
+    const chromeUrl = 'googlechrome://' + appUrl.replace('https://', '');
+    const a = document.createElement('a');
+    a.href = chromeUrl;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    // Fallback: abre no navegador padrão após 500ms (caso Chrome não abra)
+    setTimeout(function() {
+      window.open(appUrl, '_blank');
+    }, 500);
+    showToast('Abrindo no Chrome para instalar...', 3000);
+    trackEvent('pwa_install_chrome_redirect');
   }
 });
 document.getElementById('installGuideClose').addEventListener('click', () => {
