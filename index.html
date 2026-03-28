@@ -349,12 +349,10 @@
       <!-- Section Title -->
       <div class="section-title">
         <span class="section-title-text">Plataformas</span>
-        <span class="section-count" id="platformCount">0 disponíveis</span>
+        <span class="section-count" id="platformCount">61 disponíveis</span>
       </div>
       <!-- Platform Grid -->
-      <div class="platform-grid" id="platformGrid">
-        <div class="loading-wrap"><div class="spinner"></div><span style="color:var(--muted);font-size:14px">Carregando...</span></div>
-      </div>
+      <div class="platform-grid" id="platformGrid"></div>
     </div>
 
     <!-- FAVORITES SCREEN -->
@@ -1151,8 +1149,11 @@ document.getElementById('notifHeaderBtn').addEventListener('click', async () => 
 
 /// ===== INIT =====
 function init() {
-  // PASSO 1: Renderizar IMEDIATAMENTE com dados já disponíveis (não espera Firebase)
-  // Prioridade: localStorage > PLATFORMS_DATA embutido no HTML
+  // PASSO 1: Usar sempre PLATFORMS_DATA embutido no HTML (61 plataformas garantidas)
+  // Nunca depende de Firebase ou localStorage para renderizar
+  platforms = [...PLATFORMS_DATA];
+  
+  // Tenta pegar dados mais recentes do localStorage (se tiver)
   try {
     const saved = localStorage.getItem('av_platforms');
     if (saved) {
@@ -1162,7 +1163,8 @@ function init() {
       }
     }
   } catch(e) {}
-  // Renderiza imediatamente - o usuário vê as plataformas sem esperar
+  
+  // Renderiza IMEDIATAMENTE - sempre tem dados (PLATFORMS_DATA)
   renderHome();
 
   // PASSO 2: Atualizar do Firebase em SEGUNDO PLANO (sem bloquear o app)
