@@ -1,9 +1,9 @@
-const CACHE_NAME = 'acesso-vip-v1';
-const STATIC_ASSETS = ['/', '/index.html', '/manifest.json'];
+const CACHE_NAME = 'acesso-vip-v3';
+const STATIC_ASSETS = ['/acessovip/', '/acessovip/index.html', '/acessovip/manifest.json'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS).catch(() => {}))
   );
   self.skipWaiting();
 });
@@ -17,10 +17,30 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// Sempre busca da rede primeiro, cache só como fallback offline
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  
+  const url = new URL(event.request.url);
+  
+  // Para Firebase e APIs externas: sempre rede, nunca cache
+  if (url.hostname.includes('firebase') || url.hostname.includes('googleapis')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+  
+  // Para o app: rede primeiro, cache como fallback
   event.respondWith(
-    fetch(event.request).catch(() => caches.match(event.request))
+    fetch(event.request, { cache: 'no-cache' })
+      .then((response) => {
+        // Salva cópia no cache
+        if (response.ok) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
 
