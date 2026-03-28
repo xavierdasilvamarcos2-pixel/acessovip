@@ -1086,16 +1086,7 @@ if ('serviceWorker' in navigator) {
 
 // ===== WELCOME MODAL =====
 function checkWelcomeModal() {
-  const alreadySeen = localStorage.getItem('av_welcome_seen');
-  const notifStatus = Notification.permission;
-  // Mostra o modal se:
-  // 1. Nunca viu antes, OU
-  // 2. Viu mas ainda não ativou notificações
-  if (!alreadySeen || notifStatus === 'default') {
-    setTimeout(() => {
-      document.getElementById('welcomeModal').classList.add('open');
-    }, 1200); // pequeno delay para o app carregar
-  }
+  // Modal desativado - não bloqueia o app no Instagram
   // Atualiza ícone de notificação no header
   updateNotifBtn();
 }
