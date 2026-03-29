@@ -133,6 +133,22 @@
     .install-banner-icon { font-size: 28px; }
     .install-banner-arrow { font-size: 20px; }
 
+    /* iOS Install Banner */
+    .install-ios-banner { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #1c1c2e, #2d2d44); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.4); animation: pulse-install 2s ease-in-out infinite; border: 1px solid rgba(255,255,255,0.12); }
+    .install-ios-banner.hidden { display: none; }
+    /* iOS Install Modal */
+    .ios-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .ios-modal.open { opacity: 1; pointer-events: all; }
+    .ios-modal-box { background: #1a1a2e; border-radius: 20px 20px 0 0; padding: 24px 20px 36px; width: 100%; max-width: 480px; border-top: 3px solid #7C3AED; }
+    .ios-modal-title { font-size: 18px; font-weight: 900; color: #fff; text-align: center; margin-bottom: 6px; }
+    .ios-modal-sub { font-size: 13px; color: rgba(255,255,255,0.6); text-align: center; margin-bottom: 20px; }
+    .ios-step { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 12px 14px; }
+    .ios-step-num { background: #7C3AED; color: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; flex-shrink: 0; }
+    .ios-step-icon { font-size: 26px; flex-shrink: 0; }
+    .ios-step-text { font-size: 13px; color: #fff; line-height: 1.5; }
+    .ios-step-text strong { color: #a78bfa; }
+    .ios-modal-close { width: 100%; padding: 14px; border-radius: var(--radius); border: none; font-size: 15px; font-weight: 900; cursor: pointer; background: rgba(255,255,255,0.1); color: #fff; margin-top: 10px; }
+
     /* VIP Group Button */
     .vip-btn { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #25D366, #128C7E); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.3); border: none; width: calc(100% - 32px); animation: pulse-vip 2.4s ease-in-out infinite; }
     @keyframes pulse-vip { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
@@ -339,6 +355,38 @@
           <div class="install-banner-sub">👆 Adicione à tela inicial do celular!</div>
         </div>
         <span class="install-banner-arrow">⬇️</span>
+      </div>
+      <!-- Install iOS Banner -->
+      <div class="install-ios-banner hidden" id="installIosBanner">
+        <span class="install-banner-icon">🍎</span>
+        <div class="install-banner-text">
+          <div class="install-banner-title">INSTALAR NO iPHONE</div>
+          <div class="install-banner-sub">👆 Veja como adicionar à tela inicial!</div>
+        </div>
+        <span class="install-banner-arrow">⬇️</span>
+      </div>
+      <!-- iOS Install Guide Modal -->
+      <div class="ios-modal" id="iosInstallModal">
+        <div class="ios-modal-box">
+          <div class="ios-modal-title">📲 Instalar no iPhone</div>
+          <div class="ios-modal-sub">Siga os passos abaixo para adicionar o app à sua tela inicial</div>
+          <div class="ios-step">
+            <div class="ios-step-num">1</div>
+            <div class="ios-step-icon">⬆️</div>
+            <div class="ios-step-text">Toque no ícone de <strong>Compartilhar</strong> (quadrado com seta ↑) na barra inferior do Safari</div>
+          </div>
+          <div class="ios-step">
+            <div class="ios-step-num">2</div>
+            <div class="ios-step-icon">➕</div>
+            <div class="ios-step-text">Role para baixo e toque em <strong>"Adicionar à Tela de Início"</strong></div>
+          </div>
+          <div class="ios-step">
+            <div class="ios-step-num">3</div>
+            <div class="ios-step-icon">✅</div>
+            <div class="ios-step-text">Toque em <strong>"Adicionar"</strong> no canto superior direito. Pronto!</div>
+          </div>
+          <button class="ios-modal-close" id="iosModalClose">Entendi!</button>
+        </div>
       </div>
       <!-- VIP Group Button -->
       <button class="vip-btn" id="vipBtn">
@@ -847,6 +895,23 @@ document.getElementById('installBanner').addEventListener('click', async () => {
 document.getElementById('installGuideClose').addEventListener('click', () => {
   document.getElementById('installGuideModal').classList.remove('open');
 });;
+
+// ===== iOS INSTALL BUTTON =====
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+const isStandalone = window.navigator.standalone === true;
+if (isIOS && !isStandalone && !isInstalled) {
+  document.getElementById('installIosBanner').classList.remove('hidden');
+}
+document.getElementById('installIosBanner').addEventListener('click', () => {
+  document.getElementById('iosInstallModal').classList.add('open');
+  trackEvent('ios_install_guide_open');
+});
+document.getElementById('iosModalClose').addEventListener('click', () => {
+  document.getElementById('iosInstallModal').classList.remove('open');
+});
+document.getElementById('iosInstallModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('iosInstallModal')) document.getElementById('iosInstallModal').classList.remove('open');
+});
 
 // Hide install banner if already installed
 if (isInstalled || window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
