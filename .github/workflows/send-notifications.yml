@@ -1,0 +1,97 @@
+name: Send Pending Notifications
+
+on:
+  schedule:
+    # Roda a cada 5 minutos
+    - cron: '*/5 * * * *'
+  workflow_dispatch:  # Permite execução manual
+
+jobs:
+  send-notifications:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Process and send pending notifications
+        env:
+          FIREBASE_DB_URL: https://acessovip-fb4c3-default-rtdb.firebaseio.com
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
+          ONESIGNAL_API_KEY: ${{ secrets.ONESIGNAL_API_KEY }}
+        run: |
+          python3 << 'PYEOF'
+          import urllib.request, json, os, sys
+
+          FIREBASE_DB_URL = os.environ['FIREBASE_DB_URL']
+          FIREBASE_API_KEY = os.environ['FIREBASE_API_KEY']
+          ONESIGNAL_APP_ID = os.environ['ONESIGNAL_APP_ID']
+          ONESIGNAL_API_KEY = os.environ['ONESIGNAL_API_KEY']
+
+          # 1. Buscar notificações pendentes no Firebase
+          url = f"{FIREBASE_DB_URL}/pending_notifications.json?auth={FIREBASE_API_KEY}"
+          req = urllib.request.Request(url)
+          try:
+              with urllib.request.urlopen(req, timeout=15) as r:
+                  data = json.loads(r.read())
+          except Exception as e:
+              print(f"Erro ao buscar Firebase: {e}")
+              sys.exit(0)
+
+          if not data:
+              print("Nenhuma notificação pendente.")
+              sys.exit(0)
+
+          sent_count = 0
+          for key, notif in data.items():
+              if notif.get('sent', False):
+                  continue
+
+              title = notif.get('title', 'ACESSO VIP')
+              body = notif.get('body', '')
+              target_url = notif.get('url', 'https://acessoplatafomas.com.br/')
+              image_url = notif.get('image', '')
+
+              print(f"Enviando: {title} - {body[:50]}")
+
+              # 2. Enviar via OneSignal
+              payload = {
+                  'app_id': ONESIGNAL_APP_ID,
+                  'included_segments': ['Total Subscriptions'],
+                  'headings': {'en': title, 'pt': title},
+                  'contents': {'en': body, 'pt': body},
+                  'url': target_url,
+                  'chrome_web_icon': 'https://acessoplatafomas.com.br/icons/icon-192.png',
+              }
+              if image_url:
+                  payload['big_picture'] = image_url
+                  payload['chrome_web_image'] = image_url
+
+              req_os = urllib.request.Request(
+                  'https://api.onesignal.com/notifications',
+                  data=json.dumps(payload).encode(),
+                  headers={
+                      'Content-Type': 'application/json',
+                      'Authorization': f'Key {ONESIGNAL_API_KEY}'
+                  },
+                  method='POST'
+              )
+              try:
+                  with urllib.request.urlopen(req_os, timeout=15) as r:
+                      result = json.loads(r.read())
+                      notif_id = result.get('id', '')
+                      recipients = result.get('recipients', 0)
+                      print(f"  ✅ Enviado! ID: {notif_id} | Destinatários: {recipients}")
+                      sent_count += 1
+
+                      # 3. Marcar como enviado no Firebase
+                      update_url = f"{FIREBASE_DB_URL}/pending_notifications/{key}.json?auth={FIREBASE_API_KEY}"
+                      update_data = json.dumps({'sent': True, 'sent_at': __import__('time').time(), 'onesignal_id': notif_id}).encode()
+                      req_update = urllib.request.Request(update_url, data=update_data, headers={'Content-Type': 'application/json'}, method='PATCH')
+                      urllib.request.urlopen(req_update, timeout=10)
+
+              except urllib.error.HTTPError as e:
+                  error_body = e.read().decode()
+                  print(f"  ❌ Erro OneSignal {e.code}: {error_body[:200]}")
+              except Exception as e:
+                  print(f"  ❌ Erro: {e}")
+
+          print(f"\nTotal enviado: {sent_count}")
+          PYEOF
