@@ -301,15 +301,18 @@
         appId: "1ee5af72-b277-4de1-9d6f-ef75b5b49e70",
         notifyButton: { enable: false },
         allowLocalhostAsSecureOrigin: true,
+        serviceWorkerParam: { scope: '/' },
+        serviceWorkerPath: 'OneSignalSDKWorker.js',
       });
-      // Registrar o usuário automaticamente quando a página carrega
-      // Isso garante que o dispositivo seja registrado no OneSignal
       window._oneSignalReady = true;
       window._oneSignal = OneSignal;
-      // Verificar se já tem permissão e registrar
+      // Se já tem permissão, força opt-in para garantir registro
       const permission = await OneSignal.Notifications.permissionNative;
       if (permission === 'granted') {
-        try { await OneSignal.User.PushSubscription.optIn(); } catch(e) {}
+        try {
+          await OneSignal.User.PushSubscription.optIn();
+          console.log('[OneSignal] Registrado com sucesso. optedIn:', OneSignal.User.PushSubscription.optedIn);
+        } catch(e) { console.warn('[OneSignal] Erro ao registrar:', e); }
       }
     });
   </script>
@@ -647,7 +650,7 @@
 const ADMIN_PASSWORD = 'admin2025vip';
 const APP_URL = window.location.origin;
 const ONESIGNAL_APP_ID = '1ee5af72-b277-4de1-9d6f-ef75b5b49e70';
-const ONESIGNAL_API_KEY = 'os_v2_app_d3s264vso5g6dhlp5523lne6odjgeqkh4jdu63fjn7wdjkm56t4mtjnrl7rez4mgpxilfnjy2qxagfplqujlr72xsmhuxga4branuwa';
+const ONESIGNAL_API_KEY = 'os_v2_app_d3s264vso5g6dhlp5523lne6obmolop5feouw2ufxmbhxwbymawrroxxjmfqrcfxa74jhofpb5ly4hs2brlklgpa5sbr5dhibmojyfq';
 const GA_ID = 'G-XXXXXXXXXX'; // Substituir pelo ID real do Google Analytics
 
 // ===== PLATFORMS DATA (embedded from DB) =====
