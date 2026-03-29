@@ -647,7 +647,7 @@
 const ADMIN_PASSWORD = 'admin2025vip';
 const APP_URL = window.location.origin;
 const ONESIGNAL_APP_ID = '1ee5af72-b277-4de1-9d6f-ef75b5b49e70';
-const ONESIGNAL_API_KEY = 'os_v2_app_d3s264vso5g6dhlp5523lne6oaujiyxnrorejfnh6zbrcoc3d25owthy665rbqtsbv4sqygikthmy7fhomunwj34l426q5fdnxmp5fa';
+const ONESIGNAL_API_KEY = 'os_v2_app_d3s264vso5g6dhlp5523lne6oblguzfaixvelymip2kls67fumjrivtig6nrhwc5paif2fmklgmlutbd3ee6kewx23c5z6pw66a7s5q';
 const GA_ID = 'G-XXXXXXXXXX'; // Substituir pelo ID real do Google Analytics
 
 // ===== PLATFORMS DATA (embedded from DB) =====
@@ -1168,14 +1168,14 @@ async function sendPushNotification(title, body, tab) {
     // Agora envia direto para OneSignal (funciona no PC/Chrome)
     const payload = {
       app_id: ONESIGNAL_APP_ID,
-      included_segments: ['All'],
+      included_segments: ['Total Subscriptions'],
       headings: { en: title, pt: title },
       contents: { en: body, pt: body },
       url: targetUrl,
       chrome_web_icon: 'https://acessoplatafomas.com.br/icons/icon-192.png',
     };
     try {
-      const resp = await fetch('https://onesignal.com/api/v1/notifications', {
+      const resp = await fetch('https://api.onesignal.com/notifications', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Key ' + ONESIGNAL_API_KEY },
         body: JSON.stringify(payload)
