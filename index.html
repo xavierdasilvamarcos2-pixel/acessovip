@@ -93,8 +93,8 @@
       --orange: #F59E0B;
       --radius: 14px;
     }
-    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; overflow: auto; }
-    #app { min-height: 100vh; display: flex; flex-direction: column; max-width: 480px; margin: 0 auto; position: relative; }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; overflow: hidden; }
+    #app { height: 100vh; height: 100dvh; display: flex; flex-direction: column; max-width: 480px; margin: 0 auto; position: relative; overflow: hidden; }
 
     /* ===== HEADER ===== */
     .header { background: var(--bg); padding: 12px 16px 8px; padding-top: max(12px, env(safe-area-inset-top)); flex-shrink: 0; }
@@ -113,7 +113,7 @@
     .tab-badge { background: var(--red); color: #fff; border-radius: 10px; padding: 1px 5px; font-size: 9px; font-weight: 900; position: absolute; top: 4px; right: calc(50% - 20px); }
 
     /* ===== MAIN CONTENT ===== */
-    .main { flex: 1; overflow-y: visible; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+    .main { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; min-height: 0; }
     .screen { display: none; }
     .screen.active { display: block; }
 
