@@ -349,6 +349,11 @@
     .sinais-header-title { font-size: 20px; font-weight: 900; color: #fff; }
     .sinais-header-sub { font-size: 12px; color: #aaa; margin-top: 2px; display: flex; align-items: center; gap: 6px; }
     .sinais-live-dot { width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block; animation: blink 1.2s ease-in-out infinite; flex-shrink: 0; }
+    .sinais-live-count { font-size: 13px; font-weight: 900; color: #fff; background: #10B981; border-radius: 6px; padding: 1px 7px; margin-left: 4px; }
+    .sinais-live-badge { display: flex; align-items: center; gap: 6px; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); border-radius: 20px; padding: 4px 10px; }
+    .sinais-live-dot-red { width: 8px; height: 8px; border-radius: 50%; background: #EF4444; display: inline-block; animation: blink 1s ease-in-out infinite; flex-shrink: 0; }
+    .sinais-live-text { font-size: 12px; font-weight: 900; color: #EF4444; letter-spacing: 1px; }
+    .sinais-live-num { font-size: 14px; font-weight: 900; color: #fff; }
     @keyframes blink { 0%,100%{opacity:1;box-shadow:0 0 6px #10B981} 50%{opacity:0.3;box-shadow:none} }
     /* Notificação flutuante de saque */
     .saque-notif { position: fixed; top: 60px; left: 50%; transform: translateX(-50%) translateY(-80px); z-index: 300; background: #d4edda; border: 1px solid #28a745; border-radius: 10px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; min-width: 240px; max-width: 320px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.4s cubic-bezier(0.32,0.72,0,1), opacity 0.4s; opacity: 0; pointer-events: none; }
@@ -356,11 +361,13 @@
     .saque-notif-dot { width: 10px; height: 10px; border-radius: 50%; background: #28a745; flex-shrink: 0; }
     .saque-notif-text { font-size: 13px; font-weight: 700; color: #155724; }
     /* Grid de cards */
-    .sinais-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; background: #000; }
-    .sinal-card { background: #111; border-radius: 14px; padding: 12px 10px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid #222; cursor: pointer; }
-    .sinal-card-logo { width: 100%; height: 90px; border-radius: 10px; object-fit: cover; background: #222; display: block; }
-    .sinal-card-logo-ph { width: 100%; height: 90px; border-radius: 10px; background: linear-gradient(135deg, #1a1a2e, #16213e); display: flex; align-items: center; justify-content: center; font-size: 36px; }
-    .sinal-card-name { font-size: 12px; font-weight: 800; color: #fff; text-align: center; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sinais-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 12px; background: #000; }
+    .sinal-card { background: #111; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #222; cursor: pointer; }
+    .sinal-card-logo-wrap { position: relative; width: 100%; aspect-ratio: 1/1; background: #1a1a1a; }
+    .sinal-card-logo { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .sinal-card-logo-ph { width: 100%; height: 100%; background: linear-gradient(135deg, #1a1a2e, #16213e); display: flex; align-items: center; justify-content: center; font-size: 36px; }
+    .sinal-card-body { padding: 6px 6px 8px; display: flex; flex-direction: column; gap: 6px; }
+    .sinal-card-name { font-size: 11px; font-weight: 800; color: #fff; text-align: center; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     /* Barra de progresso com listras diagonais */
     .sinal-progress-wrap { width: 100%; }
     .sinal-progress-bg { width: 100%; height: 22px; background: #222; border-radius: 6px; overflow: hidden; position: relative; }
@@ -1265,77 +1272,17 @@
     <!-- SINAIS SCREEN -->
     <div class="screen" id="screen-sinais">
       <div class="sinais-header">
-        <div class="sinais-header-title">&#127919; Sinais ao Vivo</div>
-        <div class="sinais-header-sub"><span class="sinais-live-dot"></span>Atualizando em tempo real</div>
-      </div>
-      <div class="sinais-grid" id="sinaisGrid">
-<div class="sinal-card">
-      <img class="sinal-card-logo" src="https://i.imgur.com/8YkHqQe.png" alt="Fortune Tiger">
-      <div class="sinal-card-name">Fortune Tiger</div>
-      <div class="sinal-progress-wrap">
-        <div class="sinal-progress-bg">
-          <div class="sinal-progress-fill" id="sfill-d1" style="width:72%;background:#10B981"></div>
-          <div class="sinal-progress-pct" id="spct-d1">72%</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <div class="sinais-header-title">&#127919; Sinais ao Vivo</div>
+          <div class="sinais-live-badge">
+            <span class="sinais-live-dot-red"></span>
+            <span class="sinais-live-text">LIVE</span>
+            <span class="sinais-live-num" id="sinaisLiveCount">0</span>
+          </div>
         </div>
+        <div class="sinais-header-sub">Escolha o jogo com a <strong style="color:#10B981">BARRA VERDE</strong> para maior assertividade</div>
       </div>
-      <button class="sinal-play-btn" onclick="openSinalDetail('d1')">JOGAR</button>
-    </div>
-<div class="sinal-card">
-      <img class="sinal-card-logo" src="https://i.imgur.com/2nCt3Sbl.jpg" alt="Fortune Mouse">
-      <div class="sinal-card-name">Fortune Mouse</div>
-      <div class="sinal-progress-wrap">
-        <div class="sinal-progress-bg">
-          <div class="sinal-progress-fill" id="sfill-d2" style="width:72%;background:#10B981"></div>
-          <div class="sinal-progress-pct" id="spct-d2">72%</div>
-        </div>
-      </div>
-      <button class="sinal-play-btn" onclick="openSinalDetail('d2')">JOGAR</button>
-    </div>
-<div class="sinal-card">
-      <div class="sinal-card-logo-ph">🎮</div>
-      <div class="sinal-card-name">Fortune Ox</div>
-      <div class="sinal-progress-wrap">
-        <div class="sinal-progress-bg">
-          <div class="sinal-progress-fill" id="sfill-d3" style="width:72%;background:#10B981"></div>
-          <div class="sinal-progress-pct" id="spct-d3">72%</div>
-        </div>
-      </div>
-      <button class="sinal-play-btn" onclick="openSinalDetail('d3')">JOGAR</button>
-    </div>
-<div class="sinal-card">
-      <div class="sinal-card-logo-ph">🎮</div>
-      <div class="sinal-card-name">Gates of Olympus</div>
-      <div class="sinal-progress-wrap">
-        <div class="sinal-progress-bg">
-          <div class="sinal-progress-fill" id="sfill-d4" style="width:72%;background:#10B981"></div>
-          <div class="sinal-progress-pct" id="spct-d4">72%</div>
-        </div>
-      </div>
-      <button class="sinal-play-btn" onclick="openSinalDetail('d4')">JOGAR</button>
-    </div>
-<div class="sinal-card">
-      <div class="sinal-card-logo-ph">🎮</div>
-      <div class="sinal-card-name">Sweet Bonanza</div>
-      <div class="sinal-progress-wrap">
-        <div class="sinal-progress-bg">
-          <div class="sinal-progress-fill" id="sfill-d5" style="width:72%;background:#10B981"></div>
-          <div class="sinal-progress-pct" id="spct-d5">72%</div>
-        </div>
-      </div>
-      <button class="sinal-play-btn" onclick="openSinalDetail('d5')">JOGAR</button>
-    </div>
-<div class="sinal-card">
-      <div class="sinal-card-logo-ph">🎮</div>
-      <div class="sinal-card-name">Aviator</div>
-      <div class="sinal-progress-wrap">
-        <div class="sinal-progress-bg">
-          <div class="sinal-progress-fill" id="sfill-d6" style="width:72%;background:#10B981"></div>
-          <div class="sinal-progress-pct" id="spct-d6">72%</div>
-        </div>
-      </div>
-      <button class="sinal-play-btn" onclick="openSinalDetail('d6')">JOGAR</button>
-    </div>
-</div>
+      <div class="sinais-grid" id="sinaisGrid"></div>
     </div>
     <!-- RTP SCREEN -->
     <!-- RTP SCREEN -->
