@@ -1,4 +1,4 @@
-const CACHE_NAME = 'acesso-vip-v10';
+const CACHE_NAME = 'acesso-vip-v11';
 const STATIC_ASSETS = ['/', '/index.html', '/manifest.json'];
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -16,8 +16,9 @@ self.addEventListener('activate', (event) => {
 });
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  // Network first para garantir sempre a versão mais recente
   event.respondWith(
-    fetch(event.request).then((response) => {
+    fetch(event.request, { cache: 'no-cache' }).then((response) => {
       if (response && response.status === 200) {
         const clone = response.clone();
         caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
