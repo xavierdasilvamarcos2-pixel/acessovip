@@ -1173,6 +1173,7 @@ tabs.forEach(tab => {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('screen-' + name).classList.add('active');
     document.getElementById('mainContent').scrollTop = 0;
+    if (name === 'home') renderHome();
     if (name === 'favs') renderFavs();
     if (name === 'hot') renderHot();
     if (name === 'share') renderShare();
