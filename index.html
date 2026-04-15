@@ -1779,8 +1779,7 @@ function init() {
     }
   }
 }
-init();;
-
+// init() movido para o final do script
 // ===== SINAIS SYSTEM =====
 var sinaisData = [];
 var sinaisIntervals = [];
@@ -2169,7 +2168,8 @@ if (addRtpBtn) {
 // Carregar dados ao iniciar
 loadSinaisData();
 loadRtpData();
-
+// Inicializar o app DEPOIS de todo o código estar carregado
+init();
 </script>
 </body>
 </html>
