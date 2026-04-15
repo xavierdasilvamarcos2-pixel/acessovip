@@ -1660,6 +1660,12 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// ===== EARLY DECLARATIONS (must be before any event listeners) =====
+var sinaisData = [];
+var sinaisIntervals = [];
+var rtpData = [];
+var rtpIntervals = [];
+
 // ===== CONFIG =====
 const ADMIN_PASSWORD = 'admin2025vip';
 const APP_URL = window.location.origin;
@@ -2434,8 +2440,6 @@ function init() {
 }
 // init() movido para o final do script
 // ===== SINAIS SYSTEM =====
-var sinaisData = [];
-var sinaisIntervals = [];
 var sinalTimer = null;
 
 var SINAIS_DEFAULTS = [
@@ -2504,6 +2508,7 @@ function renderSinais() {
   if (!grid) return;
   var list = sinaisData.length > 0 ? sinaisData : SINAIS_DEFAULTS;
 
+  if (!Array.isArray(sinaisIntervals)) sinaisIntervals = [];
   sinaisIntervals.forEach(function(id) { clearInterval(id); });
   sinaisIntervals = [];
 
