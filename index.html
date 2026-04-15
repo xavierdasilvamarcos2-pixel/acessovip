@@ -236,62 +236,110 @@
     .install-step-text { font-size: 14px; color: var(--text); line-height: 1.5; }
 
     /* ===== ADMIN SCREEN ===== */
-    .admin-screen { padding: 16px; }
-    .admin-login { display: flex; flex-direction: column; gap: 12px; max-width: 320px; margin: 40px auto; }
-    .admin-login-title { font-size: 22px; font-weight: 900; color: var(--text); text-align: center; }
-    .admin-input { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; color: var(--text); font-size: 15px; outline: none; width: 100%; }
-    .admin-input::placeholder { color: var(--muted); }
-    .admin-login-btn { background: var(--primary); border: none; border-radius: 10px; padding: 14px; color: #fff; font-size: 16px; font-weight: 900; cursor: pointer; }
-    .admin-tabs { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; }
-    .admin-tab { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; color: var(--muted); font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
-    .admin-tab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .admin-screen { padding: 0; }
+    /* Admin Header */
+    .admin-hdr { background: linear-gradient(135deg, #1a0533 0%, #2d0a5c 50%, #0a1a3a 100%); padding: 20px 16px 16px; padding-top: max(20px, env(safe-area-inset-top)); border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .admin-hdr-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .admin-hdr-badge { background: linear-gradient(135deg, #F59E0B, #D97706); color: #000; font-size: 10px; font-weight: 900; padding: 3px 10px; border-radius: 20px; letter-spacing: 1px; }
+    .admin-hdr-title { font-size: 22px; font-weight: 900; color: #fff; }
+    .admin-hdr-sub { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    .admin-logout-btn { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 7px 14px; color: #F87171; font-size: 12px; font-weight: 700; cursor: pointer; }
+    /* Admin Nav - vertical scroll tabs */
+    .admin-nav { display: flex; gap: 8px; padding: 12px 14px; overflow-x: auto; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .admin-nav::-webkit-scrollbar { display: none; }
+    .admin-nav-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px 14px; color: rgba(255,255,255,0.5); font-size: 10px; font-weight: 800; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
+    .admin-nav-btn-icon { font-size: 20px; }
+    .admin-nav-btn.active { border-color: transparent; color: #fff; }
+    .admin-nav-btn[data-admin-tab="platforms"].active { background: linear-gradient(135deg, #7C3AED, #5B21B6); box-shadow: 0 4px 15px rgba(124,58,237,0.4); }
+    .admin-nav-btn[data-admin-tab="add"].active { background: linear-gradient(135deg, #059669, #047857); box-shadow: 0 4px 15px rgba(5,150,105,0.4); }
+    .admin-nav-btn[data-admin-tab="notifications"].active { background: linear-gradient(135deg, #DC2626, #B91C1C); box-shadow: 0 4px 15px rgba(220,38,38,0.4); }
+    .admin-nav-btn[data-admin-tab="sinais"].active { background: linear-gradient(135deg, #F59E0B, #D97706); box-shadow: 0 4px 15px rgba(245,158,11,0.4); }
+    .admin-nav-btn[data-admin-tab="rtp"].active { background: linear-gradient(135deg, #10B981, #059669); box-shadow: 0 4px 15px rgba(16,185,129,0.4); }
+    .admin-nav-btn[data-admin-tab="stats"].active { background: linear-gradient(135deg, #3B82F6, #2563EB); box-shadow: 0 4px 15px rgba(59,130,246,0.4); }
+    /* Admin Content */
+    .admin-content { padding: 16px; overflow-y: auto; }
     .admin-section { display: none; }
     .admin-section.active { display: block; }
-    .admin-card { background: var(--surface); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; border: 1px solid var(--border); }
-    .admin-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-    .admin-card-img { width: 44px; height: 44px; border-radius: 50%; object-fit: contain; background: #fff; flex-shrink: 0; }
-    .admin-card-name { font-size: 15px; font-weight: 800; color: var(--text); flex: 1; }
-    .admin-card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-    .admin-btn { padding: 6px 10px; border-radius: 6px; border: none; font-size: 11px; font-weight: 700; cursor: pointer; }
-    .admin-btn-high { background: var(--red); color: #fff; }
-    .admin-btn-high.active { background: #7f1d1d; }
-    .admin-btn-launch { background: var(--primary); color: #fff; }
-    .admin-btn-up { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-    .admin-btn-down { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-    .admin-btn-del { background: #7f1d1d; color: #fff; }
-    .admin-btn-edit { background: var(--orange); color: #fff; }
-    .admin-form { background: var(--surface); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); }
-    .admin-form-title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 12px; }
-    .admin-form-row { margin-bottom: 10px; }
-    .admin-form-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; display: block; font-weight: 600; }
-    .admin-form-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--text); font-size: 14px; outline: none; }
-    .admin-form-input::placeholder { color: var(--muted); }
-    .admin-form-submit { width: 100%; padding: 12px; background: var(--green); border: none; border-radius: 10px; color: #fff; font-size: 15px; font-weight: 900; cursor: pointer; margin-top: 4px; }
-    .admin-notif-textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--text); font-size: 14px; outline: none; resize: none; height: 80px; font-family: inherit; }
-    .admin-notif-send { width: 100%; padding: 14px; background: var(--primary); border: none; border-radius: 10px; color: #fff; font-size: 15px; font-weight: 900; cursor: pointer; }
-    .admin-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-    .admin-stat { background: var(--surface); border-radius: var(--radius); padding: 16px; text-align: center; border: 1px solid var(--border); }
-    .admin-stat-num { font-size: 32px; font-weight: 900; color: var(--primary-light); }
-    .admin-stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
-    .admin-search { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; color: var(--text); font-size: 14px; outline: none; margin-bottom: 12px; }
-    .admin-search::placeholder { color: var(--muted); }
-    .admin-hot-input { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; color: var(--text); font-size: 12px; outline: none; width: 120px; }
-
-    /* Toast */
-    .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 14px; font-weight: 600; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
-    .toast.show { opacity: 1; }
-
-    /* Notification permission banner */
-    .notif-banner { margin: 0 16px 12px; background: linear-gradient(135deg, #1e1b4b, #312e81); border-radius: var(--radius); padding: 12px 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; border: 1px solid rgba(124,58,237,0.4); }
-    .notif-banner.hidden { display: none; }
-    .notif-banner-text { flex: 1; }
-    .notif-banner-title { font-size: 13px; font-weight: 800; color: #fff; }
-    .notif-banner-sub { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 2px; }
-    .notif-banner-close { background: none; border: none; color: rgba(255,255,255,0.5); font-size: 18px; cursor: pointer; padding: 0 4px; }
-
-    /* Scrollbar */
-    .main::-webkit-scrollbar { width: 0; }
-
+    /* Section Header */
+    .admin-sec-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .admin-sec-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .admin-sec-icon.purple { background: linear-gradient(135deg, #7C3AED, #5B21B6); }
+    .admin-sec-icon.green { background: linear-gradient(135deg, #059669, #047857); }
+    .admin-sec-icon.red { background: linear-gradient(135deg, #DC2626, #B91C1C); }
+    .admin-sec-icon.orange { background: linear-gradient(135deg, #F59E0B, #D97706); }
+    .admin-sec-icon.teal { background: linear-gradient(135deg, #10B981, #059669); }
+    .admin-sec-icon.blue { background: linear-gradient(135deg, #3B82F6, #2563EB); }
+    .admin-sec-ttl { font-size: 18px; font-weight: 900; color: #fff; }
+    .admin-sec-sub { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+    /* Forms */
+    .admin-form { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 16px; margin-bottom: 16px; }
+    .admin-form-row { margin-bottom: 12px; }
+    .admin-form-label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.6); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .admin-form-input { width: 100%; background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 14px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none; }
+    .admin-form-input:focus { border-color: rgba(124,58,237,0.6); background: rgba(124,58,237,0.05); }
+    .admin-form-input::placeholder { color: rgba(255,255,255,0.25); }
+    .admin-notif-textarea { width: 100%; background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 14px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none; min-height: 80px; resize: vertical; }
+    .admin-notif-textarea:focus { border-color: rgba(220,38,38,0.6); }
+    /* Buttons */
+    .admin-btn-submit { width: 100%; border: none; border-radius: 14px; padding: 15px; color: #fff; font-size: 15px; font-weight: 900; cursor: pointer; margin-top: 4px; letter-spacing: 0.3px; }
+    .admin-btn-submit.purple { background: linear-gradient(135deg, #7C3AED, #5B21B6); box-shadow: 0 4px 20px rgba(124,58,237,0.35); }
+    .admin-btn-submit.green { background: linear-gradient(135deg, #059669, #047857); box-shadow: 0 4px 20px rgba(5,150,105,0.35); }
+    .admin-btn-submit.red { background: linear-gradient(135deg, #DC2626, #B91C1C); box-shadow: 0 4px 20px rgba(220,38,38,0.35); }
+    .admin-btn-submit.orange { background: linear-gradient(135deg, #F59E0B, #D97706); box-shadow: 0 4px 20px rgba(245,158,11,0.35); }
+    .admin-btn-submit.teal { background: linear-gradient(135deg, #10B981, #059669); box-shadow: 0 4px 20px rgba(16,185,129,0.35); }
+    .admin-btn-submit.blue { background: linear-gradient(135deg, #3B82F6, #2563EB); box-shadow: 0 4px 20px rgba(59,130,246,0.35); }
+    .admin-btn-submit:active { opacity: 0.85; transform: scale(0.98); }
+    /* Search bar */
+    .admin-search-wrap { position: relative; margin-bottom: 14px; }
+    .admin-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 16px; opacity: 0.4; }
+    .admin-search-input { width: 100%; background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 14px 12px 40px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none; }
+    .admin-search-input:focus { border-color: rgba(124,58,237,0.5); }
+    .admin-search-input::placeholder { color: rgba(255,255,255,0.25); }
+    /* Platform cards */
+    .admin-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 14px; margin-bottom: 10px; }
+    .admin-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .admin-card-img { width: 48px; height: 48px; border-radius: 12px; object-fit: cover; background: rgba(255,255,255,0.05); flex-shrink: 0; }
+    .admin-card-name { font-size: 15px; font-weight: 900; color: #fff; flex: 1; }
+    .admin-hot-input { width: 100%; background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 9px 12px; color: #fff; font-size: 13px; box-sizing: border-box; outline: none; }
+    .admin-hot-input:focus { border-color: rgba(245,158,11,0.5); }
+    .admin-card-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+    .admin-btn { border: none; border-radius: 10px; padding: 8px 12px; font-size: 12px; font-weight: 800; cursor: pointer; flex-shrink: 0; transition: opacity 0.15s; }
+    .admin-btn:active { opacity: 0.7; }
+    .admin-btn-high { background: rgba(245,158,11,0.15); color: #F59E0B; border: 1px solid rgba(245,158,11,0.3); }
+    .admin-btn-high.active { background: linear-gradient(135deg, #F59E0B, #D97706); color: #000; border-color: transparent; }
+    .admin-btn-launch { background: rgba(16,185,129,0.15); color: #10B981; border: 1px solid rgba(16,185,129,0.3); }
+    .admin-btn-launch.active { background: linear-gradient(135deg, #10B981, #059669); color: #fff; border-color: transparent; }
+    .admin-btn-up { background: rgba(59,130,246,0.15); color: #60A5FA; border: 1px solid rgba(59,130,246,0.3); }
+    .admin-btn-down { background: rgba(139,92,246,0.15); color: #A78BFA; border: 1px solid rgba(139,92,246,0.3); }
+    .admin-btn-del { background: rgba(239,68,68,0.15); color: #F87171; border: 1px solid rgba(239,68,68,0.3); }
+    /* Stats */
+    .admin-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .admin-stat { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px 14px; text-align: center; }
+    .admin-stat-num { font-size: 32px; font-weight: 900; color: #fff; }
+    .admin-stat-label { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 4px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    /* Sinal/RTP items */
+    .admin-sinal-item, .admin-rtp-item { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .admin-sinal-item-logo, .admin-rtp-item-logo { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; background: rgba(255,255,255,0.05); flex-shrink: 0; }
+    .admin-sinal-item-info, .admin-rtp-item-info { flex: 1; min-width: 0; }
+    .admin-sinal-item-name, .admin-rtp-item-game { font-size: 13px; font-weight: 800; color: #fff; }
+    .admin-sinal-item-plat, .admin-rtp-item-plat { font-size: 11px; color: rgba(255,255,255,0.4); }
+    .admin-rtp-item-pct { font-size: 18px; font-weight: 900; color: #F59E0B; flex-shrink: 0; }
+    .admin-sinal-item-del, .admin-rtp-item-del { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 7px 10px; color: #F87171; font-size: 14px; cursor: pointer; flex-shrink: 0; }
+    /* Notif info box */
+    .admin-info-box { background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.25); border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; font-size: 12px; color: #C4B5FD; line-height: 1.6; }
+    /* Empty state */
+    .admin-empty { text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.3); }
+    .admin-empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .admin-empty-text { font-size: 14px; font-weight: 600; }
+    /* Login screen */
+    .admin-login-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; padding: 32px 24px; }
+    .admin-login-icon { font-size: 56px; margin-bottom: 16px; }
+    .admin-login-title { font-size: 24px; font-weight: 900; color: #fff; margin-bottom: 6px; }
+    .admin-login-sub { font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 28px; text-align: center; }
+    .admin-login-input { width: 100%; background: rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 15px 18px; color: #fff; font-size: 16px; box-sizing: border-box; outline: none; margin-bottom: 14px; text-align: center; letter-spacing: 4px; }
+    .admin-login-input:focus { border-color: rgba(124,58,237,0.6); }
+    .admin-login-btn { width: 100%; background: linear-gradient(135deg, #7C3AED, #5B21B6); border: none; border-radius: 14px; padding: 16px; color: #fff; font-size: 16px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 20px rgba(124,58,237,0.4); }
+    /* ===== SINAIS SCREEN ===== */
     /* ===== SINAIS SCREEN ===== */
     .sinais-header { padding: 16px 16px 10px; background: #000; }
     .sinais-header-title { font-size: 20px; font-weight: 900; color: #fff; }
@@ -705,146 +753,235 @@
 </div>
 
 <!-- ADMIN SCREEN (hidden, accessible via 3 taps on header) -->
-<div id="adminScreen" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:200;overflow-y:auto;">
-  <div style="padding:12px 16px;padding-top:max(12px,env(safe-area-inset-top));display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);">
-    <button id="adminBack" style="background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;">←</button>
-    <span style="font-size:18px;font-weight:900;color:var(--text);">⚙️ Admin</span>
-  </div>
-  <div id="adminLoginWrap" class="admin-screen">
-    <div class="admin-login">
-      <div class="admin-login-title">🔐 Acesso Admin</div>
-      <input class="admin-input" id="adminPassInput" type="password" placeholder="Senha de administrador" />
-      <button class="admin-login-btn" id="adminLoginBtn">Entrar</button>
+<div class="screen" id="adminScreen" style="display:none;overflow-y:auto;">
+  <!-- Login -->
+  <div id="adminLoginWrap">
+    <div class="admin-login-wrap">
+      <div class="admin-login-icon">&#128274;</div>
+      <div class="admin-login-title">Painel Admin</div>
+      <div class="admin-login-sub">Digite a senha para acessar o painel de controle</div>
+      <input class="admin-login-input" type="password" id="adminPasswordInput" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" />
+      <button class="admin-login-btn" id="adminLoginBtn">&#128275; ENTRAR</button>
     </div>
   </div>
-  <div id="adminPanelWrap" class="admin-screen" style="display:none;">
-    <div style="padding:16px;">
-      <div class="admin-tabs">
-        <button class="admin-tab active" data-admin-tab="platforms">Plataformas</button>
-        <button class="admin-tab" data-admin-tab="add">Adicionar</button>
-        <button class="admin-tab" data-admin-tab="notifications">Notificações</button>
-        <button class="admin-tab" data-admin-tab="stats">Estatísticas</button>
-        <button class="admin-tab" data-admin-tab="sinais">&#127919; Sinais</button>
-        <button class="admin-tab" data-admin-tab="rtp">&#128176; RTP</button>
-      </div>
-      <!-- Platforms Tab -->
-      <div class="admin-section active" id="admin-tab-platforms">
-        <input class="admin-search" id="adminSearch" type="text" placeholder="Buscar plataforma..." />
-        <div id="adminPlatformList"></div>
-      </div>
-      <!-- Add Platform Tab -->
-      <div class="admin-section" id="admin-tab-add">
-        <div class="admin-form">
-          <div class="admin-form-title">➕ Nova Plataforma</div>
-          <div class="admin-form-row">
-            <label class="admin-form-label">URL da Logo</label>
-            <input class="admin-form-input" id="addLogoUrl" type="url" placeholder="https://..." />
-          </div>
-          <div class="admin-form-row">
-            <label class="admin-form-label">Nome da Plataforma</label>
-            <input class="admin-form-input" id="addName" type="text" placeholder="Ex: SPIN77" />
-          </div>
-          <div class="admin-form-row">
-            <label class="admin-form-label">URL do Link</label>
-            <input class="admin-form-input" id="addUrl" type="url" placeholder="https://..." />
-          </div>
-          <button class="admin-form-submit" id="addPlatformBtn">✅ Adicionar Plataforma</button>
+  <!-- Panel -->
+  <div id="adminPanelWrap" style="display:none;">
+    <!-- Header -->
+    <div class="admin-hdr">
+      <div class="admin-hdr-top">
+        <div>
+          <div class="admin-hdr-title">&#9881;&#65039; Painel Admin</div>
+          <div class="admin-hdr-sub">Gerencie tudo do seu app aqui</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="admin-hdr-badge">PRO</span>
+          <button class="admin-logout-btn" id="adminLogoutBtn">Sair</button>
         </div>
       </div>
-      <!-- Notifications Tab -->
-      <div class="admin-section" id="admin-tab-notifications">
+    </div>
+    <!-- Nav Tabs -->
+    <div class="admin-nav">
+      <button class="admin-nav-btn active" data-admin-tab="platforms">
+        <span class="admin-nav-btn-icon">&#128293;</span>Plataformas
+      </button>
+      <button class="admin-nav-btn" data-admin-tab="add">
+        <span class="admin-nav-btn-icon">&#10133;</span>Adicionar
+      </button>
+      <button class="admin-nav-btn" data-admin-tab="notifications">
+        <span class="admin-nav-btn-icon">&#128226;</span>Notificações
+      </button>
+      <button class="admin-nav-btn" data-admin-tab="sinais">
+        <span class="admin-nav-btn-icon">&#127919;</span>Sinais
+      </button>
+      <button class="admin-nav-btn" data-admin-tab="rtp">
+        <span class="admin-nav-btn-icon">&#128176;</span>RTP
+      </button>
+      <button class="admin-nav-btn" data-admin-tab="stats">
+        <span class="admin-nav-btn-icon">&#128200;</span>Stats
+      </button>
+    </div>
+    <!-- Content -->
+    <div class="admin-content">
+
+      <!-- PLATAFORMAS TAB -->
+      <div class="admin-section active" id="admin-tab-platforms">
+        <div class="admin-sec-hdr">
+          <div class="admin-sec-icon purple">&#128293;</div>
+          <div>
+            <div class="admin-sec-ttl">Plataformas Cadastradas</div>
+            <div class="admin-sec-sub">Gerencie, reordene e edite suas plataformas</div>
+          </div>
+        </div>
+        <div class="admin-search-wrap">
+          <span class="admin-search-icon">&#128269;</span>
+          <input class="admin-search-input" id="adminSearch" placeholder="Buscar plataforma..." />
+        </div>
+        <div id="adminPlatformList"></div>
+      </div>
+
+      <!-- ADICIONAR TAB -->
+      <div class="admin-section" id="admin-tab-add">
+        <div class="admin-sec-hdr">
+          <div class="admin-sec-icon green">&#10133;</div>
+          <div>
+            <div class="admin-sec-ttl">Nova Plataforma</div>
+            <div class="admin-sec-sub">Adicione uma nova plataforma ao app</div>
+          </div>
+        </div>
         <div class="admin-form">
-          <div class="admin-form-title">📢 Enviar Notificação</div>
-          <div style="background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.35);border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:#c4b5fd;line-height:1.6">
-            🔥 Ao clicar na notificação, o usuário será levado direto para a aba <strong style="color:#fff">Mais Quentes</strong> do app.
+          <div class="admin-form-row">
+            <label class="admin-form-label">&#128247; URL da Logo</label>
+            <input class="admin-form-input" id="addLogoUrl" type="url" placeholder="https://exemplo.com/logo.png" />
           </div>
           <div class="admin-form-row">
-            <label class="admin-form-label">Título</label>
-            <input class="admin-form-input" id="notifTitle" type="text" placeholder="Ex: Plataforma Em Alta!" value="🔥 Plataforma Em Alta!" />
+            <label class="admin-form-label">&#127991;&#65039; Nome da Plataforma</label>
+            <input class="admin-form-input" id="addName" type="text" placeholder="Ex: SPIN77, FORTUNE BET..." />
           </div>
           <div class="admin-form-row">
-            <label class="admin-form-label">Mensagem</label>
+            <label class="admin-form-label">&#128279; URL do Link de Acesso</label>
+            <input class="admin-form-input" id="addUrl" type="url" placeholder="https://plataforma.com/cadastro" />
+          </div>
+          <button class="admin-btn-submit green" id="addPlatformBtn">&#10133; ADICIONAR PLATAFORMA</button>
+        </div>
+      </div>
+
+      <!-- NOTIFICAÇÕES TAB -->
+      <div class="admin-section" id="admin-tab-notifications">
+        <div class="admin-sec-hdr">
+          <div class="admin-sec-icon red">&#128226;</div>
+          <div>
+            <div class="admin-sec-ttl">Enviar Notificação</div>
+            <div class="admin-sec-sub">Notifique todos os usuários do app</div>
+          </div>
+        </div>
+        <div class="admin-info-box">
+          &#128293; Ao clicar na notificação, o usuário será levado para a aba <strong style="color:#fff">Mais Quentes</strong> do app.
+        </div>
+        <div class="admin-form">
+          <div class="admin-form-row">
+            <label class="admin-form-label">&#128172; Título da Notificação</label>
+            <input class="admin-form-input" id="notifTitle" type="text" placeholder="Ex: 🔥 Plataforma Em Alta!" value="&#128293; Plataforma Em Alta!" />
+          </div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">&#128221; Mensagem</label>
             <textarea class="admin-notif-textarea" id="notifBody" placeholder="Ex: Fortune Tiger pagando muito hoje! Corre lá 🐯"></textarea>
           </div>
           <div class="admin-form-row">
-            <label class="admin-form-label">Imagem (opcional)</label>
-            <input class="admin-form-input" id="notifImage" type="url" placeholder="Cole a URL de uma imagem (https://...)" />
-            <div style="font-size:11px;color:var(--muted);margin-top:4px;">A imagem aparece em destaque abaixo do texto da notificação</div>
+            <label class="admin-form-label">&#128247; Imagem (opcional)</label>
+            <input class="admin-form-input" id="notifImage" type="url" placeholder="https://link-da-imagem.com/foto.jpg" />
+            <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:5px;">A imagem aparece em destaque na notificação</div>
           </div>
           <input type="hidden" id="notifUrl" value="hot" />
-          <button class="admin-notif-send" id="sendNotifBtn">📤 Enviar para Todos</button>
-          <div id="notifResult" style="margin-top:10px;font-size:13px;color:var(--muted);text-align:center;"></div>
+          <button class="admin-btn-submit red" id="sendNotifBtn">&#128228; ENVIAR PARA TODOS</button>
+          <div id="notifResult" style="margin-top:12px;font-size:13px;color:rgba(255,255,255,0.4);text-align:center;"></div>
         </div>
       </div>
-      <!-- Stats Tab -->
-      <div class="admin-section" id="admin-tab-stats">
-        <div class="admin-stats-grid">
-          <div class="admin-stat"><div class="admin-stat-num" id="adminStatInstalls">-</div><div class="admin-stat-label">Instalações PWA</div></div>
-          <div class="admin-stat"><div class="admin-stat-num" id="adminStatTokens">-</div><div class="admin-stat-label">Tokens Push</div></div>
-          <div class="admin-stat"><div class="admin-stat-num" id="adminStatPlatforms">-</div><div class="admin-stat-label">Plataformas</div></div>
-          <div class="admin-stat"><div class="admin-stat-num" id="adminStatHigh">-</div><div class="admin-stat-label">Em Alta</div></div>
-        </div>
-        <button class="admin-notif-send" id="refreshStatsBtn" style="background:var(--surface);color:var(--text);border:1px solid var(--border)">🔄 Atualizar</button>
-      </div>
-    </div>
-      <!-- Sinais Tab -->
+
+      <!-- SINAIS TAB -->
       <div class="admin-section" id="admin-tab-sinais">
-        <div class="admin-form" style="margin-bottom:16px">
-          <div class="admin-form-title">&#127919; Adicionar Jogo de Sinais</div>
+        <div class="admin-sec-hdr">
+          <div class="admin-sec-icon orange">&#127919;</div>
+          <div>
+            <div class="admin-sec-ttl">Jogos de Sinais</div>
+            <div class="admin-sec-sub">Gerencie os jogos da aba Sinais</div>
+          </div>
+        </div>
+        <div class="admin-form">
           <div class="admin-form-row">
-            <label class="admin-form-label">Nome do Jogo</label>
+            <label class="admin-form-label">&#127918; Nome do Jogo</label>
             <input class="admin-form-input" id="sinalGameName" type="text" placeholder="Ex: Fortune Tiger" />
           </div>
           <div class="admin-form-row">
-            <label class="admin-form-label">Plataforma</label>
-            <input class="admin-form-input" id="sinalPlatform" type="text" placeholder="Ex: PG Soft" />
+            <label class="admin-form-label">&#127968; Plataforma</label>
+            <input class="admin-form-input" id="sinalPlatform" type="text" placeholder="Ex: PG Soft, Pragmatic..." />
           </div>
           <div class="admin-form-row">
-            <label class="admin-form-label">URL da Logo (opcional)</label>
+            <label class="admin-form-label">&#128247; URL da Logo (opcional)</label>
             <input class="admin-form-input" id="sinalLogoUrl" type="url" placeholder="https://..." />
           </div>
           <div class="admin-form-row">
-            <label class="admin-form-label">Link da Plataforma (opcional)</label>
+            <label class="admin-form-label">&#128279; Link da Plataforma (opcional)</label>
             <input class="admin-form-input" id="sinalGameUrl" type="url" placeholder="https://..." />
           </div>
-          <button class="admin-form-submit" id="addSinalBtn">&#43; Adicionar Jogo</button>
+          <button class="admin-btn-submit orange" id="addSinalBtn">&#10133; ADICIONAR JOGO</button>
         </div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;padding:0 2px">
-          Jogos cadastrados: <strong id="sinalCount" style="color:var(--text)">0</strong>
-          <span style="margin-left:8px;font-size:11px;color:var(--muted)">(Se vazio, usa jogos padr&#227;o)</span>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+          <span>Jogos cadastrados:</span>
+          <strong id="sinalCount" style="color:#F59E0B;font-size:16px">0</strong>
+          <span style="font-size:11px">(vazio = usa jogos padrão)</span>
         </div>
         <div id="adminSinalList"></div>
       </div>
-      <!-- RTP Tab -->
+
+      <!-- RTP TAB -->
       <div class="admin-section" id="admin-tab-rtp">
-        <div class="admin-form" style="margin-bottom:16px">
-          <div class="admin-form-title">&#128176; Adicionar Jogo RTP</div>
+        <div class="admin-sec-hdr">
+          <div class="admin-sec-icon teal">&#128176;</div>
+          <div>
+            <div class="admin-sec-ttl">Jogos RTP</div>
+            <div class="admin-sec-sub">Gerencie os jogos da aba RTP</div>
+          </div>
+        </div>
+        <div class="admin-form">
           <div class="admin-form-row">
-            <label class="admin-form-label">Nome do Jogo</label>
+            <label class="admin-form-label">&#127918; Nome do Jogo</label>
             <input class="admin-form-input" id="rtpGameName" type="text" placeholder="Ex: Gates of Olympus" />
           </div>
           <div class="admin-form-row">
-            <label class="admin-form-label">Plataforma</label>
-            <input class="admin-form-input" id="rtpPlatformName" type="text" placeholder="Ex: Pragmatic" />
+            <label class="admin-form-label">&#127968; Plataforma</label>
+            <input class="admin-form-input" id="rtpPlatformName" type="text" placeholder="Ex: Pragmatic, PG Soft..." />
           </div>
           <div class="admin-form-row">
-            <label class="admin-form-label">RTP % (ex: 96.50)</label>
+            <label class="admin-form-label">&#128200; RTP % (ex: 96.50)</label>
             <input class="admin-form-input" id="rtpValue" type="number" step="0.01" min="0" max="100" placeholder="96.50" />
           </div>
           <div class="admin-form-row">
-            <label class="admin-form-label">URL da Logo (opcional)</label>
+            <label class="admin-form-label">&#128247; URL da Logo (opcional)</label>
             <input class="admin-form-input" id="rtpLogoUrl" type="url" placeholder="https://..." />
           </div>
-          <button class="admin-form-submit" id="addRtpBtn">&#43; Adicionar Jogo RTP</button>
+          <button class="admin-btn-submit teal" id="addRtpBtn">&#10133; ADICIONAR JOGO RTP</button>
         </div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;padding:0 2px">
-          Jogos cadastrados: <strong id="rtpCount" style="color:var(--text)">0</strong>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+          <span>Jogos cadastrados:</span>
+          <strong id="rtpCount" style="color:#10B981;font-size:16px">0</strong>
         </div>
         <div id="adminRtpList"></div>
       </div>
+
+      <!-- STATS TAB -->
+      <div class="admin-section" id="admin-tab-stats">
+        <div class="admin-sec-hdr">
+          <div class="admin-sec-icon blue">&#128200;</div>
+          <div>
+            <div class="admin-sec-ttl">Estatísticas</div>
+            <div class="admin-sec-sub">Dados do seu app em tempo real</div>
+          </div>
+        </div>
+        <div class="admin-stats-grid">
+          <div class="admin-stat" style="border-color:rgba(124,58,237,0.3)">
+            <div class="admin-stat-num" id="adminStatInstalls" style="color:#A78BFA">-</div>
+            <div class="admin-stat-label">&#128247; Instalações</div>
+          </div>
+          <div class="admin-stat" style="border-color:rgba(220,38,38,0.3)">
+            <div class="admin-stat-num" id="adminStatTokens" style="color:#F87171">-</div>
+            <div class="admin-stat-label">&#128226; Push Tokens</div>
+          </div>
+          <div class="admin-stat" style="border-color:rgba(16,185,129,0.3)">
+            <div class="admin-stat-num" id="adminStatPlatforms" style="color:#34D399">-</div>
+            <div class="admin-stat-label">&#128279; Plataformas</div>
+          </div>
+          <div class="admin-stat" style="border-color:rgba(245,158,11,0.3)">
+            <div class="admin-stat-num" id="adminStatHigh" style="color:#FCD34D">-</div>
+            <div class="admin-stat-label">&#128293; Em Alta</div>
+          </div>
+        </div>
+        <button class="admin-btn-submit blue" id="refreshStatsBtn">&#128260; ATUALIZAR STATS</button>
+      </div>
+
+    </div>
   </div>
 </div>
-
+<!-- WELCOME / NOTIFICATION MODAL -->
 <!-- WELCOME / NOTIFICATION MODAL -->
 <div class="modal-overlay" id="welcomeModal">
   <div class="modal-sheet" style="background:#1A1035;padding-bottom:max(36px,env(safe-area-inset-bottom))">
@@ -1250,7 +1387,7 @@ document.getElementById('adminBack').addEventListener('click', () => {
 
 // ===== ADMIN =====
 document.getElementById('adminLoginBtn').addEventListener('click', () => {
-  const pass = document.getElementById('adminPassInput').value;
+  const pass = document.getElementById('adminPasswordInput').value;
   if (pass === ADMIN_PASSWORD) {
     adminLoggedIn = true;
     document.getElementById('adminLoginWrap').style.display = 'none';
