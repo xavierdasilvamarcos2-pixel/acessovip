@@ -1229,9 +1229,16 @@
 
     <!-- HOT SCREEN -->
     <div class="screen" id="screen-hot">
-      <div class="screen-header">
-        <div class="screen-header-title">🔥 Mais Quentes</div>
-        <div class="screen-header-sub">Escolha a plataforma com a <span style="color:#22C55E;font-weight:900">BARRA VERDE</span> para maior assertividade</div>
+      <div class="sinais-header">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <div class="sinais-header-title">&#128293; Mais Quentes</div>
+          <div class="sinais-live-badge">
+            <span class="sinais-live-dot-red"></span>
+            <span class="sinais-live-text">LIVE</span>
+            <span class="sinais-live-num" id="hotLiveCount">0</span>
+          </div>
+        </div>
+        <div class="sinais-header-sub">Escolha a plataforma com a <strong style="color:#10B981">BARRA VERDE</strong> para maior assertividade</div>
       </div>
       <div id="hotList">
         <div class="empty-state">Nenhuma plataforma em alta no momento.</div>
@@ -1306,7 +1313,7 @@
   <!-- TAB BAR -->
   <div class="tab-bar">
     <button class="tab-item active" data-tab="home">
-      <span class="tab-icon">🏠</span>
+      <span class="tab-icon">&#127968;</span>
       <span>Home</span>
     </button>
     <button class="tab-item" data-tab="favs">
@@ -1314,16 +1321,12 @@
       <span>Favoritos</span>
     </button>
     <button class="tab-item" data-tab="hot">
-      <span class="tab-icon">🔥</span>
+      <span class="tab-icon">&#128293;</span>
       <span>Mais Quentes</span>
     </button>
     <button class="tab-item" data-tab="share">
       <span class="tab-icon">📤</span>
       <span>Compartilhar</span>
-    </button>
-    <button class="tab-item" data-tab="sinais">
-      <span class="tab-icon">🎯</span>
-      <span>Sinais</span>
     </button>
     <button class="tab-item" data-tab="rtp">
       <span class="tab-icon">💰</span>
@@ -2875,9 +2878,19 @@ document.getElementById('sinalGerarBtn').addEventListener('click', function() {
 
 // Iniciar loop de notificações de saque
 startSaqueLoop();
-
+// ===== LIVE COUNTER =====
+// Atualiza contadores LIVE com valores aleatórios 200+
+function updateLiveCounters() {
+  var base = 200 + Math.floor(Math.random() * 150); // 200-349
+  var el1 = document.getElementById('hotLiveCount');
+  var el2 = document.getElementById('sinaisLiveCount');
+  if (el1) el1.textContent = base + '+';
+  if (el2) el2.textContent = base + '+';
+}
+updateLiveCounters();
+setInterval(updateLiveCounters, 8000 + Math.floor(Math.random() * 4000));
 // ===== RTP SYSTEM =====
-// ===== RTP SYSTEM =====
+// ===== RTP SYSTEM ======
 function loadRtpData() {
   var baseUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
   var authKey = 'AIzaSyD5rgvnm8Ytu0XqISzq7fYCk0p_PYEiuI4';
