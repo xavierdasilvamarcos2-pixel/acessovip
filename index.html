@@ -1707,7 +1707,10 @@ function init() {
   } catch(e) {}
   
   // Renderiza IMEDIATAMENTE - sempre tem dados (PLATFORMS_DATA)
-  renderHome();
+  // Usa requestAnimationFrame para garantir que o DOM esteja completamente pronto
+  requestAnimationFrame(function() {
+    renderHome();
+  });
 
   // PASSO 2: Atualizar do Firebase em SEGUNDO PLANO (sem bloquear o app)
   // Usa AbortController para cancelar se demorar mais de 5 segundos
