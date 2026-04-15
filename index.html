@@ -665,95 +665,8 @@
       <span class="tab-icon">💰</span>
       <span>RTP</span>
     </button>
-  </div>
-</div>
-
-
-<!-- NOTIFICACAO SAQUE -->
-<div class="saque-notif" id="saqueNotif">
-  <div class="saque-notif-dot"></div>
-  <div class="saque-notif-text" id="saqueNotifText">Débora AA. Sacou: R$ 414,00</div>
-</div>
-<!-- SINAL DETAIL SCREEN -->
-<div class="sinal-detail" id="sinalDetail">
-  <div class="sinal-detail-hdr">
-    <button class="sinal-detail-back" id="sinalDetailBack">&#8592;</button>
-    <div class="sinal-detail-ttl" id="sinalDetailTitle">Sinal</div>
-  </div>
-  <div class="sinal-detail-body">
-    <div class="sinal-detail-logo-wrap">
-      <div id="sinalDetailLogoWrap"></div>
-    </div>
-    <div class="sinal-detail-name" id="sinalDetailName"></div>
-    <div class="sinal-detail-plat" id="sinalDetailPlat"></div>
-    <div class="sinal-panel">
-      <div class="sinal-panel-row">
-        <span class="sinal-panel-label">&#128994; NORMAL</span>
-        <span class="sinal-panel-val" id="sinalNormal">...</span>
-      </div>
-      <div class="sinal-panel-row">
-        <span class="sinal-panel-label">&#9889; TURBO</span>
-        <span class="sinal-panel-val" id="sinalTurbo">...</span>
-      </div>
-      <div class="sinal-panel-row">
-        <span class="sinal-panel-label">&#128336; V&#193;LIDO AT&#201;</span>
-        <span class="sinal-panel-val yellow" id="sinalValido">...</span>
-      </div>
-      <div class="sinal-panel-row">
-        <span class="sinal-panel-label">&#127919; ASSERTIVIDADE</span>
-        <span class="sinal-panel-val assert" id="sinalAssert">...</span>
-      </div>
-    </div>
-    <button class="sinal-gerar-btn" id="sinalGerarBtn">&#127919; GERAR NOVO SINAL</button>
-    <div class="sinal-info-text">Funciona apenas nesse link</div>
-    <div class="sinal-mult-text">&#128293; Multiplicador de 2.500X Ativado</div>
-    <button class="sinal-access-btn" id="sinalAccessBtn">&#128279; ACESSAR PLATAFORMA</button>
-  </div>
-</div>
-<!-- SORTEIO MODAL -->
-<!-- SORTEIO MODAL -->
-<div class="modal-overlay" id="sorteioModal">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">🎰 SORTEIOS DIÁRIOS VIP!</div>
-    <div class="modal-sub">Entre no grupo exclusivo e participe dos sorteios diários com prêmios em dinheiro!</div>
-    <div class="modal-steps">
-      <div class="modal-step">🎯 <strong>Passo 1:</strong> Entre no grupo do WhatsApp abaixo</div>
-      <div class="modal-step">📲 <strong>Passo 2:</strong> Siga as instruções do sorteio do dia</div>
-      <div class="modal-step">🏆 <strong>Passo 3:</strong> Aguarde o resultado e receba seu prêmio!</div>
-    </div>
-    <button class="modal-btn" id="sorteioJoinBtn">📱 ENTRAR NO GRUPO AGORA!</button>
-    <button class="modal-close" id="sorteioCloseBtn">Fechar</button>
-  </div>
-</div>
-
-<!-- INSTALL GUIDE MODAL -->
-<div class="modal-overlay" id="installGuideModal">
-  <div class="modal-sheet install-guide">
-    <div class="modal-handle"></div>
-    <div class="install-guide-title">📲 Como Instalar o App</div>
-    <div class="install-step">
-      <div class="install-step-num">1</div>
-      <div class="install-step-text">Toque nos <strong>3 pontinhos</strong> (⋮) no canto superior direito do Chrome</div>
-    </div>
-    <div class="install-step">
-      <div class="install-step-num">2</div>
-      <div class="install-step-text">Toque em <strong>"Adicionar à tela inicial"</strong> ou <strong>"Instalar app"</strong></div>
-    </div>
-    <div class="install-step">
-      <div class="install-step-num">3</div>
-      <div class="install-step-text">Confirme tocando em <strong>"Instalar"</strong> ou <strong>"Adicionar"</strong></div>
-    </div>
-    <div class="install-step">
-      <div class="install-step-num">4</div>
-      <div class="install-step-text">Pronto! O ícone do <strong>ACESSO VIP</strong> vai aparecer na sua tela inicial 🎉</div>
-    </div>
-    <button class="modal-btn" id="installGuideClose" style="background:var(--primary)">Entendi!</button>
-  </div>
-</div>
-
 <!-- ADMIN SCREEN (hidden, accessible via 3 taps on header) -->
-<div class="screen" id="adminScreen" style="display:none;overflow-y:auto;">
+<div class="screen" id="adminScreen" style="display:none;overflow-y:auto;position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;background:var(--bg);">
   <!-- Login -->
   <div id="adminLoginWrap">
     <div class="admin-login-wrap">
@@ -981,6 +894,93 @@
     </div>
   </div>
 </div>
+  </div>
+</div>
+
+
+<!-- NOTIFICACAO SAQUE -->
+<div class="saque-notif" id="saqueNotif">
+  <div class="saque-notif-dot"></div>
+  <div class="saque-notif-text" id="saqueNotifText">Débora AA. Sacou: R$ 414,00</div>
+</div>
+<!-- SINAL DETAIL SCREEN -->
+<div class="sinal-detail" id="sinalDetail">
+  <div class="sinal-detail-hdr">
+    <button class="sinal-detail-back" id="sinalDetailBack">&#8592;</button>
+    <div class="sinal-detail-ttl" id="sinalDetailTitle">Sinal</div>
+  </div>
+  <div class="sinal-detail-body">
+    <div class="sinal-detail-logo-wrap">
+      <div id="sinalDetailLogoWrap"></div>
+    </div>
+    <div class="sinal-detail-name" id="sinalDetailName"></div>
+    <div class="sinal-detail-plat" id="sinalDetailPlat"></div>
+    <div class="sinal-panel">
+      <div class="sinal-panel-row">
+        <span class="sinal-panel-label">&#128994; NORMAL</span>
+        <span class="sinal-panel-val" id="sinalNormal">...</span>
+      </div>
+      <div class="sinal-panel-row">
+        <span class="sinal-panel-label">&#9889; TURBO</span>
+        <span class="sinal-panel-val" id="sinalTurbo">...</span>
+      </div>
+      <div class="sinal-panel-row">
+        <span class="sinal-panel-label">&#128336; V&#193;LIDO AT&#201;</span>
+        <span class="sinal-panel-val yellow" id="sinalValido">...</span>
+      </div>
+      <div class="sinal-panel-row">
+        <span class="sinal-panel-label">&#127919; ASSERTIVIDADE</span>
+        <span class="sinal-panel-val assert" id="sinalAssert">...</span>
+      </div>
+    </div>
+    <button class="sinal-gerar-btn" id="sinalGerarBtn">&#127919; GERAR NOVO SINAL</button>
+    <div class="sinal-info-text">Funciona apenas nesse link</div>
+    <div class="sinal-mult-text">&#128293; Multiplicador de 2.500X Ativado</div>
+    <button class="sinal-access-btn" id="sinalAccessBtn">&#128279; ACESSAR PLATAFORMA</button>
+  </div>
+</div>
+<!-- SORTEIO MODAL -->
+<!-- SORTEIO MODAL -->
+<div class="modal-overlay" id="sorteioModal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🎰 SORTEIOS DIÁRIOS VIP!</div>
+    <div class="modal-sub">Entre no grupo exclusivo e participe dos sorteios diários com prêmios em dinheiro!</div>
+    <div class="modal-steps">
+      <div class="modal-step">🎯 <strong>Passo 1:</strong> Entre no grupo do WhatsApp abaixo</div>
+      <div class="modal-step">📲 <strong>Passo 2:</strong> Siga as instruções do sorteio do dia</div>
+      <div class="modal-step">🏆 <strong>Passo 3:</strong> Aguarde o resultado e receba seu prêmio!</div>
+    </div>
+    <button class="modal-btn" id="sorteioJoinBtn">📱 ENTRAR NO GRUPO AGORA!</button>
+    <button class="modal-close" id="sorteioCloseBtn">Fechar</button>
+  </div>
+</div>
+
+<!-- INSTALL GUIDE MODAL -->
+<div class="modal-overlay" id="installGuideModal">
+  <div class="modal-sheet install-guide">
+    <div class="modal-handle"></div>
+    <div class="install-guide-title">📲 Como Instalar o App</div>
+    <div class="install-step">
+      <div class="install-step-num">1</div>
+      <div class="install-step-text">Toque nos <strong>3 pontinhos</strong> (⋮) no canto superior direito do Chrome</div>
+    </div>
+    <div class="install-step">
+      <div class="install-step-num">2</div>
+      <div class="install-step-text">Toque em <strong>"Adicionar à tela inicial"</strong> ou <strong>"Instalar app"</strong></div>
+    </div>
+    <div class="install-step">
+      <div class="install-step-num">3</div>
+      <div class="install-step-text">Confirme tocando em <strong>"Instalar"</strong> ou <strong>"Adicionar"</strong></div>
+    </div>
+    <div class="install-step">
+      <div class="install-step-num">4</div>
+      <div class="install-step-text">Pronto! O ícone do <strong>ACESSO VIP</strong> vai aparecer na sua tela inicial 🎉</div>
+    </div>
+    <button class="modal-btn" id="installGuideClose" style="background:var(--primary)">Entendi!</button>
+  </div>
+</div>
+
 <!-- WELCOME / NOTIFICATION MODAL -->
 <!-- WELCOME / NOTIFICATION MODAL -->
 <div class="modal-overlay" id="welcomeModal">
