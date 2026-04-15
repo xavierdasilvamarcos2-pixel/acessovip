@@ -1830,8 +1830,8 @@ tabs.forEach(tab => {
     if (name === 'favs') renderFavs();
     if (name === 'hot') renderHot();
     if (name === 'share') renderShare();
-    if (name === 'sinais') { loadSinaisData(); }
-    if (name === 'rtp') { loadRtpData(); }
+    if (name === 'sinais') { renderSinais(); loadSinaisData(); }
+    if (name === 'rtp') { renderRtp(); loadRtpData(); }
     trackEvent('tab_switch', { tab: name });
   });
 });
@@ -2818,7 +2818,10 @@ if (addRtpBtn) {
   });
 }
 
-// Carregar dados ao iniciar
+// Pré-renderizar com dados padrão imediatamente (sem esperar Firebase)
+renderSinais();
+renderRtp();
+// Carregar dados do Firebase em segundo plano
 loadSinaisData();
 loadRtpData();
 // Inicializar o app DEPOIS de todo o código estar carregado
