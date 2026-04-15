@@ -117,6 +117,62 @@
     .screen { display: none; }
     .screen.active { display: block; }
 
+    /* ===== SINAIS SCREEN ===== */
+    .sinais-screen { padding: 0 0 16px 0; }
+    .sinais-header { padding: 16px 16px 12px; background: linear-gradient(135deg, #0f0f1a 0%, #1a0533 100%); border-bottom: 1px solid var(--border); }
+    .sinais-header-title { font-size: 22px; font-weight: 900; color: var(--text); letter-spacing: 0.5px; }
+    .sinais-header-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .sinais-live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10B981; margin-right: 6px; animation: blink 1.2s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .sinais-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 14px 14px 0; }
+    .sinal-card { background: var(--surface); border-radius: 16px; padding: 14px 10px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid var(--border); cursor: pointer; position: relative; overflow: hidden; transition: transform 0.15s, border-color 0.15s; }
+    .sinal-card:active { transform: scale(0.96); }
+    .sinal-card-logo { width: 60px; height: 60px; border-radius: 14px; object-fit: cover; background: var(--surface2); flex-shrink: 0; }
+    .sinal-card-logo-placeholder { width: 60px; height: 60px; border-radius: 14px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); display: flex; align-items: center; justify-content: center; font-size: 28px; }
+    .sinal-card-name { font-size: 12px; font-weight: 800; color: var(--text); text-align: center; line-height: 1.3; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    /* Progress Bar */
+    .sinal-progress-wrap { width: 100%; }
+    .sinal-progress-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
+    .sinal-progress-bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease, background-color 0.5s; }
+    .sinal-progress-pct { font-size: 13px; font-weight: 900; text-align: center; margin-top: 4px; }
+    /* Play Button */
+    .sinal-play-btn { width: 100%; background: linear-gradient(135deg, #F59E0B, #D97706); border: none; border-radius: 10px; padding: 9px 6px; color: #fff; font-size: 12px; font-weight: 900; cursor: pointer; letter-spacing: 0.5px; transition: transform 0.1s; }
+    .sinal-play-btn:active { transform: scale(0.96); }
+    /* Signal Detail Screen */
+    .sinal-detail-screen { position: fixed; inset: 0; background: var(--bg); z-index: 150; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1); }
+    .sinal-detail-screen.open { transform: translateX(0); }
+    .sinal-detail-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; padding-top: max(14px, env(safe-area-inset-top)); background: var(--bg); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .sinal-detail-back { background: var(--surface); border: none; border-radius: 10px; padding: 8px 12px; color: var(--text); font-size: 18px; cursor: pointer; }
+    .sinal-detail-title { font-size: 17px; font-weight: 900; color: var(--text); flex: 1; }
+    .sinal-detail-body { flex: 1; overflow-y: auto; padding: 20px 16px; }
+    .sinal-detail-logo-wrap { display: flex; justify-content: center; margin-bottom: 20px; }
+    .sinal-detail-logo { width: 90px; height: 90px; border-radius: 20px; object-fit: cover; background: var(--surface2); }
+    .sinal-detail-logo-placeholder { width: 90px; height: 90px; border-radius: 20px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); display: flex; align-items: center; justify-content: center; font-size: 42px; }
+    .sinal-detail-game-name { text-align: center; font-size: 22px; font-weight: 900; color: var(--text); margin-bottom: 4px; }
+    .sinal-detail-platform { text-align: center; font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    /* Signal Panel */
+    .sinal-panel { background: #0d2b1a; border: 1.5px solid #10B981; border-radius: 18px; padding: 20px 16px; margin-bottom: 20px; }
+    .sinal-panel-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(16,185,129,0.15); }
+    .sinal-panel-row:last-child { border-bottom: none; }
+    .sinal-panel-label { font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .sinal-panel-value { font-size: 20px; font-weight: 900; color: #10B981; }
+    .sinal-panel-value.assertividade { color: var(--gold); font-size: 22px; }
+    .sinal-panel-value.loading { color: rgba(255,255,255,0.3); font-size: 16px; }
+    /* Generate Button */
+    .sinal-gerar-btn { width: 100%; background: linear-gradient(135deg, #F59E0B, #D97706); border: none; border-radius: 16px; padding: 18px; color: #fff; font-size: 17px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 20px rgba(245,158,11,0.4); transition: transform 0.15s; letter-spacing: 0.5px; margin-bottom: 14px; }
+    .sinal-gerar-btn:active { transform: scale(0.97); }
+    .sinal-gerar-btn.waiting { background: linear-gradient(135deg, #059669, #10B981); cursor: not-allowed; }
+    .sinal-info-text { text-align: center; font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; margin-bottom: 16px; }
+    .sinal-info-text strong { color: rgba(255,255,255,0.8); }
+    /* Platform iframe */
+    .sinal-platform-wrap { background: var(--surface); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
+    .sinal-platform-label { padding: 10px 14px; font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+    .sinal-platform-iframe { width: 100%; height: 400px; border: none; display: block; }
+    .sinal-platform-btn { width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-light)); border: none; border-radius: 12px; padding: 14px; color: #fff; font-size: 15px; font-weight: 900; cursor: pointer; margin-top: 12px; }
+    /* Notification toast */
+    .sinal-toast { position: fixed; top: max(16px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%) translateY(-80px); background: #10B981; color: #fff; padding: 10px 18px; border-radius: 20px; font-size: 13px; font-weight: 700; z-index: 9999; transition: transform 0.4s cubic-bezier(0.32,0.72,0,1); white-space: nowrap; box-shadow: 0 4px 20px rgba(16,185,129,0.5); }
+    .sinal-toast.show { transform: translateX(-50%) translateY(0); }
+
     /* ===== RTP SCREEN ===== */
     .rtp-screen { padding: 16px; }
     .rtp-header { text-align: center; margin-bottom: 20px; }
@@ -563,6 +619,10 @@
       <span class="tab-icon">📤</span>
       <span>Compartilhar</span>
     </button>
+    <button class="tab-item" data-tab="sinais">
+      <span class="tab-icon">🎯</span>
+      <span>Sinais</span>
+    </button>
     <button class="tab-item" data-tab="rtp">
       <span class="tab-icon">💰</span>
       <span>RTP</span>
@@ -571,6 +631,26 @@
 </div>
 
     <!-- RTP SCREEN -->
+    <!-- SINAIS SCREEN -->
+    <div class="screen" id="screen-sinais">
+      <div class="sinais-screen">
+        <div class="sinais-header">
+          <div class="sinais-header-title"><span class="sinais-live-dot"></span>🎯 SINAIS AO VIVO</div>
+          <div class="sinais-header-sub">Analise em tempo real • Atualizando agora</div>
+        </div>
+        <div class="sinais-grid" id="sinaisGrid"></div>
+      </div>
+    </div>
+    <!-- SINAL DETAIL SCREEN -->
+    <div class="sinal-detail-screen" id="sinalDetailScreen">
+      <div class="sinal-detail-header">
+        <button class="sinal-detail-back" id="sinalDetailBack">&#8592;</button>
+        <span class="sinal-detail-title" id="sinalDetailTitle">Gerar Sinal</span>
+      </div>
+      <div class="sinal-detail-body" id="sinalDetailBody">
+        <!-- Preenchido via JS -->
+      </div>
+    </div>
     <div class="screen" id="screen-rtp">
       <div class="rtp-screen">
         <div class="rtp-header">
@@ -653,6 +733,7 @@
     <div class="admin-tabs">
       <button class="admin-tab active" data-admin-tab="platforms">&#128203; Plataformas</button>
       <button class="admin-tab" data-admin-tab="add">&#10133; Adicionar</button>
+      <button class="admin-tab" data-admin-tab="sinais">&#127919; Sinais</button>
       <button class="admin-tab" data-admin-tab="rtp">&#128176; RTP</button>
       <button class="admin-tab" data-admin-tab="notifications">&#128226; Notificacoes</button>
       <button class="admin-tab" data-admin-tab="stats">&#128202; Estatisticas</button>
@@ -692,6 +773,37 @@
     </div>
 
     <!-- Tab: RTP -->
+    <!-- Tab: Sinais -->
+    <div class="admin-section" id="admin-tab-sinais">
+      <div class="admin-form">
+        <div class="admin-form-title">&#127919; Cadastrar Jogo de Sinais</div>
+        <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:12px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:#fbbf24;line-height:1.6">
+          &#128293; Os jogos cadastrados aqui aparecem na aba <strong style="color:#fff">Sinais</strong> do app. Cada jogo tem barra de progresso animada e botao JOGAR.
+        </div>
+        <div class="admin-form-row">
+          <label class="admin-form-label">&#127918; Nome do Jogo</label>
+          <input class="admin-form-input" id="sinaisGameName" type="text" placeholder="Ex: Fortune Tiger" />
+        </div>
+        <div class="admin-form-row">
+          <label class="admin-form-label">&#127970; Nome da Plataforma</label>
+          <input class="admin-form-input" id="sinaisPlatformName" type="text" placeholder="Ex: PG Soft" />
+        </div>
+        <div class="admin-form-row">
+          <label class="admin-form-label">&#128444; URL da Logo do Jogo</label>
+          <input class="admin-form-input" id="sinaisLogoUrl" type="url" placeholder="https://..." />
+        </div>
+        <div class="admin-form-row">
+          <label class="admin-form-label">&#128279; Link da Plataforma (onde o usuario vai jogar)</label>
+          <input class="admin-form-input" id="sinaisPlatformUrl" type="url" placeholder="https://plataforma.com/cadastro" />
+        </div>
+        <button class="admin-form-submit" id="addSinalBtn">&#9989; Adicionar Jogo</button>
+      </div>
+      <div class="admin-section-header">
+        <span class="admin-section-header-title">Jogos cadastrados nos Sinais</span>
+        <span class="admin-count-badge" id="adminSinaisCount">0</span>
+      </div>
+      <div id="adminSinaisList"></div>
+    </div>
     <div class="admin-section" id="admin-tab-rtp">
       <div class="admin-rtp-form">
         <div class="admin-form-title">&#128176; Cadastrar Jogo RTP</div>
@@ -971,6 +1083,7 @@ tabs.forEach(tab => {
     if (name === 'hot') renderHot();
     if (name === 'share') renderShare();
     if (name === 'rtp') renderRtp();
+    if (name === 'sinais') renderSinais();
     trackEvent('tab_switch', { tab: name });
   });
 });
@@ -1202,6 +1315,7 @@ document.querySelectorAll('[data-admin-tab]').forEach(btn => {
     document.getElementById('admin-tab-' + btn.dataset.adminTab).classList.add('active');
     if (btn.dataset.adminTab === 'stats') loadAdminStats();
     if (btn.dataset.adminTab === 'rtp') renderAdminRtp();
+    if (btn.dataset.adminTab === 'sinais') renderAdminSinais();
   });
 });
 
@@ -1613,6 +1727,289 @@ if (addRtpBtn) addRtpBtn.addEventListener('click', function() {
     document.getElementById('rtpLogoUrl').value = '';
     document.getElementById('rtpLinkUrl').value = '';
     renderAdminRtp();
+
+// =============================================
+// ===== SISTEMA DE SINAIS =====
+// =============================================
+
+var sinaisData = []; // jogos carregados do Firebase
+var sinalCountdown = null;
+
+// Carregar jogos de sinais do Firebase
+function loadSinaisData() {
+  window._fbREST.get('/sinais').then(function(data) {
+    sinaisData = [];
+    if (data && typeof data === 'object' && !Array.isArray(data)) {
+      sinaisData = Object.entries(data).map(function(e) {
+        return Object.assign({ _key: e[0] }, e[1]);
+      }).filter(function(x) { return x && x.name; });
+    }
+    // Se não houver jogos cadastrados, usar exemplos padrão
+    if (!sinaisData.length) {
+      sinaisData = [
+        { _key: 'default1', name: 'Fortune Tiger', platform: 'PG Soft', logo: '', url: '' },
+        { _key: 'default2', name: 'Fortune Mouse', platform: 'PG Soft', logo: '', url: '' },
+        { _key: 'default3', name: 'Fortune Ox', platform: 'PG Soft', logo: '', url: '' },
+        { _key: 'default4', name: 'Gates of Olympus', platform: 'Pragmatic', logo: '', url: '' },
+        { _key: 'default5', name: 'Sweet Bonanza', platform: 'Pragmatic', logo: '', url: '' },
+        { _key: 'default6', name: 'Aviator', platform: 'Spribe', logo: '', url: '' },
+      ];
+    }
+    if (document.getElementById('screen-sinais') && document.getElementById('screen-sinais').classList.contains('active')) {
+      renderSinais();
+    }
+  }).catch(function() {
+    sinaisData = [
+      { _key: 'default1', name: 'Fortune Tiger', platform: 'PG Soft', logo: '', url: '' },
+      { _key: 'default2', name: 'Fortune Mouse', platform: 'PG Soft', logo: '', url: '' },
+      { _key: 'default3', name: 'Gates of Olympus', platform: 'Pragmatic', logo: '', url: '' },
+      { _key: 'default4', name: 'Sweet Bonanza', platform: 'Pragmatic', logo: '', url: '' },
+    ];
+  });
+}
+
+// Gerar porcentagem aleatória animada para cada jogo
+var sinaisPercentages = {};
+function getSinalPct(key) {
+  if (!sinaisPercentages[key]) {
+    sinaisPercentages[key] = Math.floor(Math.random() * 60) + 30; // 30-90%
+  }
+  return sinaisPercentages[key];
+}
+
+function animateSinaisPercentages() {
+  sinaisData.forEach(function(jogo) {
+    var current = sinaisPercentages[jogo._key] || 50;
+    var delta = Math.floor(Math.random() * 11) - 5; // -5 a +5
+    var next = Math.max(20, Math.min(99, current + delta));
+    sinaisPercentages[jogo._key] = next;
+  });
+  // Atualizar barras na tela
+  sinaisData.forEach(function(jogo) {
+    var pct = sinaisPercentages[jogo._key];
+    var barEl = document.getElementById('sinal-bar-' + jogo._key);
+    var pctEl = document.getElementById('sinal-pct-' + jogo._key);
+    if (barEl) {
+      barEl.style.width = pct + '%';
+      barEl.style.backgroundColor = pct >= 80 ? '#10B981' : pct >= 55 ? '#F59E0B' : '#EF4444';
+    }
+    if (pctEl) {
+      pctEl.textContent = pct + '%';
+      pctEl.style.color = pct >= 80 ? '#10B981' : pct >= 55 ? '#F59E0B' : '#EF4444';
+    }
+  });
+}
+
+// Renderizar grade de jogos
+function renderSinais() {
+  var grid = document.getElementById('sinaisGrid');
+  if (!grid) return;
+  if (!sinaisData.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--muted)">Nenhum jogo cadastrado ainda.<br>Adicione jogos no painel admin.</div>';
+    return;
+  }
+  grid.innerHTML = sinaisData.map(function(jogo) {
+    var pct = getSinalPct(jogo._key);
+    var barColor = pct >= 80 ? '#10B981' : pct >= 55 ? '#F59E0B' : '#EF4444';
+    var logoHtml = jogo.logo
+      ? '<img class="sinal-card-logo" src="' + jogo.logo + '" alt="' + jogo.name + '" onerror="this.style.display='none'">'
+      : '<div class="sinal-card-logo-placeholder">🎰</div>';
+    return '<div class="sinal-card" onclick="openSinalDetail('' + jogo._key + '')">' +
+      logoHtml +
+      '<div class="sinal-card-name">' + jogo.name + '</div>' +
+      '<div class="sinal-progress-wrap">' +
+        '<div class="sinal-progress-bar-bg">' +
+          '<div class="sinal-progress-bar-fill" id="sinal-bar-' + jogo._key + '" style="width:' + pct + '%;background-color:' + barColor + '"></div>' +
+        '</div>' +
+        '<div class="sinal-progress-pct" id="sinal-pct-' + jogo._key + '" style="color:' + barColor + '">' + pct + '%</div>' +
+      '</div>' +
+      '<button class="sinal-play-btn">▶ JOGAR</button>' +
+    '</div>';
+  }).join('');
+}
+
+// Abrir tela de detalhe do sinal
+function openSinalDetail(key) {
+  var jogo = sinaisData.find(function(j) { return j._key === key; });
+  if (!jogo) return;
+  var screen = document.getElementById('sinalDetailScreen');
+  var title = document.getElementById('sinalDetailTitle');
+  var body = document.getElementById('sinalDetailBody');
+  title.textContent = jogo.name;
+  var logoHtml = jogo.logo
+    ? '<img class="sinal-detail-logo" src="' + jogo.logo + '" alt="' + jogo.name + '" onerror="this.style.display='none'">'
+    : '<div class="sinal-detail-logo-placeholder">🎰</div>';
+  body.innerHTML =
+    '<div class="sinal-detail-logo-wrap">' + logoHtml + '</div>' +
+    '<div class="sinal-detail-game-name">' + jogo.name + '</div>' +
+    '<div class="sinal-detail-platform">' + (jogo.platform || '') + '</div>' +
+    '<div class="sinal-panel" id="sinalPanel">' +
+      '<div class="sinal-panel-row">' +
+        '<span class="sinal-panel-label">NORMAL</span>' +
+        '<span class="sinal-panel-value loading" id="sinalNormal">...</span>' +
+      '</div>' +
+      '<div class="sinal-panel-row">' +
+        '<span class="sinal-panel-label">TURBO</span>' +
+        '<span class="sinal-panel-value loading" id="sinalTurbo">...</span>' +
+      '</div>' +
+      '<div class="sinal-panel-row">' +
+        '<span class="sinal-panel-label">VÁLIDO ATÉ</span>' +
+        '<span class="sinal-panel-value loading" id="sinalValido">...</span>' +
+      '</div>' +
+      '<div class="sinal-panel-row">' +
+        '<span class="sinal-panel-label">ASSERTIVIDADE</span>' +
+        '<span class="sinal-panel-value assertividade loading" id="sinalAssert">...</span>' +
+      '</div>' +
+    '</div>' +
+    '<button class="sinal-gerar-btn" id="sinalGerarBtn" onclick="gerarSinal('' + key + '')">🎯 GERAR NOVO SINAL</button>' +
+    '<div class="sinal-info-text">Funciona apenas nesse link<br><strong>Multiplicador especial ativado</strong></div>' +
+    (jogo.url ? '<div class="sinal-platform-wrap"><div class="sinal-platform-label">🎰 Acesse a plataforma</div><button class="sinal-platform-btn" onclick="window.open('' + jogo.url + '','_blank')">🚀 ACESSAR PLATAFORMA AGORA</button></div>' : '');
+  screen.classList.add('open');
+  // Gerar sinal automaticamente ao abrir
+  gerarSinal(key);
+}
+
+// Gerar sinal
+function gerarSinal(key) {
+  var btn = document.getElementById('sinalGerarBtn');
+  if (btn && btn.classList.contains('waiting')) return;
+  // Gerar valores aleatórios
+  var normal = Math.floor(Math.random() * 8) + 3; // 3-10
+  var turbo = Math.floor(Math.random() * 8) + 3;  // 3-10
+  var now = new Date();
+  now.setMinutes(now.getMinutes() + Math.floor(Math.random() * 10) + 5);
+  var hh = String(now.getHours()).padStart(2, '0');
+  var mm = String(now.getMinutes()).padStart(2, '0');
+  var valido = hh + ':' + mm;
+  var assert = (Math.random() * 8 + 91).toFixed(2); // 91-99%
+  // Preencher painel
+  var normalEl = document.getElementById('sinalNormal');
+  var turboEl = document.getElementById('sinalTurbo');
+  var validoEl = document.getElementById('sinalValido');
+  var assertEl = document.getElementById('sinalAssert');
+  if (normalEl) { normalEl.textContent = normal + 'X'; normalEl.classList.remove('loading'); }
+  if (turboEl) { turboEl.textContent = turbo + 'X'; turboEl.classList.remove('loading'); }
+  if (validoEl) { validoEl.textContent = valido; validoEl.classList.remove('loading'); }
+  if (assertEl) { assertEl.textContent = assert + '%'; assertEl.classList.remove('loading'); }
+  // Iniciar countdown no botão
+  if (btn) {
+    btn.classList.add('waiting');
+    var seconds = 30;
+    btn.textContent = 'Aguarde: ' + seconds + 's';
+    if (sinalCountdown) clearInterval(sinalCountdown);
+    sinalCountdown = setInterval(function() {
+      seconds--;
+      if (seconds <= 0) {
+        clearInterval(sinalCountdown);
+        sinalCountdown = null;
+        btn.classList.remove('waiting');
+        btn.textContent = '🎯 GERAR NOVO SINAL';
+      } else {
+        btn.textContent = 'Aguarde: ' + seconds + 's';
+      }
+    }, 1000);
+  }
+}
+
+// Fechar tela de detalhe
+document.getElementById('sinalDetailBack').addEventListener('click', function() {
+  document.getElementById('sinalDetailScreen').classList.remove('open');
+  if (sinalCountdown) { clearInterval(sinalCountdown); sinalCountdown = null; }
+});
+
+// Animar porcentagens a cada 3 segundos
+setInterval(animateSinaisPercentages, 3000);
+
+// =============================================
+// ===== ADMIN: GERENCIAR SINAIS =====
+// =============================================
+
+function renderAdminSinais() {
+  var el = document.getElementById('adminSinaisList');
+  var countEl = document.getElementById('adminSinaisCount');
+  if (!el) return;
+  window._fbREST.get('/sinais').then(function(data) {
+    var items = [];
+    if (data && typeof data === 'object' && !Array.isArray(data)) {
+      items = Object.entries(data).map(function(e) { return Object.assign({ _key: e[0] }, e[1]); }).filter(function(x) { return x && x.name; });
+    }
+    if (countEl) countEl.textContent = items.length;
+    if (!items.length) {
+      el.innerHTML = '<div class="admin-empty"><div class="admin-empty-icon">&#127919;</div><div class="admin-empty-text">Nenhum jogo cadastrado</div></div>';
+      return;
+    }
+    el.innerHTML = items.map(function(item) {
+      return '<div class="admin-card" style="margin-bottom:10px">' +
+        '<div class="admin-card-header">' +
+          (item.logo ? '<img class="admin-card-img" src="' + item.logo + '" alt="' + item.name + '" onerror="this.style.display='none'">' : '<div style="width:52px;height:52px;border-radius:14px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">&#127918;</div>') +
+          '<div class="admin-card-info">' +
+            '<div class="admin-card-name">' + item.name + '</div>' +
+            '<div class="admin-card-url">' + (item.platform || '') + (item.url ? ' • ' + item.url.substring(0,30) + '...' : '') + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
+          '<button class="admin-btn admin-btn-edit" onclick="editSinalItem('' + item._key + '')" style="font-size:13px;padding:10px">&#9998; Editar</button>' +
+          '<button class="admin-btn admin-btn-del" onclick="deleteSinalItem('' + item._key + '')" style="font-size:13px;padding:10px">&#128465;&#65039; Remover</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }).catch(function() {
+    el.innerHTML = '<div class="admin-empty"><div class="admin-empty-icon">&#9888;&#65039;</div><div class="admin-empty-text">Erro ao carregar</div></div>';
+  });
+}
+
+function deleteSinalItem(key) {
+  if (!confirm('Remover este jogo dos sinais?')) return;
+  var baseUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+  var authKey = 'AIzaSyD5rgvnm8Ytu0XqISzq7fYCk0p_PYEiuI4';
+  fetch(baseUrl + '/sinais/' + key + '.json?auth=' + authKey, { method: 'DELETE' })
+    .then(function() { renderAdminSinais(); loadSinaisData(); });
+}
+
+function editSinalItem(key) {
+  window._fbREST.get('/sinais/' + key).then(function(item) {
+    if (!item) return;
+    document.getElementById('sinaisGameName').value = item.name || '';
+    document.getElementById('sinaisPlatformName').value = item.platform || '';
+    document.getElementById('sinaisLogoUrl').value = item.logo || '';
+    document.getElementById('sinaisPlatformUrl').value = item.url || '';
+    // Mudar botão para "Atualizar"
+    var btn = document.getElementById('addSinalBtn');
+    btn.textContent = '&#9989; Atualizar Jogo';
+    btn.dataset.editKey = key;
+    // Scroll para o formulário
+    document.getElementById('admin-tab-sinais').scrollTop = 0;
+  });
+}
+
+var addSinalBtn = document.getElementById('addSinalBtn');
+if (addSinalBtn) addSinalBtn.addEventListener('click', function() {
+  var name = (document.getElementById('sinaisGameName') || {}).value || '';
+  var platform = (document.getElementById('sinaisPlatformName') || {}).value || '';
+  var logo = (document.getElementById('sinaisLogoUrl') || {}).value || '';
+  var url = (document.getElementById('sinaisPlatformUrl') || {}).value || '';
+  if (!name) { alert('Digite o nome do jogo!'); return; }
+  var item = { name: name, platform: platform, logo: logo, url: url };
+  var editKey = addSinalBtn.dataset.editKey;
+  var saveKey = editKey || String(Date.now());
+  var obj = {}; obj[saveKey] = item;
+  window._fbREST.patch('/sinais', obj).then(function() {
+    document.getElementById('sinaisGameName').value = '';
+    document.getElementById('sinaisPlatformName').value = '';
+    document.getElementById('sinaisLogoUrl').value = '';
+    document.getElementById('sinaisPlatformUrl').value = '';
+    addSinalBtn.textContent = '&#9989; Adicionar Jogo';
+    delete addSinalBtn.dataset.editKey;
+    renderAdminSinais();
+    loadSinaisData();
+    alert(editKey ? 'Jogo atualizado!' : 'Jogo adicionado aos Sinais!');
+  });
+});
+
+// Carregar dados de sinais ao iniciar
+loadSinaisData();
+
+
     loadRtpData();
     alert('Jogo RTP salvo com sucesso!');
   });
