@@ -599,6 +599,40 @@
         </div>
       </div>
     </div>
+    <!-- SINAIS SCREEN -->
+    <div class="screen" id="screen-sinais">
+      <div class="sinais-screen">
+        <div class="sinais-header">
+          <div class="sinais-header-title"><span class="sinais-live-dot"></span>🎯 SINAIS AO VIVO</div>
+          <div class="sinais-header-sub">Analise em tempo real • Atualizando agora</div>
+        </div>
+        <div class="sinais-grid" id="sinaisGrid"></div>
+      </div>
+    </div>
+    <!-- SINAL DETAIL SCREEN -->
+    <div class="sinal-detail-screen" id="sinalDetailScreen">
+      <div class="sinal-detail-header">
+        <button class="sinal-detail-back" id="sinalDetailBack">&#8592;</button>
+        <span class="sinal-detail-title" id="sinalDetailTitle">Gerar Sinal</span>
+      </div>
+      <div class="sinal-detail-body" id="sinalDetailBody">
+        <!-- Preenchido via JS -->
+      </div>
+    </div>
+    <!-- RTP SCREEN -->
+    <div class="screen" id="screen-rtp">
+      <div class="rtp-screen">
+        <div class="rtp-header">
+          <div class="rtp-header-title">💰 MELHORES RTP DO DIA</div>
+          <div class="rtp-header-sub">Jogos com maior retorno ao jogador</div>
+        </div>
+        <div class="rtp-filter-bar" id="rtpFilterBar">
+          <button class="rtp-filter-btn active" data-filter="all">🔥 Todos</button>
+        </div>
+        <div class="rtp-section-title">🏆 TOP JOGOS</div>
+        <div class="rtp-grid" id="rtpGrid"></div>
+      </div>
+    </div>
   </div>
 
   <!-- TAB BAR -->
@@ -629,41 +663,6 @@
     </button>
   </div>
 </div>
-
-    <!-- RTP SCREEN -->
-    <!-- SINAIS SCREEN -->
-    <div class="screen" id="screen-sinais">
-      <div class="sinais-screen">
-        <div class="sinais-header">
-          <div class="sinais-header-title"><span class="sinais-live-dot"></span>🎯 SINAIS AO VIVO</div>
-          <div class="sinais-header-sub">Analise em tempo real • Atualizando agora</div>
-        </div>
-        <div class="sinais-grid" id="sinaisGrid"></div>
-      </div>
-    </div>
-    <!-- SINAL DETAIL SCREEN -->
-    <div class="sinal-detail-screen" id="sinalDetailScreen">
-      <div class="sinal-detail-header">
-        <button class="sinal-detail-back" id="sinalDetailBack">&#8592;</button>
-        <span class="sinal-detail-title" id="sinalDetailTitle">Gerar Sinal</span>
-      </div>
-      <div class="sinal-detail-body" id="sinalDetailBody">
-        <!-- Preenchido via JS -->
-      </div>
-    </div>
-    <div class="screen" id="screen-rtp">
-      <div class="rtp-screen">
-        <div class="rtp-header">
-          <div class="rtp-header-title">💰 MELHORES RTP DO DIA</div>
-          <div class="rtp-header-sub">Jogos com maior retorno ao jogador</div>
-        </div>
-        <div class="rtp-filter-bar" id="rtpFilterBar">
-          <button class="rtp-filter-btn active" data-filter="all">🔥 Todos</button>
-        </div>
-        <div class="rtp-section-title">🏆 TOP JOGOS</div>
-        <div class="rtp-grid" id="rtpGrid"></div>
-      </div>
-    </div>
 
     <!-- SORTEIO MODAL -->
 <div class="modal-overlay" id="sorteioModal">
