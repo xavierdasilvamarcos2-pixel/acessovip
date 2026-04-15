@@ -2519,7 +2519,8 @@ function renderSinais() {
       ? '<img class="sinal-card-logo" src="' + jogo.logo + '" alt="' + jogo.name + '">'
       : '<div class="sinal-card-logo-ph">&#127918;</div>';
     return '<div class="sinal-card">' +
-      logoHtml +
+      '<div class="sinal-card-logo-wrap">' + logoHtml + '</div>' +
+      '<div class="sinal-card-body">' +
       '<div class="sinal-card-name">' + jogo.name + '</div>' +
       '<div class="sinal-progress-wrap">' +
         '<div class="sinal-progress-bg">' +
@@ -2528,6 +2529,7 @@ function renderSinais() {
         '</div>' +
       '</div>' +
       '<button class="sinal-play-btn" onclick="openSinalDetail(&quot;' + jogo._key + '&quot;)">JOGAR</button>' +
+      '</div>' +
     '</div>';
   }).join('');
 
