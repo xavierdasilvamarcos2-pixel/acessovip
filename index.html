@@ -787,6 +787,61 @@
         <button class="admin-notif-send" id="refreshStatsBtn" style="background:var(--surface);color:var(--text);border:1px solid var(--border)">🔄 Atualizar</button>
       </div>
     </div>
+      <!-- Sinais Tab -->
+      <div class="admin-section" id="admin-tab-sinais">
+        <div class="admin-form" style="margin-bottom:16px">
+          <div class="admin-form-title">&#127919; Adicionar Jogo de Sinais</div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">Nome do Jogo</label>
+            <input class="admin-form-input" id="sinalGameName" type="text" placeholder="Ex: Fortune Tiger" />
+          </div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">Plataforma</label>
+            <input class="admin-form-input" id="sinalPlatform" type="text" placeholder="Ex: PG Soft" />
+          </div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">URL da Logo (opcional)</label>
+            <input class="admin-form-input" id="sinalLogoUrl" type="url" placeholder="https://..." />
+          </div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">Link da Plataforma (opcional)</label>
+            <input class="admin-form-input" id="sinalGameUrl" type="url" placeholder="https://..." />
+          </div>
+          <button class="admin-form-submit" id="addSinalBtn">&#43; Adicionar Jogo</button>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;padding:0 2px">
+          Jogos cadastrados: <strong id="sinalCount" style="color:var(--text)">0</strong>
+          <span style="margin-left:8px;font-size:11px;color:var(--muted)">(Se vazio, usa jogos padr&#227;o)</span>
+        </div>
+        <div id="adminSinalList"></div>
+      </div>
+      <!-- RTP Tab -->
+      <div class="admin-section" id="admin-tab-rtp">
+        <div class="admin-form" style="margin-bottom:16px">
+          <div class="admin-form-title">&#128176; Adicionar Jogo RTP</div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">Nome do Jogo</label>
+            <input class="admin-form-input" id="rtpGameName" type="text" placeholder="Ex: Gates of Olympus" />
+          </div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">Plataforma</label>
+            <input class="admin-form-input" id="rtpPlatformName" type="text" placeholder="Ex: Pragmatic" />
+          </div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">RTP % (ex: 96.50)</label>
+            <input class="admin-form-input" id="rtpValue" type="number" step="0.01" min="0" max="100" placeholder="96.50" />
+          </div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">URL da Logo (opcional)</label>
+            <input class="admin-form-input" id="rtpLogoUrl" type="url" placeholder="https://..." />
+          </div>
+          <button class="admin-form-submit" id="addRtpBtn">&#43; Adicionar Jogo RTP</button>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;padding:0 2px">
+          Jogos cadastrados: <strong id="rtpCount" style="color:var(--text)">0</strong>
+        </div>
+        <div id="adminRtpList"></div>
+      </div>
   </div>
 </div>
 
@@ -1214,6 +1269,8 @@ document.querySelectorAll('[data-admin-tab]').forEach(btn => {
     document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
     document.getElementById('admin-tab-' + btn.dataset.adminTab).classList.add('active');
     if (btn.dataset.adminTab === 'stats') loadAdminStats();
+    if (btn.dataset.adminTab === 'sinais') { renderAdminSinais(); }
+    if (btn.dataset.adminTab === 'rtp') { renderAdminRtp(); }
   });
 });
 
