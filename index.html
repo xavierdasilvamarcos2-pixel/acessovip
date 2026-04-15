@@ -404,11 +404,12 @@
     .sinal-mult-text { text-align: center; font-size: 13px; font-weight: 900; color: #F97316; margin-bottom: 16px; }
     .sinal-access-btn { width: 100%; background: #1a6b3a; border: 1.5px solid #10B981; border-radius: 14px; padding: 14px; color: #fff; font-size: 15px; font-weight: 900; cursor: pointer; display: none; align-items: center; justify-content: center; gap: 8px; }
     .sinal-access-btn.visible { display: flex; }
-    .sinal-plat-card { background: linear-gradient(135deg, #1a1a2e, #16213e); border: 1.5px solid rgba(124,58,237,0.4); border-radius: 16px; padding: 14px; margin-bottom: 12px; }
-    .sinal-plat-card-inner { display: flex; flex-direction: column; gap: 10px; }
-    .sinal-plat-card-logo-wrap { display: flex; align-items: center; gap: 10px; }
-    .sinal-plat-card-logo { width: 44px; height: 44px; border-radius: 10px; object-fit: contain; background: #fff; }
-    .sinal-plat-card-name { font-size: 16px; font-weight: 900; color: #fff; letter-spacing: 0.5px; text-transform: uppercase; }
+    .sinal-plat-card { background: linear-gradient(135deg, #1a1a2e, #16213e); border: 1.5px solid rgba(124,58,237,0.5); border-radius: 18px; padding: 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 12px; }
+    .sinal-plat-card-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; text-align: center; }
+    .sinal-plat-card-img-wrap { width: 100%; height: 90px; border-radius: 12px; overflow: hidden; background: #fff; display: flex; align-items: center; justify-content: center; }
+    .sinal-plat-card-img { width: 100%; height: 100%; object-fit: contain; }
+    .sinal-plat-card-name-row { text-align: center; }
+    .sinal-plat-card-name { font-size: 15px; font-weight: 900; color: #fff; letter-spacing: 0.5px; text-transform: uppercase; }
     .rtp-access-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; background: linear-gradient(135deg, #1a6b3a, #065f46); border: 1.5px solid #10B981; border-radius: 10px; padding: 8px 10px; color: #fff; font-size: 12px; font-weight: 800; text-decoration: none; margin-top: 2px; cursor: pointer; transition: opacity 0.15s; }
     .rtp-access-btn:active { opacity: 0.75; }
     /* ===== RTP SCREEN ===== */
@@ -1480,11 +1481,18 @@
             <input class="admin-form-input" id="sinalLogoUrl" type="url" placeholder="https://..." />
           </div>
           <div class="admin-form-row">
-            <label class="admin-form-label">&#127968; Plataforma Vinculada (opcional)</label>
-            <select class="admin-form-input" id="sinalGameUrl" style="color:#fff;background:var(--surface2)">
-              <option value="">-- Nenhuma plataforma --</option>
-            </select>
-            <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;">&#128293; Mostra plataformas marcadas como Em Alta</div>
+            <label class="admin-form-label">&#127968; Plataforma Vinculada</label>
+            <!-- Campo hidden que guarda o ID selecionado -->
+            <input type="hidden" id="sinalGameUrl" value="" />
+            <!-- Plataforma selecionada atual -->
+            <div id="sinalPlatSelected" style="display:none;background:rgba(124,58,237,0.15);border:1.5px solid #7C3AED;border-radius:12px;padding:10px 12px;margin-bottom:8px;display:none;align-items:center;gap:10px;">
+              <img id="sinalPlatSelectedImg" src="" alt="" style="width:40px;height:40px;border-radius:8px;object-fit:contain;background:#fff;" onerror="this.style.display='none'" />
+              <span id="sinalPlatSelectedName" style="font-size:14px;font-weight:900;color:#fff;"></span>
+              <button onclick="clearSinalPlatSelect()" style="margin-left:auto;background:rgba(239,68,68,0.2);border:1px solid #EF4444;border-radius:8px;padding:4px 10px;color:#EF4444;font-size:12px;cursor:pointer;">&#10005; Remover</button>
+            </div>
+            <!-- Grid de plataformas para selecionar -->
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:8px;">&#128293; Toque para selecionar a plataforma:</div>
+            <div id="sinalPlatGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-height:220px;overflow-y:auto;"></div>
           </div>
           <div class="admin-form-row">
             <label class="admin-form-label">&#128176; Mais Pagando?</label>
@@ -1617,13 +1625,14 @@
     <div class="sinal-mult-text">&#128293; Multiplicador de 2.500X Ativado</div>
     <!-- Card da plataforma vinculada -->
     <div class="sinal-plat-card" id="sinalPlatCard" style="display:none;">
-      <div class="sinal-plat-card-inner">
-        <div class="sinal-plat-card-logo-wrap">
-          <img id="sinalPlatCardLogo" src="" alt="" class="sinal-plat-card-logo" onerror="this.style.display='none'" />
-          <span id="sinalPlatCardName" class="sinal-plat-card-name"></span>
-        </div>
-        <button class="sinal-access-btn visible" id="sinalAccessBtn">&#128279; JOGAR AGORA</button>
+      <div class="sinal-plat-card-label">&#127919; Jogue nessa plataforma</div>
+      <div class="sinal-plat-card-img-wrap">
+        <img id="sinalPlatCardLogo" src="" alt="" class="sinal-plat-card-img" onerror="this.parentElement.style.display='none'" />
       </div>
+      <div class="sinal-plat-card-name-row">
+        <span id="sinalPlatCardName" class="sinal-plat-card-name"></span>
+      </div>
+      <button class="sinal-access-btn visible" id="sinalAccessBtn">&#9654; ACESSAR PLATAFORMA</button>
     </div>
     <!-- Botão fallback sem plataforma vinculada -->
     <button class="sinal-access-btn" id="sinalAccessBtnFallback" style="display:none;">&#128279; ACESSAR PLATAFORMA</button>
@@ -1719,15 +1728,58 @@ function populatePlatformSelects() {
   // Se não houver plataformas Em Alta, mostrar todas
   var platforms = hotPlatforms.length > 0 ? hotPlatforms : allPlatforms;
   platforms.sort(function(a, b) { return a.name.localeCompare(b.name); });
+
+  // Popular o select do RTP (mantido como dropdown)
   var opts = '<option value="">-- Nenhuma plataforma --</option>' +
     platforms.map(function(p) {
-      var badge = p.isHigh ? ' 🔥' : '';
+      var badge = p.isHigh ? ' \ud83d\udd25' : '';
       return '<option value="' + p.id + '">' + p.name + badge + '</option>';
     }).join('');
-  var selSinal = document.getElementById('sinalGameUrl');
   var selRtp = document.getElementById('rtpLinkedPlatform');
-  if (selSinal) selSinal.innerHTML = opts;
   if (selRtp) selRtp.innerHTML = opts;
+
+  // Popular o grid visual de plataformas para Sinais
+  var grid = document.getElementById('sinalPlatGrid');
+  if (grid) {
+    grid.innerHTML = platforms.map(function(p) {
+      var imgHtml = p.imageUrl
+        ? '<img src="' + p.imageUrl + '" alt="' + p.name + '" style="width:100%;height:44px;object-fit:contain;border-radius:6px;background:#fff;" onerror="this.style.display=\'none\'" />'
+        : '<div style="width:100%;height:44px;background:rgba(255,255,255,0.1);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;">&#127968;</div>';
+      return '<div onclick="selectSinalPlat(' + JSON.stringify(p.id) + ',' + JSON.stringify(p.name) + ',' + JSON.stringify(p.imageUrl || '') + ')" ' +
+        'id="sinal-plat-card-' + p.id + '" ' +
+        'style="background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:6px;cursor:pointer;text-align:center;transition:all 0.15s;">' +
+        imgHtml +
+        '<div style="font-size:9px;color:rgba(255,255,255,0.7);margin-top:4px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + p.name + '</div>' +
+        '</div>';
+    }).join('');
+  }
+}
+
+function selectSinalPlat(id, name, imgUrl) {
+  // Marcar como selecionado no hidden input
+  var hidden = document.getElementById('sinalGameUrl');
+  if (hidden) hidden.value = id;
+  // Mostrar plataforma selecionada
+  var selDiv = document.getElementById('sinalPlatSelected');
+  var selImg = document.getElementById('sinalPlatSelectedImg');
+  var selName = document.getElementById('sinalPlatSelectedName');
+  if (selDiv) { selDiv.style.display = 'flex'; }
+  if (selImg) { selImg.src = imgUrl; selImg.style.display = imgUrl ? 'block' : 'none'; }
+  if (selName) selName.textContent = name;
+  // Destacar card selecionado
+  var allCards = document.querySelectorAll('[id^="sinal-plat-card-"]');
+  allCards.forEach(function(c) { c.style.border = '1.5px solid rgba(255,255,255,0.1)'; c.style.background = 'rgba(255,255,255,0.05)'; });
+  var selectedCard = document.getElementById('sinal-plat-card-' + id);
+  if (selectedCard) { selectedCard.style.border = '1.5px solid #7C3AED'; selectedCard.style.background = 'rgba(124,58,237,0.2)'; }
+}
+
+function clearSinalPlatSelect() {
+  var hidden = document.getElementById('sinalGameUrl');
+  if (hidden) hidden.value = '';
+  var selDiv = document.getElementById('sinalPlatSelected');
+  if (selDiv) selDiv.style.display = 'none';
+  var allCards = document.querySelectorAll('[id^="sinal-plat-card-"]');
+  allCards.forEach(function(c) { c.style.border = '1.5px solid rgba(255,255,255,0.1)'; c.style.background = 'rgba(255,255,255,0.05)'; });
 }
 
 // ===== CONFIG =====
@@ -2666,10 +2718,15 @@ function openSinalDetail(key) {
     if (fallbackBtn) fallbackBtn.style.display = 'none';
     var logoEl = document.getElementById('sinalPlatCardLogo');
     var nameEl = document.getElementById('sinalPlatCardName');
-    if (logoEl) { logoEl.src = linkedPlat.imageUrl || ''; logoEl.alt = linkedPlat.name; logoEl.style.display = linkedPlat.imageUrl ? 'block' : 'none'; }
+    if (logoEl) {
+      logoEl.src = linkedPlat.imageUrl || '';
+      logoEl.alt = linkedPlat.name;
+      if (!linkedPlat.imageUrl) logoEl.parentElement.style.display = 'none';
+      else logoEl.parentElement.style.display = 'flex';
+    }
     if (nameEl) nameEl.textContent = linkedPlat.name;
     if (accessBtn) {
-      accessBtn.innerHTML = '&#128279; JOGAR NA ' + linkedPlat.name.toUpperCase();
+      accessBtn.innerHTML = '&#9654; ACESSAR ' + linkedPlat.name.toUpperCase();
       accessBtn.onclick = function() { window.open(effectiveUrl, '_blank'); };
     }
   } else if (effectiveUrl) {
@@ -2868,6 +2925,7 @@ if (addSinalBtn) {
       document.getElementById('sinalLogoUrl').value = '';
       document.getElementById('sinalGameUrl').value = '';
       if (document.getElementById('sinalIsPaying')) document.getElementById('sinalIsPaying').checked = false;
+      clearSinalPlatSelect();
       showToast('Jogo adicionado!');
       loadSinaisData();
     });
