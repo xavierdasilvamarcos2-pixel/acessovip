@@ -2713,14 +2713,37 @@ function renderSinais() {
 }
 
 function openSinalDetail(key) {
-  // Buscar em todas as fontes possíveis
-  var platList = buildSinalListFromPlatforms();
-  var allLists = [];
-  if (sinaisData.length > 0) allLists = allLists.concat(sinaisData);
-  if (platList) allLists = allLists.concat(platList);
-  allLists = allLists.concat(SINAIS_DEFAULTS);
-  var list = allLists;
-  var jogo = list.find(function(j) { return j._key === key; });
+  var jogo = null;
+  // Se a key começa com 'plat_', buscar diretamente no array de plataformas
+  if (key.indexOf('plat_') === 0) {
+    var platId = key.replace('plat_', '');
+    // Buscar em platforms (array local com isHigh) e em PLATFORMS_DATA (banco original)
+    var platObj = platforms.find(function(p) { return String(p.id) === platId; })
+               || PLATFORMS_DATA.find(function(p) { return String(p.id) === platId; });
+    if (platObj) {
+      var origP = PLATFORMS_DATA.find(function(p) { return String(p.id) === platId; });
+      var imgUrl = (origP && origP.imageUrl) ? origP.imageUrl : (platObj.imageUrl || '');
+      jogo = {
+        _key: key,
+        name: platObj.name,
+        platform: '',
+        logo: imgUrl,
+        url: platObj.url || '',
+        linkedPlatformId: String(platObj.id),
+        isPaying: false,
+        _isPlatform: true
+      };
+    }
+  }
+  // Se não encontrou ainda, buscar nas listas de sinais
+  if (!jogo) {
+    var platList = buildSinalListFromPlatforms();
+    var allLists = [];
+    if (sinaisData.length > 0) allLists = allLists.concat(sinaisData);
+    if (platList) allLists = allLists.concat(platList);
+    allLists = allLists.concat(SINAIS_DEFAULTS);
+    jogo = allLists.find(function(j) { return j._key === key; });
+  }
   if (!jogo) return;
 
   document.getElementById('sinalDetailTitle').textContent = jogo.name;
