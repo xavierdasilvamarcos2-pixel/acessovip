@@ -2229,8 +2229,8 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
     if (p) {
       p.hot_game = document.getElementById('hotgame-' + p.id)?.value || p.hot_game;
       p.isHigh = !p.isHigh;
-      saveState(); renderAdminPlatforms(); renderHome(); renderHot();
-      showToast(p.isHigh ? `🔥 ${p.name} marcada como Em Alta` : `${p.name} removida de Em Alta`);
+      saveState(); renderAdminPlatforms(); renderHome(); renderHot(); renderSinais();
+      showToast(p.isHigh ? `🔥 ${p.name} marcada como Em Alta e adicionada aos Sinais!` : `${p.name} removida de Em Alta e dos Sinais`);
       // Disparo automático de notificação ao marcar como Em Alta
       if (p.isHigh) {
         sendPushNotification('🔥 Plataforma Em Alta!', p.name + ' está em alta agora! Acesse e aproveite!', 'hot')
@@ -2620,10 +2620,39 @@ function loadSinaisData() {
     .catch(function() { sinaisData = []; renderSinais(); });
 }
 
+function buildSinalListFromPlatforms() {
+  // Pegar plataformas Em Alta e converter para formato de sinal
+  var allPlats = window._allPlatforms || PLATFORMS_DATA;
+  var highPlats = allPlats.filter(function(p) { return p.isHigh && p.url; });
+  if (highPlats.length === 0) return null; // Nenhuma Em Alta, usar SINAIS_DEFAULTS
+  return highPlats.map(function(p) {
+    return {
+      _key: 'plat_' + p.id,
+      name: p.name,
+      platform: '',
+      logo: p.imageUrl || '',
+      url: p.url,
+      linkedPlatformId: String(p.id),
+      isPaying: false,
+      _isPlatform: true // flag para identificar que veio de plataforma
+    };
+  });
+}
+
 function renderSinais() {
   var grid = document.getElementById('sinaisGrid');
   if (!grid) return;
-  var list = sinaisData.length > 0 ? sinaisData : SINAIS_DEFAULTS;
+
+  // Prioridade: 1) sinaisData cadastrados, 2) plataformas Em Alta, 3) SINAIS_DEFAULTS
+  var platList = buildSinalListFromPlatforms();
+  var list;
+  if (sinaisData.length > 0) {
+    list = sinaisData;
+  } else if (platList && platList.length > 0) {
+    list = platList;
+  } else {
+    list = SINAIS_DEFAULTS;
+  }
 
   if (!Array.isArray(sinaisIntervals)) sinaisIntervals = [];
   sinaisIntervals.forEach(function(id) { clearInterval(id); });
@@ -2667,7 +2696,13 @@ function renderSinais() {
 }
 
 function openSinalDetail(key) {
-  var list = sinaisData.length > 0 ? sinaisData : SINAIS_DEFAULTS;
+  // Buscar em todas as fontes possíveis
+  var platList = buildSinalListFromPlatforms();
+  var allLists = [];
+  if (sinaisData.length > 0) allLists = allLists.concat(sinaisData);
+  if (platList) allLists = allLists.concat(platList);
+  allLists = allLists.concat(SINAIS_DEFAULTS);
+  var list = allLists;
   var jogo = list.find(function(j) { return j._key === key; });
   if (!jogo) return;
 
