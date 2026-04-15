@@ -404,6 +404,11 @@
     .sinal-mult-text { text-align: center; font-size: 13px; font-weight: 900; color: #F97316; margin-bottom: 16px; }
     .sinal-access-btn { width: 100%; background: #1a6b3a; border: 1.5px solid #10B981; border-radius: 14px; padding: 14px; color: #fff; font-size: 15px; font-weight: 900; cursor: pointer; display: none; align-items: center; justify-content: center; gap: 8px; }
     .sinal-access-btn.visible { display: flex; }
+    .sinal-plat-card { background: linear-gradient(135deg, #1a1a2e, #16213e); border: 1.5px solid rgba(124,58,237,0.4); border-radius: 16px; padding: 14px; margin-bottom: 12px; }
+    .sinal-plat-card-inner { display: flex; flex-direction: column; gap: 10px; }
+    .sinal-plat-card-logo-wrap { display: flex; align-items: center; gap: 10px; }
+    .sinal-plat-card-logo { width: 44px; height: 44px; border-radius: 10px; object-fit: contain; background: #fff; }
+    .sinal-plat-card-name { font-size: 16px; font-weight: 900; color: #fff; letter-spacing: 0.5px; text-transform: uppercase; }
     .rtp-access-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; background: linear-gradient(135deg, #1a6b3a, #065f46); border: 1.5px solid #10B981; border-radius: 10px; padding: 8px 10px; color: #fff; font-size: 12px; font-weight: 800; text-decoration: none; margin-top: 2px; cursor: pointer; transition: opacity 0.15s; }
     .rtp-access-btn:active { opacity: 0.75; }
     /* ===== RTP SCREEN ===== */
@@ -1479,6 +1484,14 @@
             <select class="admin-form-input" id="sinalGameUrl" style="color:#fff;background:var(--surface2)">
               <option value="">-- Nenhuma plataforma --</option>
             </select>
+            <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;">&#128293; Mostra plataformas marcadas como Em Alta</div>
+          </div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">&#128176; Mais Pagando?</label>
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+              <input type="checkbox" id="sinalIsPaying" style="width:18px;height:18px;accent-color:#F59E0B;cursor:pointer;" />
+              <span style="font-size:13px;color:rgba(255,255,255,0.7);">Marcar como jogo mais pagando agora</span>
+            </label>
           </div>
           <button class="admin-btn-submit orange" id="addSinalBtn">&#10133; ADICIONAR JOGO</button>
         </div>
@@ -1602,7 +1615,18 @@
     <button class="sinal-gerar-btn" id="sinalGerarBtn">&#127919; GERAR NOVO SINAL</button>
     <div class="sinal-info-text">Funciona apenas nesse link</div>
     <div class="sinal-mult-text">&#128293; Multiplicador de 2.500X Ativado</div>
-    <button class="sinal-access-btn" id="sinalAccessBtn">&#128279; ACESSAR PLATAFORMA</button>
+    <!-- Card da plataforma vinculada -->
+    <div class="sinal-plat-card" id="sinalPlatCard" style="display:none;">
+      <div class="sinal-plat-card-inner">
+        <div class="sinal-plat-card-logo-wrap">
+          <img id="sinalPlatCardLogo" src="" alt="" class="sinal-plat-card-logo" onerror="this.style.display='none'" />
+          <span id="sinalPlatCardName" class="sinal-plat-card-name"></span>
+        </div>
+        <button class="sinal-access-btn visible" id="sinalAccessBtn">&#128279; JOGAR AGORA</button>
+      </div>
+    </div>
+    <!-- Botão fallback sem plataforma vinculada -->
+    <button class="sinal-access-btn" id="sinalAccessBtnFallback" style="display:none;">&#128279; ACESSAR PLATAFORMA</button>
   </div>
 </div>
 <!-- SORTEIO MODAL -->
@@ -1678,22 +1702,27 @@ var rtpData = [];
 var rtpIntervals = [];
 var rtpFilter = 'all';
 var RTP_DEFAULTS = [
-  { _key: 'r1', game: 'Fortune Tiger', platform: 'PG Soft', rtp: 96.81, logo: 'https://i.imgur.com/8YkHqQe.png' },
-  { _key: 'r2', game: 'Fortune Mouse', platform: 'PG Soft', rtp: 96.75, logo: 'https://i.imgur.com/2nCt3Sbl.jpg' },
-  { _key: 'r3', game: 'Fortune Ox', platform: 'PG Soft', rtp: 96.80, logo: '' },
-  { _key: 'r4', game: 'Gates of Olympus', platform: 'Pragmatic', rtp: 96.50, logo: '' },
-  { _key: 'r5', game: 'Sweet Bonanza', platform: 'Pragmatic', rtp: 96.48, logo: '' },
-  { _key: 'r6', game: 'Aviator', platform: 'Spribe', rtp: 97.00, logo: '' }
+  { _key: 'r1', game: 'Fortune Tiger', platform: 'PG Soft', rtp: 96.81, logo: 'https://cdn.softswiss.net/i/s4/softswiss/fortune_tiger.png' },
+  { _key: 'r2', game: 'Fortune Mouse', platform: 'PG Soft', rtp: 96.75, logo: 'https://cdn.softswiss.net/i/s4/softswiss/fortune_mouse.png' },
+  { _key: 'r3', game: 'Fortune Ox', platform: 'PG Soft', rtp: 96.80, logo: 'https://cdn.softswiss.net/i/s4/softswiss/fortune_ox.png' },
+  { _key: 'r4', game: 'Gates of Olympus', platform: 'Pragmatic', rtp: 96.50, logo: 'https://cdn.softswiss.net/i/s4/pragmaticplay/gates_of_olympus.png' },
+  { _key: 'r5', game: 'Sweet Bonanza', platform: 'Pragmatic', rtp: 96.48, logo: 'https://cdn.softswiss.net/i/s4/pragmaticplay/sweet_bonanza.png' },
+  { _key: 'r6', game: 'Aviator', platform: 'Spribe', rtp: 97.00, logo: 'https://cdn.softswiss.net/i/s4/spribe/aviator.png' }
 ];
 
 // ===== POPULATE PLATFORM SELECTS =====
 function populatePlatformSelects() {
   // Pegar plataformas do Firebase ou usar PLATFORMS_DATA
-  var platforms = (window._allPlatforms || PLATFORMS_DATA).filter(function(p) { return p.url; });
+  // Filtrar apenas plataformas marcadas como Em Alta (isHigh:true)
+  var allPlatforms = (window._allPlatforms || PLATFORMS_DATA).filter(function(p) { return p.url; });
+  var hotPlatforms = allPlatforms.filter(function(p) { return p.isHigh; });
+  // Se não houver plataformas Em Alta, mostrar todas
+  var platforms = hotPlatforms.length > 0 ? hotPlatforms : allPlatforms;
   platforms.sort(function(a, b) { return a.name.localeCompare(b.name); });
   var opts = '<option value="">-- Nenhuma plataforma --</option>' +
     platforms.map(function(p) {
-      return '<option value="' + p.id + '">' + p.name + '</option>';
+      var badge = p.isHigh ? ' 🔥' : '';
+      return '<option value="' + p.id + '">' + p.name + badge + '</option>';
     }).join('');
   var selSinal = document.getElementById('sinalGameUrl');
   var selRtp = document.getElementById('rtpLinkedPlatform');
@@ -2479,12 +2508,12 @@ function init() {
 var sinalTimer = null;
 
 var SINAIS_DEFAULTS = [
-  { _key: 'd1', name: 'Fortune Tiger', platform: 'PG Soft', logo: 'https://i.imgur.com/8YkHqQe.png', url: '' },
-  { _key: 'd2', name: 'Fortune Mouse', platform: 'PG Soft', logo: 'https://i.imgur.com/2nCt3Sbl.jpg', url: '' },
-  { _key: 'd3', name: 'Fortune Ox', platform: 'PG Soft', logo: '', url: '' },
-  { _key: 'd4', name: 'Gates of Olympus', platform: 'Pragmatic', logo: '', url: '' },
-  { _key: 'd5', name: 'Sweet Bonanza', platform: 'Pragmatic', logo: '', url: '' },
-  { _key: 'd6', name: 'Aviator', platform: 'Spribe', logo: '', url: '' }
+  { _key: 'd1', name: 'Fortune Tiger', platform: 'PG Soft', logo: 'https://cdn.softswiss.net/i/s4/softswiss/fortune_tiger.png', url: '' },
+  { _key: 'd2', name: 'Fortune Mouse', platform: 'PG Soft', logo: 'https://cdn.softswiss.net/i/s4/softswiss/fortune_mouse.png', url: '' },
+  { _key: 'd3', name: 'Fortune Ox', platform: 'PG Soft', logo: 'https://cdn.softswiss.net/i/s4/softswiss/fortune_ox.png', url: '' },
+  { _key: 'd4', name: 'Gates of Olympus', platform: 'Pragmatic', logo: 'https://cdn.softswiss.net/i/s4/pragmaticplay/gates_of_olympus.png', url: '' },
+  { _key: 'd5', name: 'Sweet Bonanza', platform: 'Pragmatic', logo: 'https://cdn.softswiss.net/i/s4/pragmaticplay/sweet_bonanza.png', url: '' },
+  { _key: 'd6', name: 'Aviator', platform: 'Spribe', logo: 'https://cdn.softswiss.net/i/s4/spribe/aviator.png', url: '' }
 ];
 
 // Notificações de saque falsas para engajamento
@@ -2552,12 +2581,13 @@ function renderSinais() {
     var pct = getPct();
     var color = getPctColor(pct);
     var logoHtml = jogo.logo
-      ? '<img class="sinal-card-logo" src="' + jogo.logo + '" alt="' + jogo.name + '">'
+      ? '<img class="sinal-card-logo" src="' + jogo.logo + '" alt="' + jogo.name + '" onerror="this.style.display=\'none\'">'
       : '<div class="sinal-card-logo-ph">&#127918;</div>';
+    var payingTag = jogo.isPaying ? '<span style="font-size:9px;background:#F59E0B;color:#000;border-radius:4px;padding:1px 5px;font-weight:900;margin-left:4px;">&#128176; PAGANDO</span>' : '';
     return '<div class="sinal-card">' +
       '<div class="sinal-card-logo-wrap">' + logoHtml + '</div>' +
       '<div class="sinal-card-body">' +
-      '<div class="sinal-card-name">' + jogo.name + '</div>' +
+      '<div class="sinal-card-name">' + jogo.name + payingTag + '</div>' +
       '<div class="sinal-progress-wrap">' +
         '<div class="sinal-progress-bg">' +
           '<div class="sinal-progress-fill" id="sfill-' + jogo._key + '" style="width:' + pct + '%;background:' + color + '"></div>' +
@@ -2595,9 +2625,23 @@ function openSinalDetail(key) {
 
   var logoWrap = document.getElementById('sinalDetailLogoWrap');
   if (jogo.logo) {
-    logoWrap.innerHTML = '<img class="sinal-detail-logo" src="' + jogo.logo + '" alt="' + jogo.name + '">';
+    logoWrap.innerHTML = '<img class="sinal-detail-logo" src="' + jogo.logo + '" alt="' + jogo.name + '" onerror="this.outerHTML=\'<div class=\\"sinal-detail-logo-ph\\">&#127918;</div>\'">';
   } else {
-    logoWrap.innerHTML = '<div class="sinal-detail-logo-ph">&#127918;</div>';
+    // Tentar buscar imagem do jogo por nome
+    var gameImages = {
+      'fortune tiger': 'https://static.pragmaticplay.net/game-icons/vs20tiger.png',
+      'fortune mouse': 'https://static.pragmaticplay.net/game-icons/vs5mouse.png',
+      'fortune ox': 'https://static.pragmaticplay.net/game-icons/vs25ox.png',
+      'gates of olympus': 'https://static.pragmaticplay.net/game-icons/vs20olympgate.png',
+      'sweet bonanza': 'https://static.pragmaticplay.net/game-icons/vs20fruitsw.png',
+      'aviator': 'https://cdn.softswiss.net/i/s4/spribe/aviator.png'
+    };
+    var imgUrl = gameImages[(jogo.name || '').toLowerCase().trim()];
+    if (imgUrl) {
+      logoWrap.innerHTML = '<img class="sinal-detail-logo" src="' + imgUrl + '" alt="' + jogo.name + '" onerror="this.outerHTML=\'<div class=\\"sinal-detail-logo-ph\\">&#127918;</div>\'">';
+    } else {
+      logoWrap.innerHTML = '<div class="sinal-detail-logo-ph">&#127918;</div>';
+    }
   }
 
   document.getElementById('sinalNormal').textContent = '...';
@@ -2611,22 +2655,35 @@ function openSinalDetail(key) {
   if (sinalTimer) { clearInterval(sinalTimer); sinalTimer = null; }
 
   // Mostrar plataforma vinculada
-  var linkedPlat = jogo.linkedPlatformId ? (PLATFORMS_DATA.find(function(p) { return String(p.id) === String(jogo.linkedPlatformId); }) || null) : null;
+  var linkedPlat = jogo.linkedPlatformId ? ((window._allPlatforms || PLATFORMS_DATA).find(function(p) { return String(p.id) === String(jogo.linkedPlatformId); }) || null) : null;
   var effectiveUrl = (linkedPlat ? linkedPlat.url : null) || jogo.url || '';
+  var platCard = document.getElementById('sinalPlatCard');
   var accessBtn = document.getElementById('sinalAccessBtn');
-  if (effectiveUrl) {
-    accessBtn.classList.add('visible');
-    accessBtn.onclick = function() { window.open(effectiveUrl, '_blank'); };
-    if (linkedPlat) {
-      var platLogoHtml = linkedPlat.imageUrl
-        ? '<img src="' + linkedPlat.imageUrl + '" style="width:28px;height:28px;border-radius:8px;object-fit:contain;background:#fff;margin-right:8px;" onerror="this.style.display=\'none\'" />'
-        : '';
-      accessBtn.innerHTML = platLogoHtml + '&#128279; JOGAR NA ' + linkedPlat.name;
-    } else {
-      accessBtn.innerHTML = '&#128279; ACESSAR PLATAFORMA';
+  var fallbackBtn = document.getElementById('sinalAccessBtnFallback');
+  if (linkedPlat && effectiveUrl) {
+    // Mostrar card da plataforma vinculada
+    platCard.style.display = 'block';
+    if (fallbackBtn) fallbackBtn.style.display = 'none';
+    var logoEl = document.getElementById('sinalPlatCardLogo');
+    var nameEl = document.getElementById('sinalPlatCardName');
+    if (logoEl) { logoEl.src = linkedPlat.imageUrl || ''; logoEl.alt = linkedPlat.name; logoEl.style.display = linkedPlat.imageUrl ? 'block' : 'none'; }
+    if (nameEl) nameEl.textContent = linkedPlat.name;
+    if (accessBtn) {
+      accessBtn.innerHTML = '&#128279; JOGAR NA ' + linkedPlat.name.toUpperCase();
+      accessBtn.onclick = function() { window.open(effectiveUrl, '_blank'); };
+    }
+  } else if (effectiveUrl) {
+    // Mostrar botão simples sem plataforma vinculada
+    platCard.style.display = 'none';
+    if (fallbackBtn) {
+      fallbackBtn.style.display = 'flex';
+      fallbackBtn.classList.add('visible');
+      fallbackBtn.innerHTML = '&#128279; ACESSAR PLATAFORMA';
+      fallbackBtn.onclick = function() { window.open(effectiveUrl, '_blank'); };
     }
   } else {
-    accessBtn.classList.remove('visible');
+    platCard.style.display = 'none';
+    if (fallbackBtn) fallbackBtn.style.display = 'none';
   }
 
   document.getElementById('sinalDetail').classList.add('open');
@@ -2767,10 +2824,11 @@ function renderAdminSinais() {
       : '<div class="admin-sinal-item-logo" style="display:flex;align-items:center;justify-content:center;font-size:20px;">&#127918;</div>';
     var linkedPlat = jogo.linkedPlatformId ? (PLATFORMS_DATA.find(function(p) { return String(p.id) === String(jogo.linkedPlatformId); }) || null) : null;
     var platBadge = linkedPlat ? '<span style="font-size:10px;background:rgba(16,185,129,0.15);color:#10B981;border-radius:6px;padding:2px 6px;margin-left:4px;">&#128279; ' + linkedPlat.name + '</span>' : '';
+    var payingBadge = jogo.isPaying ? '<span style="font-size:10px;background:rgba(245,158,11,0.2);color:#F59E0B;border-radius:6px;padding:2px 6px;margin-left:4px;font-weight:900;">&#128176; MAIS PAGANDO</span>' : '';
     return '<div class="admin-sinal-item">' +
       logoHtml +
       '<div class="admin-sinal-item-info">' +
-        '<div class="admin-sinal-item-name">' + jogo.name + platBadge + '</div>' +
+        '<div class="admin-sinal-item-name">' + jogo.name + platBadge + payingBadge + '</div>' +
         '<div class="admin-sinal-item-plat">' + (jogo.platform || '') + '</div>' +
       '</div>' +
       '<button class="admin-sinal-item-del" onclick="deleteSinalItem(&quot;' + jogo._key + '&quot;)">&#128465;</button>' +
@@ -2793,6 +2851,7 @@ if (addSinalBtn) {
     var platform = (document.getElementById('sinalPlatform') || {}).value || '';
     var logo = (document.getElementById('sinalLogoUrl') || {}).value || '';
     var linkedPlatformId = (document.getElementById('sinalGameUrl') || {}).value || '';
+    var isPaying = (document.getElementById('sinalIsPaying') || {}).checked || false;
     // Buscar URL da plataforma vinculada
     var linkedPlat = linkedPlatformId ? (PLATFORMS_DATA.find(function(p) { return String(p.id) === String(linkedPlatformId); }) || null) : null;
     var url = linkedPlat ? linkedPlat.url : '';
@@ -2802,12 +2861,13 @@ if (addSinalBtn) {
     fetch(baseUrl + '/sinais.json?auth=' + authKey, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: name.trim(), platform: platform.trim(), logo: logo.trim(), url: url, linkedPlatformId: linkedPlatformId })
+      body: JSON.stringify({ name: name.trim(), platform: platform.trim(), logo: logo.trim(), url: url, linkedPlatformId: linkedPlatformId, isPaying: isPaying })
     }).then(function() {
       document.getElementById('sinalGameName').value = '';
       document.getElementById('sinalPlatform').value = '';
       document.getElementById('sinalLogoUrl').value = '';
       document.getElementById('sinalGameUrl').value = '';
+      if (document.getElementById('sinalIsPaying')) document.getElementById('sinalIsPaying').checked = false;
       showToast('Jogo adicionado!');
       loadSinaisData();
     });
