@@ -1606,13 +1606,25 @@ document.getElementById('refreshStatsBtn').addEventListener('click', loadAdminSt
 // Nota: O OneSignal registra o OneSignalSDKWorker.js automaticamente via SDK
 // O sw.js antigo foi substituido pelo OneSignalSDKWorker.js que inclui o código do PWA
 if ('serviceWorker' in navigator) {
-  // Desregistrar o sw.js antigo se estiver registrado
+  // Desregistrar TODOS os SWs antigos e registrar o novo sw.js v11
   navigator.serviceWorker.getRegistrations().then(registrations => {
+    var hasNewSW = registrations.some(reg => reg.active && reg.active.scriptURL && reg.active.scriptURL.includes('sw.js'));
     registrations.forEach(reg => {
-      if (reg.active && reg.active.scriptURL && reg.active.scriptURL.includes('sw.js')) {
-        reg.unregister().then(() => console.log('Old SW unregistered'));
+      // Desregistrar qualquer SW que NÃO seja o sw.js atual
+      if (reg.active && reg.active.scriptURL && !reg.active.scriptURL.endsWith('/sw.js')) {
+        reg.unregister().then(() => console.log('Old SW unregistered:', reg.active.scriptURL));
       }
     });
+    // Registrar o sw.js v11 se ainda não estiver registrado
+    if (!hasNewSW) {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' })
+        .then(reg => {
+          console.log('SW v11 registered:', reg.scope);
+          // Forçar ativação imediata
+          if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+        })
+        .catch(err => console.log('SW register error:', err));
+    }
   });
 
   navigator.serviceWorker.addEventListener('message', (event) => {
@@ -1708,12 +1720,18 @@ function init() {
   
   // Renderiza IMEDIATAMENTE - sempre tem dados (PLATFORMS_DATA)
   renderHome();
-  // Fallback: renderiza novamente após 50ms caso o browser ainda não tenha processado o DOM
+  // Fallback 1: renderiza novamente após 200ms (celulares lentos)
   setTimeout(function() {
     if (document.getElementById('platformGrid').children.length === 0) {
       renderHome();
     }
-  }, 50);
+  }, 200);
+  // Fallback 2: renderiza novamente após 600ms (celulares muito lentos ou com SW antigo)
+  setTimeout(function() {
+    if (document.getElementById('platformGrid').children.length === 0) {
+      renderHome();
+    }
+  }, 600);
 
   // PASSO 2: Atualizar do Firebase em SEGUNDO PLANO (sem bloquear o app)
   // Usa AbortController para cancelar se demorar mais de 5 segundos
