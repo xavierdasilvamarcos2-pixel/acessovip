@@ -1922,11 +1922,8 @@ function renderHot() {
   }
   // Usar o mesmo grid visual dos Sinais
   hotList.innerHTML = `<div class="sinais-grid" style="padding:0">${hot.map(p => {
-    var imgUrl = p.imageUrl || '';
-    if (!imgUrl) {
-      var orig = PLATFORMS_DATA.find(x => x.id === p.id);
-      if (orig) imgUrl = orig.imageUrl || '';
-    }
+    var origP = PLATFORMS_DATA.find(x => x.id === p.id);
+    var imgUrl = (origP && origP.imageUrl) ? origP.imageUrl : (p.imageUrl || '');
     var pct = Math.floor(Math.random() * 30) + 60; // 60-90%
     var color = pct >= 80 ? '#22C55E' : pct >= 60 ? '#F59E0B' : '#EF4444';
     var logoHtml = imgUrl
@@ -2642,12 +2639,10 @@ function buildSinalListFromPlatforms() {
   var highPlats = allPlats.filter(function(p) { return p.isHigh && p.url; });
   if (highPlats.length === 0) return null; // Nenhuma Em Alta, usar SINAIS_DEFAULTS
   return highPlats.map(function(p) {
-    // Buscar imageUrl: primeiro do objeto da plataforma, depois do PLATFORMS_DATA original
-    var imgUrl = p.imageUrl || '';
-    if (!imgUrl) {
-      var orig = PLATFORMS_DATA.find(function(x) { return x.id === p.id; });
-      if (orig) imgUrl = orig.imageUrl || '';
-    }
+    // Buscar imageUrl: SEMPRE buscar no PLATFORMS_DATA original (tem as logos reais)
+    // O objeto salvo no localStorage pode ter imageUrl vazio se foi adicionado manualmente
+    var orig = PLATFORMS_DATA.find(function(x) { return x.id === p.id; });
+    var imgUrl = (orig && orig.imageUrl) ? orig.imageUrl : (p.imageUrl || '');
     return {
       _key: 'plat_' + p.id,
       name: p.name,
@@ -2656,7 +2651,7 @@ function buildSinalListFromPlatforms() {
       url: p.url,
       linkedPlatformId: String(p.id),
       isPaying: false,
-      _isPlatform: true // flag para identificar que veio de plataforma
+      _isPlatform: true
     };
   });
 }
@@ -2733,8 +2728,13 @@ function openSinalDetail(key) {
   document.getElementById('sinalDetailPlat').textContent = jogo.platform || '';
 
   var logoWrap = document.getElementById('sinalDetailLogoWrap');
+  // Para plataformas Em Alta: buscar logo do PLATFORMS_DATA original
+  if (jogo._isPlatform && !jogo.logo) {
+    var origPlat = PLATFORMS_DATA.find(function(x) { return String(x.id) === String(jogo.linkedPlatformId); });
+    if (origPlat && origPlat.imageUrl) jogo.logo = origPlat.imageUrl;
+  }
   if (jogo.logo) {
-    logoWrap.innerHTML = '<img class="sinal-detail-logo" src="' + jogo.logo + '" alt="' + jogo.name + '" onerror="this.outerHTML=\'<div class=\\"sinal-detail-logo-ph\\">&#127918;</div>\'">';
+    logoWrap.innerHTML = '<img class="sinal-detail-logo" src="' + jogo.logo + '" alt="' + jogo.name + '" onerror="this.outerHTML=\'<div class=\\\"sinal-detail-logo-ph\\\">&#127918;</div>\'">';
   } else {
     // Tentar buscar imagem do jogo por nome
     var gameImages = {
@@ -2764,7 +2764,13 @@ function openSinalDetail(key) {
   if (sinalTimer) { clearInterval(sinalTimer); sinalTimer = null; }
 
   // Mostrar plataforma vinculada
-  var linkedPlat = jogo.linkedPlatformId ? ((window._allPlatforms || PLATFORMS_DATA).find(function(p) { return String(p.id) === String(jogo.linkedPlatformId); }) || null) : null;
+  // Buscar em PLATFORMS_DATA original (tem as logos reais) e em _allPlatforms (tem isHigh/url atualizados)
+  var linkedPlatId = jogo.linkedPlatformId;
+  var linkedPlatOrig = linkedPlatId ? PLATFORMS_DATA.find(function(p) { return String(p.id) === String(linkedPlatId); }) : null;
+  var linkedPlatLive = linkedPlatId ? ((window._allPlatforms || []).find(function(p) { return String(p.id) === String(linkedPlatId); })) : null;
+  var linkedPlat = linkedPlatLive || linkedPlatOrig || null;
+  // Garantir que imageUrl vem do PLATFORMS_DATA original se o live não tiver
+  if (linkedPlat && !linkedPlat.imageUrl && linkedPlatOrig) linkedPlat = Object.assign({}, linkedPlat, { imageUrl: linkedPlatOrig.imageUrl });
   var effectiveUrl = (linkedPlat ? linkedPlat.url : null) || jogo.url || '';
   var platCard = document.getElementById('sinalPlatCard');
   var accessBtn = document.getElementById('sinalAccessBtn');
