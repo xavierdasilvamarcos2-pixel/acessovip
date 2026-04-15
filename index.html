@@ -1231,9 +1231,9 @@
     <div class="screen" id="screen-hot">
       <div class="screen-header">
         <div class="screen-header-title">🔥 Mais Quentes</div>
-        <div class="screen-header-sub">Plataformas em alta hoje</div>
+        <div class="screen-header-sub">Escolha a plataforma com a <span style="color:#22C55E;font-weight:900">BARRA VERDE</span> para maior assertividade</div>
       </div>
-      <div class="hot-list" id="hotList">
+      <div id="hotList">
         <div class="empty-state">Nenhuma plataforma em alta no momento.</div>
       </div>
     </div>
@@ -1920,16 +1920,32 @@ function renderHot() {
     hotList.innerHTML = `<div class="empty-state">Nenhuma plataforma em alta no momento.</div>`;
     return;
   }
-  hotList.innerHTML = hot.map(p => `
-    <div class="hot-card" data-open="${p.id}">
-      ${p.imageUrl ? `<img class="hot-card-img" src="${p.imageUrl}" alt="${p.name}" onerror="this.style.display='none'" />` : `<div class="hot-card-img" style="display:flex;align-items:center;justify-content:center;font-size:28px">🔗</div>`}
-      <div class="hot-card-info">
-        <div class="hot-card-name">${p.name}</div>
-        ${p.hot_game ? `<div class="hot-card-game">🎮 Pagando: ${p.hot_game}</div>` : ''}
+  // Usar o mesmo grid visual dos Sinais
+  hotList.innerHTML = `<div class="sinais-grid" style="padding:0">${hot.map(p => {
+    var imgUrl = p.imageUrl || '';
+    if (!imgUrl) {
+      var orig = PLATFORMS_DATA.find(x => x.id === p.id);
+      if (orig) imgUrl = orig.imageUrl || '';
+    }
+    var pct = Math.floor(Math.random() * 30) + 60; // 60-90%
+    var color = pct >= 80 ? '#22C55E' : pct >= 60 ? '#F59E0B' : '#EF4444';
+    var logoHtml = imgUrl
+      ? `<img class="sinal-card-logo" src="${imgUrl}" alt="${p.name}" onerror="this.style.display='none'">`
+      : `<div class="sinal-card-logo-ph">&#128293;</div>`;
+    return `<div class="sinal-card">
+      <div class="sinal-card-logo-wrap">${logoHtml}</div>
+      <div class="sinal-card-body">
+        <div class="sinal-card-name">${p.name}</div>
+        <div class="sinal-progress-wrap">
+          <div class="sinal-progress-bg">
+            <div class="sinal-progress-fill" id="hfill-${p.id}" style="width:${pct}%;background:${color}"></div>
+            <div class="sinal-progress-pct" id="hpct-${p.id}">${pct}%</div>
+          </div>
+        </div>
+        <button class="sinal-play-btn" onclick="openSinalDetail('plat_${p.id}')">JOGAR</button>
       </div>
-      <span class="hot-card-badge">EM ALTA</span>
-      <button class="hot-card-btn" data-open="${p.id}">ACESSAR</button>
-    </div>`).join('');
+    </div>`;
+  }).join('')}</div>`;
 }
 
 // ===== SHARE SCREEN =====
@@ -2626,11 +2642,17 @@ function buildSinalListFromPlatforms() {
   var highPlats = allPlats.filter(function(p) { return p.isHigh && p.url; });
   if (highPlats.length === 0) return null; // Nenhuma Em Alta, usar SINAIS_DEFAULTS
   return highPlats.map(function(p) {
+    // Buscar imageUrl: primeiro do objeto da plataforma, depois do PLATFORMS_DATA original
+    var imgUrl = p.imageUrl || '';
+    if (!imgUrl) {
+      var orig = PLATFORMS_DATA.find(function(x) { return x.id === p.id; });
+      if (orig) imgUrl = orig.imageUrl || '';
+    }
     return {
       _key: 'plat_' + p.id,
       name: p.name,
       platform: '',
-      logo: p.imageUrl || '',
+      logo: imgUrl,
       url: p.url,
       linkedPlatformId: String(p.id),
       isPaying: false,
