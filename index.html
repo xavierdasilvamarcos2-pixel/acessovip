@@ -293,44 +293,59 @@
     .main::-webkit-scrollbar { width: 0; }
 
     /* ===== SINAIS SCREEN ===== */
-    .sinais-header { padding: 16px 16px 12px; background: linear-gradient(135deg, #0f0f1a 0%, #1a0533 100%); border-bottom: 1px solid var(--border); }
-    .sinais-header-title { font-size: 20px; font-weight: 900; color: var(--text); }
-    .sinais-header-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
-    .sinais-live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10B981; margin-right: 6px; animation: blink 1.2s ease-in-out infinite; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-    .sinais-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 14px; }
-    .sinal-card { background: var(--surface); border-radius: 16px; padding: 14px 10px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid var(--border); cursor: pointer; transition: transform 0.15s; }
-    .sinal-card:active { transform: scale(0.96); }
-    .sinal-card-logo { width: 64px; height: 64px; border-radius: 14px; object-fit: cover; background: var(--surface2); }
-    .sinal-card-logo-ph { width: 64px; height: 64px; border-radius: 14px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); display: flex; align-items: center; justify-content: center; font-size: 28px; }
-    .sinal-card-name { font-size: 12px; font-weight: 800; color: var(--text); text-align: center; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sinais-header { padding: 16px 16px 10px; background: #000; }
+    .sinais-header-title { font-size: 20px; font-weight: 900; color: #fff; }
+    .sinais-header-sub { font-size: 12px; color: #aaa; margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+    .sinais-live-dot { width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block; animation: blink 1.2s ease-in-out infinite; flex-shrink: 0; }
+    @keyframes blink { 0%,100%{opacity:1;box-shadow:0 0 6px #10B981} 50%{opacity:0.3;box-shadow:none} }
+    /* Notificação flutuante de saque */
+    .saque-notif { position: fixed; top: 60px; left: 50%; transform: translateX(-50%) translateY(-80px); z-index: 300; background: #d4edda; border: 1px solid #28a745; border-radius: 10px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; min-width: 240px; max-width: 320px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.4s cubic-bezier(0.32,0.72,0,1), opacity 0.4s; opacity: 0; pointer-events: none; }
+    .saque-notif.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .saque-notif-dot { width: 10px; height: 10px; border-radius: 50%; background: #28a745; flex-shrink: 0; }
+    .saque-notif-text { font-size: 13px; font-weight: 700; color: #155724; }
+    /* Grid de cards */
+    .sinais-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; background: #000; }
+    .sinal-card { background: #111; border-radius: 14px; padding: 12px 10px 10px; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid #222; cursor: pointer; }
+    .sinal-card-logo { width: 100%; height: 90px; border-radius: 10px; object-fit: cover; background: #222; display: block; }
+    .sinal-card-logo-ph { width: 100%; height: 90px; border-radius: 10px; background: linear-gradient(135deg, #1a1a2e, #16213e); display: flex; align-items: center; justify-content: center; font-size: 36px; }
+    .sinal-card-name { font-size: 12px; font-weight: 800; color: #fff; text-align: center; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    /* Barra de progresso com listras diagonais */
     .sinal-progress-wrap { width: 100%; }
-    .sinal-progress-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
-    .sinal-progress-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease, background-color 0.5s; }
-    .sinal-progress-pct { font-size: 13px; font-weight: 900; text-align: center; margin-top: 4px; }
-    .sinal-play-btn { width: 100%; background: linear-gradient(135deg, #F59E0B, #D97706); border: none; border-radius: 10px; padding: 9px 6px; color: #fff; font-size: 12px; font-weight: 900; cursor: pointer; }
-    /* Signal Detail Screen */
-    .sinal-detail { position: fixed; inset: 0; background: var(--bg); z-index: 150; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1); pointer-events: none; }
+    .sinal-progress-bg { width: 100%; height: 22px; background: #222; border-radius: 6px; overflow: hidden; position: relative; }
+    .sinal-progress-fill { height: 100%; border-radius: 6px; position: relative; overflow: hidden; transition: width 0.9s ease, background-color 0.6s; }
+    .sinal-progress-fill::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(-45deg, rgba(255,255,255,0.15) 0px, rgba(255,255,255,0.15) 6px, transparent 6px, transparent 12px); background-size: 24px 24px; animation: stripe-move 0.8s linear infinite; }
+    @keyframes stripe-move { 0%{background-position:0 0} 100%{background-position:24px 0} }
+    .sinal-progress-pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); z-index: 1; }
+    .sinal-play-btn { width: 100%; background: #F97316; border: none; border-radius: 8px; padding: 10px 6px; color: #fff; font-size: 13px; font-weight: 900; cursor: pointer; letter-spacing: 0.5px; }
+    .sinal-play-btn:active { opacity: 0.85; transform: scale(0.97); }
+    /* Tela de detalhe do sinal */
+    .sinal-detail { position: fixed; inset: 0; background: #000; z-index: 150; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1); pointer-events: none; overflow-y: auto; }
     .sinal-detail.open { transform: translateX(0); pointer-events: all; }
-    .sinal-detail-hdr { display: flex; align-items: center; gap: 12px; padding: 14px 16px; padding-top: max(14px, env(safe-area-inset-top)); background: var(--bg); border-bottom: 1px solid var(--border); flex-shrink: 0; }
-    .sinal-detail-back { background: var(--surface); border: none; border-radius: 10px; padding: 8px 12px; color: var(--text); font-size: 18px; cursor: pointer; }
-    .sinal-detail-ttl { font-size: 17px; font-weight: 900; color: var(--text); flex: 1; }
-    .sinal-detail-body { flex: 1; overflow-y: auto; padding: 20px 16px; }
-    .sinal-detail-logo-wrap { display: flex; justify-content: center; margin-bottom: 16px; }
-    .sinal-detail-logo { width: 90px; height: 90px; border-radius: 20px; object-fit: cover; background: var(--surface2); }
-    .sinal-detail-logo-ph { width: 90px; height: 90px; border-radius: 20px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); display: flex; align-items: center; justify-content: center; font-size: 42px; }
-    .sinal-detail-name { text-align: center; font-size: 22px; font-weight: 900; color: var(--text); margin-bottom: 4px; }
-    .sinal-detail-plat { text-align: center; font-size: 13px; color: var(--muted); margin-bottom: 20px; }
-    .sinal-panel { background: #0d2b1a; border: 1.5px solid #10B981; border-radius: 18px; padding: 20px 16px; margin-bottom: 20px; }
-    .sinal-panel-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(16,185,129,0.15); }
+    .sinal-detail-hdr { display: flex; align-items: center; gap: 12px; padding: 14px 16px; padding-top: max(14px, env(safe-area-inset-top)); background: #000; border-bottom: 1px solid #222; flex-shrink: 0; }
+    .sinal-detail-back { background: #1a1a1a; border: none; border-radius: 10px; padding: 8px 14px; color: #fff; font-size: 20px; cursor: pointer; }
+    .sinal-detail-ttl { font-size: 17px; font-weight: 900; color: #fff; flex: 1; }
+    .sinal-detail-body { flex: 1; padding: 20px 16px 40px; }
+    .sinal-detail-logo-wrap { display: flex; justify-content: center; margin-bottom: 10px; }
+    .sinal-detail-logo { width: 120px; height: 120px; border-radius: 20px; object-fit: cover; }
+    .sinal-detail-logo-ph { width: 120px; height: 120px; border-radius: 20px; background: linear-gradient(135deg, #c9a227, #f0c040); display: flex; align-items: center; justify-content: center; font-size: 56px; }
+    .sinal-detail-name { text-align: center; font-size: 24px; font-weight: 900; color: #fff; margin-bottom: 2px; }
+    .sinal-detail-plat { text-align: center; font-size: 13px; color: #aaa; margin-bottom: 18px; }
+    /* Painel verde do sinal */
+    .sinal-panel { background: linear-gradient(135deg, #0a3d1f, #0d5c2a); border: 2px solid #10B981; border-radius: 18px; padding: 0 16px; margin-bottom: 18px; }
+    .sinal-panel-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(16,185,129,0.2); }
     .sinal-panel-row:last-child { border-bottom: none; }
-    .sinal-panel-label { font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-    .sinal-panel-val { font-size: 20px; font-weight: 900; color: #10B981; }
-    .sinal-panel-val.gold { color: var(--gold); font-size: 22px; }
-    .sinal-gerar-btn { width: 100%; background: linear-gradient(135deg, #F59E0B, #D97706); border: none; border-radius: 16px; padding: 18px; color: #fff; font-size: 17px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 20px rgba(245,158,11,0.4); margin-bottom: 14px; }
-    .sinal-gerar-btn.waiting { background: var(--surface); color: var(--muted); box-shadow: none; cursor: not-allowed; }
-    .sinal-access-btn { width: 100%; background: var(--primary); border: none; border-radius: 14px; padding: 14px; color: #fff; font-size: 15px; font-weight: 900; cursor: pointer; display: none; }
+    .sinal-panel-label { font-size: 12px; color: rgba(255,255,255,0.65); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; display: flex; align-items: center; gap: 6px; }
+    .sinal-panel-val { font-size: 22px; font-weight: 900; color: #10B981; min-width: 60px; text-align: right; }
+    .sinal-panel-val.yellow { color: #FBBF24; }
+    .sinal-panel-val.assert { font-size: 20px; color: #10B981; }
+    /* Botão gerar sinal */
+    .sinal-gerar-btn { width: 100%; background: #F97316; border: none; border-radius: 14px; padding: 18px; color: #fff; font-size: 17px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 20px rgba(249,115,22,0.5); margin-bottom: 12px; letter-spacing: 0.5px; }
+    .sinal-gerar-btn.waiting { background: #2d4a35; color: #6ee7a0; box-shadow: none; cursor: not-allowed; }
+    .sinal-info-text { text-align: center; font-size: 12px; color: #aaa; margin-bottom: 6px; }
+    .sinal-mult-text { text-align: center; font-size: 13px; font-weight: 900; color: #F97316; margin-bottom: 16px; }
+    .sinal-access-btn { width: 100%; background: #1a6b3a; border: 1.5px solid #10B981; border-radius: 14px; padding: 14px; color: #fff; font-size: 15px; font-weight: 900; cursor: pointer; display: none; }
     .sinal-access-btn.visible { display: block; }
+    /* ===== RTP SCREEN ===== */
     /* RTP SCREEN */
     .rtp-header { padding: 16px 16px 12px; background: linear-gradient(135deg, #0f1a0f 0%, #0a2a0a 100%); border-bottom: 1px solid var(--border); }
     .rtp-header-title { font-size: 20px; font-weight: 900; color: var(--gold); }
@@ -561,11 +576,12 @@
     <!-- SINAIS SCREEN -->
     <div class="screen" id="screen-sinais">
       <div class="sinais-header">
-        <div class="sinais-header-title">🎯 Sinais ao Vivo</div>
-        <div class="sinais-header-sub"><span class="sinais-live-dot"></span>Análise em tempo real</div>
+        <div class="sinais-header-title">&#127919; Sinais ao Vivo</div>
+        <div class="sinais-header-sub"><span class="sinais-live-dot"></span>Atualizando em tempo real</div>
       </div>
       <div class="sinais-grid" id="sinaisGrid"></div>
     </div>
+    <!-- RTP SCREEN -->
     <!-- RTP SCREEN -->
     <div class="screen" id="screen-rtp">
       <div class="rtp-header">
@@ -605,6 +621,11 @@
 </div>
 
 
+<!-- NOTIFICACAO SAQUE -->
+<div class="saque-notif" id="saqueNotif">
+  <div class="saque-notif-dot"></div>
+  <div class="saque-notif-text" id="saqueNotifText">Débora AA. Sacou: R$ 414,00</div>
+</div>
 <!-- SINAL DETAIL SCREEN -->
 <div class="sinal-detail" id="sinalDetail">
   <div class="sinal-detail-hdr">
@@ -619,53 +640,29 @@
     <div class="sinal-detail-plat" id="sinalDetailPlat"></div>
     <div class="sinal-panel">
       <div class="sinal-panel-row">
-        <span class="sinal-panel-label">&#127922; NORMAL</span>
-        <span class="sinal-panel-val" id="sinalNormal">--</span>
+        <span class="sinal-panel-label">&#128994; NORMAL</span>
+        <span class="sinal-panel-val" id="sinalNormal">...</span>
       </div>
       <div class="sinal-panel-row">
         <span class="sinal-panel-label">&#9889; TURBO</span>
-        <span class="sinal-panel-val" id="sinalTurbo">--</span>
+        <span class="sinal-panel-val" id="sinalTurbo">...</span>
       </div>
       <div class="sinal-panel-row">
-        <span class="sinal-panel-label">&#8987; VÁLIDO ATÉ</span>
-        <span class="sinal-panel-val" id="sinalValido">--</span>
+        <span class="sinal-panel-label">&#128336; V&#193;LIDO AT&#201;</span>
+        <span class="sinal-panel-val yellow" id="sinalValido">...</span>
       </div>
       <div class="sinal-panel-row">
         <span class="sinal-panel-label">&#127919; ASSERTIVIDADE</span>
-        <span class="sinal-panel-val gold" id="sinalAssert">--</span>
+        <span class="sinal-panel-val assert" id="sinalAssert">...</span>
       </div>
     </div>
     <button class="sinal-gerar-btn" id="sinalGerarBtn">&#127919; GERAR NOVO SINAL</button>
+    <div class="sinal-info-text">Funciona apenas nesse link</div>
+    <div class="sinal-mult-text">&#128293; Multiplicador de 2.500X Ativado</div>
     <button class="sinal-access-btn" id="sinalAccessBtn">&#128279; ACESSAR PLATAFORMA</button>
-
-        <!-- ADMIN SINAIS -->
-        <div id="adminTabSinais" style="display:none;">
-          <div class="admin-sinal-form">
-            <div class="admin-sinal-form-title">&#127919; Adicionar Jogo de Sinais</div>
-            <input class="admin-input" id="sinalGameName" placeholder="Nome do jogo (ex: Fortune Tiger)" />
-            <input class="admin-input" id="sinalPlatform" placeholder="Plataforma (ex: PG Soft)" />
-            <input class="admin-input" id="sinalLogoUrl" placeholder="URL da logo (opcional)" />
-            <input class="admin-input" id="sinalGameUrl" placeholder="URL da plataforma (opcional)" />
-            <button class="admin-btn-primary" id="addSinalBtn">&#43; Adicionar Jogo</button>
-          </div>
-          <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px;">Jogos cadastrados (<span id="sinalCount">0</span>)</div>
-          <div class="admin-sinal-list" id="adminSinalList"></div>
-        </div>
-        <!-- ADMIN RTP -->
-        <div id="adminTabRtp" style="display:none;">
-          <div class="admin-rtp-form">
-            <div class="admin-rtp-form-title">&#128176; Adicionar Jogo RTP</div>
-            <input class="admin-input" id="rtpGameName" placeholder="Nome do jogo (ex: Gates of Olympus)" />
-            <input class="admin-input" id="rtpPlatformName" placeholder="Plataforma (ex: Pragmatic)" />
-            <input class="admin-input" id="rtpValue" placeholder="RTP % (ex: 96.50)" type="number" step="0.01" />
-            <input class="admin-input" id="rtpLogoUrl" placeholder="URL da logo (opcional)" />
-            <button class="admin-btn-primary" id="addRtpBtn">&#43; Adicionar Jogo RTP</button>
-          </div>
-          <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px;">Jogos cadastrados (<span id="rtpCount">0</span>)</div>
-          <div class="admin-rtp-list" id="adminRtpList"></div>
-        </div>
   </div>
 </div>
+<!-- SORTEIO MODAL -->
 <!-- SORTEIO MODAL -->
 <div class="modal-overlay" id="sorteioModal">
   <div class="modal-sheet">
@@ -1565,38 +1562,51 @@ init();;
 
 // ===== SINAIS SYSTEM =====
 var sinaisData = [];
-var rtpData = [];
-var rtpFilter = 'all';
-var currentSinalKey = null;
+var sinaisIntervals = [];
 var sinalTimer = null;
 
 var SINAIS_DEFAULTS = [
-  { _key: 'default1', name: 'Fortune Tiger', platform: 'PG Soft', logo: '', url: '' },
-  { _key: 'default2', name: 'Fortune Mouse', platform: 'PG Soft', logo: '', url: '' },
-  { _key: 'default3', name: 'Fortune Ox', platform: 'PG Soft', logo: '', url: '' },
-  { _key: 'default4', name: 'Gates of Olympus', platform: 'Pragmatic', logo: '', url: '' },
-  { _key: 'default5', name: 'Sweet Bonanza', platform: 'Pragmatic', logo: '', url: '' },
-  { _key: 'default6', name: 'Aviator', platform: 'Spribe', logo: '', url: '' }
+  { _key: 'd1', name: 'Fortune Tiger', platform: 'PG Soft', logo: 'https://i.imgur.com/8YkHqQe.png', url: '' },
+  { _key: 'd2', name: 'Fortune Mouse', platform: 'PG Soft', logo: 'https://i.imgur.com/2nCt3Sbl.jpg', url: '' },
+  { _key: 'd3', name: 'Fortune Ox', platform: 'PG Soft', logo: '', url: '' },
+  { _key: 'd4', name: 'Gates of Olympus', platform: 'Pragmatic', logo: '', url: '' },
+  { _key: 'd5', name: 'Sweet Bonanza', platform: 'Pragmatic', logo: '', url: '' },
+  { _key: 'd6', name: 'Aviator', platform: 'Spribe', logo: '', url: '' }
 ];
 
-var RTP_DEFAULTS = [
-  { _key: 'rdefault1', game: 'Fortune Tiger', platform: 'PG Soft', rtp: 96.81, logo: '' },
-  { _key: 'rdefault2', game: 'Fortune Mouse', platform: 'PG Soft', rtp: 96.79, logo: '' },
-  { _key: 'rdefault3', game: 'Fortune Rabbit', platform: 'PG Soft', rtp: 96.72, logo: '' },
-  { _key: 'rdefault4', game: 'Gates of Olympus', platform: 'Pragmatic', rtp: 96.50, logo: '' },
-  { _key: 'rdefault5', game: 'Sweet Bonanza', platform: 'Pragmatic', rtp: 96.51, logo: '' },
-  { _key: 'rdefault6', game: 'Spaceman', platform: 'Pragmatic', rtp: 96.00, logo: '' }
+// Notificações de saque falsas para engajamento
+var SAQUES_NOTIF = [
+  'Débora AA. Sacou: R$ 414,00',
+  'Carlos M. Sacou: R$ 1.250,00',
+  'Ana P. Sacou: R$ 780,00',
+  'Roberto S. Sacou: R$ 2.100,00',
+  'Fernanda L. Sacou: R$ 560,00',
+  'Marcos T. Sacou: R$ 3.400,00',
+  'Juliana C. Sacou: R$ 890,00',
+  'Paulo R. Sacou: R$ 1.750,00'
 ];
 
-var sinaisIntervals = [];
-
-function getPct() {
-  return Math.floor(Math.random() * 35) + 60; // 60-94%
+function showSaqueNotif() {
+  var notif = document.getElementById('saqueNotif');
+  if (!notif) return;
+  var msg = SAQUES_NOTIF[Math.floor(Math.random() * SAQUES_NOTIF.length)];
+  document.getElementById('saqueNotifText').textContent = msg;
+  notif.classList.add('show');
+  setTimeout(function() { notif.classList.remove('show'); }, 3500);
 }
+
+function startSaqueLoop() {
+  setTimeout(function() {
+    showSaqueNotif();
+    setInterval(showSaqueNotif, 8000);
+  }, 2000);
+}
+
+function getPct() { return Math.floor(Math.random() * 70) + 25; }
 
 function getPctColor(pct) {
   if (pct >= 80) return '#10B981';
-  if (pct >= 60) return '#F59E0B';
+  if (pct >= 55) return '#F59E0B';
   return '#EF4444';
 }
 
@@ -1610,44 +1620,39 @@ function loadSinaisData() {
         sinaisData = Object.entries(data).map(function(e) {
           return Object.assign({ _key: e[0] }, e[1]);
         });
-      } else {
-        sinaisData = [];
-      }
+      } else { sinaisData = []; }
       renderSinais();
     })
-    .catch(function() {
-      sinaisData = [];
-      renderSinais();
-    });
+    .catch(function() { sinaisData = []; renderSinais(); });
 }
 
 function renderSinais() {
   var grid = document.getElementById('sinaisGrid');
   if (!grid) return;
   var list = sinaisData.length > 0 ? sinaisData : SINAIS_DEFAULTS;
-  
-  // Limpar intervalos anteriores
+
   sinaisIntervals.forEach(function(id) { clearInterval(id); });
   sinaisIntervals = [];
-  
+
   grid.innerHTML = list.map(function(jogo) {
     var pct = getPct();
     var color = getPctColor(pct);
     var logoHtml = jogo.logo
-      ? '<img class="sinal-card-logo" src="' + jogo.logo + '" alt="' + jogo.name + '" onerror="this.style.display=\'none\'">'
+      ? '<img class="sinal-card-logo" src="' + jogo.logo + '" alt="' + jogo.name + '">'
       : '<div class="sinal-card-logo-ph">&#127918;</div>';
-    return '<div class="sinal-card" id="scard-' + jogo._key + '">' +
+    return '<div class="sinal-card">' +
       logoHtml +
       '<div class="sinal-card-name">' + jogo.name + '</div>' +
       '<div class="sinal-progress-wrap">' +
-        '<div class="sinal-progress-bg"><div class="sinal-progress-fill" id="sfill-' + jogo._key + '" style="width:' + pct + '%;background:' + color + '"></div></div>' +
-        '<div class="sinal-progress-pct" id="spct-' + jogo._key + '" style="color:' + color + '">' + pct + '%</div>' +
+        '<div class="sinal-progress-bg">' +
+          '<div class="sinal-progress-fill" id="sfill-' + jogo._key + '" style="width:' + pct + '%;background:' + color + '"></div>' +
+          '<div class="sinal-progress-pct" id="spct-' + jogo._key + '">' + pct + '%</div>' +
+        '</div>' +
       '</div>' +
-      '<button class="sinal-play-btn" onclick="openSinalDetail(&quot;' + jogo._key + '&quot;)">&#9654; JOGAR</button>' +
+      '<button class="sinal-play-btn" onclick="openSinalDetail(&quot;' + jogo._key + '&quot;)">JOGAR</button>' +
     '</div>';
   }).join('');
-  
-  // Animar barras de progresso
+
   list.forEach(function(jogo) {
     var id = setInterval(function() {
       var fill = document.getElementById('sfill-' + jogo._key);
@@ -1658,8 +1663,7 @@ function renderSinais() {
       fill.style.width = newPct + '%';
       fill.style.backgroundColor = newColor;
       pctEl.textContent = newPct + '%';
-      pctEl.style.color = newColor;
-    }, 3000);
+    }, 3000 + Math.random() * 2000);
     sinaisIntervals.push(id);
   });
 }
@@ -1668,24 +1672,28 @@ function openSinalDetail(key) {
   var list = sinaisData.length > 0 ? sinaisData : SINAIS_DEFAULTS;
   var jogo = list.find(function(j) { return j._key === key; });
   if (!jogo) return;
-  currentSinalKey = key;
-  
+
   document.getElementById('sinalDetailTitle').textContent = jogo.name;
   document.getElementById('sinalDetailName').textContent = jogo.name;
   document.getElementById('sinalDetailPlat').textContent = jogo.platform || '';
-  
+
   var logoWrap = document.getElementById('sinalDetailLogoWrap');
   if (jogo.logo) {
     logoWrap.innerHTML = '<img class="sinal-detail-logo" src="' + jogo.logo + '" alt="' + jogo.name + '">';
   } else {
     logoWrap.innerHTML = '<div class="sinal-detail-logo-ph">&#127918;</div>';
   }
-  
-  document.getElementById('sinalNormal').textContent = '--';
-  document.getElementById('sinalTurbo').textContent = '--';
-  document.getElementById('sinalValido').textContent = '--';
-  document.getElementById('sinalAssert').textContent = '--';
-  
+
+  document.getElementById('sinalNormal').textContent = '...';
+  document.getElementById('sinalTurbo').textContent = '...';
+  document.getElementById('sinalValido').textContent = '...';
+  document.getElementById('sinalAssert').textContent = '...';
+
+  var btn = document.getElementById('sinalGerarBtn');
+  btn.classList.remove('waiting');
+  btn.textContent = '\u{1F3AF} GERAR NOVO SINAL';
+  if (sinalTimer) { clearInterval(sinalTimer); sinalTimer = null; }
+
   var accessBtn = document.getElementById('sinalAccessBtn');
   if (jogo.url) {
     accessBtn.classList.add('visible');
@@ -1693,7 +1701,7 @@ function openSinalDetail(key) {
   } else {
     accessBtn.classList.remove('visible');
   }
-  
+
   document.getElementById('sinalDetail').classList.add('open');
 }
 
@@ -1702,27 +1710,25 @@ document.getElementById('sinalDetailBack').addEventListener('click', function() 
   if (sinalTimer) { clearInterval(sinalTimer); sinalTimer = null; }
 });
 
-var NORMAIS = ['1x', '2x', '3x', '5x', '10x', '20x', '50x'];
-var TURBOS = ['2x', '5x', '10x', '20x', '50x', '100x'];
+var NORMAIS = ['2X', '3X', '5X', '8X', '10X', '15X', '20X'];
+var TURBOS = ['5X', '8X', '10X', '15X', '20X', '50X', '100X'];
 
 document.getElementById('sinalGerarBtn').addEventListener('click', function() {
   var btn = this;
   if (btn.classList.contains('waiting')) return;
-  
-  // Gerar sinal
+
   var normal = NORMAIS[Math.floor(Math.random() * NORMAIS.length)];
   var turbo = TURBOS[Math.floor(Math.random() * TURBOS.length)];
-  var assert = (Math.floor(Math.random() * 25) + 70) + '%';
+  var assert = (Math.floor(Math.random() * 20) + 75) + '.' + Math.floor(Math.random() * 99).toString().padStart(2, '0') + '%';
   var now = new Date();
-  now.setMinutes(now.getMinutes() + Math.floor(Math.random() * 30) + 10);
+  now.setMinutes(now.getMinutes() + Math.floor(Math.random() * 20) + 5);
   var valido = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-  
+
   document.getElementById('sinalNormal').textContent = normal;
   document.getElementById('sinalTurbo').textContent = turbo;
   document.getElementById('sinalValido').textContent = valido;
   document.getElementById('sinalAssert').textContent = assert;
-  
-  // Contador regressivo
+
   var seconds = 30;
   btn.classList.add('waiting');
   btn.textContent = 'Aguarde: ' + seconds + 's';
@@ -1740,6 +1746,10 @@ document.getElementById('sinalGerarBtn').addEventListener('click', function() {
   }, 1000);
 });
 
+// Iniciar loop de notificações de saque
+startSaqueLoop();
+
+// ===== RTP SYSTEM =====
 // ===== RTP SYSTEM =====
 function loadRtpData() {
   var baseUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
