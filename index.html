@@ -3070,34 +3070,7 @@ function deleteRtpItem(key) {
     .then(function() { renderAdminRtp(); loadRtpData(); });
 }
 
-var addRtpBtn = document.getElementById('addRtpBtn');
-if (addRtpBtn) {
-  addRtpBtn.addEventListener('click', function() {
-    var game = (document.getElementById('rtpGameName') || {}).value || '';
-    var platform = (document.getElementById('rtpPlatformName') || {}).value || '';
-    var rtp = parseFloat((document.getElementById('rtpValue') || {}).value || '0');
-    var logo = (document.getElementById('rtpLogoUrl') || {}).value || '';
-    var linkedPlatformId = (document.getElementById('rtpLinkedPlatform') || {}).value || '';
-    if (!game.trim()) { showToast('Digite o nome do jogo'); return; }
-    if (!rtp || rtp <= 0 || rtp > 100) { showToast('Digite um RTP válido (ex: 96.50)'); return; }
-    var baseUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
-    var authKey = 'AIzaSyD5rgvnm8Ytu0XqISzq7fYCk0p_PYEiuI4';
-    fetch(baseUrl + '/rtp.json?auth=' + authKey, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ game: game.trim(), platform: platform.trim(), rtp: rtp, logo: logo.trim(), linkedPlatformId: linkedPlatformId })
-    }).then(function() {
-      document.getElementById('rtpGameName').value = '';
-      document.getElementById('rtpPlatformName').value = '';
-      document.getElementById('rtpValue').value = '';
-      document.getElementById('rtpLogoUrl').value = '';
-      document.getElementById('rtpLinkedPlatform').value = '';
-      showToast('Jogo RTP adicionado!');
-      renderAdminRtp();
-      loadRtpData();
-    });
-  });
-}
+
 
 // Pré-renderizar com dados padrão imediatamente (sem esperar Firebase)
 renderSinais();
