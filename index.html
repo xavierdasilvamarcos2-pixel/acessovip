@@ -1568,14 +1568,10 @@
       <div style="flex:1;min-width:0">
         <div class="sinal-detail-name" id="sinalDetailName" style="text-align:left;margin-bottom:2px"></div>
         <div class="sinal-detail-plat" id="sinalDetailPlat" style="text-align:left;margin-bottom:8px"></div>
-        <!-- Jogo pagando + RTP -->
+        <!-- Jogos pagando + RTP (até 3) -->
         <div id="sinalDetailHotGame" style="display:none">
-          <div style="font-size:10px;color:#10B981;font-weight:800;letter-spacing:0.5px;margin-bottom:2px">🎮 JOGO PAGANDO</div>
-          <div id="sinalDetailHotGameName" style="font-size:14px;font-weight:900;color:#fff;margin-bottom:4px"></div>
-          <div id="sinalDetailHotRtp" style="display:none;background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.4);border-radius:8px;padding:4px 10px;display:inline-flex;align-items:center;gap:6px">
-            <span style="font-size:10px;color:#10B981;font-weight:800">RTP</span>
-            <span id="sinalDetailHotRtpVal" style="font-size:18px;font-weight:900;color:#10B981"></span>
-          </div>
+          <div style="font-size:9px;color:#10B981;font-weight:800;letter-spacing:0.5px;margin-bottom:5px">🎮 JOGOS PAGANDO</div>
+          <div id="sinalDetailGamesList"></div>
         </div>
       </div>
     </div>
@@ -2194,9 +2190,20 @@ function renderAdminPlatforms(filter = '') {
           </div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 90px;gap:6px;margin-bottom:6px">
-        <input class="admin-hot-input" id="hotgame-${p.id}" value="${p.hot_game || ''}" placeholder="🎮 Jogo pagando" />
-        <input class="admin-hot-input" id="hotrtp-${p.id}" value="${p.hot_rtp || ''}" placeholder="RTP %" type="number" min="0" max="100" step="0.01" style="text-align:center" />
+      <div style="margin-bottom:6px">
+        <div style="font-size:9px;color:#10B981;font-weight:800;margin-bottom:4px;letter-spacing:0.5px">🎮 JOGOS PAGANDO (até 3)</div>
+        <div style="display:grid;grid-template-columns:1fr 80px;gap:4px;margin-bottom:4px">
+          <input class="admin-hot-input" id="hotgame1-${p.id}" value="${(p.games && p.games[0] && p.games[0].name) || p.hot_game || ''}" placeholder="Jogo 1" />
+          <input class="admin-hot-input" id="hotrtp1-${p.id}" value="${(p.games && p.games[0] && p.games[0].rtp) || p.hot_rtp || ''}" placeholder="RTP %" type="number" min="0" max="100" step="0.01" style="text-align:center" />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 80px;gap:4px;margin-bottom:4px">
+          <input class="admin-hot-input" id="hotgame2-${p.id}" value="${(p.games && p.games[1] && p.games[1].name) || ''}" placeholder="Jogo 2 (opcional)" />
+          <input class="admin-hot-input" id="hotrtp2-${p.id}" value="${(p.games && p.games[1] && p.games[1].rtp) || ''}" placeholder="RTP %" type="number" min="0" max="100" step="0.01" style="text-align:center" />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 80px;gap:4px">
+          <input class="admin-hot-input" id="hotgame3-${p.id}" value="${(p.games && p.games[2] && p.games[2].name) || ''}" placeholder="Jogo 3 (opcional)" />
+          <input class="admin-hot-input" id="hotrtp3-${p.id}" value="${(p.games && p.games[2] && p.games[2].rtp) || ''}" placeholder="RTP %" type="number" min="0" max="100" step="0.01" style="text-align:center" />
+        </div>
       </div>
       <div class="admin-card-actions" style="grid-template-columns:1fr 1fr 36px 36px 36px">
         <button class="admin-btn admin-btn-high ${p.isHigh ? 'active' : ''}" data-toggle-high="${p.id}">${p.isHigh ? '🔥 Em Alta' : '📊 Em Alta'}</button>
@@ -2222,8 +2229,19 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
   if (toggleHigh) {
     const p = platforms.find(x => x.id == toggleHigh);
     if (p) {
-      p.hot_game = document.getElementById('hotgame-' + p.id)?.value || p.hot_game;
-      p.hot_rtp = document.getElementById('hotrtp-' + p.id)?.value || p.hot_rtp;
+      // Salvar os 3 jogos
+      var g1n = document.getElementById('hotgame1-' + p.id)?.value.trim() || '';
+      var g1r = document.getElementById('hotrtp1-' + p.id)?.value.trim() || '';
+      var g2n = document.getElementById('hotgame2-' + p.id)?.value.trim() || '';
+      var g2r = document.getElementById('hotrtp2-' + p.id)?.value.trim() || '';
+      var g3n = document.getElementById('hotgame3-' + p.id)?.value.trim() || '';
+      var g3r = document.getElementById('hotrtp3-' + p.id)?.value.trim() || '';
+      p.games = [];
+      if (g1n) p.games.push({ name: g1n, rtp: g1r });
+      if (g2n) p.games.push({ name: g2n, rtp: g2r });
+      if (g3n) p.games.push({ name: g3n, rtp: g3r });
+      p.hot_game = g1n || p.hot_game;
+      p.hot_rtp = g1r || p.hot_rtp;
       p.isHigh = !p.isHigh;
       saveState(); renderAdminPlatforms(); renderHome(); renderHot(); renderSinais();
       showToast(p.isHigh ? `🔥 ${p.name} marcada como Em Alta e adicionada aos Sinais!` : `${p.name} removida de Em Alta e dos Sinais`);
@@ -2735,21 +2753,19 @@ function openSinalDetail(key) {
   document.getElementById('sinalDetailPlat').textContent = jogo.platform || '';
   // Mostrar jogo pagando da plataforma vinculada
   var hotGameEl = document.getElementById('sinalDetailHotGame');
-  var hotGameNameEl = document.getElementById('sinalDetailHotGameName');
   var linkedPlatForHot = jogo.linkedPlatformId ? ((window._allPlatforms || []).find(function(p) { return String(p.id) === String(jogo.linkedPlatformId); })) : null;
-  var hotGame = linkedPlatForHot ? (linkedPlatForHot.hot_game || '') : (jogo.hot_game || '');
-  var hotRtp = linkedPlatForHot ? (linkedPlatForHot.hot_rtp || '') : (jogo.hot_rtp || '');
-  if (hotGame && hotGame.trim()) {
-    hotGameNameEl.textContent = hotGame.trim();
+  var platData = linkedPlatForHot || jogo;
+  var gamesList = (platData.games && platData.games.length > 0) ? platData.games
+    : (platData.hot_game ? [{ name: platData.hot_game, rtp: platData.hot_rtp || '' }] : []);
+  var gamesListEl = document.getElementById('sinalDetailGamesList');
+  if (gamesList.length > 0) {
     hotGameEl.style.display = 'block';
-    var rtpEl = document.getElementById('sinalDetailHotRtp');
-    var rtpValEl = document.getElementById('sinalDetailHotRtpVal');
-    if (hotRtp && String(hotRtp).trim()) {
-      rtpValEl.textContent = parseFloat(hotRtp).toFixed(2) + '%';
-      rtpEl.style.display = 'block';
-    } else {
-      rtpEl.style.display = 'none';
-    }
+    gamesListEl.innerHTML = gamesList.map(function(g) {
+      return '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">' +
+        '<span style="font-size:13px;font-weight:800;color:#fff">' + g.name + '</span>' +
+        (g.rtp ? '<span style="background:rgba(16,185,129,0.25);border:1px solid rgba(16,185,129,0.5);border-radius:6px;padding:2px 8px;font-size:13px;font-weight:900;color:#10B981">RTP ' + parseFloat(g.rtp).toFixed(2) + '%</span>' : '') +
+      '</div>';
+    }).join('');
   } else {
     hotGameEl.style.display = 'none';
   }
