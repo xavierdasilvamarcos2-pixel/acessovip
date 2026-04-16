@@ -395,11 +395,11 @@
     .sinal-detail-back { background: #1a1a1a; border: none; border-radius: 10px; padding: 8px 14px; color: #fff; font-size: 20px; cursor: pointer; }
     .sinal-detail-ttl { font-size: 17px; font-weight: 900; color: #fff; flex: 1; }
     .sinal-detail-body { flex: 1; padding: 20px 16px 40px; }
-    .sinal-detail-logo-wrap { display: flex; justify-content: center; margin-bottom: 10px; }
-    .sinal-detail-logo { width: 120px; height: 120px; border-radius: 20px; object-fit: cover; }
-    .sinal-detail-logo-ph { width: 120px; height: 120px; border-radius: 20px; background: linear-gradient(135deg, #c9a227, #f0c040); display: flex; align-items: center; justify-content: center; font-size: 56px; }
-    .sinal-detail-name { text-align: center; font-size: 24px; font-weight: 900; color: #fff; margin-bottom: 2px; }
-    .sinal-detail-plat { text-align: center; font-size: 13px; color: #aaa; margin-bottom: 18px; }
+    .sinal-detail-logo-wrap { display: flex; justify-content: center; margin-bottom: 0; }
+    .sinal-detail-logo { width: 90px; height: 90px; border-radius: 16px; object-fit: cover; }
+    .sinal-detail-logo-ph { width: 90px; height: 90px; border-radius: 16px; background: linear-gradient(135deg, #c9a227, #f0c040); display: flex; align-items: center; justify-content: center; font-size: 40px; }
+    .sinal-detail-name { text-align: left; font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 2px; }
+    .sinal-detail-plat { text-align: left; font-size: 13px; color: #aaa; margin-bottom: 6px; }
     /* Painel verde do sinal */
     .sinal-panel { background: linear-gradient(135deg, #0a3d1f, #0d5c2a); border: 2px solid #10B981; border-radius: 18px; padding: 0 16px; margin-bottom: 18px; }
     .sinal-panel-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(16,185,129,0.2); }
@@ -1562,23 +1562,20 @@
     <div class="sinal-detail-ttl" id="sinalDetailTitle">Sinal</div>
   </div>
   <div class="sinal-detail-body">
-    <div class="sinal-detail-logo-wrap">
-      <div id="sinalDetailLogoWrap"></div>
-    </div>
-    <div class="sinal-detail-name" id="sinalDetailName"></div>
-    <div class="sinal-detail-plat" id="sinalDetailPlat"></div>
-    <div id="sinalDetailHotGame" style="display:none;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.35);border-radius:10px;padding:10px 14px;margin:8px 16px 0">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:18px">🎮</span>
-          <div>
-            <div style="font-size:10px;color:#10B981;font-weight:800;letter-spacing:0.5px">JOGO PAGANDO AGORA</div>
-            <div id="sinalDetailHotGameName" style="font-size:15px;font-weight:900;color:#fff"></div>
+    <!-- TOPO: Logo + Info lado a lado -->
+    <div style="display:flex;align-items:center;gap:14px;padding:0 4px 12px">
+      <div id="sinalDetailLogoWrap" style="flex-shrink:0"></div>
+      <div style="flex:1;min-width:0">
+        <div class="sinal-detail-name" id="sinalDetailName" style="text-align:left;margin-bottom:2px"></div>
+        <div class="sinal-detail-plat" id="sinalDetailPlat" style="text-align:left;margin-bottom:8px"></div>
+        <!-- Jogo pagando + RTP -->
+        <div id="sinalDetailHotGame" style="display:none">
+          <div style="font-size:10px;color:#10B981;font-weight:800;letter-spacing:0.5px;margin-bottom:2px">🎮 JOGO PAGANDO</div>
+          <div id="sinalDetailHotGameName" style="font-size:14px;font-weight:900;color:#fff;margin-bottom:4px"></div>
+          <div id="sinalDetailHotRtp" style="display:none;background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.4);border-radius:8px;padding:4px 10px;display:inline-flex;align-items:center;gap:6px">
+            <span style="font-size:10px;color:#10B981;font-weight:800">RTP</span>
+            <span id="sinalDetailHotRtpVal" style="font-size:18px;font-weight:900;color:#10B981"></span>
           </div>
-        </div>
-        <div id="sinalDetailHotRtp" style="display:none;background:rgba(16,185,129,0.2);border-radius:8px;padding:4px 10px;text-align:center">
-          <div style="font-size:9px;color:#10B981;font-weight:800">RTP</div>
-          <div id="sinalDetailHotRtpVal" style="font-size:16px;font-weight:900;color:#10B981"></div>
         </div>
       </div>
     </div>
