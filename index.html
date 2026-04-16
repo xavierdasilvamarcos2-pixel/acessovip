@@ -1426,6 +1426,11 @@
           <span class="admin-search-icon">&#128269;</span>
           <input class="admin-search-input" id="adminSearch" placeholder="Buscar plataforma..." />
         </div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+          <button id="adminFilterAll" style="flex:1;padding:8px 12px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.15);background:rgba(124,58,237,0.35);color:#fff;font-size:12px;font-weight:700;cursor:pointer" onclick="adminHighFilterMode='all';renderAdminPlatforms(document.getElementById('adminSearch').value)">&#128293; Todas</button>
+          <button id="adminFilterHigh" style="flex:1;padding:8px 12px;border-radius:10px;border:1.5px solid rgba(239,68,68,0.3);background:rgba(239,68,68,0.15);color:#EF4444;font-size:12px;font-weight:700;cursor:pointer" onclick="adminHighFilterMode='high';renderAdminPlatforms(document.getElementById('adminSearch').value)">&#128293; Só Em Alta</button>
+          <button id="adminFilterNotHigh" style="flex:1;padding:8px 12px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);font-size:12px;font-weight:700;cursor:pointer" onclick="adminHighFilterMode='normal';renderAdminPlatforms(document.getElementById('adminSearch').value)">&#128202; Normais</button>
+        </div>
         <div id="adminPlatformList"></div>
       </div>
 
@@ -1863,6 +1868,7 @@ let deferredPrompt = null;
 let isInstalled = _ls.get('av_installed') === '1';
 let notifPermission = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
 let adminLoggedIn = false;
+let adminHighFilterMode = 'all'; // 'all' | 'high' | 'normal'
 let headerTapCount = 0;
 let headerTapTimer = null;
 
@@ -1895,19 +1901,27 @@ function saveGamesForPlatform(platId) {
 }
 
 function saveState() {
+  var now = Date.now();
   try { _ls.set('av_favorites', JSON.stringify(favorites)); } catch(e) {}
   try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
+  try { _ls.set('av_platforms_ts', String(now)); } catch(e) {}
   // Salvar no Firebase via SDK (se disponível) ou REST API
+  var payload = { data: platforms, ts: now };
   if (window._fbReady && window._fbDb) {
     try {
       window._fbSet(window._fbRef(window._fbDb, 'platforms'), platforms);
+      window._fbSet(window._fbRef(window._fbDb, 'platforms_ts'), now);
     } catch(e) {
       // Fallback para REST
-      if (window._fbREST) window._fbREST.set('/platforms', platforms).catch(function(){});
+      if (window._fbREST) {
+        window._fbREST.set('/platforms', platforms).catch(function(){});
+        window._fbREST.set('/platforms_ts', now).catch(function(){});
+      }
     }
   } else if (window._fbREST) {
     // SDK não disponível, usar REST
     window._fbREST.set('/platforms', platforms).catch(function(e) { console.log('REST save error:', e); });
+    window._fbREST.set('/platforms_ts', now).catch(function(){});
   }
 }
 
@@ -2280,7 +2294,17 @@ document.querySelectorAll('[data-admin-tab]').forEach(btn => {
 });
 
 function renderAdminPlatforms(filter = '') {
-  const list = platforms.filter(p => !filter || p.name.toLowerCase().includes(filter.toLowerCase()));
+  // Aplicar filtro de Em Alta
+  let list = platforms.filter(p => !filter || p.name.toLowerCase().includes(filter.toLowerCase()));
+  if (adminHighFilterMode === 'high') list = list.filter(p => p.isHigh);
+  else if (adminHighFilterMode === 'normal') list = list.filter(p => !p.isHigh);
+  // Atualizar visual dos botões de filtro
+  var btnAll = document.getElementById('adminFilterAll');
+  var btnHigh = document.getElementById('adminFilterHigh');
+  var btnNormal = document.getElementById('adminFilterNotHigh');
+  if (btnAll) btnAll.style.background = adminHighFilterMode === 'all' ? 'rgba(124,58,237,0.5)' : 'rgba(124,58,237,0.15)';
+  if (btnHigh) btnHigh.style.background = adminHighFilterMode === 'high' ? 'rgba(239,68,68,0.45)' : 'rgba(239,68,68,0.15)';
+  if (btnNormal) btnNormal.style.background = adminHighFilterMode === 'normal' ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)';
   const el = document.getElementById('adminPlatformList');
   el.innerHTML = list.map((p, idx) => `
     <div class="admin-card" id="acard-${p.id}">
@@ -2636,29 +2660,65 @@ function init() {
     var timeoutId = controller ? setTimeout(function() { controller.abort(); }, 5000) : null;
     var fetchOptions = controller ? { signal: controller.signal } : {};
     
-    fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/platforms.json', fetchOptions)
-      .then(function(r) {
-        if (timeoutId) clearTimeout(timeoutId);
-        return r.json();
-      })
-      .then(function(data) {
-        var newList = null;
-        if (data && Array.isArray(data) && data.length > 0) {
-          newList = data;
-        } else if (data && typeof data === 'object' && !Array.isArray(data)) {
-          var arr = Object.values(data).filter(function(x) { return x && x.url; });
-          if (arr.length > 0) newList = arr;
-        }
-        if (newList && newList.length > 0) {
-          platforms = newList;
-          try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
-          renderHome(); // Atualiza com dados mais recentes do Firebase
+    // Verificar timestamp local para não sobrescrever dados mais recentes
+    var localTs = parseInt(_ls.get('av_platforms_ts') || '0');
+    var tsUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com/platforms_ts.json';
+    fetch(tsUrl, fetchOptions)
+      .then(function(r) { return r.json(); })
+      .then(function(fbTs) {
+        var firebaseTs = parseInt(fbTs || '0');
+        // Só buscar dados do Firebase se forem mais recentes que os dados locais
+        if (firebaseTs >= localTs) {
+          return fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/platforms.json', fetchOptions)
+            .then(function(r) {
+              if (timeoutId) clearTimeout(timeoutId);
+              return r.json();
+            })
+            .then(function(data) {
+              var newList = null;
+              if (data && Array.isArray(data) && data.length > 0) {
+                newList = data;
+              } else if (data && typeof data === 'object' && !Array.isArray(data)) {
+                var arr = Object.values(data).filter(function(x) { return x && x.url; });
+                if (arr.length > 0) newList = arr;
+              }
+              if (newList && newList.length > 0) {
+                platforms = newList;
+                try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
+                try { _ls.set('av_platforms_ts', String(firebaseTs)); } catch(e) {}
+                renderHome();
+                renderHot();
+              }
+            });
+        } else {
+          // Dados locais são mais recentes, não sobrescrever
+          if (timeoutId) clearTimeout(timeoutId);
+          console.log('Dados locais mais recentes que Firebase, mantendo locais.');
         }
       })
       .catch(function(e) {
         if (timeoutId) clearTimeout(timeoutId);
-        // Silencioso - já temos dados renderizados
-        console.log('Firebase update em segundo plano falhou:', e.message);
+        // Fallback: buscar dados direto sem verificar timestamp
+        fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/platforms.json', fetchOptions)
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            var newList = null;
+            if (data && Array.isArray(data) && data.length > 0) {
+              newList = data;
+            } else if (data && typeof data === 'object' && !Array.isArray(data)) {
+              var arr = Object.values(data).filter(function(x) { return x && x.url; });
+              if (arr.length > 0) newList = arr;
+            }
+            if (newList && newList.length > 0) {
+              platforms = newList;
+              try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
+              renderHome();
+              renderHot();
+            }
+          })
+          .catch(function(e2) {
+            console.log('Firebase update em segundo plano falhou:', e2.message);
+          });
       });
   }
   // Aguarda 500ms para não atrasar a renderização inicial
