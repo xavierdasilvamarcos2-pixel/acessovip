@@ -1310,16 +1310,7 @@
       </div>
       <div class="sinais-grid" id="sinaisGrid"></div>
     </div>
-    <!-- RTP SCREEN -->
-    <!-- RTP SCREEN -->
-    <div class="screen" id="screen-rtp">
-      <div class="rtp-header">
-        <div class="rtp-header-title">💰 Melhores RTP do Dia</div>
-        <div class="rtp-header-sub">Jogos com maior retorno ao jogador</div>
-      </div>
-      <div class="rtp-filter-bar" id="rtpFilterBar"></div>
-      <div class="rtp-grid" id="rtpGrid"></div>
-    </div>
+
   </div>
   <!-- TAB BAR -->
   <div class="tab-bar">
@@ -1339,10 +1330,7 @@
       <span class="tab-icon">📤</span>
       <span>Compartilhar</span>
     </button>
-    <button class="tab-item" data-tab="rtp">
-      <span class="tab-icon">💰</span>
-      <span>RTP</span>
-    </button>
+
   </div>
 </div>
 
@@ -1579,6 +1567,13 @@
     </div>
     <div class="sinal-detail-name" id="sinalDetailName"></div>
     <div class="sinal-detail-plat" id="sinalDetailPlat"></div>
+    <div id="sinalDetailHotGame" style="display:none;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.35);border-radius:10px;padding:8px 14px;margin:6px 16px 0;display:flex;align-items:center;gap:8px">
+      <span style="font-size:16px">🎮</span>
+      <div>
+        <div style="font-size:10px;color:#10B981;font-weight:800;letter-spacing:0.5px">JOGO PAGANDO AGORA</div>
+        <div id="sinalDetailHotGameName" style="font-size:14px;font-weight:900;color:#fff"></div>
+      </div>
+    </div>
     <div class="sinal-panel">
       <div class="sinal-panel-row">
         <span class="sinal-panel-label">&#128994; NORMAL</span>
@@ -1692,8 +1687,7 @@ var RTP_DEFAULTS = [
   { _key: 'r2', game: 'Fortune Mouse', platform: 'PG Soft', rtp: 96.75, logo: 'https://cdn.softswiss.net/i/s4/softswiss/fortune_mouse.png' },
   { _key: 'r3', game: 'Fortune Ox', platform: 'PG Soft', rtp: 96.80, logo: 'https://cdn.softswiss.net/i/s4/softswiss/fortune_ox.png' },
   { _key: 'r4', game: 'Gates of Olympus', platform: 'Pragmatic', rtp: 96.50, logo: 'https://cdn.softswiss.net/i/s4/pragmaticplay/gates_of_olympus.png' },
-  { _key: 'r5', game: 'Sweet Bonanza', platform: 'Pragmatic', rtp: 96.48, logo: 'https://cdn.softswiss.net/i/s4/pragmaticplay/sweet_bonanza.png' },
-  { _key: 'r6', game: 'Aviator', platform: 'Spribe', rtp: 97.00, logo: 'https://cdn.softswiss.net/i/s4/spribe/aviator.png' }
+  { _key: 'r5', game: 'Sweet Bonanza', platform: 'Pragmatic', rtp: 96.48, logo: 'https://cdn.softswiss.net/i/s4/pragmaticplay/sweet_bonanza.png' }
 ];
 
 // ===== POPULATE PLATFORM SELECTS =====
@@ -1943,7 +1937,7 @@ tabs.forEach(tab => {
     if (name === 'hot') renderHot();
     if (name === 'share') renderShare();
     if (name === 'sinais') { renderSinais(); loadSinaisData(); }
-    if (name === 'rtp') { renderRtp(); loadRtpData(); }
+
     trackEvent('tab_switch', { tab: name });
   });
 });
@@ -2561,8 +2555,7 @@ var SINAIS_DEFAULTS = [
   { _key: 'd2', name: 'Fortune Mouse', platform: 'PG Soft', logo: 'https://cdn.softswiss.net/i/s4/softswiss/fortune_mouse.png', url: '' },
   { _key: 'd3', name: 'Fortune Ox', platform: 'PG Soft', logo: 'https://cdn.softswiss.net/i/s4/softswiss/fortune_ox.png', url: '' },
   { _key: 'd4', name: 'Gates of Olympus', platform: 'Pragmatic', logo: 'https://cdn.softswiss.net/i/s4/pragmaticplay/gates_of_olympus.png', url: '' },
-  { _key: 'd5', name: 'Sweet Bonanza', platform: 'Pragmatic', logo: 'https://cdn.softswiss.net/i/s4/pragmaticplay/sweet_bonanza.png', url: '' },
-  { _key: 'd6', name: 'Aviator', platform: 'Spribe', logo: 'https://cdn.softswiss.net/i/s4/spribe/aviator.png', url: '' }
+  { _key: 'd5', name: 'Sweet Bonanza', platform: 'Pragmatic', logo: 'https://cdn.softswiss.net/i/s4/pragmaticplay/sweet_bonanza.png', url: '' }
 ];
 
 // Notificações de saque falsas para engajamento
@@ -2733,6 +2726,17 @@ function openSinalDetail(key) {
   document.getElementById('sinalDetailTitle').textContent = jogo.name;
   document.getElementById('sinalDetailName').textContent = jogo.name;
   document.getElementById('sinalDetailPlat').textContent = jogo.platform || '';
+  // Mostrar jogo pagando da plataforma vinculada
+  var hotGameEl = document.getElementById('sinalDetailHotGame');
+  var hotGameNameEl = document.getElementById('sinalDetailHotGameName');
+  var linkedPlatForHot = jogo.linkedPlatformId ? ((window._allPlatforms || []).find(function(p) { return String(p.id) === String(jogo.linkedPlatformId); })) : null;
+  var hotGame = linkedPlatForHot ? (linkedPlatForHot.hot_game || '') : (jogo.hot_game || '');
+  if (hotGame && hotGame.trim()) {
+    hotGameNameEl.textContent = hotGame.trim();
+    hotGameEl.style.display = 'flex';
+  } else {
+    hotGameEl.style.display = 'none';
+  }
 
   var logoWrap = document.getElementById('sinalDetailLogoWrap');
   // Para plataformas Em Alta: buscar logo do PLATFORMS_DATA original
