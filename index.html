@@ -3080,6 +3080,112 @@ loadSinaisData();
 loadRtpData();
 // Inicializar o app DEPOIS de todo o código estar carregado
 init();
+
+// ===== BOTÃO FÍSICO VOLTAR (ANDROID PWA) =====
+// Estratégia: usar history.pushState para empurrar estados no histórico.
+// Cada vez que o usuário abre um overlay/modal/aba, empurramos um estado.
+// O evento 'popstate' (botão voltar físico) fecha o overlay/modal mais recente.
+
+function pushNavState(state) {
+  history.pushState(state, '');
+}
+
+// Empurrar estado inicial para que o primeiro "voltar" não feche o app
+history.replaceState({ view: 'home' }, '');
+
+// Interceptar abas — empurrar estado ao trocar de aba
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    pushNavState({ view: 'tab', tab: tab.dataset.tab });
+  });
+});
+
+// Interceptar abertura do sinalDetail
+var _origOpenSinalDetail = window.openSinalDetail;
+if (typeof openSinalDetail === 'function') {
+  var _origOpen = openSinalDetail;
+  openSinalDetail = function(jogo) {
+    _origOpen(jogo);
+    pushNavState({ view: 'sinalDetail' });
+  };
+}
+
+// Interceptar abertura dos modais
+var _sorteioOpen = document.getElementById('sorteioModal');
+var _iosModalOpen = document.getElementById('iosInstallModal');
+var _welcomeModalOpen = document.getElementById('welcomeModal');
+
+// Sobrescrever classList.add para modais para empurrar estado
+function patchModalOpen(el, stateKey) {
+  if (!el) return;
+  var orig = el.classList.add.bind(el.classList);
+  el.classList.add = function(cls) {
+    orig(cls);
+    if (cls === 'open') pushNavState({ view: stateKey });
+  };
+}
+patchModalOpen(_sorteioOpen, 'sorteioModal');
+patchModalOpen(_iosModalOpen, 'iosModal');
+patchModalOpen(_welcomeModalOpen, 'welcomeModal');
+
+// Interceptar abertura do sinalDetail via classList.add
+var _sinalDetailEl = document.getElementById('sinalDetail');
+if (_sinalDetailEl) {
+  var _origSinalAdd = _sinalDetailEl.classList.add.bind(_sinalDetailEl.classList);
+  _sinalDetailEl.classList.add = function(cls) {
+    _origSinalAdd(cls);
+    if (cls === 'open') pushNavState({ view: 'sinalDetail' });
+  };
+}
+
+// Interceptar abertura do adminPanelWrap
+var _adminWrap = document.getElementById('adminPanelWrap');
+if (_adminWrap) {
+  var _origAdminStyle = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style');
+  // Monitorar via MutationObserver
+  new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      if (m.attributeName === 'style' && _adminWrap.style.display === 'block') {
+        pushNavState({ view: 'admin' });
+      }
+    });
+  }).observe(_adminWrap, { attributes: true });
+}
+
+// Handler do evento popstate (botão físico voltar)
+window.addEventListener('popstate', function(e) {
+  // 1. Fechar sinalDetail se estiver aberto
+  var sinalDetailEl = document.getElementById('sinalDetail');
+  if (sinalDetailEl && sinalDetailEl.classList.contains('open')) {
+    document.getElementById('sinalDetailBack').click();
+    return;
+  }
+  // 2. Fechar admin se estiver aberto
+  var adminWrap = document.getElementById('adminPanelWrap');
+  if (adminWrap && adminWrap.style.display === 'block') {
+    adminWrap.style.display = 'none';
+    document.getElementById('adminLoginWrap').style.display = 'flex';
+    document.getElementById('adminPasswordInput').value = '';
+    history.pushState({ view: 'home' }, '');
+    return;
+  }
+  // 3. Fechar qualquer modal aberto
+  var openModal = document.querySelector('.modal-overlay.open, .ios-modal.open');
+  if (openModal) {
+    openModal.classList.remove('open');
+    history.pushState({ view: 'home' }, '');
+    return;
+  }
+  // 4. Se estiver em aba diferente de home, voltar para home
+  var activeTab = document.querySelector('.tab-item.active');
+  if (activeTab && activeTab.dataset.tab !== 'home') {
+    document.querySelector('[data-tab="home"]').click();
+    history.pushState({ view: 'home' }, '');
+    return;
+  }
+  // 5. Se já estiver na home, empurrar estado para não fechar o app
+  history.pushState({ view: 'home' }, '');
+});
 </script>
 </body>
 </html>
