@@ -1790,6 +1790,26 @@ function showToast(msg, duration = 2500) {
   setTimeout(() => t.classList.remove('show'), duration);
 }
 
+// Salva os jogos de uma plataforma automaticamente ao sair do campo
+function saveGamesForPlatform(platId) {
+  var p = platforms.find(function(x) { return x.id == platId; });
+  if (!p) return;
+  var g1n = document.getElementById('hotgame1-' + p.id)?.value.trim() || '';
+  var g1r = document.getElementById('hotrtp1-' + p.id)?.value.trim() || '';
+  var g2n = document.getElementById('hotgame2-' + p.id)?.value.trim() || '';
+  var g2r = document.getElementById('hotrtp2-' + p.id)?.value.trim() || '';
+  var g3n = document.getElementById('hotgame3-' + p.id)?.value.trim() || '';
+  var g3r = document.getElementById('hotrtp3-' + p.id)?.value.trim() || '';
+  p.games = [];
+  if (g1n) p.games.push({ name: g1n, rtp: g1r });
+  if (g2n) p.games.push({ name: g2n, rtp: g2r });
+  if (g3n) p.games.push({ name: g3n, rtp: g3r });
+  p.hot_game = g1n || p.hot_game;
+  p.hot_rtp = g1r || p.hot_rtp;
+  saveState();
+  showToast('✅ Jogos salvos para ' + p.name);
+}
+
 function saveState() {
   try { _ls.set('av_favorites', JSON.stringify(favorites)); } catch(e) {}
   try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
@@ -2193,16 +2213,16 @@ function renderAdminPlatforms(filter = '') {
       <div style="margin-bottom:6px">
         <div style="font-size:9px;color:#10B981;font-weight:800;margin-bottom:4px;letter-spacing:0.5px">🎮 JOGOS PAGANDO (até 3)</div>
         <div style="display:grid;grid-template-columns:1fr 80px;gap:4px;margin-bottom:4px">
-          <input class="admin-hot-input" id="hotgame1-${p.id}" value="${(p.games && p.games[0] && p.games[0].name) || p.hot_game || ''}" placeholder="Jogo 1" />
-          <input class="admin-hot-input" id="hotrtp1-${p.id}" value="${(p.games && p.games[0] && p.games[0].rtp) || p.hot_rtp || ''}" placeholder="RTP %" type="number" min="0" max="100" step="0.01" style="text-align:center" />
+          <input class="admin-hot-input" id="hotgame1-${p.id}" value="${(p.games && p.games[0] && p.games[0].name) || p.hot_game || ''}" placeholder="Jogo 1" onblur="saveGamesForPlatform(${p.id})" />
+          <input class="admin-hot-input" id="hotrtp1-${p.id}" value="${(p.games && p.games[0] && p.games[0].rtp) || p.hot_rtp || ''}" placeholder="RTP %" type="number" min="0" max="100" step="0.01" style="text-align:center" onblur="saveGamesForPlatform(${p.id})" />
         </div>
         <div style="display:grid;grid-template-columns:1fr 80px;gap:4px;margin-bottom:4px">
-          <input class="admin-hot-input" id="hotgame2-${p.id}" value="${(p.games && p.games[1] && p.games[1].name) || ''}" placeholder="Jogo 2 (opcional)" />
-          <input class="admin-hot-input" id="hotrtp2-${p.id}" value="${(p.games && p.games[1] && p.games[1].rtp) || ''}" placeholder="RTP %" type="number" min="0" max="100" step="0.01" style="text-align:center" />
+          <input class="admin-hot-input" id="hotgame2-${p.id}" value="${(p.games && p.games[1] && p.games[1].name) || ''}" placeholder="Jogo 2 (opcional)" onblur="saveGamesForPlatform(${p.id})" />
+          <input class="admin-hot-input" id="hotrtp2-${p.id}" value="${(p.games && p.games[1] && p.games[1].rtp) || ''}" placeholder="RTP %" type="number" min="0" max="100" step="0.01" style="text-align:center" onblur="saveGamesForPlatform(${p.id})" />
         </div>
         <div style="display:grid;grid-template-columns:1fr 80px;gap:4px">
-          <input class="admin-hot-input" id="hotgame3-${p.id}" value="${(p.games && p.games[2] && p.games[2].name) || ''}" placeholder="Jogo 3 (opcional)" />
-          <input class="admin-hot-input" id="hotrtp3-${p.id}" value="${(p.games && p.games[2] && p.games[2].rtp) || ''}" placeholder="RTP %" type="number" min="0" max="100" step="0.01" style="text-align:center" />
+          <input class="admin-hot-input" id="hotgame3-${p.id}" value="${(p.games && p.games[2] && p.games[2].name) || ''}" placeholder="Jogo 3 (opcional)" onblur="saveGamesForPlatform(${p.id})" />
+          <input class="admin-hot-input" id="hotrtp3-${p.id}" value="${(p.games && p.games[2] && p.games[2].rtp) || ''}" placeholder="RTP %" type="number" min="0" max="100" step="0.01" style="text-align:center" onblur="saveGamesForPlatform(${p.id})" />
         </div>
       </div>
       <div class="admin-card-actions" style="grid-template-columns:1fr 1fr 36px 36px 36px">
