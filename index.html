@@ -1784,15 +1784,15 @@ var RTP_DEFAULTS = [
 function populatePlatformSelects() {
   // Pegar plataformas do Firebase ou usar PLATFORMS_DATA
   // Filtrar apenas plataformas marcadas como Em Alta (isHigh:true)
-  var allPlatforms = (window._allPlatforms || PLATFORMS_DATA).filter(function(p) { return p.url; });
+  var allPlatforms = (platforms.length > 0 ? platforms : PLATFORMS_DATA).filter(function(p) { return p.url; });
   var hotPlatforms = allPlatforms.filter(function(p) { return p.isHigh; });
   // Se não houver plataformas Em Alta, mostrar todas
-  var platforms = hotPlatforms.length > 0 ? hotPlatforms : allPlatforms;
-  platforms.sort(function(a, b) { return a.name.localeCompare(b.name); });
+  var platList = hotPlatforms.length > 0 ? hotPlatforms : allPlatforms;
+  platList.sort(function(a, b) { return a.name.localeCompare(b.name); });
 
   // Popular o select do RTP (mantido como dropdown)
   var opts = '<option value="">-- Nenhuma plataforma --</option>' +
-    platforms.map(function(p) {
+    platList.map(function(p) {
       var badge = p.isHigh ? ' \ud83d\udd25' : '';
       return '<option value="' + p.id + '">' + p.name + badge + '</option>';
     }).join('');
@@ -1802,7 +1802,7 @@ function populatePlatformSelects() {
   // Popular o grid visual de plataformas para Sinais
   var grid = document.getElementById('sinalPlatGrid');
   if (grid) {
-    grid.innerHTML = platforms.map(function(p) {
+    grid.innerHTML = platList.map(function(p) {
       var imgHtml = p.imageUrl
         ? '<img src="' + p.imageUrl + '" alt="' + p.name + '" style="width:100%;height:44px;object-fit:contain;border-radius:6px;background:#fff;" onerror="this.style.display=\'none\'" />'
         : '<div style="width:100%;height:44px;background:rgba(255,255,255,0.1);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;">&#127968;</div>';
@@ -2904,7 +2904,7 @@ function loadSinaisData() {
 
 function buildSinalListFromPlatforms() {
   // Pegar plataformas Em Alta e converter para formato de sinal
-  var allPlats = window._allPlatforms || PLATFORMS_DATA;
+  var allPlats = platforms.length > 0 ? platforms : PLATFORMS_DATA;
   var highPlats = allPlats.filter(function(p) { return p.isHigh && p.url; });
   if (highPlats.length === 0) return null; // Nenhuma Em Alta, usar SINAIS_DEFAULTS
   return highPlats.map(function(p) {
@@ -3020,7 +3020,7 @@ function openSinalDetail(key) {
   document.getElementById('sinalDetailPlat').textContent = jogo.platform || '';
   // Mostrar jogo pagando da plataforma vinculada
   var hotGameEl = document.getElementById('sinalDetailHotGame');
-  var linkedPlatForHot = jogo.linkedPlatformId ? ((window._allPlatforms || []).find(function(p) { return String(p.id) === String(jogo.linkedPlatformId); })) : null;
+  var linkedPlatForHot = jogo.linkedPlatformId ? ((platforms).find(function(p) { return String(p.id) === String(jogo.linkedPlatformId); })) : null;
   var platData = linkedPlatForHot || jogo;
   var gamesList = (platData.games && platData.games.length > 0) ? platData.games
     : (platData.hot_game ? [{ name: platData.hot_game, rtp: platData.hot_rtp || '' }] : []);
@@ -3087,7 +3087,7 @@ function openSinalDetail(key) {
   // Buscar em PLATFORMS_DATA original (tem as logos reais) e em _allPlatforms (tem isHigh/url atualizados)
   var linkedPlatId = jogo.linkedPlatformId;
   var linkedPlatOrig = linkedPlatId ? PLATFORMS_DATA.find(function(p) { return String(p.id) === String(linkedPlatId); }) : null;
-  var linkedPlatLive = linkedPlatId ? ((window._allPlatforms || []).find(function(p) { return String(p.id) === String(linkedPlatId); })) : null;
+  var linkedPlatLive = linkedPlatId ? ((platforms).find(function(p) { return String(p.id) === String(linkedPlatId); })) : null;
   var linkedPlat = linkedPlatLive || linkedPlatOrig || null;
   // Garantir que imageUrl vem do PLATFORMS_DATA original se o live não tiver
   if (linkedPlat && !linkedPlat.imageUrl && linkedPlatOrig) linkedPlat = Object.assign({}, linkedPlat, { imageUrl: linkedPlatOrig.imageUrl });
