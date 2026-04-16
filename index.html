@@ -415,6 +415,36 @@
     .sinal-mult-text { text-align: center; font-size: 13px; font-weight: 900; color: #F97316; margin-bottom: 16px; }
     .sinal-access-btn { width: 100%; background: #1a6b3a; border: 1.5px solid #10B981; border-radius: 14px; padding: 14px; color: #fff; font-size: 15px; font-weight: 900; cursor: pointer; display: none; align-items: center; justify-content: center; gap: 8px; }
     .sinal-access-btn.visible { display: flex; }
+    /* ===== CONVERSÃO: novos elementos ===== */
+    @keyframes pulseRed { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.85;transform:scale(1.03)} }
+    @keyframes pulseGold { 0%,100%{box-shadow:0 0 10px rgba(251,191,36,0.5)} 50%{box-shadow:0 0 22px rgba(251,191,36,0.9)} }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.6} }
+    .sinal-hot-badge { display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;font-size:12px;font-weight:900;letter-spacing:1px;padding:5px 12px;border-radius:20px;margin-bottom:10px;animation:pulseRed 1.5s infinite;text-transform:uppercase; }
+    .sinal-countdown-row { display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(16,185,129,0.2); }
+    .sinal-countdown-label { font-size:12px;color:rgba(255,255,255,0.65);font-weight:700;text-transform:uppercase;letter-spacing:0.8px; }
+    .sinal-countdown-val { font-size:22px;font-weight:900;color:#FBBF24;min-width:80px;text-align:right;font-variant-numeric:tabular-nums; }
+    .sinal-assert-big { font-size:16px!important;font-weight:900!important;color:#10B981!important; }
+    .sinal-mult-block { background:linear-gradient(135deg,#1a3a1a,#0d4a1a);border:2px solid #22c55e;border-radius:14px;padding:12px 16px;margin-bottom:14px;text-align:center;animation:pulseGold 2s infinite; }
+    .sinal-mult-block-text { font-size:14px;font-weight:900;color:#22c55e;letter-spacing:0.5px; }
+    .sinal-strategy-block { background:linear-gradient(135deg,#0f172a,#1e293b);border:1.5px solid rgba(99,102,241,0.5);border-radius:16px;padding:16px;margin-bottom:14px; }
+    .sinal-strategy-title { font-size:13px;font-weight:900;color:#818cf8;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px; }
+    .sinal-strategy-step { font-size:14px;font-weight:700;color:#e2e8f0;margin-bottom:8px;line-height:1.5; }
+    .sinal-strategy-tip { font-size:12px;font-weight:700;color:#94a3b8;margin-top:6px;padding:8px 10px;background:rgba(255,255,255,0.05);border-radius:8px;line-height:1.5; }
+    .sinal-pro-block { background:linear-gradient(135deg,#1e1b4b,#312e81);border:1.5px solid rgba(139,92,246,0.5);border-radius:16px;padding:14px 16px;margin-bottom:14px; }
+    .sinal-pro-title { font-size:13px;font-weight:900;color:#a78bfa;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px; }
+    .sinal-pro-step { font-size:13px;font-weight:700;color:#c4b5fd;margin-bottom:5px;line-height:1.5; }
+    .sinal-bars-block { background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 16px;margin-bottom:14px; }
+    .sinal-bar-row { margin-bottom:10px; }
+    .sinal-bar-label { font-size:11px;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;display:flex;justify-content:space-between; }
+    .sinal-bar-track { height:10px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden; }
+    .sinal-bar-fill { height:100%;border-radius:10px;transition:width 0.5s; }
+    .sinal-urgency-block { text-align:center;margin-bottom:14px;padding:10px 12px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:12px; }
+    .sinal-urgency-line { font-size:12px;font-weight:800;color:#f87171;margin-bottom:4px;animation:blink 1.8s infinite; }
+    .sinal-saques-block { background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:14px;padding:12px 14px;margin-bottom:14px;overflow:hidden; }
+    .sinal-saques-title { font-size:10px;font-weight:700;color:rgba(16,185,129,0.7);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px; }
+    .sinal-saque-item { display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(16,185,129,0.1);font-size:13px;font-weight:700;color:#d1fae5; }
+    .sinal-saque-item:last-child { border-bottom:none; }
+    .sinal-saque-dot { width:8px;height:8px;border-radius:50%;background:#10B981;flex-shrink:0;animation:blink 1.5s infinite; }
     .sinal-plat-card { background: linear-gradient(135deg, #1a1a2e, #16213e); border: 1.5px solid rgba(124,58,237,0.5); border-radius: 18px; padding: 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 12px; }
     .sinal-plat-card-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; text-align: center; }
     .sinal-plat-card-img-wrap { width: 100%; height: 90px; border-radius: 12px; overflow: hidden; background: #fff; display: flex; align-items: center; justify-content: center; }
@@ -1563,39 +1593,93 @@
   </div>
   <div class="sinal-detail-body">
     <!-- TOPO: Logo + Info lado a lado -->
-    <div style="display:flex;align-items:center;gap:14px;padding:0 4px 12px">
+    <div style="display:flex;align-items:center;gap:14px;padding:0 4px 10px">
       <div id="sinalDetailLogoWrap" style="flex-shrink:0"></div>
       <div style="flex:1;min-width:0">
         <div class="sinal-detail-name" id="sinalDetailName" style="text-align:left;margin-bottom:2px"></div>
-        <div class="sinal-detail-plat" id="sinalDetailPlat" style="text-align:left;margin-bottom:8px"></div>
+        <div class="sinal-detail-plat" id="sinalDetailPlat" style="text-align:left;margin-bottom:6px"></div>
+        <!-- Selo EXTREMAMENTE QUENTE -->
+        <div class="sinal-hot-badge">&#128680; EXTREMAMENTE QUENTE</div>
         <!-- Jogos pagando + RTP (até 3) -->
         <div id="sinalDetailHotGame" style="display:none">
-          <div style="font-size:9px;color:#10B981;font-weight:800;letter-spacing:0.5px;margin-bottom:5px">🎮 JOGOS PAGANDO</div>
+          <div style="font-size:9px;color:#10B981;font-weight:800;letter-spacing:0.5px;margin-bottom:5px">&#127918; JOGOS PAGANDO</div>
           <div id="sinalDetailGamesList"></div>
         </div>
       </div>
     </div>
+
+    <!-- BLOCO MULTIPLICADOR -->
+    <div class="sinal-mult-block">
+      <div class="sinal-mult-block-text">&#128176; MULTIPLICADOR ALTO ATIVO (AT&#201; 2.500x)</div>
+    </div>
+
+    <!-- PAINEL DE SINAL -->
     <div class="sinal-panel">
-      <div class="sinal-panel-row">
-        <span class="sinal-panel-label">&#128994; NORMAL</span>
-        <span class="sinal-panel-val" id="sinalNormal">...</span>
+      <!-- Estratégia substituindo Normal/Turbo -->
+      <div class="sinal-panel-row" id="sinalStrategyRow">
+        <span class="sinal-panel-label">&#127919; ENTRADA</span>
+        <span class="sinal-panel-val" id="sinalNormal" style="font-size:14px">...</span>
       </div>
-      <div class="sinal-panel-row">
+      <div class="sinal-panel-row" id="sinalTurboRow">
         <span class="sinal-panel-label">&#9889; TURBO</span>
         <span class="sinal-panel-val" id="sinalTurbo">...</span>
       </div>
-      <div class="sinal-panel-row">
-        <span class="sinal-panel-label">&#128336; V&#193;LIDO AT&#201;</span>
-        <span class="sinal-panel-val yellow" id="sinalValido">...</span>
+      <!-- Contador regressivo -->
+      <div class="sinal-countdown-row">
+        <span class="sinal-countdown-label">&#9203; TEMPO RESTANTE</span>
+        <span class="sinal-countdown-val" id="sinalCountdown">--:--</span>
       </div>
+      <!-- Assertividade maior -->
       <div class="sinal-panel-row">
-        <span class="sinal-panel-label">&#127919; ASSERTIVIDADE</span>
-        <span class="sinal-panel-val assert" id="sinalAssert">...</span>
+        <span class="sinal-panel-label">&#128202; ASSERTIVIDADE</span>
+        <span class="sinal-panel-val assert sinal-assert-big" id="sinalAssert">...</span>
       </div>
     </div>
+
+    <!-- ESTRATÉGIA CLARA -->
+    <div class="sinal-strategy-block" id="sinalStrategyBlock" style="display:none">
+      <div class="sinal-strategy-title">&#127919; ENTRADA RECOMENDADA:</div>
+      <div class="sinal-strategy-step" id="sinalStratStep1"></div>
+      <div class="sinal-strategy-step" id="sinalStratStep2"></div>
+      <div class="sinal-strategy-tip">&#128073; SE BATER: continuar mais 10 giros e parar<br>&#128073; SE N&#195;O BATER: parar e trocar jogo</div>
+    </div>
+
+    <!-- MODO PRO -->
+    <div class="sinal-pro-block" id="sinalProBlock" style="display:none">
+      <div class="sinal-pro-title">&#129504; MODO PRO:</div>
+      <div class="sinal-pro-step">&#128260; 5 giros normal</div>
+      <div class="sinal-pro-step">&#9889; 5 giros turbo</div>
+      <div class="sinal-pro-step" style="color:#a5b4fc;font-size:12px">&#128073; alternar at&#233; o jogo responder</div>
+    </div>
+
+    <!-- INDICADORES VISUAIS -->
+    <div class="sinal-bars-block" id="sinalBarsBlock" style="display:none">
+      <div class="sinal-bar-row">
+        <div class="sinal-bar-label"><span>POTENCIAL</span><span id="sinalBarPotLabel">80%</span></div>
+        <div class="sinal-bar-track"><div class="sinal-bar-fill" id="sinalBarPot" style="width:80%;background:linear-gradient(90deg,#10B981,#34d399)"></div></div>
+      </div>
+      <div class="sinal-bar-row" style="margin-bottom:0">
+        <div class="sinal-bar-label"><span>RISCO</span><span id="sinalBarRiskLabel">30%</span></div>
+        <div class="sinal-bar-track"><div class="sinal-bar-fill" id="sinalBarRisk" style="width:30%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div></div>
+      </div>
+    </div>
+
+    <!-- SAQUES RECENTES -->
+    <div class="sinal-saques-block">
+      <div class="sinal-saques-title">&#128176; SAQUES RECENTES</div>
+      <div id="sinalSaquesLista"></div>
+    </div>
+
     <button class="sinal-gerar-btn" id="sinalGerarBtn">&#127919; GERAR NOVO SINAL</button>
+
+    <!-- URGÊNCIA -->
+    <div class="sinal-urgency-block">
+      <div class="sinal-urgency-line">&#128293; fluxo de pagamento ativo agora</div>
+      <div class="sinal-urgency-line" style="animation-delay:0.5s">&#9888;&#65039; &#250;ltimos minutos de alta distribui&#231;&#227;o</div>
+    </div>
+
     <div class="sinal-info-text">Funciona apenas nesse link</div>
-    <div class="sinal-mult-text">&#128293; Multiplicador de 2.500X Ativado</div>
+
     <!-- Card da plataforma vinculada -->
     <div class="sinal-plat-card" id="sinalPlatCard" style="display:none;">
       <div class="sinal-plat-card-label">&#127919; Jogue nessa plataforma</div>
@@ -1605,10 +1689,10 @@
       <div class="sinal-plat-card-name-row">
         <span id="sinalPlatCardName" class="sinal-plat-card-name"></span>
       </div>
-      <button class="sinal-access-btn visible" id="sinalAccessBtn">&#9654; ACESSAR PLATAFORMA</button>
+      <button class="sinal-access-btn visible" id="sinalAccessBtn" style="padding:18px;font-size:17px;background:linear-gradient(135deg,#16a34a,#15803d);border:none;box-shadow:0 4px 20px rgba(22,163,74,0.5)">&#128640; ACESSAR PLATAFORMA</button>
     </div>
     <!-- Botão fallback sem plataforma vinculada -->
-    <button class="sinal-access-btn" id="sinalAccessBtnFallback" style="display:none;">&#128279; ACESSAR PLATAFORMA</button>
+    <button class="sinal-access-btn" id="sinalAccessBtnFallback" style="display:none;padding:18px;font-size:17px;background:linear-gradient(135deg,#16a34a,#15803d);border:none;box-shadow:0 4px 20px rgba(22,163,74,0.5)">&#128640; ACESSAR PLATAFORMA</button>
   </div>
 </div>
 <!-- SORTEIO MODAL -->
@@ -2823,8 +2907,13 @@ function openSinalDetail(key) {
 
   document.getElementById('sinalNormal').textContent = '...';
   document.getElementById('sinalTurbo').textContent = '...';
-  document.getElementById('sinalValido').textContent = '...';
   document.getElementById('sinalAssert').textContent = '...';
+  document.getElementById('sinalCountdown').textContent = '--:--';
+  if (sinalCountdownTimer) { clearInterval(sinalCountdownTimer); sinalCountdownTimer = null; }
+  if (sinalSaquesTimer) { clearInterval(sinalSaquesTimer); sinalSaquesTimer = null; }
+  // Ocultar blocos extras
+  var _blocks = ['sinalStrategyBlock','sinalProBlock','sinalBarsBlock'];
+  _blocks.forEach(function(id) { var el = document.getElementById(id); if(el) el.style.display='none'; });
 
   var btn = document.getElementById('sinalGerarBtn');
   btn.classList.remove('waiting');
@@ -2877,12 +2966,15 @@ function openSinalDetail(key) {
   // Salvar de qual aba o sinal foi aberto
   var activeTab = document.querySelector('.tab-item.active');
   document.getElementById('sinalDetail').dataset.fromTab = activeTab ? activeTab.dataset.tab : 'hot';
+  // Iniciar saques rotativos
+  startSinalSaquesRotativo();
   document.getElementById('sinalDetail').classList.add('open');
 }
-
 document.getElementById('sinalDetailBack').addEventListener('click', function() {
   document.getElementById('sinalDetail').classList.remove('open');
   if (sinalTimer) { clearInterval(sinalTimer); sinalTimer = null; }
+  if (sinalCountdownTimer) { clearInterval(sinalCountdownTimer); sinalCountdownTimer = null; }
+  if (sinalSaquesTimer) { clearInterval(sinalSaquesTimer); sinalSaquesTimer = null; }
   // Voltar para a aba de onde veio
   var fromTab = document.getElementById('sinalDetail').dataset.fromTab || 'hot';
   var tabBtn = document.querySelector('[data-tab="' + fromTab + '"]');
@@ -2892,22 +2984,97 @@ document.getElementById('sinalDetailBack').addEventListener('click', function() 
 var NORMAIS = ['2X', '3X', '5X', '8X', '10X', '15X', '20X'];
 var TURBOS = ['5X', '8X', '10X', '15X', '20X', '50X', '100X'];
 
+// ===== CONTADOR REGRESSIVO DO SINAL =====
+var sinalCountdownTimer = null;
+function startSinalCountdown(totalSeconds) {
+  if (sinalCountdownTimer) clearInterval(sinalCountdownTimer);
+  var remaining = totalSeconds;
+  var el = document.getElementById('sinalCountdown');
+  function update() {
+    if (!el) return;
+    var m = Math.floor(remaining / 60);
+    var s = remaining % 60;
+    el.textContent = m.toString().padStart(2,'0') + ':' + s.toString().padStart(2,'0') + ' restantes';
+    if (remaining <= 60) el.style.color = '#ef4444';
+    else el.style.color = '#FBBF24';
+    if (remaining <= 0) {
+      clearInterval(sinalCountdownTimer);
+      sinalCountdownTimer = null;
+      el.textContent = 'EXPIRADO';
+      el.style.color = '#ef4444';
+    }
+    remaining--;
+  }
+  update();
+  sinalCountdownTimer = setInterval(update, 1000);
+}
+
+// ===== SAQUES ROTATIVOS NA TELA DE DETALHE =====
+var sinalSaquesTimer = null;
+function startSinalSaquesRotativo() {
+  if (sinalSaquesTimer) clearInterval(sinalSaquesTimer);
+  var lista = document.getElementById('sinalSaquesLista');
+  if (!lista) return;
+  var idx = 0;
+  function renderSaques() {
+    var items = [];
+    for (var i = 0; i < 3; i++) {
+      items.push(SAQUES_NOTIF[(idx + i) % SAQUES_NOTIF.length]);
+    }
+    lista.innerHTML = items.map(function(s) {
+      return '<div class="sinal-saque-item"><div class="sinal-saque-dot"></div><span>&#128176; ' + s + '</span></div>';
+    }).join('');
+    idx = (idx + 1) % SAQUES_NOTIF.length;
+  }
+  renderSaques();
+  sinalSaquesTimer = setInterval(renderSaques, 3500);
+}
+
+// ===== PREENCHER ESTRATÉGIA E INDICADORES =====
+function fillSinalExtras(normal, turbo, assert) {
+  // Extrair número do normal e turbo
+  var nVal = parseInt(normal) || 10;
+  var tVal = parseInt(turbo) || 20;
+  // Estratégia
+  var stratBlock = document.getElementById('sinalStrategyBlock');
+  var step1 = document.getElementById('sinalStratStep1');
+  var step2 = document.getElementById('sinalStratStep2');
+  if (stratBlock && step1 && step2) {
+    step1.textContent = '1\uFE0F\u20E3 ' + nVal + ' giros no NORMAL';
+    step2.textContent = '2\uFE0F\u20E3 ' + tVal + ' giros no TURBO';
+    stratBlock.style.display = 'block';
+  }
+  // Modo Pro
+  var proBlock = document.getElementById('sinalProBlock');
+  if (proBlock) proBlock.style.display = 'block';
+  // Indicadores visuais
+  var barsBlock = document.getElementById('sinalBarsBlock');
+  if (barsBlock) {
+    var assertNum = parseFloat(assert) || 75;
+    var potPct = Math.min(Math.round(assertNum * 1.05), 98);
+    var riskPct = Math.max(Math.round((100 - assertNum) * 0.6), 10);
+    document.getElementById('sinalBarPot').style.width = potPct + '%';
+    document.getElementById('sinalBarPotLabel').textContent = potPct + '%';
+    document.getElementById('sinalBarRisk').style.width = riskPct + '%';
+    document.getElementById('sinalBarRiskLabel').textContent = riskPct + '%';
+    barsBlock.style.display = 'block';
+  }
+}
+
 document.getElementById('sinalGerarBtn').addEventListener('click', function() {
   var btn = this;
   if (btn.classList.contains('waiting')) return;
-
   var normal = NORMAIS[Math.floor(Math.random() * NORMAIS.length)];
   var turbo = TURBOS[Math.floor(Math.random() * TURBOS.length)];
-  var assert = (Math.floor(Math.random() * 20) + 75) + '.' + Math.floor(Math.random() * 99).toString().padStart(2, '0') + '%';
-  var now = new Date();
-  now.setMinutes(now.getMinutes() + Math.floor(Math.random() * 20) + 5);
-  var valido = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-
+  var assertNum = (Math.floor(Math.random() * 20) + 75) + '.' + Math.floor(Math.random() * 99).toString().padStart(2, '0');
+  var assert = assertNum + '%';
+  // Contador regressivo: entre 5 e 25 minutos
+  var totalSecs = (Math.floor(Math.random() * 20) + 5) * 60;
   document.getElementById('sinalNormal').textContent = normal;
   document.getElementById('sinalTurbo').textContent = turbo;
-  document.getElementById('sinalValido').textContent = valido;
-  document.getElementById('sinalAssert').textContent = assert;
-
+  document.getElementById('sinalAssert').textContent = '\uD83D\uDCCA ' + assertNum + '% - ASSERTIVIDADE ALTA';
+  startSinalCountdown(totalSecs);
+  fillSinalExtras(normal, turbo, assertNum);
   var seconds = 30;
   btn.classList.add('waiting');
   btn.textContent = 'Aguarde: ' + seconds + 's';
