@@ -174,7 +174,8 @@
     .platform-icon { width: 95px; height: 95px; border-radius: 50%; object-fit: contain; background: #fff; display: block; }
     .platform-icon-placeholder { width: 95px; height: 95px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 36px; }
     .platform-fav { position: absolute; top: -2px; left: -2px; background: none; border: none; font-size: 16px; cursor: pointer; z-index: 2; padding: 4px; }
-    .badge-launch { position: absolute; top: -4px; right: -4px; background: var(--primary); color: #fff; font-size: 9px; font-weight: 900; padding: 2px 5px; border-radius: 6px; letter-spacing: 0.5px; z-index: 2; }
+    .badge-launch { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); background: #E53935; color: #fff; font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 20px; letter-spacing: 1px; z-index: 3; white-space: nowrap; animation: pulse-launch 1.2s ease-in-out infinite; box-shadow: 0 2px 8px rgba(229,57,53,0.5); }
+    @keyframes pulse-launch { 0%,100% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-50%) scale(1.07); } }
     .badge-high { position: absolute; top: -4px; right: -4px; background: var(--red); color: #fff; font-size: 9px; font-weight: 900; padding: 2px 5px; border-radius: 6px; letter-spacing: 1px; z-index: 2; animation: blink-high 1s ease-in-out infinite; }
     @keyframes blink-high { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
     .platform-access-btn { margin-top: 8px; background: var(--green); padding: 5px 12px; border-radius: 6px; border: none; cursor: pointer; }
@@ -618,7 +619,7 @@
       <div class="platform-grid" id="platformGrid">
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://25f02.com/?pid=3261998855" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'25t',platform_id:150051})">
-        <div class="badge-launch">NOVO</div>
+        <div class="badge-launch">&#128293; LANÇAMENTO</div>
         <button class="platform-fav" data-fav="150051">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s4/app-icon/3409648/1.png" alt="25t" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
@@ -1937,7 +1938,7 @@ function renderPlatformCard(p, showFav = true) {
   const imgHtml = p.imageUrl
     ? `<img class="platform-icon" src="${p.imageUrl}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>`
     : `<div class="platform-icon-placeholder">🔗</div>`;
-  const launchBadge = p.isLaunch ? `<div class="badge-launch">NOVO</div>` : '';
+  const launchBadge = p.isLaunch ? `<div class="badge-launch">&#128293; LANÇAMENTO</div>` : '';
   const highBadge = p.isHigh ? `<div class="badge-high">EM ALTA</div>` : '';
   const favBtn = showFav ? `<button class="platform-fav" data-fav="${p.id}">${isFav ? '❤️' : '🤍'}</button>` : '';
   // Usar <a> real para garantir que funcione em todos os navegadores (Instagram, Chrome, Safari)
