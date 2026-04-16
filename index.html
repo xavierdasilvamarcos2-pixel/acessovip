@@ -2757,18 +2757,26 @@ function openSinalDetail(key) {
   var platData = linkedPlatForHot || jogo;
   var gamesList = (platData.games && platData.games.length > 0) ? platData.games
     : (platData.hot_game ? [{ name: platData.hot_game, rtp: platData.hot_rtp || '' }] : []);
-  var gamesListEl = document.getElementById('sinalDetailGamesList');
-  if (gamesList.length > 0) {
-    hotGameEl.style.display = 'block';
-    gamesListEl.innerHTML = gamesList.map(function(g) {
-      return '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">' +
-        '<span style="font-size:13px;font-weight:800;color:#fff">' + g.name + '</span>' +
-        (g.rtp ? '<span style="background:rgba(16,185,129,0.25);border:1px solid rgba(16,185,129,0.5);border-radius:6px;padding:2px 8px;font-size:13px;font-weight:900;color:#10B981">RTP ' + parseFloat(g.rtp).toFixed(2) + '%</span>' : '') +
-      '</div>';
-    }).join('');
-  } else {
-    hotGameEl.style.display = 'none';
+  // Fallback: se não há jogos cadastrados, gerar jogos aleatórios
+  var DEFAULT_GAMES = ['Fortune Tiger','Fortune Rabbit','Fortune Ox','Fortune Mouse','Fortune Dragon','Ganesha Gold','Mahjong Ways','Wild Bandito','Starlight Princess','Gates of Olympus'];
+  if (gamesList.length === 0) {
+    var seed = (platData.id || 1) * 7;
+    var rnd = function(n) { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return Math.abs(seed) % n; };
+    var g1 = DEFAULT_GAMES[rnd(DEFAULT_GAMES.length)];
+    var g2 = DEFAULT_GAMES[rnd(DEFAULT_GAMES.length)];
+    if (g2 === g1) g2 = DEFAULT_GAMES[(DEFAULT_GAMES.indexOf(g1) + 1) % DEFAULT_GAMES.length];
+    var rtp1 = (93 + rnd(5) + rnd(100) / 100).toFixed(2);
+    var rtp2 = (93 + rnd(5) + rnd(100) / 100).toFixed(2);
+    gamesList = [{ name: g1, rtp: rtp1 }, { name: g2, rtp: rtp2 }];
   }
+  var gamesListEl = document.getElementById('sinalDetailGamesList');
+  hotGameEl.style.display = 'block';
+  gamesListEl.innerHTML = gamesList.map(function(g) {
+    return '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">' +
+      '<span style="font-size:13px;font-weight:800;color:#fff">' + g.name + '</span>' +
+      (g.rtp ? '<span style="background:rgba(16,185,129,0.25);border:1px solid rgba(16,185,129,0.5);border-radius:6px;padding:2px 8px;font-size:13px;font-weight:900;color:#10B981">RTP ' + parseFloat(g.rtp).toFixed(2) + '%</span>' : '') +
+    '</div>';
+  }).join('');
 
   var logoWrap = document.getElementById('sinalDetailLogoWrap');
   // Para plataformas Em Alta: buscar logo do PLATFORMS_DATA original
