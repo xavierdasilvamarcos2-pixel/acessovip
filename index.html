@@ -2757,17 +2757,14 @@ function openSinalDetail(key) {
   var platData = linkedPlatForHot || jogo;
   var gamesList = (platData.games && platData.games.length > 0) ? platData.games
     : (platData.hot_game ? [{ name: platData.hot_game, rtp: platData.hot_rtp || '' }] : []);
-  // Fallback: se não há jogos cadastrados, gerar jogos aleatórios
+  // Fallback: se não há jogos cadastrados, gerar 1 jogo aleatório
   var DEFAULT_GAMES = ['Fortune Tiger','Fortune Rabbit','Fortune Ox','Fortune Mouse','Fortune Dragon','Ganesha Gold','Mahjong Ways','Wild Bandito','Starlight Princess','Gates of Olympus'];
   if (gamesList.length === 0) {
     var seed = (platData.id || 1) * 7;
     var rnd = function(n) { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return Math.abs(seed) % n; };
     var g1 = DEFAULT_GAMES[rnd(DEFAULT_GAMES.length)];
-    var g2 = DEFAULT_GAMES[rnd(DEFAULT_GAMES.length)];
-    if (g2 === g1) g2 = DEFAULT_GAMES[(DEFAULT_GAMES.indexOf(g1) + 1) % DEFAULT_GAMES.length];
     var rtp1 = (93 + rnd(5) + rnd(100) / 100).toFixed(2);
-    var rtp2 = (93 + rnd(5) + rnd(100) / 100).toFixed(2);
-    gamesList = [{ name: g1, rtp: rtp1 }, { name: g2, rtp: rtp2 }];
+    gamesList = [{ name: g1, rtp: rtp1 }];
   }
   var gamesListEl = document.getElementById('sinalDetailGamesList');
   hotGameEl.style.display = 'block';
