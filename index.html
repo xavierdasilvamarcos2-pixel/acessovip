@@ -1620,14 +1620,14 @@
 
     <!-- PAINEL DE SINAL -->
     <div class="sinal-panel">
-      <!-- Estratégia substituindo Normal/Turbo -->
+      <!-- Resumo de entrada - sem números, apenas descrição -->
       <div class="sinal-panel-row" id="sinalStrategyRow">
-        <span class="sinal-panel-label">&#127919; ENTRADA</span>
-        <span class="sinal-panel-val" id="sinalNormal" style="font-size:14px">...</span>
+        <span class="sinal-panel-label">&#127919; JOGADA INICIAL</span>
+        <span class="sinal-panel-val" id="sinalNormal" style="font-size:13px;font-weight:700">modo normal</span>
       </div>
       <div class="sinal-panel-row" id="sinalTurboRow">
-        <span class="sinal-panel-label">&#9889; TURBO</span>
-        <span class="sinal-panel-val" id="sinalTurbo">...</span>
+        <span class="sinal-panel-label">&#9889; EM SEGUIDA</span>
+        <span class="sinal-panel-val" id="sinalTurbo" style="font-size:13px;font-weight:700">modo turbo</span>
       </div>
       <!-- Contador regressivo -->
       <div class="sinal-countdown-row">
@@ -3068,8 +3068,8 @@ function openSinalDetail(key) {
     }
   }
 
-  document.getElementById('sinalNormal').textContent = '...';
-  document.getElementById('sinalTurbo').textContent = '...';
+  document.getElementById('sinalNormal').textContent = 'modo normal';
+  document.getElementById('sinalTurbo').textContent = 'modo turbo';
   document.getElementById('sinalAssert').textContent = '...';
   document.getElementById('sinalCountdown').textContent = '--:--';
   if (sinalCountdownTimer) { clearInterval(sinalCountdownTimer); sinalCountdownTimer = null; }
@@ -3144,8 +3144,8 @@ document.getElementById('sinalDetailBack').addEventListener('click', function() 
   if (tabBtn) tabBtn.click();
 });
 
-var NORMAIS = ['2X', '3X', '5X', '8X', '10X', '15X', '20X'];
-var TURBOS = ['5X', '8X', '10X', '15X', '20X', '50X', '100X'];
+var NORMAIS = ['5', '8', '10', '15', '20', '25', '30'];
+var TURBOS = ['5', '8', '10', '15', '20', '25', '30'];
 
 // ===== CONTADOR REGRESSIVO DO SINAL =====
 var sinalCountdownTimer = null;
@@ -3233,8 +3233,9 @@ document.getElementById('sinalGerarBtn').addEventListener('click', function() {
   var assert = assertNum + '%';
   // Contador regressivo: entre 5 e 25 minutos
   var totalSecs = (Math.floor(Math.random() * 20) + 5) * 60;
-  document.getElementById('sinalNormal').textContent = normal;
-  document.getElementById('sinalTurbo').textContent = turbo;
+  // Resumo de cima: sempre texto descritivo, sem números
+  document.getElementById('sinalNormal').textContent = 'modo normal';
+  document.getElementById('sinalTurbo').textContent = 'modo turbo';
   document.getElementById('sinalAssert').textContent = '\uD83D\uDCCA ' + assertNum + '% - ASSERTIVIDADE ALTA';
   startSinalCountdown(totalSecs);
   fillSinalExtras(normal, turbo, assertNum);
