@@ -1567,11 +1567,19 @@
     </div>
     <div class="sinal-detail-name" id="sinalDetailName"></div>
     <div class="sinal-detail-plat" id="sinalDetailPlat"></div>
-    <div id="sinalDetailHotGame" style="display:none;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.35);border-radius:10px;padding:8px 14px;margin:6px 16px 0;display:flex;align-items:center;gap:8px">
-      <span style="font-size:16px">🎮</span>
-      <div>
-        <div style="font-size:10px;color:#10B981;font-weight:800;letter-spacing:0.5px">JOGO PAGANDO AGORA</div>
-        <div id="sinalDetailHotGameName" style="font-size:14px;font-weight:900;color:#fff"></div>
+    <div id="sinalDetailHotGame" style="display:none;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.35);border-radius:10px;padding:10px 14px;margin:8px 16px 0">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:18px">🎮</span>
+          <div>
+            <div style="font-size:10px;color:#10B981;font-weight:800;letter-spacing:0.5px">JOGO PAGANDO AGORA</div>
+            <div id="sinalDetailHotGameName" style="font-size:15px;font-weight:900;color:#fff"></div>
+          </div>
+        </div>
+        <div id="sinalDetailHotRtp" style="display:none;background:rgba(16,185,129,0.2);border-radius:8px;padding:4px 10px;text-align:center">
+          <div style="font-size:9px;color:#10B981;font-weight:800">RTP</div>
+          <div id="sinalDetailHotRtpVal" style="font-size:16px;font-weight:900;color:#10B981"></div>
+        </div>
       </div>
     </div>
     <div class="sinal-panel">
@@ -2189,8 +2197,9 @@ function renderAdminPlatforms(filter = '') {
           </div>
         </div>
       </div>
-      <div style="margin-bottom:6px">
-        <input class="admin-hot-input" id="hotgame-${p.id}" value="${p.hot_game || ''}" placeholder="🎮 Jogo pagando: Ex: Fortune Tiger" />
+      <div style="display:grid;grid-template-columns:1fr 90px;gap:6px;margin-bottom:6px">
+        <input class="admin-hot-input" id="hotgame-${p.id}" value="${p.hot_game || ''}" placeholder="🎮 Jogo pagando" />
+        <input class="admin-hot-input" id="hotrtp-${p.id}" value="${p.hot_rtp || ''}" placeholder="RTP %" type="number" min="0" max="100" step="0.01" style="text-align:center" />
       </div>
       <div class="admin-card-actions" style="grid-template-columns:1fr 1fr 36px 36px 36px">
         <button class="admin-btn admin-btn-high ${p.isHigh ? 'active' : ''}" data-toggle-high="${p.id}">${p.isHigh ? '🔥 Em Alta' : '📊 Em Alta'}</button>
@@ -2217,6 +2226,7 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
     const p = platforms.find(x => x.id == toggleHigh);
     if (p) {
       p.hot_game = document.getElementById('hotgame-' + p.id)?.value || p.hot_game;
+      p.hot_rtp = document.getElementById('hotrtp-' + p.id)?.value || p.hot_rtp;
       p.isHigh = !p.isHigh;
       saveState(); renderAdminPlatforms(); renderHome(); renderHot(); renderSinais();
       showToast(p.isHigh ? `🔥 ${p.name} marcada como Em Alta e adicionada aos Sinais!` : `${p.name} removida de Em Alta e dos Sinais`);
@@ -2731,9 +2741,18 @@ function openSinalDetail(key) {
   var hotGameNameEl = document.getElementById('sinalDetailHotGameName');
   var linkedPlatForHot = jogo.linkedPlatformId ? ((window._allPlatforms || []).find(function(p) { return String(p.id) === String(jogo.linkedPlatformId); })) : null;
   var hotGame = linkedPlatForHot ? (linkedPlatForHot.hot_game || '') : (jogo.hot_game || '');
+  var hotRtp = linkedPlatForHot ? (linkedPlatForHot.hot_rtp || '') : (jogo.hot_rtp || '');
   if (hotGame && hotGame.trim()) {
     hotGameNameEl.textContent = hotGame.trim();
-    hotGameEl.style.display = 'flex';
+    hotGameEl.style.display = 'block';
+    var rtpEl = document.getElementById('sinalDetailHotRtp');
+    var rtpValEl = document.getElementById('sinalDetailHotRtpVal');
+    if (hotRtp && String(hotRtp).trim()) {
+      rtpValEl.textContent = parseFloat(hotRtp).toFixed(2) + '%';
+      rtpEl.style.display = 'block';
+    } else {
+      rtpEl.style.display = 'none';
+    }
   } else {
     hotGameEl.style.display = 'none';
   }
