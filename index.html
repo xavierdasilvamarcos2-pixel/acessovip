@@ -556,7 +556,7 @@
         <button class="notif-banner-close" id="notifBannerClose">✕</button>
       </div>
       <!-- Install PWA Banner -->
-      <div class="install-banner" id="installBanner">
+      <div class="install-banner hidden" id="installBanner">
         <span class="install-banner-icon">📲</span>
         <div class="install-banner-text">
           <div class="install-banner-title">INSTALAR O APP GRÁTIS</div>
@@ -2151,7 +2151,9 @@ document.getElementById('installGuideClose').addEventListener('click', () => {
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 const isStandalone = window.navigator.standalone === true;
 if (isIOS && !isStandalone && !isInstalled) {
+  // iPhone: mostra banner iOS com etapas, garante que banner Android fica oculto
   document.getElementById('installIosBanner').classList.remove('hidden');
+  document.getElementById('installBanner').classList.add('hidden');
 }
 document.getElementById('installIosBanner').addEventListener('click', () => {
   document.getElementById('iosInstallModal').classList.add('open');
