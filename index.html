@@ -1504,8 +1504,16 @@
             <input class="admin-form-input" id="notifImage" type="url" placeholder="https://link-da-imagem.com/foto.jpg" />
             <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:5px;">A imagem aparece em destaque na notificação</div>
           </div>
-          <input type="hidden" id="notifUrl" value="hot" />
+          <div class="admin-form-row">
+            <label class="admin-form-label">&#127919; Destino ao clicar</label>
+            <select class="admin-form-input" id="notifUrl" style="background:#1a1a2e;color:#fff;border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:10px 12px;font-size:14px;">
+              <option value="hot">🔥 Sinais ao Vivo</option>
+              <option value="home">🏠 Home (Plataformas)</option>
+              <option value="launch">🆕 Lançamentos</option>
+            </select>
+          </div>
           <button class="admin-btn-submit red" id="sendNotifBtn">&#128228; ENVIAR PARA TODOS</button>
+          <button style="width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;" id="testNotifBtn">🧪 ENVIAR NOTIFICAÇÃO DE TESTE</button>
           <div id="notifResult" style="margin-top:12px;font-size:13px;color:rgba(255,255,255,0.4);text-align:center;"></div>
         </div>
       </div>
@@ -2407,19 +2415,44 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
       p.isHigh = !p.isHigh;
       saveState(); renderAdminPlatforms(); renderHome(); renderHot(); renderSinais();
       showToast(p.isHigh ? `🔥 ${p.name} marcada como Em Alta e adicionada aos Sinais!` : `${p.name} removida de Em Alta e dos Sinais`);
-      // Disparo automático de notificação ao marcar como Em Alta
+      // Disparo automático de notificação ao marcar como Em Alta (anti-spam: 30min por plataforma)
       if (p.isHigh) {
-        sendPushNotification('🔥 Plataforma Em Alta!', p.name + ' está em alta agora! Acesse e aproveite!', 'hot')
-          .then(result => {
-            if (result.success) showToast('📲 Notificação enviada para todos!');
-            else showToast('⚠️ Erro: ' + result.error);
-          });
+        var spamKey = 'av_notif_high_' + p.id;
+        var lastSent = parseInt(_ls.get(spamKey) || '0');
+        var now = Date.now();
+        if (now - lastSent > 30 * 60 * 1000) { // 30 minutos
+          _ls.set(spamKey, String(now));
+          sendPushNotification('🚨 Sinais ativos agora!', 'Nova plataforma com movimentação detectada. Acesse e aproveite!', 'hot')
+            .then(result => {
+              if (result.success) showToast('📲 Notificação enviada para todos!');
+              else showToast('⚠️ Erro ao enviar notificação');
+            });
+        } else {
+          showToast('⏳ Aguarde 30min para enviar outra notificação desta plataforma');
+        }
       }
     }
   }
   if (toggleLaunch) {
     const p = platforms.find(x => x.id == toggleLaunch);
-    if (p) { p.isLaunch = !p.isLaunch; saveState(); renderAdminPlatforms(); renderHome(); showToast(`${p.name} ${p.isLaunch ? 'marcada como Lançamento' : 'removida de Lançamento'}`); }
+    if (p) {
+      p.isLaunch = !p.isLaunch;
+      saveState(); renderAdminPlatforms(); renderHome();
+      showToast(`${p.name} ${p.isLaunch ? 'marcada como Lançamento' : 'removida de Lançamento'}`);
+      // Notificação automática ao marcar como Lançamento (anti-spam: 30min)
+      if (p.isLaunch) {
+        var spamKeyL = 'av_notif_launch_' + p.id;
+        var lastSentL = parseInt(_ls.get(spamKeyL) || '0');
+        var nowL = Date.now();
+        if (nowL - lastSentL > 30 * 60 * 1000) {
+          _ls.set(spamKeyL, String(nowL));
+          sendPushNotification('🆕 Novo lançamento disponível!', p.name + ' acabou de ser lançado! Acesse agora e confira.', 'home')
+            .then(result => {
+              if (result.success) showToast('📲 Notificação de lançamento enviada!');
+            });
+        }
+      }
+    }
   }
   if (moveUp) {
     const idx = platforms.findIndex(x => x.id == moveUp);
@@ -2467,9 +2500,10 @@ document.getElementById('addPlatformBtn').addEventListener('click', () => {
 async function sendPushNotification(title, body, tab) {
   // Salva no Firebase como notificação pendente
   // O Firebase aceita escrita sem bloqueio de CORS
-  const targetUrl = tab === 'hot'
-    ? 'https://acessoplatafomas.com.br/?tab=hot'
-    : 'https://acessoplatafomas.com.br/';
+  var targetUrl;
+  if (tab === 'hot') targetUrl = 'https://acessoplatafomas.com.br/?tab=hot';
+  else if (tab === 'launch') targetUrl = 'https://acessoplatafomas.com.br/?tab=home&highlight=launch';
+  else targetUrl = 'https://acessoplatafomas.com.br/';
   const imageUrl = document.getElementById('notifImage') ? document.getElementById('notifImage').value.trim() : '';
   const notifData = {
     title: title,
@@ -2554,6 +2588,39 @@ document.getElementById('sendNotifBtn').addEventListener('click', async () => {
     showToast('⚠️ Erro ao enviar notificação.');
   }
 });
+
+// Botão de notificação de teste
+document.getElementById('testNotifBtn').addEventListener('click', async () => {
+  const resultEl = document.getElementById('notifResult');
+  resultEl.textContent = '⏳ Enviando teste...';
+  const result = await sendPushNotification(
+    '🔔 Notificação ativa!',
+    'Você já pode receber sinais e atualizações em tempo real.',
+    'hot'
+  );
+  if (result.success) {
+    resultEl.innerHTML = '✅ Teste enviado! Verifique seu celular.';
+    showToast('🧪 Notificação de teste enviada!');
+  } else {
+    resultEl.textContent = '⚠️ Erro: ' + result.error;
+    showToast('⚠️ Erro ao enviar teste.');
+  }
+});
+
+// Redirecionamento ao abrir o app via notificação (?tab=hot ou ?tab=home)
+(function handleNotifRedirect() {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var tab = params.get('tab');
+    if (tab) {
+      // Aguardar o app inicializar antes de navegar
+      setTimeout(function() {
+        var tabBtn = document.querySelector('[data-tab="' + tab + '"]');
+        if (tabBtn) tabBtn.click();
+      }, 800);
+    }
+  } catch(e) {}
+})();
 
 // Buscar subscribers reais do OneSignal
 async function loadSubscriberCount() {
