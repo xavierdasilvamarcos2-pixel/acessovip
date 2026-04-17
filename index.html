@@ -1479,8 +1479,16 @@
             <div class="admin-sec-sub">Notifique todos os usuários do app</div>
           </div>
         </div>
-        <div class="admin-info-box">
-          &#128293; Ao clicar na notificação, o usuário será levado para a aba <strong style="color:#fff">Mais Quentes</strong> do app.
+        <div class="admin-info-box" style="background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.3);">
+          📲 Ao clicar na notificação, o usuário será levado para a aba <strong style="color:#34D399">Sinais ao Vivo</strong> do app.
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:12px 14px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);border-radius:12px;">
+          <span style="font-size:22px">📡</span>
+          <div style="flex:1">
+            <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:2px;">Assinantes com push ativo</div>
+            <div style="font-size:22px;font-weight:900;color:#A78BFA;" id="notifSubscriberCount">...</div>
+          </div>
+          <button onclick="loadSubscriberCount()" style="background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);border-radius:8px;padding:6px 12px;color:#A78BFA;font-size:12px;cursor:pointer;font-weight:700">🔄 Atualizar</button>
         </div>
         <div class="admin-form">
           <div class="admin-form-row">
@@ -1561,28 +1569,38 @@
           <div class="admin-sec-icon blue">&#128200;</div>
           <div>
             <div class="admin-sec-ttl">Estatísticas</div>
-            <div class="admin-sec-sub">Dados do seu app em tempo real</div>
+            <div class="admin-sec-sub">Dados globais do seu app em tempo real</div>
           </div>
         </div>
-        <div class="admin-stats-grid">
-          <div class="admin-stat" style="border-color:rgba(124,58,237,0.3)">
-            <div class="admin-stat-num" id="adminStatInstalls" style="color:#A78BFA">-</div>
-            <div class="admin-stat-label">&#128247; Instalações</div>
+        <!-- Cards principais -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+          <div style="background:linear-gradient(135deg,rgba(124,58,237,0.25),rgba(124,58,237,0.1));border:1px solid rgba(124,58,237,0.4);border-radius:14px;padding:16px 12px;text-align:center;">
+            <div style="font-size:28px;font-weight:900;color:#A78BFA;" id="adminStatInstalls">...</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;">📲 Total de Instalações</div>
           </div>
-          <div class="admin-stat" style="border-color:rgba(220,38,38,0.3)">
-            <div class="admin-stat-num" id="adminStatTokens" style="color:#F87171">-</div>
-            <div class="admin-stat-label">&#128226; Push Tokens</div>
+          <div style="background:linear-gradient(135deg,rgba(239,68,68,0.25),rgba(239,68,68,0.1));border:1px solid rgba(239,68,68,0.4);border-radius:14px;padding:16px 12px;text-align:center;">
+            <div style="font-size:28px;font-weight:900;color:#F87171;" id="adminStatTokens">...</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;">🔔 Assinantes Push</div>
           </div>
-          <div class="admin-stat" style="border-color:rgba(16,185,129,0.3)">
-            <div class="admin-stat-num" id="adminStatPlatforms" style="color:#34D399">-</div>
-            <div class="admin-stat-label">&#128279; Plataformas</div>
+          <div style="background:linear-gradient(135deg,rgba(16,185,129,0.25),rgba(16,185,129,0.1));border:1px solid rgba(16,185,129,0.4);border-radius:14px;padding:16px 12px;text-align:center;">
+            <div style="font-size:28px;font-weight:900;color:#34D399;" id="adminStatPlatforms">-</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;">🔗 Plataformas Ativas</div>
           </div>
-          <div class="admin-stat" style="border-color:rgba(245,158,11,0.3)">
-            <div class="admin-stat-num" id="adminStatHigh" style="color:#FCD34D">-</div>
-            <div class="admin-stat-label">&#128293; Em Alta</div>
+          <div style="background:linear-gradient(135deg,rgba(245,158,11,0.25),rgba(245,158,11,0.1));border:1px solid rgba(245,158,11,0.4);border-radius:14px;padding:16px 12px;text-align:center;">
+            <div style="font-size:28px;font-weight:900;color:#FCD34D;" id="adminStatHigh">-</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;">🔥 Em Alta / Sinais</div>
           </div>
         </div>
-        <button class="admin-btn-submit blue" id="refreshStatsBtn">&#128260; ATUALIZAR STATS</button>
+        <!-- Card notificações enviadas -->
+        <div style="background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(59,130,246,0.08));border:1px solid rgba(59,130,246,0.35);border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:28px">📨</span>
+          <div style="flex:1">
+            <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:2px;">Notificações Enviadas</div>
+            <div style="font-size:26px;font-weight:900;color:#60A5FA;" id="adminStatNotifsSent">...</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.3);text-align:center;margin-bottom:10px;">Instalações e assinantes são contados globalmente (todos os dispositivos)</div>
+        <button class="admin-btn-submit blue" id="refreshStatsBtn">🔄 ATUALIZAR DADOS</button>
       </div>
 
     </div>
@@ -2119,6 +2137,14 @@ window.addEventListener('appinstalled', () => {
   showToast('✅ App instalado com sucesso!', 3000);
   trackEvent('pwa_installed');
   gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' });
+  // Incrementar contador global no Firebase
+  fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_installs.json?auth=' + FIREBASE_API_KEY)
+    .then(r => r.json()).then(cur => {
+      var next = (parseInt(cur) || 0) + 1;
+      fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_installs.json?auth=' + FIREBASE_API_KEY, {
+        method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
+      });
+    }).catch(()=>{});
 });
 
 document.getElementById('installBanner').addEventListener('click', async () => {
@@ -2479,6 +2505,14 @@ async function sendPushNotification(title, body, tab) {
       });
       const data = await resp.json();
       if (data.id) {
+        // Incrementar contador global de notificações enviadas no Firebase
+        fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_notifs_sent.json?auth=' + FIREBASE_API_KEY)
+          .then(r => r.json()).then(cur => {
+            var next = (parseInt(cur) || 0) + 1;
+            fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_notifs_sent.json?auth=' + FIREBASE_API_KEY, {
+              method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
+            });
+          }).catch(()=>{});
         return { success: true, recipients: data.recipients };
       } else {
         return { success: false, error: JSON.stringify(data.errors || data) };
@@ -2521,14 +2555,67 @@ document.getElementById('sendNotifBtn').addEventListener('click', async () => {
   }
 });
 
-function loadAdminStats() {
-  document.getElementById('adminStatInstalls').textContent = installCount.toLocaleString();
-  document.getElementById('adminStatTokens').textContent = pushTokens.toLocaleString();
-  document.getElementById('adminStatPlatforms').textContent = platforms.length;
-  document.getElementById('adminStatHigh').textContent = platforms.filter(p => p.isHigh).length;
+// Buscar subscribers reais do OneSignal
+async function loadSubscriberCount() {
+  var el = document.getElementById('notifSubscriberCount');
+  var elStats = document.getElementById('adminStatTokens');
+  if (el) el.textContent = '...';
+  try {
+    var resp = await fetch('https://onesignal.com/api/v1/notifications?app_id=' + ONESIGNAL_APP_ID + '&limit=1', {
+      headers: { 'Authorization': 'Key ' + ONESIGNAL_API_KEY }
+    });
+    var data = await resp.json();
+    // total_count = total de notificações enviadas; usar para estimar
+    // Buscar diretamente os players
+    var resp2 = await fetch('https://onesignal.com/api/v1/players?app_id=' + ONESIGNAL_APP_ID + '&limit=1', {
+      headers: { 'Authorization': 'Key ' + ONESIGNAL_API_KEY }
+    });
+    var data2 = await resp2.json();
+    var count = data2.total_count || data2.total || 0;
+    if (count > 0) {
+      if (el) el.textContent = count.toLocaleString();
+      if (elStats) elStats.textContent = count.toLocaleString();
+      // Salvar no Firebase para referência
+      fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_push_subscribers.json?auth=' + FIREBASE_API_KEY, {
+        method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(count)
+      }).catch(()=>{});
+    } else {
+      // Fallback: usar valor salvo no Firebase
+      var fbResp = await fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_push_subscribers.json');
+      var fbVal = await fbResp.json();
+      var fbCount = parseInt(fbVal) || pushTokens;
+      if (el) el.textContent = fbCount.toLocaleString();
+      if (elStats) elStats.textContent = fbCount.toLocaleString();
+    }
+  } catch(e) {
+    if (el) el.textContent = pushTokens.toLocaleString();
+    if (elStats) elStats.textContent = pushTokens.toLocaleString();
+  }
 }
 
-document.getElementById('refreshStatsBtn').addEventListener('click', loadAdminStats);
+function loadAdminStats() {
+  // Plataformas e Em Alta: dados locais (sempre corretos)
+  document.getElementById('adminStatPlatforms').textContent = platforms.length;
+  document.getElementById('adminStatHigh').textContent = platforms.filter(p => p.isHigh).length;
+  // Installs: buscar do Firebase (contador global)
+  fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats.json')
+    .then(r => r.json()).then(stats => {
+      if (stats) {
+        var installs = parseInt(stats.total_installs) || installCount;
+        document.getElementById('adminStatInstalls').textContent = installs.toLocaleString();
+        var notifsSent = parseInt(stats.total_notifs_sent) || 0;
+        var elNotifs = document.getElementById('adminStatNotifsSent');
+        if (elNotifs) elNotifs.textContent = notifsSent.toLocaleString();
+      } else {
+        document.getElementById('adminStatInstalls').textContent = installCount.toLocaleString();
+      }
+    }).catch(() => {
+      document.getElementById('adminStatInstalls').textContent = installCount.toLocaleString();
+    });
+  // Subscribers push: buscar do OneSignal
+  loadSubscriberCount();
+}
+document.getElementById('refreshStatsBtn').addEventListener('click', loadAdminStats);;
 
 // ===== SERVICE WORKER =====
 // Nota: O OneSignal registra o OneSignalSDKWorker.js automaticamente via SDK
