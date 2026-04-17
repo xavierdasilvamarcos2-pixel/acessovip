@@ -120,8 +120,11 @@
     /* ===== HOME SCREEN ===== */
     .banner-img { width: calc(100% - 32px); margin: 12px 16px 0; border-radius: 20px; display: block; height: 200px; object-fit: cover; }
     .bonus-section { margin: 12px 16px 8px; text-align: center; }
-    .bonus-title { font-size: 20px; font-weight: 900; color: var(--text); }
-    .bonus-sub { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 4px; line-height: 1.4; }
+    .bonus-title { font-size: 18px; font-weight: 900; color: var(--text); }
+    .bonus-sub { font-size: 13px; font-weight: 700; color: #22C55E; margin-top: 4px; line-height: 1.4; }
+    /* Live counter */
+    .live-counter { margin: 0 16px 10px; background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 8px 14px; text-align: center; font-size: 13px; font-weight: 800; color: #EF4444; letter-spacing: 0.3px; animation: pulse-counter 2s ease-in-out infinite; }
+    @keyframes pulse-counter { 0%,100% { opacity:1; } 50% { opacity:0.75; } }
 
     /* Install Banner */
     .install-banner { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #7C3AED, #5B21B6); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(124,58,237,0.4); animation: pulse-install 2s ease-in-out infinite; }
@@ -150,11 +153,11 @@
     .ios-modal-close { width: 100%; padding: 14px; border-radius: var(--radius); border: none; font-size: 15px; font-weight: 900; cursor: pointer; background: rgba(255,255,255,0.1); color: #fff; margin-top: 10px; }
 
     /* VIP Group Button */
-    .vip-btn { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #25D366, #128C7E); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.3); border: none; width: calc(100% - 32px); animation: pulse-vip 2.4s ease-in-out infinite; }
-    @keyframes pulse-vip { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+    .vip-btn { margin: 0 16px 14px; border-radius: var(--radius); background: linear-gradient(135deg, #25D366, #128C7E); padding: 16px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 6px 24px rgba(37,211,102,0.45); border: none; width: calc(100% - 32px); animation: pulse-vip 2s ease-in-out infinite; }
+    @keyframes pulse-vip { 0%,100% { transform: scale(1); box-shadow: 0 6px 24px rgba(37,211,102,0.45); } 50% { transform: scale(1.025); box-shadow: 0 8px 32px rgba(37,211,102,0.65); } }
     .vip-btn-text { flex: 1; text-align: left; }
     .vip-btn-title { font-size: 15px; font-weight: 900; color: #fff; letter-spacing: 0.5px; }
-    .vip-btn-sub { font-size: 11px; color: rgba(255,255,255,0.9); margin-top: 2px; font-weight: 600; }
+    .vip-btn-sub { font-size: 12px; color: rgba(255,255,255,0.95); margin-top: 3px; font-weight: 700; }
 
     /* Search */
     .search-wrap { margin: 0 16px 12px; background: var(--surface); border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
@@ -542,17 +545,20 @@
     <div class="screen active" id="screen-home">
       <img class="banner-img" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/XAisIaYtQacAGvnq.png" alt="ACESSO VIP Banner" />
       <div class="bonus-section">
-        <div class="bonus-title">🎁 Bônus de Registro ATIVO!</div>
-        <div class="bonus-sub">🔔 Ative a Notificação para receber o lançamento em primeira mão!</div>
+        <div class="bonus-title">🎁 BÔNUS DE REGISTRO ATIVO AGORA</div>
+        <div class="bonus-sub">💰 Aproveite enquanto está liberado</div>
       </div>
       <!-- Notification permission banner -->
       <div class="notif-banner" id="notifBanner">
         <span style="font-size:24px">🔔</span>
         <div class="notif-banner-text">
-          <div class="notif-banner-title">Ativar Notificações</div>
-          <div class="notif-banner-sub">Receba lançamentos em primeira mão!</div>
+          <div class="notif-banner-title">🔔 Ativar notificações</div>
+          <div class="notif-banner-sub">Receba novidades e atualizações em primeira mão!</div>
         </div>
-        <button class="notif-banner-close" id="notifBannerClose">✕</button>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <button onclick="requestNotificationPermission()" style="background:#25D366;color:#fff;border:none;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:900;cursor:pointer">Agora</button>
+          <button id="notifBannerClose" style="background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer">Depois</button>
+        </div>
       </div>
       <!-- Install PWA Banner -->
       <div class="install-banner" id="installBanner">
@@ -595,14 +601,16 @@
           <button class="ios-modal-close" id="iosModalClose">Entendi!</button>
         </div>
       </div>
+      <!-- Live counter -->
+      <div class="live-counter" id="liveCounter">🔥 <span id="liveCounterNum">247</span> pessoas entrando agora</div>
       <!-- VIP Group Button -->
       <button class="vip-btn" id="vipBtn">
-        <span style="font-size:24px">🏆</span>
+        <span style="font-size:26px">📊</span>
         <div class="vip-btn-text">
-          <div class="vip-btn-title">🎉 GRUPO DE SORTEIO VIP!</div>
-          <div class="vip-btn-sub">👆 Entre agora e participe do sorteio!</div>
+          <div class="vip-btn-title">📊 GRUPO DE ESTRATÉGIAS E ATUALIZAÇÕES DO APP</div>
+          <div class="vip-btn-sub">👉 Receba estratégias e novidades em primeira mão!</div>
         </div>
-        <span style="font-size:20px">👉</span>
+        <span style="font-size:20px">➡️</span>
       </button>
       <!-- Search -->
       <div class="search-wrap">
@@ -2623,6 +2631,19 @@ document.getElementById('notifHeaderBtn').addEventListener('click', async () => 
 });
 
 /// ===== INIT =====
+// ===== CONTADOR DINAMICO DE PESSOAS =====
+(function startLiveCounter() {
+  var base = Math.floor(Math.random() * 80) + 200; // 200-280
+  var el = document.getElementById('liveCounterNum');
+  if (!el) return;
+  el.textContent = base;
+  setInterval(function() {
+    var delta = Math.floor(Math.random() * 7) - 2; // -2 a +4
+    base = Math.max(180, Math.min(350, base + delta));
+    if (el) el.textContent = base;
+  }, 4000);
+})();
+
 function init() {
   // PASSO 1: Usar sempre PLATFORMS_DATA embutido no HTML (61 plataformas garantidas)
   // Nunca depende de Firebase ou localStorage para renderizar
