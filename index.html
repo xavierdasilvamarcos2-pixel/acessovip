@@ -543,16 +543,20 @@
       <img class="banner-img" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/XAisIaYtQacAGvnq.png" alt="ACESSO VIP Banner" />
       <div class="bonus-section">
         <div class="bonus-title">🎁 Bônus de Registro ATIVO!</div>
-        <div class="bonus-sub">🔔 Ative a Notificação para receber o lançamento em primeira mão!</div>
       </div>
       <!-- Notification permission banner -->
-      <div class="notif-banner" id="notifBanner">
-        <span style="font-size:24px">🔔</span>
-        <div class="notif-banner-text">
-          <div class="notif-banner-title">Ativar Notificações</div>
-          <div class="notif-banner-sub">Receba lançamentos em primeira mão!</div>
+      <div class="notif-banner" id="notifBanner" style="flex-direction:column;align-items:flex-start;gap:10px">
+        <div style="display:flex;align-items:center;gap:10px;width:100%">
+          <span style="font-size:24px">🔔</span>
+          <div class="notif-banner-text" style="flex:1">
+            <div class="notif-banner-title">Ativar notificações</div>
+            <div class="notif-banner-sub">Receba novidades e atualizações em primeira mão!<br>Você pode desativar quando quiser.</div>
+          </div>
         </div>
-        <button class="notif-banner-close" id="notifBannerClose">✕</button>
+        <div style="display:flex;gap:10px;width:100%">
+          <button onclick="requestNotificationPermission()" style="flex:1;background:#25D366;color:#fff;border:none;border-radius:10px;padding:10px;font-size:13px;font-weight:900;cursor:pointer">Agora</button>
+          <button id="notifBannerClose" style="flex:1;background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:10px;padding:10px;font-size:13px;font-weight:700;cursor:pointer">Depois</button>
+        </div>
       </div>
       <!-- Install PWA Banner -->
       <div class="install-banner" id="installBanner">
