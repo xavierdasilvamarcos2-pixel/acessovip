@@ -543,8 +543,17 @@
       <img class="banner-img" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/XAisIaYtQacAGvnq.png" alt="ACESSO VIP Banner" />
       <div class="bonus-section">
         <div class="bonus-title">🎁 Bônus de Registro ATIVO!</div>
+        <div class="bonus-sub">🔔 Ative a Notificação para receber o lançamento em primeira mão!</div>
       </div>
-
+      <!-- Notification permission banner -->
+      <div class="notif-banner" id="notifBanner">
+        <span style="font-size:24px">🔔</span>
+        <div class="notif-banner-text">
+          <div class="notif-banner-title">Ativar Notificações</div>
+          <div class="notif-banner-sub">Receba lançamentos em primeira mão!</div>
+        </div>
+        <button class="notif-banner-close" id="notifBannerClose">✕</button>
+      </div>
       <!-- Install PWA Banner -->
       <div class="install-banner" id="installBanner">
         <span class="install-banner-icon">📲</span>
@@ -590,8 +599,8 @@
       <button class="vip-btn" id="vipBtn">
         <span style="font-size:24px">🏆</span>
         <div class="vip-btn-text">
-          <div class="vip-btn-title">💬 Grupo VIP no WhatsApp</div>
-          <div class="vip-btn-sub">👆 Entre agora e receba sinais exclusivos!</div>
+          <div class="vip-btn-title">🎉 GRUPO DE SORTEIO VIP!</div>
+          <div class="vip-btn-sub">👆 Entre agora e participe do sorteio!</div>
         </div>
         <span style="font-size:20px">👉</span>
       </button>
@@ -2244,21 +2253,15 @@ document.getElementById('shareCopy').addEventListener('click', () => {
 });
 
 // ===== HEADER SECRET TAP (3x = admin) =====
-function handleAdminTap(e) {
-  e.stopPropagation();
+document.getElementById('headerLogo').addEventListener('click', () => {
   headerTapCount++;
   if (headerTapTimer) clearTimeout(headerTapTimer);
   if (headerTapCount >= 3) {
     headerTapCount = 0;
     document.getElementById('adminScreen').style.display = 'block';
   } else {
-    headerTapTimer = setTimeout(() => { headerTapCount = 0; }, 2000);
+    headerTapTimer = setTimeout(() => { headerTapCount = 0; }, 1500);
   }
-}
-document.getElementById('headerLogo').addEventListener('click', handleAdminTap);
-document.getElementById('headerLogo').addEventListener('touchend', function(e) {
-  e.preventDefault();
-  handleAdminTap(e);
 });
 document.getElementById('adminBack').addEventListener('click', () => {
   document.getElementById('adminScreen').style.display = 'none';
@@ -2626,12 +2629,11 @@ function init() {
   platforms = [...PLATFORMS_DATA];
   
   // Tenta pegar dados mais recentes do localStorage (se tiver)
-  // Só usa localStorage se tiver pelo menos tantas plataformas quanto o PLATFORMS_DATA
   try {
     const saved = _ls.get('av_platforms');
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed) && parsed.length >= PLATFORMS_DATA.length) {
+      if (Array.isArray(parsed) && parsed.length > 0) {
         platforms = parsed;
       }
     }
@@ -2666,8 +2668,7 @@ function init() {
       .then(function(r) { return r.json(); })
       .then(function(fbTs) {
         var firebaseTs = parseInt(fbTs || '0');
-        // Buscar dados do Firebase se forem mais recentes OU se Firebase tiver mais plataformas
-        var localCount = platforms.length;
+        // Só buscar dados do Firebase se forem mais recentes que os dados locais
         if (firebaseTs >= localTs) {
           return fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/platforms.json', fetchOptions)
             .then(function(r) {
@@ -2691,24 +2692,9 @@ function init() {
               }
             });
         } else {
-          // Dados locais são mais recentes - mas verificar se Firebase tem mais plataformas
+          // Dados locais são mais recentes, não sobrescrever
           if (timeoutId) clearTimeout(timeoutId);
-          fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/platforms.json', fetchOptions)
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
-              var newList = null;
-              if (data && Array.isArray(data) && data.length > localCount) {
-                newList = data;
-              }
-              if (newList && newList.length > 0) {
-                platforms = newList;
-                try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
-                try { _ls.set('av_platforms_ts', String(Date.now())); } catch(e) {}
-                renderHome();
-                renderHot();
-              }
-            })
-            .catch(function() {});
+          console.log('Dados locais mais recentes que Firebase, mantendo locais.');
         }
       })
       .catch(function(e) {

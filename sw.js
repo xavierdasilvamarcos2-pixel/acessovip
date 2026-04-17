@@ -1,4 +1,4 @@
-const CACHE_NAME = 'acesso-vip-v13';
+const CACHE_NAME = 'acesso-vip-v11';
 const STATIC_ASSETS = ['/', '/index.html', '/manifest.json'];
 self.addEventListener('install', (event) => {
   event.waitUntil(
