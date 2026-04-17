@@ -2243,16 +2243,19 @@ document.getElementById('shareCopy').addEventListener('click', () => {
 });
 
 // ===== HEADER SECRET TAP (3x = admin) =====
-document.getElementById('headerLogo').addEventListener('click', () => {
+function handleAdminTap() {
   headerTapCount++;
   if (headerTapTimer) clearTimeout(headerTapTimer);
   if (headerTapCount >= 3) {
     headerTapCount = 0;
     document.getElementById('adminScreen').style.display = 'block';
   } else {
-    headerTapTimer = setTimeout(() => { headerTapCount = 0; }, 1500);
+    headerTapTimer = setTimeout(() => { headerTapCount = 0; }, 2500);
   }
-});
+}
+var _headerLogoEl = document.getElementById('headerLogo');
+_headerLogoEl.addEventListener('click', handleAdminTap);
+_headerLogoEl.addEventListener('touchend', function(e) { e.preventDefault(); handleAdminTap(); });
 document.getElementById('adminBack').addEventListener('click', () => {
   document.getElementById('adminScreen').style.display = 'none';
 });
