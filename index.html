@@ -1515,6 +1515,10 @@
           <button class="admin-btn-submit red" id="sendNotifBtn">&#128228; ENVIAR PARA TODOS</button>
           <button style="width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;" id="testNotifBtn">🧪 ENVIAR NOTIFICAÇÃO DE TESTE</button>
           <div id="notifResult" style="margin-top:12px;font-size:13px;color:rgba(255,255,255,0.4);text-align:center;"></div>
+          <div id="notifDeliveryBox" style="display:none;margin-top:10px;padding:14px 16px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.35);border-radius:12px;text-align:center;">
+            <div style="font-size:15px;font-weight:900;color:#34D399;margin-bottom:6px;">✅ Notificação enviada com sucesso!</div>
+            <div id="notifDeliveryCount" style="font-size:22px;font-weight:900;color:#fff;">📱 Enviada para <span id="notifDeliveryNum" style="color:#34D399;">0</span> dispositivos</div>
+          </div>
         </div>
       </div>
 
@@ -2422,7 +2426,7 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
         var now = Date.now();
         if (now - lastSent > 30 * 60 * 1000) { // 30 minutos
           _ls.set(spamKey, String(now));
-          sendPushNotification('🚨 Sinais ativos agora!', 'Nova plataforma com movimentação detectada. Acesse e aproveite!', 'hot')
+          sendPushNotification('🚨 SINAIS ATIVOS AGORA', '🎰 Nova oportunidade detectada\nEntre agora e confira', 'hot')
             .then(result => {
               if (result.success) showToast('📲 Notificação enviada para todos!');
               else showToast('⚠️ Erro ao enviar notificação');
@@ -2446,7 +2450,7 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
         var nowL = Date.now();
         if (nowL - lastSentL > 30 * 60 * 1000) {
           _ls.set(spamKeyL, String(nowL));
-          sendPushNotification('🆕 Novo lançamento disponível!', p.name + ' acabou de ser lançado! Acesse agora e confira.', 'home')
+          sendPushNotification('🆕 NOVO LANÇAMENTO DISPONÍVEL', '🚀 Veja agora a novidade liberada no app', 'home')
             .then(result => {
               if (result.success) showToast('📲 Notificação de lançamento enviada!');
             });
@@ -2530,6 +2534,9 @@ async function sendPushNotification(title, body, tab) {
       contents: { en: body, pt: body },
       url: targetUrl,
       chrome_web_icon: 'https://acessoplatafomas.com.br/icons/icon-192.png',
+      chrome_web_badge: 'https://acessoplatafomas.com.br/icons/icon-192.png',
+      firefox_icon: 'https://acessoplatafomas.com.br/icons/icon-192.png',
+      small_icon: 'https://acessoplatafomas.com.br/icons/icon-192.png',
     };
     try {
       const resp = await fetch('https://api.onesignal.com/notifications', {
@@ -2564,26 +2571,31 @@ document.getElementById('sendNotifBtn').addEventListener('click', async () => {
   const body = document.getElementById('notifBody').value;
   const tab = document.getElementById('notifUrl').value || 'hot';
   if (!body) { showToast('Digite uma mensagem!'); return; }
-  // Limpar campo de imagem após envio
   const imgField = document.getElementById('notifImage');
-  const imgValue = imgField ? imgField.value.trim() : '';
   const resultEl = document.getElementById('notifResult');
-  resultEl.textContent = '⏳ Enviando para todos...';
+  const deliveryBox = document.getElementById('notifDeliveryBox');
+  const deliveryNum = document.getElementById('notifDeliveryNum');
+  if (deliveryBox) deliveryBox.style.display = 'none';
+  resultEl.style.color = 'rgba(255,255,255,0.5)';
+  resultEl.textContent = '⏳ Enviando para todos os dispositivos...';
   const result = await sendPushNotification(title, body, tab);
   if (result.success) {
     if (result.queued) {
-      resultEl.innerHTML = '✅ Notificação agendada! Será enviada em instantes.';
-      showToast('✅ Notificação agendada!');
+      resultEl.textContent = '';
+      if (deliveryBox) { deliveryBox.style.display = 'block'; if (deliveryNum) deliveryNum.textContent = '?'; }
+      showToast('✅ Notificação enviada!');
     } else {
-      const count = result.recipients > 0 ? result.recipients : 'todos';
-      resultEl.innerHTML = '✅ Enviado para <strong>' + count + '</strong> dispositivos!';
-      showToast('✅ Notificação enviada para todos!');
+      const count = result.recipients || 0;
+      const countFmt = count > 0 ? count.toLocaleString('pt-BR') : '?';
+      resultEl.textContent = '';
+      if (deliveryBox) { deliveryBox.style.display = 'block'; if (deliveryNum) deliveryNum.textContent = countFmt; }
+      showToast('✅ Notificação enviada para ' + countFmt + ' dispositivos!');
     }
     trackEvent('notification_sent', { title });
-    // Limpar campos após envio
     document.getElementById('notifBody').value = '';
     if (imgField) imgField.value = '';
   } else {
+    resultEl.style.color = '#F87171';
     resultEl.textContent = '⚠️ Erro: ' + result.error;
     showToast('⚠️ Erro ao enviar notificação.');
   }
@@ -2592,16 +2604,24 @@ document.getElementById('sendNotifBtn').addEventListener('click', async () => {
 // Botão de notificação de teste
 document.getElementById('testNotifBtn').addEventListener('click', async () => {
   const resultEl = document.getElementById('notifResult');
+  const deliveryBox = document.getElementById('notifDeliveryBox');
+  const deliveryNum = document.getElementById('notifDeliveryNum');
+  if (deliveryBox) deliveryBox.style.display = 'none';
+  resultEl.style.color = 'rgba(255,255,255,0.5)';
   resultEl.textContent = '⏳ Enviando teste...';
   const result = await sendPushNotification(
-    '🔔 Notificação ativa!',
+    '🔔 NOTIFICAÇÃO ATIVA!',
     'Você já pode receber sinais e atualizações em tempo real.',
     'hot'
   );
   if (result.success) {
-    resultEl.innerHTML = '✅ Teste enviado! Verifique seu celular.';
+    const count = result.recipients || 0;
+    const countFmt = count > 0 ? count.toLocaleString('pt-BR') : '?';
+    resultEl.textContent = '';
+    if (deliveryBox) { deliveryBox.style.display = 'block'; if (deliveryNum) deliveryNum.textContent = countFmt; }
     showToast('🧪 Notificação de teste enviada!');
   } else {
+    resultEl.style.color = '#F87171';
     resultEl.textContent = '⚠️ Erro: ' + result.error;
     showToast('⚠️ Erro ao enviar teste.');
   }
