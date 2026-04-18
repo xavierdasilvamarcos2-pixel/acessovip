@@ -1880,7 +1880,8 @@ function clearSinalPlatSelect() {
 const ADMIN_PASSWORD = 'admin2025vip';
 const APP_URL = window.location.origin;
 const ONESIGNAL_APP_ID = '1ee5af72-b277-4de1-9d6f-ef75b5b49e70';
-const ONESIGNAL_API_KEY = 'os_v2_app_d3s264vso5g6dhlp5523lne6oajwul4wowlu6imcghvvqwemway5cjzzd3frls2atb4coiicpkgenbpzhy3uca7c4fioev3wrpxupri';
+const ONESIGNAL_API_KEY = 'os_v2_app_d3s264vso5g6dhlp5523lne6oaxgs5ha5voupuubwfktwkbftmxs7fdmcezsafmhzvzb5wmctkukevlmrwxbwznghtddntcjhsqvydq';
+const WORKER_URL = 'https://acessovip-notif.xavierdasilvamarcos2.workers.dev';
 const GA_ID = 'G-XXXXXXXXXX'; // Substituir pelo ID real do Google Analytics
 
 // ===== PLATFORMS DATA (embedded from DB) =====
@@ -2539,10 +2540,11 @@ async function sendPushNotification(title, body, tab) {
       small_icon: 'https://acessoplatafomas.com.br/icons/icon-192.png',
     };
     try {
-      const resp = await fetch('https://api.onesignal.com/notifications', {
+      // Usa o Cloudflare Worker como proxy seguro (solução definitiva - sem CORS, chave protegida)
+      const resp = await fetch(WORKER_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Key ' + ONESIGNAL_API_KEY },
-        body: JSON.stringify(payload)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: title, message: body, url: targetUrl, imageUrl: imageUrl })
       });
       const data = await resp.json();
       if (data.id) {
