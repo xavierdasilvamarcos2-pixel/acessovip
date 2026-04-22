@@ -1,7 +1,8 @@
 // Service Worker - Acesso VIP PWA
-// Versão: v12 - Web Push nativo (sem OneSignal)
-const CACHE_NAME = 'acesso-vip-v12';
-const STATIC_ASSETS = ['/', '/index.html', '/manifest.json'];
+// Versão: v13 - Sem cache do index.html (sempre atualizado)
+const CACHE_NAME = 'acesso-vip-v13';
+// Não incluir index.html no cache para garantir que o usuário sempre receba a versão mais recente
+const STATIC_ASSETS = ['/manifest.json'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -19,74 +20,76 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// Estratégia: Network First para HTML, Cache First para outros assets
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
+  const url = new URL(event.request.url);
+  
+  // Para o index.html e raiz: sempre buscar da rede (nunca do cache)
+  if (url.pathname === '/' || url.pathname === '/index.html') {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-cache' })
+        .catch(() => caches.match('/index.html'))
+    );
+    return;
+  }
+  
+  // Para outros assets: cache first
   event.respondWith(
-    fetch(event.request, { cache: 'no-cache' }).then((response) => {
-      if (response && response.status === 200) {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-      }
-      return response;
-    }).catch(() => caches.match(event.request))
+    caches.match(event.request).then((cached) => {
+      if (cached) return cached;
+      return fetch(event.request).then((response) => {
+        if (response.ok && event.request.method === 'GET') {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
+        return response;
+      });
+    })
   );
 });
 
-// ============================================================
-// Web Push - Receber e exibir notificações
-// ============================================================
+// Web Push - receber notificações
 self.addEventListener('push', (event) => {
-  let data = {};
+  let data = { title: 'ACESSO VIP', body: 'Nova mensagem', url: '/' };
   try {
-    data = event.data ? event.data.json() : {};
-  } catch (e) {
-    data = { title: 'Acesso VIP', body: event.data ? event.data.text() : 'Nova notificação' };
-  }
+    if (event.data) {
+      const text = event.data.text();
+      try { data = JSON.parse(text); } catch { data.body = text; }
+    }
+  } catch (e) {}
 
-  const title = data.title || '🔥 ACESSO VIP';
   const options = {
-    body: data.body || data.message || 'Confira as plataformas em alta agora!',
-    icon: data.icon || '/icons/icon-192.png',
-    badge: data.badge || '/icons/icon-72.png',
-    tag: data.tag || 'acesso-vip',
-    renotify: true,
+    body: data.body || 'Nova mensagem',
+    icon: '/icon-192.png',
+    badge: '/icon-192.png',
+    vibrate: [200, 100, 200],
+    data: { url: data.url || '/?tab=hot' },
     requireInteraction: false,
-    data: {
-      url: data.url || 'https://acessoplatafomas.com.br/?tab=hot',
-    },
+    tag: 'acesso-vip-notif',
+    renotify: true,
   };
 
-  if (data.image) {
-    options.image = data.image;
-  }
-
-  event.waitUntil(self.registration.showNotification(title, options));
+  event.waitUntil(
+    self.registration.showNotification(data.title || 'ACESSO VIP', options)
+  );
 });
 
-// ============================================================
-// Clique na notificação - abrir a URL correta
-// ============================================================
+// Clique na notificação
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-
-  const url = (event.notification.data && event.notification.data.url)
+  const targetUrl = (event.notification.data && event.notification.data.url)
     ? event.notification.data.url
-    : 'https://acessoplatafomas.com.br/?tab=hot';
+    : '/?tab=hot';
 
   event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
-      // Se já existe uma janela aberta, focar nela e navegar
-      for (const client of windowClients) {
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
         if (client.url.includes('acessoplatafomas.com.br') && 'focus' in client) {
-          client.focus();
-          client.navigate(url);
-          return;
+          client.navigate(targetUrl);
+          return client.focus();
         }
       }
-      // Caso contrário, abrir nova janela
-      if (clients.openWindow) {
-        return clients.openWindow(url);
-      }
+      return clients.openWindow(targetUrl);
     })
   );
 });
