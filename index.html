@@ -2203,8 +2203,8 @@ function renderHot() {
         <div class="sinal-card-people">👥 ${hotPeople} pessoas acessando agora</div>
         <button class="sinal-card-entrar" onclick="openSinalDetail('plat_${p.id}')">🚀 ENTRAR AGORA</button>
         <div class="sinal-card-avaliar">
-          <button class="sinal-card-avaliar-btn" onclick="avaliarSinal(this,\'ok\')">👍 Funcionou</button>
-          <button class="sinal-card-avaliar-btn" onclick="avaliarSinal(this,\'nao\')">👎 Não funcionou</button>
+          <button class="sinal-card-avaliar-btn" data-avalia="ok">👍 Funcionou</button>
+          <button class="sinal-card-avaliar-btn" data-avalia="nao">👎 Não funcionou</button>
         </div>
       </div>
     </div>`;
