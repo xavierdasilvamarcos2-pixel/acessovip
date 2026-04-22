@@ -669,7 +669,7 @@
   <div class="main" id="mainContent">
     <!-- HOME SCREEN -->
     <div class="screen active" id="screen-home">
-      <img class="banner-img" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/XAisIaYtQacAGvnq.png" alt="ACESSO VIP Banner" />
+      <img class="banner-img" src="https://acessoplatafomas.com.br/icons/icon-192.png" alt="ACESSO VIP Banner" />
       <!-- SINAL ATIVO BANNER -->
       <div class="sinal-ativo-banner" id="sinalAtivoBanner" onclick="document.querySelector('[data-tab=hot]').click()" style="cursor:pointer;justify-content:center;text-align:center;">
         <div class="ao-vivo-badge">
@@ -2765,8 +2765,8 @@ async function sendPushNotification(title, body, tab) {
     url: targetUrl,
     timestamp: Date.now(),
     sent: false,
-    icon: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/egqHBtIKPOqWIeRU.png',
-    badge: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/egqHBtIKPOqWIeRU.png'
+    icon: 'https://acessoplatafomas.com.br/icons/notif-icon-mono.png',
+    badge: 'https://acessoplatafomas.com.br/icons/icon-192.png'
   };
   if (imageUrl) notifData.image = imageUrl;
   // Salva no Firebase
@@ -2788,8 +2788,8 @@ async function sendPushNotification(title, body, tab) {
           message: body,
           url: targetUrl,
           imageUrl: imageUrl,
-          icon: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/egqHBtIKPOqWIeRU.png',
-          badge: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/egqHBtIKPOqWIeRU.png'
+          icon: 'https://acessoplatafomas.com.br/icons/notif-icon-mono.png',
+          badge: 'https://acessoplatafomas.com.br/icons/icon-192.png'
         })
       });
       const data = await resp.json();
