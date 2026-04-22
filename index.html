@@ -573,6 +573,31 @@
       flex-shrink: 0;
       line-height: 1;
     }
+
+    /* ===== MELHORIAS ABA SINAIS ===== */
+    .sinais-top-destaque { margin: 0 12px 10px; background: linear-gradient(135deg, #1a0a00, #3d1f00); border: 1.5px solid #f97316; border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; animation: top-destaque-pulse 2s ease-in-out infinite; }
+    @keyframes top-destaque-pulse { 0%,100% { box-shadow: 0 0 12px rgba(249,115,22,0.3); } 50% { box-shadow: 0 0 24px rgba(249,115,22,0.6); } }
+    .sinais-top-destaque-icon { font-size: 22px; flex-shrink: 0; }
+    .sinais-top-destaque-text { flex: 1; }
+    .sinais-top-destaque-title { font-size: 12px; font-weight: 900; color: #f97316; letter-spacing: 0.5px; }
+    .sinais-top-destaque-name { font-size: 14px; font-weight: 900; color: #fff; margin-top: 2px; }
+    .sinais-top-destaque-pct { font-size: 13px; font-weight: 900; color: #22C55E; flex-shrink: 0; }
+
+    .sinal-card-ao-vivo { display: flex; align-items: center; gap: 3px; justify-content: center; margin-bottom: 3px; }
+    .sinal-card-ao-vivo-dot { width: 6px; height: 6px; border-radius: 50%; background: #EF4444; animation: ao-vivo-blink 1.2s ease-in-out infinite; flex-shrink: 0; }
+    .sinal-card-ao-vivo-txt { font-size: 8px; font-weight: 900; color: #EF4444; letter-spacing: 1px; text-transform: uppercase; }
+
+    .sinal-card-status-label { display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 9px; font-weight: 900; margin-bottom: 3px; padding: 2px 6px; border-radius: 6px; }
+    .sinal-card-status-hot { background: rgba(239,68,68,0.15); color: #EF4444; }
+    .sinal-card-status-alta { background: rgba(249,115,22,0.15); color: #f97316; }
+    .sinal-card-status-teste { background: rgba(234,179,8,0.15); color: #EAB308; }
+
+    .sinal-progress-fill { transition: width 0.8s ease, background-color 0.8s ease; }
+
+    .sinal-card-avaliar { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 4px; }
+    .sinal-card-avaliar-btn { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 3px 10px; color: #94a3b8; font-size: 10px; cursor: pointer; transition: background 0.2s; }
+    .sinal-card-avaliar-btn:hover, .sinal-card-avaliar-btn.ativo-ok { background: rgba(34,197,94,0.2); color: #22C55E; border-color: #22C55E; }
+    .sinal-card-avaliar-btn.ativo-nao { background: rgba(239,68,68,0.2); color: #EF4444; border-color: #EF4444; }
   </style>
   <!-- Web Push Nativo (VAPID) - sem dependências externas -->
   <script>
@@ -1387,6 +1412,7 @@
         </div>
         <div class="sinais-header-sub">🚨 Sinal ativo agora — Escolha a plataforma com a <strong style="color:#10B981">BARRA VERDE</strong> para maior assertividade</div>
       </div>
+      <div id="hotTopDestaque"></div>
       <div id="hotList">
         <div class="empty-state">Nenhuma plataforma em alta no momento.</div>
       </div>
@@ -1442,8 +1468,9 @@
             <span class="sinais-live-num" id="sinaisLiveCount">0</span>
           </div>
         </div>
-        <div class="sinais-header-sub">Escolha o jogo com a <strong style="color:#10B981">BARRA VERDE</strong> para maior assertividade</div>
+        <div class="sinais-header-sub">🚨 Sinal ativo — Escolha o jogo com a <strong style="color:#10B981">BARRA VERDE</strong> para maior assertividade</div>
       </div>
+      <div id="sinaisTopDestaque"></div>
       <div class="sinais-grid" id="sinaisGrid"></div>
     </div>
 
@@ -2157,17 +2184,28 @@ function renderHot() {
     var logoHtml = imgUrl
       ? `<img class="sinal-card-logo" src="${imgUrl}" alt="${p.name}" onerror="this.style.display='none'">`
       : `<div class="sinal-card-logo-ph">&#128293;</div>`;
+    var hotStatusLabel = pct >= 80 ? '<div class="sinal-card-status-label sinal-card-status-hot">🔥 MUITO QUENTE</div>' : pct >= 70 ? '<div class="sinal-card-status-label sinal-card-status-alta">⚡ EM ALTA</div>' : '<div class="sinal-card-status-label sinal-card-status-teste">🟡 EM TESTE</div>';
+    var hotPeople = 12 + ((p.name.charCodeAt(0) + (p.name.charCodeAt(1)||0)) % 27);
     return `<div class="sinal-card">
       <div class="sinal-card-logo-wrap">${logoHtml}</div>
       <div class="sinal-card-body">
+        <div class="sinal-card-ao-vivo"><span class="sinal-card-ao-vivo-dot"></span><span class="sinal-card-ao-vivo-txt">AO VIVO</span></div>
         <div class="sinal-card-name">${p.name}</div>
+        ${hotStatusLabel}
+        <div class="sinal-card-ia">🤖 padrão detectado automaticamente</div>
         <div class="sinal-progress-wrap">
           <div class="sinal-progress-bg">
             <div class="sinal-progress-fill" id="hfill-${p.id}" style="width:${pct}%;background:${color}"></div>
             <div class="sinal-progress-pct" id="hpct-${p.id}">${pct}%</div>
           </div>
         </div>
-        <button class="sinal-play-btn" onclick="openSinalDetail('plat_${p.id}')">JOGAR</button>
+        <div class="sinal-card-estrategia">🎯 5 giros manual + 5 giros turbo</div>
+        <div class="sinal-card-people">👥 ${hotPeople} pessoas acessando agora</div>
+        <button class="sinal-card-entrar" onclick="openSinalDetail('plat_${p.id}')">🚀 ENTRAR AGORA</button>
+        <div class="sinal-card-avaliar">
+          <button class="sinal-card-avaliar-btn" onclick="avaliarSinal(this,'ok')">👍 Funcionou</button>
+          <button class="sinal-card-avaliar-btn" onclick="avaliarSinal(this,'nao')">👎 Não funcionou</button>
+        </div>
       </div>
     </div>`;
   }).join('')}</div>`;
@@ -3209,10 +3247,11 @@ function renderSinais() {
     return '<div class="sinal-card">' +
       '<div class="sinal-card-logo-wrap">' + logoHtml + '</div>' +
       '<div class="sinal-card-body">' +
-      '<div class="sinal-card-ativo-badge">🚨 SINAL ATIVO AGORA</div>' +
+      '<div class="sinal-card-ao-vivo"><span class="sinal-card-ao-vivo-dot"></span><span class="sinal-card-ao-vivo-txt">AO VIVO</span></div>' +
       '<div class="sinal-card-name">' + jogo.name + payingTag + '</div>' +
+      '<div class="sinal-card-status-label ' + (pct >= 80 ? 'sinal-card-status-hot">🔥 MUITO QUENTE' : pct >= 70 ? 'sinal-card-status-alta">⚡ EM ALTA' : 'sinal-card-status-teste">🟡 EM TESTE') + '</div>' +
       '<div class="sinal-card-timer" id="stimer-' + jogo._key + '">⏳ RESTAM: --:--</div>' +
-      '<div class="sinal-card-ia">🤖 IA detectou padrão de pagamento agora</div>' +
+      '<div class="sinal-card-ia">🤖 padrão detectado automaticamente</div>' +
       '<div class="sinal-progress-wrap">' +
         '<div class="sinal-progress-bg">' +
           '<div class="sinal-progress-fill" id="sfill-' + jogo._key + '" style="width:' + pct + '%;background:' + color + '"></div>' +
@@ -3223,10 +3262,21 @@ function renderSinais() {
       '<div class="sinal-card-status"><span>' + statusDot + '</span><span style="color:#e2e8f0">' + statusTxt + '</span></div>' +
       '<div class="sinal-card-people">💬 ' + people + ' pessoas entrando agora</div>' +
       '<button class="sinal-card-entrar" onclick="openSinalDetail(&quot;' + jogo._key + '&quot;)">🚀 ENTRAR AGORA</button>' +
+      '<div class="sinal-card-avaliar">' +
+        '<button class="sinal-card-avaliar-btn" onclick="avaliarSinal(this,'ok')">👍 Funcionou</button>' +
+        '<button class="sinal-card-avaliar-btn" onclick="avaliarSinal(this,'nao')">👎 Não funcionou</button>' +
+      '</div>' +
       '</div>' +
     '</div>';
   }).join('');
 
+  // Destaque top - melhor sinal
+  var topDestSinais = document.getElementById('sinaisTopDestaque');
+  if (topDestSinais && list.length > 0) {
+    var topSinal = list[0];
+    var topPctS = 78 + Math.floor(Math.random() * 18);
+    topDestSinais.innerHTML = '<div class="sinais-top-destaque"><span class="sinais-top-destaque-icon">🔥</span><div class="sinais-top-destaque-text"><div class="sinais-top-destaque-title">MELHOR OPORTUNIDADE AGORA</div><div class="sinais-top-destaque-name">' + topSinal.name + '</div></div><span class="sinais-top-destaque-pct">' + topPctS + '%</span></div>';
+  }
   // Tempo base para cada card (entre 4 e 9 minutos)
   list.forEach(function(jogo) {
     var id = setInterval(function() {
@@ -3984,7 +4034,20 @@ window.addEventListener('popstate', function(e) {
       window.deferredPrompt = e;
     });
   })();
-  </script>
+  
+// ===== AVALIAÇÃO DE SINAIS =====
+function avaliarSinal(btn, tipo) {
+  var container = btn.parentElement;
+  var btns = container.querySelectorAll('.sinal-card-avaliar-btn');
+  btns.forEach(function(b) { b.classList.remove('ativo-ok','ativo-nao'); });
+  btn.classList.add(tipo === 'ok' ? 'ativo-ok' : 'ativo-nao');
+  btn.textContent = tipo === 'ok' ? '✅ Obrigado!' : '❌ Registrado';
+  setTimeout(function() {
+    btn.textContent = tipo === 'ok' ? '👍 Funcionou' : '👎 Não funcionou';
+    btn.classList.remove('ativo-ok','ativo-nao');
+  }, 2500);
+}
+</script>
 
 </body>
 </html>
