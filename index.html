@@ -150,6 +150,16 @@
     .ios-step-text strong { color: #a78bfa; }
     .ios-modal-close { width: 100%; padding: 14px; border-radius: var(--radius); border: none; font-size: 15px; font-weight: 900; cursor: pointer; background: rgba(255,255,255,0.1); color: #fff; margin-top: 10px; }
 
+
+    /* ===== SINAL ATIVO BANNER ===== */
+    .sinal-ativo-banner { margin: 0 16px 12px; border-radius: 14px; background: linear-gradient(135deg, #0a2a0a, #0d4a1a); border: 1.5px solid #10B981; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 0 20px rgba(16,185,129,0.25); animation: sinal-pulse 2s ease-in-out infinite; }
+    @keyframes sinal-pulse { 0%,100% { box-shadow: 0 0 20px rgba(16,185,129,0.25); } 50% { box-shadow: 0 0 32px rgba(16,185,129,0.5); } }
+    .sinal-ativo-left { flex: 1; }
+    .sinal-ativo-title { font-size: 16px; font-weight: 900; color: #10B981; letter-spacing: 0.5px; }
+    .sinal-ativo-sub { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 3px; font-weight: 600; }
+    .sinal-ativo-timer { text-align: center; flex-shrink: 0; background: rgba(16,185,129,0.12); border-radius: 10px; padding: 8px 12px; border: 1px solid rgba(16,185,129,0.3); }
+    .sinal-ativo-timer-label { font-size: 9px; color: rgba(255,255,255,0.5); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
+    .sinal-ativo-timer-val { font-size: 22px; font-weight: 900; color: #FBBF24; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
     /* VIP Group Button */
     .vip-btn { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #25D366, #128C7E); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.3); border: none; width: calc(100% - 32px); animation: pulse-vip 2.4s ease-in-out infinite; }
     @keyframes pulse-vip { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
@@ -179,7 +189,7 @@
     @keyframes pulse-launch { 0%,100% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-50%) scale(1.07); } }
     .badge-high { position: absolute; top: -4px; right: -4px; background: var(--red); color: #fff; font-size: 9px; font-weight: 900; padding: 2px 5px; border-radius: 6px; letter-spacing: 1px; z-index: 2; animation: blink-high 1s ease-in-out infinite; }
     @keyframes blink-high { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-    .platform-access-btn { margin-top: 8px; background: var(--green); padding: 5px 12px; border-radius: 6px; border: none; cursor: pointer; }
+    .platform-access-btn { margin-top: 8px; background: linear-gradient(135deg, var(--green), #059669); padding: 5px 12px; border-radius: 6px; border: none; cursor: pointer; box-shadow: 0 2px 8px rgba(16,185,129,0.35); }
     .platform-access-text { color: #fff; font-size: 10px; font-weight: 900; letter-spacing: 0.5px; }
     .platform-name { font-size: 11px; color: var(--muted); margin-top: 4px; text-align: center; max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
@@ -403,7 +413,7 @@
     .sinal-detail-name { text-align: left; font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 2px; }
     .sinal-detail-plat { text-align: left; font-size: 13px; color: #aaa; margin-bottom: 6px; }
     /* Painel verde do sinal */
-    .sinal-panel { background: linear-gradient(135deg, #0a3d1f, #0d5c2a); border: 2px solid #10B981; border-radius: 18px; padding: 0 16px; margin-bottom: 18px; }
+    .sinal-panel { background: linear-gradient(135deg, #0a3d1f, #0d5c2a); border: 2px solid #10B981; border-radius: 18px; padding: 0 16px; margin-bottom: 18px; box-shadow: 0 0 24px rgba(16,185,129,0.2); }
     .sinal-panel-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(16,185,129,0.2); }
     .sinal-panel-row:last-child { border-bottom: none; }
     .sinal-panel-label { font-size: 12px; color: rgba(255,255,255,0.65); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; display: flex; align-items: center; gap: 6px; }
@@ -562,9 +572,16 @@
     <!-- HOME SCREEN -->
     <div class="screen active" id="screen-home">
       <img class="banner-img" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/XAisIaYtQacAGvnq.png" alt="ACESSO VIP Banner" />
-      <div class="bonus-section">
-        <div class="bonus-title">🎁 Bônus de Registro ATIVO!</div>
-        <div class="bonus-sub">🔔 Ative a Notificação para receber o lançamento em primeira mão!</div>
+      <!-- SINAL ATIVO BANNER -->
+      <div class="sinal-ativo-banner" id="sinalAtivoBanner">
+        <div class="sinal-ativo-left">
+          <div class="sinal-ativo-title">🚨 SINAL ATIVO AGORA</div>
+          <div class="sinal-ativo-sub">🤖 IA analisando oportunidades em tempo real</div>
+        </div>
+        <div class="sinal-ativo-timer">
+          <div class="sinal-ativo-timer-label">⏳ RESTANTE</div>
+          <div class="sinal-ativo-timer-val" id="sinalAtivoClock">--:--</div>
+        </div>
       </div>
       <!-- Notification permission banner -->
       <div class="notif-banner" id="notifBanner" style="display:none">
@@ -620,8 +637,8 @@
       <button class="vip-btn" id="vipBtn">
         <span style="font-size:24px">🏆</span>
         <div class="vip-btn-text">
-          <div class="vip-btn-title">🎉 GRUPO VIP!</div>
-          <div class="vip-btn-sub">👆 Estratégias, resultados e lançamentos oficiais!</div>
+          <div class="vip-btn-title">📊 Grupo VIP no WhatsApp</div>
+          <div class="vip-btn-sub">🏆 Estratégias exclusivas e sinais em primeira mão!</div>
         </div>
         <span style="font-size:20px">👉</span>
       </button>
@@ -1301,7 +1318,7 @@
             <span class="sinais-live-num" id="hotLiveCount">0</span>
           </div>
         </div>
-        <div class="sinais-header-sub">Escolha a plataforma com a <strong style="color:#10B981">BARRA VERDE</strong> para maior assertividade</div>
+        <div class="sinais-header-sub">🚨 Sinal ativo agora — Escolha a plataforma com a <strong style="color:#10B981">BARRA VERDE</strong> para maior assertividade</div>
       </div>
       <div id="hotList">
         <div class="empty-state">Nenhuma plataforma em alta no momento.</div>
@@ -1658,6 +1675,7 @@
         <div class="sinal-detail-plat" id="sinalDetailPlat" style="text-align:left;margin-bottom:6px"></div>
         <!-- Selo EXTREMAMENTE QUENTE -->
         <div class="sinal-hot-badge">&#128680; EXTREMAMENTE QUENTE</div>
+        <div style="font-size:10px;color:rgba(16,185,129,0.8);font-weight:700;letter-spacing:1px;margin-top:4px;">🤖 IA analisando em tempo real</div>
         <!-- Jogos pagando + RTP (até 3) -->
         <div id="sinalDetailHotGame" style="display:none">
           <div style="font-size:9px;color:#10B981;font-weight:800;letter-spacing:0.5px;margin-bottom:5px">&#127918; JOGOS PAGANDO</div>
@@ -1736,7 +1754,6 @@
       <div class="sinal-urgency-line" style="animation-delay:0.5s">&#9888;&#65039; &#250;ltimos minutos de alta distribui&#231;&#227;o</div>
     </div>
 
-    <div class="sinal-info-text">Funciona apenas nesse link</div>
 
     <!-- Card da plataforma vinculada -->
     <div class="sinal-plat-card" id="sinalPlatCard" style="display:none;">
@@ -1747,10 +1764,10 @@
       <div class="sinal-plat-card-name-row">
         <span id="sinalPlatCardName" class="sinal-plat-card-name"></span>
       </div>
-      <button class="sinal-access-btn visible" id="sinalAccessBtn" style="padding:18px;font-size:17px;background:linear-gradient(135deg,#16a34a,#15803d);border:none;box-shadow:0 4px 20px rgba(22,163,74,0.5)">&#128640; ACESSAR PLATAFORMA</button>
+      <button class="sinal-access-btn visible" id="sinalAccessBtn" style="padding:18px;font-size:17px;background:linear-gradient(135deg,#f97316,#ea580c);border:none;box-shadow:0 4px 20px rgba(249,115,22,0.6);letter-spacing:1px">🚀 ENTRAR AGORA</button>
     </div>
     <!-- Botão fallback sem plataforma vinculada -->
-    <button class="sinal-access-btn" id="sinalAccessBtnFallback" style="display:none;padding:18px;font-size:17px;background:linear-gradient(135deg,#16a34a,#15803d);border:none;box-shadow:0 4px 20px rgba(22,163,74,0.5)">&#128640; ACESSAR PLATAFORMA</button>
+    <button class="sinal-access-btn" id="sinalAccessBtnFallback" style="display:none;padding:18px;font-size:17px;background:linear-gradient(135deg,#f97316,#ea580c);border:none;box-shadow:0 4px 20px rgba(249,115,22,0.6);letter-spacing:1px">🚀 ENTRAR AGORA</button>
   </div>
 </div>
 <!-- SORTEIO MODAL -->
@@ -3273,7 +3290,7 @@ function openSinalDetail(key) {
     }
     if (nameEl) nameEl.textContent = linkedPlat.name;
     if (accessBtn) {
-      accessBtn.innerHTML = '&#9654; ACESSAR ' + linkedPlat.name.toUpperCase();
+      accessBtn.innerHTML = '🚀 ENTRAR AGORA — ' + linkedPlat.name.toUpperCase();
       accessBtn.onclick = function() { window.open(effectiveUrl, '_blank'); };
     }
   } else if (effectiveUrl) {
@@ -3282,7 +3299,7 @@ function openSinalDetail(key) {
     if (fallbackBtn) {
       fallbackBtn.style.display = 'flex';
       fallbackBtn.classList.add('visible');
-      fallbackBtn.innerHTML = '&#128279; ACESSAR PLATAFORMA';
+      fallbackBtn.innerHTML = '🚀 ENTRAR AGORA';
       fallbackBtn.onclick = function() { window.open(effectiveUrl, '_blank'); };
     }
   } else {
@@ -3310,6 +3327,82 @@ document.getElementById('sinalDetailBack').addEventListener('click', function() 
 
 var NORMAIS = ['5', '8', '10', '15', '20', '25', '30'];
 var TURBOS = ['5', '8', '10', '15', '20', '25', '30'];
+
+// ===== CONTADOR DO BANNER SINAL ATIVO (HOME) =====
+(function() {
+  var SINAL_DURATION = 7 * 60; // 7 minutos por padrão
+  var _sinalAtivoClock = null;
+  var _sinalAtivoRemaining = 0;
+  
+  function startSinalAtivoClock() {
+    var el = document.getElementById('sinalAtivoClock');
+    if (!el) return;
+    
+    // Verificar se há um sinal ativo no Firebase
+    fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/sinais.json')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var sinais = [];
+        if (data && typeof data === 'object') {
+          Object.values(data).forEach(function(s) {
+            if (s && s.active) sinais.push(s);
+          });
+        }
+        if (sinais.length > 0) {
+          // Pegar o sinal mais recente
+          var newest = sinais.sort(function(a,b) { return (b.createdAt||0) - (a.createdAt||0); })[0];
+          var now = Date.now();
+          var created = newest.createdAt || now;
+          var elapsed = Math.floor((now - created) / 1000);
+          var duration = newest.duration || SINAL_DURATION;
+          var remaining = Math.max(0, duration - elapsed);
+          _sinalAtivoRemaining = remaining;
+          runClock(el);
+        } else {
+          // Sem sinal ativo — iniciar contador de 5 min para próximo sinal
+          _sinalAtivoRemaining = 5 * 60;
+          runClock(el);
+        }
+      })
+      .catch(function() {
+        // Fallback: contador de 3 min
+        _sinalAtivoRemaining = 3 * 60;
+        runClock(el);
+      });
+  }
+  
+  function runClock(el) {
+    if (_sinalAtivoClock) clearInterval(_sinalAtivoClock);
+    function tick() {
+      if (!el) return;
+      var m = Math.floor(_sinalAtivoRemaining / 60);
+      var s = _sinalAtivoRemaining % 60;
+      el.textContent = m.toString().padStart(2,'0') + ':' + s.toString().padStart(2,'0');
+      if (_sinalAtivoRemaining <= 60) {
+        el.style.color = '#ef4444';
+      } else {
+        el.style.color = '#FBBF24';
+      }
+      if (_sinalAtivoRemaining <= 0) {
+        clearInterval(_sinalAtivoClock);
+        // Reiniciar com novo ciclo de 7 min
+        _sinalAtivoRemaining = SINAL_DURATION;
+        runClock(el);
+        return;
+      }
+      _sinalAtivoRemaining--;
+    }
+    tick();
+    _sinalAtivoClock = setInterval(tick, 1000);
+  }
+  
+  // Iniciar quando o DOM estiver pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startSinalAtivoClock);
+  } else {
+    setTimeout(startSinalAtivoClock, 500);
+  }
+})();
 
 // ===== CONTADOR REGRESSIVO DO SINAL =====
 var sinalCountdownTimer = null;
