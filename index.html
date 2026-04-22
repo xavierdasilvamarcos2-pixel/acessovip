@@ -161,63 +161,73 @@
     .sinal-ativo-timer-label { font-size: 9px; color: rgba(255,255,255,0.5); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
     .sinal-ativo-timer-val { font-size: 22px; font-weight: 900; color: #FBBF24; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
 
-    /* ===== BOTÃO INSTALAR FLUTUANTE ===== */
-    .install-float-btn {
+    /* ===== BOLHA FLUTUANTE INSTALAR ===== */
+    .install-bubble {
       position: fixed;
-      bottom: -120px; /* começa fora da tela */
+      bottom: -110px;
       left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 32px);
-      max-width: 480px;
+      transform: translateX(-50%) scale(1);
       z-index: 9999;
-      background: linear-gradient(135deg, #7C3AED, #5B21B6);
+      background: linear-gradient(135deg, #7C3AED, #4F46E5);
       border: none;
-      border-radius: 18px;
-      padding: 16px 20px;
+      border-radius: 50px;
+      padding: 14px 24px 14px 18px;
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 10px;
       cursor: pointer;
-      box-shadow: 0 8px 32px rgba(124,58,237,0.55);
-      transition: bottom 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
-      text-decoration: none;
+      box-shadow: 0 8px 30px rgba(124,58,237,0.6), 0 0 0 0 rgba(124,58,237,0.4);
+      transition: bottom 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
+      white-space: nowrap;
+      min-width: 200px;
+      max-width: 320px;
     }
-    .install-float-btn.visible {
-      bottom: 24px;
+    .install-bubble.visible {
+      bottom: 88px;
     }
-    .install-float-btn.hiding {
-      bottom: -120px;
-      transition: bottom 0.3s ease-in;
+    .install-bubble.hiding {
+      bottom: -110px;
+      transition: bottom 0.35s ease-in;
     }
-    .install-float-btn-icon { font-size: 32px; flex-shrink: 0; }
-    .install-float-btn-text { flex: 1; text-align: left; }
-    .install-float-btn-title { font-size: 16px; font-weight: 900; color: #fff; letter-spacing: 0.5px; }
-    .install-float-btn-sub { font-size: 12px; color: rgba(255,255,255,0.85); margin-top: 2px; font-weight: 600; }
-    .install-float-btn-arrow { font-size: 22px; flex-shrink: 0; }
-    .install-float-btn-close {
+    @keyframes bubble-pulse {
+      0%, 100% {
+        transform: translateX(-50%) scale(1);
+        box-shadow: 0 8px 30px rgba(124,58,237,0.6), 0 0 0 0 rgba(124,58,237,0.35);
+      }
+      50% {
+        transform: translateX(-50%) scale(1.05);
+        box-shadow: 0 12px 40px rgba(124,58,237,0.75), 0 0 0 10px rgba(124,58,237,0);
+      }
+    }
+    .install-bubble.visible {
+      animation: bubble-pulse 2.4s ease-in-out infinite;
+    }
+    .install-bubble.hiding {
+      animation: none;
+    }
+    .install-bubble-icon { font-size: 26px; flex-shrink: 0; }
+    .install-bubble-text { flex: 1; text-align: left; }
+    .install-bubble-title { font-size: 15px; font-weight: 900; color: #fff; letter-spacing: 0.3px; line-height: 1.2; }
+    .install-bubble-sub { font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 1px; font-weight: 600; }
+    .install-bubble-close {
       position: absolute;
-      top: -10px;
-      right: -10px;
-      width: 28px;
-      height: 28px;
+      top: -9px;
+      right: -9px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      background: rgba(0,0,0,0.6);
-      border: 1.5px solid rgba(255,255,255,0.3);
+      background: rgba(0,0,0,0.65);
+      border: 1.5px solid rgba(255,255,255,0.25);
       color: #fff;
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 900;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       z-index: 10000;
+      line-height: 1;
     }
-    @keyframes float-pulse {
-      0%, 100% { transform: translateX(-50%) scale(1); box-shadow: 0 8px 32px rgba(124,58,237,0.55); }
-      50% { transform: translateX(-50%) scale(1.025); box-shadow: 0 12px 40px rgba(124,58,237,0.75); }
-    }
-    .install-float-btn.visible { animation: float-pulse 2.2s ease-in-out infinite; }
-    .install-float-btn.hiding { animation: none; }
     /* VIP Group Button */
     .vip-btn { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #25D366, #128C7E); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.3); border: none; width: calc(100% - 32px); animation: pulse-vip 2.4s ease-in-out infinite; }
     @keyframes pulse-vip { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
@@ -1439,15 +1449,14 @@
     </div>
 
   </div>
-  <!-- BOTÃO INSTALAR FLUTUANTE -->
-  <button class="install-float-btn" id="installFloatBtn" style="display:none">
-    <span class="install-float-btn-close" id="installFloatClose">✕</span>
-    <span class="install-float-btn-icon">📲</span>
-    <div class="install-float-btn-text">
-      <div class="install-float-btn-title">📲 INSTALAR APP</div>
-      <div class="install-float-btn-sub">Adicionar à tela inicial</div>
+  <!-- BOLHA FLUTUANTE INSTALAR -->
+  <button class="install-bubble" id="installBubble" style="display:none">
+    <span class="install-bubble-close" id="installBubbleClose">✕</span>
+    <span class="install-bubble-icon">📲</span>
+    <div class="install-bubble-text">
+      <div class="install-bubble-title">Instalar App</div>
+      <div class="install-bubble-sub">Adicionar à tela inicial</div>
     </div>
-    <span class="install-float-btn-arrow">⬇️</span>
   </button>
 
   <!-- TAB BAR -->
@@ -2318,72 +2327,68 @@ if (isInstalled || window.matchMedia('(display-mode: standalone)').matches || wi
   _ls.set('av_installed', '1');
 }
 
-// ===== BOTÃO INSTALAR FLUTUANTE =====
+// ===== BOLHA FLUTUANTE INSTALAR =====
 (function() {
-  var floatBtn = document.getElementById('installFloatBtn');
-  var floatClose = document.getElementById('installFloatClose');
-  if (!floatBtn) return;
+  var bubble = document.getElementById('installBubble');
+  var bubbleClose = document.getElementById('installBubbleClose');
+  if (!bubble) return;
 
-  // Controle de sessão: mostrar apenas 1x por sessão
-  var shownThisSession = sessionStorage.getItem('av_install_float_shown') === '1';
+  var shownThisSession = sessionStorage.getItem('av_bubble_shown') === '1';
   var alreadyInstalled = isInstalled
     || window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true;
 
-  function showFloatBtn() {
+  function showBubble() {
     if (alreadyInstalled || shownThisSession) return;
-    floatBtn.style.display = 'flex';
-    // Forçar reflow para garantir a animação de entrada
-    floatBtn.offsetHeight;
-    floatBtn.classList.add('visible');
-    sessionStorage.setItem('av_install_float_shown', '1');
+    bubble.style.display = 'flex';
+    bubble.offsetHeight; // forçar reflow
+    bubble.classList.add('visible');
+    sessionStorage.setItem('av_bubble_shown', '1');
     shownThisSession = true;
   }
 
-  function hideFloatBtn() {
-    floatBtn.classList.add('hiding');
-    floatBtn.classList.remove('visible');
+  function hideBubble() {
+    bubble.classList.add('hiding');
+    bubble.classList.remove('visible');
     setTimeout(function() {
-      floatBtn.style.display = 'none';
-      floatBtn.classList.remove('hiding');
-    }, 350);
+      bubble.style.display = 'none';
+      bubble.classList.remove('hiding');
+    }, 380);
   }
 
-  // Mostrar após 1.5 segundos se não instalado e não mostrado nessa sessão
+  // Aparecer após 3.5 segundos
   if (!alreadyInstalled && !shownThisSession) {
-    setTimeout(showFloatBtn, 1500);
+    setTimeout(showBubble, 3500);
   }
 
-  // Atualizar quando o beforeinstallprompt disparar
+  // Também mostrar quando o beforeinstallprompt disparar (garante Android)
   window.addEventListener('beforeinstallprompt', function() {
     if (!alreadyInstalled && !shownThisSession) {
-      setTimeout(showFloatBtn, 1500);
+      setTimeout(showBubble, 3500);
     }
   });
 
   // Fechar ao clicar no X
-  floatClose.addEventListener('click', function(e) {
+  bubbleClose.addEventListener('click', function(e) {
     e.stopPropagation();
-    hideFloatBtn();
+    hideBubble();
   });
 
-  // Clicar no botão: disparar instalação
-  floatBtn.addEventListener('click', async function(e) {
-    if (e.target === floatClose) return;
+  // Clicar na bolha: instalar
+  bubble.addEventListener('click', async function(e) {
+    if (e.target === bubbleClose) return;
     if (deferredPrompt) {
       deferredPrompt.prompt();
       var result = await deferredPrompt.userChoice;
       deferredPrompt = null;
       if (result.outcome === 'accepted') {
-        trackEvent('pwa_install_float_accepted');
+        trackEvent('pwa_bubble_install_accepted');
       }
-      hideFloatBtn();
+      hideBubble();
     } else if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-      // iOS: abrir modal de instrução
       document.getElementById('iosInstallModal').classList.add('open');
-      hideFloatBtn();
+      hideBubble();
     } else {
-      // Outros: redirecionar para Chrome
       var appUrl = 'https://acessoplatafomas.com.br/';
       var intentUrl = 'intent://' + appUrl.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;end';
       var a = document.createElement('a');
@@ -2391,15 +2396,15 @@ if (isInstalled || window.matchMedia('(display-mode: standalone)').matches || wi
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      trackEvent('pwa_install_float_chrome');
-      hideFloatBtn();
+      trackEvent('pwa_bubble_chrome');
+      hideBubble();
     }
   });
 
-  // Esconder se o app for instalado
+  // Esconder se instalado
   window.addEventListener('appinstalled', function() {
     alreadyInstalled = true;
-    hideFloatBtn();
+    hideBubble();
   });
 })();
 
