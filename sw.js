@@ -59,7 +59,7 @@ self.addEventListener('push', (event) => {
   const options = {
     body: data.body || data.message || 'Confira as plataformas em alta agora!',
     icon: data.icon || '/icons/icon-192.png',
-    badge: data.badge || '/icons/icon-192.png',
+    badge: data.badge || '/icons/notif-icon-mono.png',
     tag: data.tag || 'acesso-vip',
     renotify: true,
     requireInteraction: false,
