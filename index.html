@@ -2332,8 +2332,12 @@ function renderHot() {
 
 // ===== SHARE SCREEN =====
 function renderShare() {
-  document.getElementById('statInstalls').textContent = installCount.toLocaleString();
-  document.getElementById('statTokens').textContent = pushTokens.toLocaleString();
+  // Elementos de estatísticas removidos na nova aba de indicação
+  // Manter compatibilidade sem causar erros
+  var elInstalls = document.getElementById('statInstalls');
+  var elTokens = document.getElementById('statTokens');
+  if (elInstalls) elInstalls.textContent = installCount.toLocaleString();
+  if (elTokens) elTokens.textContent = pushTokens.toLocaleString();
 }
 
 // ===== TAB NAVIGATION =====
