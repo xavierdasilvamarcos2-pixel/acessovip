@@ -2818,6 +2818,8 @@ async function sendPushNotification(title, body, tab) {
 // ============================================================
 // Upload de imagem para notificação (GitHub Pages - v2)
 // ============================================================
+// Upload de imagem para notificação (via GitHub Pages)
+// ============================================================
 function clearNotifImage() {
   document.getElementById('notifImage').value = '';
   document.getElementById('notifImageFile').value = '';
@@ -2825,94 +2827,58 @@ function clearNotifImage() {
   document.getElementById('notifImagePreviewImg').src = '';
   document.getElementById('notifImageUploadBtn').innerHTML = '&#128247; Selecionar imagem da galeria';
   document.getElementById('notifImageUploadBtn').style.borderColor = 'rgba(124,58,237,0.5)';
+  document.getElementById('notifImageUploadBtn').style.color = '#A78BFA';
+  document.getElementById('notifImageUploadStatus').textContent = '';
 }
 
-document.getElementById('notifImageFile').addEventListener('change', async function() {
+async function getUploadToken() {
+  // Busca o token de upload do Firebase (não fica exposto no código)
+  const resp = await fetch(FIREBASE_DB + '/config/gh_upload_token.json');
+  if (!resp.ok) throw new Error('Token não encontrado');
+  const token = await resp.json();
+  return token;
+}
+
+document.getElementById('notifImageFile').addEventListener('change', function() {
   const file = this.files[0];
   if (!file) return;
-  
-  // Validar tipo e tamanho (max 5MB)
-  const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-  if (!validTypes.includes(file.type)) {
-    showToast('❌ Use imagens JPG, PNG ou WebP');
-    return;
-  }
-  if (file.size > 5 * 1024 * 1024) {
-    showToast('❌ Imagem muito grande (máx 5MB)');
-    return;
-  }
-  
-  // Mostrar preview local imediatamente
+  const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+  if (!validTypes.includes(file.type)) { showToast('\u274c Use imagens JPG, PNG, WebP ou GIF'); return; }
+  if (file.size > 3 * 1024 * 1024) { showToast('\u274c Imagem muito grande (m\u00e1x 3MB)'); return; }
   const reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = async function(e) {
     document.getElementById('notifImagePreviewImg').src = e.target.result;
     document.getElementById('notifImagePreview').style.display = 'block';
-    document.getElementById('notifImageUploadStatus').textContent = '⏳ Fazendo upload...';
+    document.getElementById('notifImageUploadStatus').textContent = '\u23f3 Fazendo upload...';
     document.getElementById('notifImageUploadBtn').innerHTML = '&#128247; Trocar imagem';
+    try {
+      const token = await getUploadToken();
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace('jpeg','jpg');
+      const fileName = 'notif-images/' + Date.now() + '.' + ext;
+      const base64Data = e.target.result.split(',')[1];
+      const ghResp = await fetch('https://api.github.com/repos/xavierdasilvamarcos2-pixel/acessovip/contents/' + fileName, {
+        method: 'PUT',
+        headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'upload: imagem notif ' + Date.now(), content: base64Data })
+      });
+      if (ghResp.ok) {
+        const publicUrl = 'https://acessoplatafomas.com.br/' + fileName;
+        document.getElementById('notifImage').value = publicUrl;
+        document.getElementById('notifImageUploadStatus').textContent = '\u2705 Upload conclu\u00eddo!';
+        document.getElementById('notifImageUploadBtn').style.borderColor = 'rgba(16,185,129,0.6)';
+        document.getElementById('notifImageUploadBtn').style.color = '#34D399';
+      } else {
+        throw new Error('Upload falhou: ' + ghResp.status);
+      }
+    } catch(err) {
+      console.error('Upload error:', err);
+      document.getElementById('notifImageUploadStatus').textContent = '\u26a0\ufe0f Erro no upload. Tente novamente.';
+      document.getElementById('notifImageUploadBtn').style.borderColor = 'rgba(239,68,68,0.5)';
+      showToast('\u26a0\ufe0f Erro no upload da imagem');
+    }
   };
   reader.readAsDataURL(file);
-  
-  // Fazer upload para o Firebase Storage via REST API
-  try {
-    const fileName = 'notif_images/' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const uploadUrl = 'https://firebasestorage.googleapis.com/v0/b/acessovip-fb4c3.appspot.com/o/' + encodeURIComponent(fileName) + '?uploadType=media';
-    
-    const uploadResp = await fetch(uploadUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': file.type,
-        'Authorization': 'Bearer ' + FIREBASE_API_KEY
-      },
-      body: file
-    });
-    
-    if (uploadResp.ok) {
-      const uploadData = await uploadResp.json();
-      // Gerar URL pública de download
-      const downloadUrl = 'https://firebasestorage.googleapis.com/v0/b/acessovip-fb4c3.appspot.com/o/' + encodeURIComponent(fileName) + '?alt=media';
-      document.getElementById('notifImage').value = downloadUrl;
-      document.getElementById('notifImageUploadStatus').textContent = '✅ Upload concluído!';
-      document.getElementById('notifImageUploadBtn').style.borderColor = 'rgba(16,185,129,0.6)';
-    } else {
-      // Fallback: usar a imagem em base64 via imgbb ou outra API pública
-      // Como alternativa, usar o ImgBB API gratuito
-      await uploadViaImgBB(file);
-    }
-  } catch(e) {
-    // Fallback: tentar via ImgBB
-    try {
-      await uploadViaImgBB(file);
-    } catch(e2) {
-      document.getElementById('notifImageUploadStatus').textContent = '⚠️ Use a URL manual abaixo';
-      // Mostrar campo URL como fallback
-      document.getElementById('notifImage').value = '';
-      showToast('⚠️ Upload falhou. Cole a URL da imagem manualmente.');
-    }
-  }
 });
-
-async function uploadViaImgBB(file) {
-  // ImgBB API gratuita para upload de imagens
-  const formData = new FormData();
-  formData.append('image', file);
-  
-  const resp = await fetch('https://api.imgbb.com/1/upload?key=2e4f5c8a9b1d3e6f7a0c2d4e5f8a1b3c', {
-    method: 'POST',
-    body: formData
-  });
-  
-  if (resp.ok) {
-    const data = await resp.json();
-    if (data.success && data.data && data.data.url) {
-      document.getElementById('notifImage').value = data.data.url;
-      document.getElementById('notifImageUploadStatus').textContent = '✅ Upload concluído!';
-      document.getElementById('notifImageUploadBtn').style.borderColor = 'rgba(16,185,129,0.6)';
-      return;
-    }
-  }
-  throw new Error('ImgBB upload failed');
-}
-
 document.getElementById('sendNotifBtn').addEventListener('click', async () => {
   const title = document.getElementById('notifTitle').value || '🔥 ACESSO VIP';
   const body = document.getElementById('notifBody').value;
