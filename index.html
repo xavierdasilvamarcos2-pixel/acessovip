@@ -3263,8 +3263,8 @@ function renderSinais() {
       '<div class="sinal-card-people">💬 ' + people + ' pessoas entrando agora</div>' +
       '<button class="sinal-card-entrar" onclick="openSinalDetail(&quot;' + jogo._key + '&quot;)">🚀 ENTRAR AGORA</button>' +
       '<div class="sinal-card-avaliar">' +
-        '<button class="sinal-card-avaliar-btn" onclick="avaliarSinal(this,\'ok\')">👍 Funcionou</button>' +
-        '<button class="sinal-card-avaliar-btn" onclick="avaliarSinal(this,\'nao\')">👎 Não funcionou</button>' +
+        '<button class="sinal-card-avaliar-btn" data-avalia="ok">👍 Funcionou</button>' +
+        '<button class="sinal-card-avaliar-btn" data-avalia="nao">👎 Não funcionou</button>' +
       '</div>' +
       '</div>' +
     '</div>';
@@ -4047,6 +4047,13 @@ function avaliarSinal(btn, tipo) {
     btn.classList.remove('ativo-ok','ativo-nao');
   }, 2500);
 }
+// Event delegation para botões de avaliação (evita problemas de aspas no onclick)
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-avalia]');
+  if (!btn) return;
+  var tipo = btn.getAttribute('data-avalia');
+  avaliarSinal(btn, tipo);
+});
 </script>
 
 </body>
