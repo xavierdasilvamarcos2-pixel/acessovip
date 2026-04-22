@@ -278,6 +278,12 @@
     .admin-nav-btn[data-admin-tab="sinais"].active { background:linear-gradient(135deg,#F59E0B,#D97706); box-shadow:0 4px 15px rgba(245,158,11,0.5); }
     .admin-nav-btn[data-admin-tab="rtp"].active { background:linear-gradient(135deg,#10B981,#059669); box-shadow:0 4px 15px rgba(16,185,129,0.5); }
     .admin-nav-btn[data-admin-tab="stats"].active { background:linear-gradient(135deg,#3B82F6,#2563EB); box-shadow:0 4px 15px rgba(59,130,246,0.5); }
+    .admin-nav-btn[data-admin-tab="config"].active { background:linear-gradient(135deg,#25D366,#128C7E); box-shadow:0 4px 15px rgba(37,211,102,0.5); }
+    .admin-wpp-input { width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 14px;color:#fff;font-size:14px;outline:none;box-sizing:border-box;margin-bottom:10px; }
+    .admin-wpp-input:focus { border-color:#25D366; }
+    .admin-wpp-status { font-size:12px;padding:8px 12px;border-radius:8px;margin-bottom:10px;display:none; }
+    .admin-wpp-status.ok { background:rgba(37,211,102,0.15);color:#25D366;border:1px solid rgba(37,211,102,0.3);display:block; }
+    .admin-wpp-status.err { background:rgba(239,68,68,0.15);color:#F87171;border:1px solid rgba(239,68,68,0.3);display:block; }
 
     .admin-content { padding:16px; overflow-y:auto; height:calc(100vh - 160px); }
     .admin-section { display:none; }
@@ -1533,6 +1539,9 @@
       <button class="admin-nav-btn" data-admin-tab="stats">
         <span class="admin-nav-btn-icon">&#128200;</span>Stats
       </button>
+      <button class="admin-nav-btn" data-admin-tab="config">
+        <span class="admin-nav-btn-icon">&#128242;</span>WhatsApp
+      </button>
     </div>
     <!-- Content -->
     <div class="admin-content">
@@ -2258,6 +2267,19 @@ document.getElementById('searchClear').addEventListener('click', () => {
   renderHome();
 });
 
+// ===== VIP GROUP LINK (dinâmico via Firebase) =====
+var VIP_WPP_LINK = 'https://chat.whatsapp.com/FuIMaqEeIz1Jcc2Wevvk63'; // fallback padrão
+function loadVipWppLink() {
+  fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/config/wpp_group_link.json')
+    .then(function(r) { return r.json(); })
+    .then(function(val) {
+      if (val && typeof val === 'string' && val.startsWith('https://chat.whatsapp.com/')) {
+        VIP_WPP_LINK = val;
+      }
+    })
+    .catch(function() {});
+}
+loadVipWppLink();
 // ===== VIP GROUP MODAL =====
 document.getElementById('vipBtn').addEventListener('click', () => {
   document.getElementById('sorteioModal').classList.add('open');
@@ -2267,7 +2289,7 @@ document.getElementById('sorteioCloseBtn').addEventListener('click', () => {
   document.getElementById('sorteioModal').classList.remove('open');
 });
 document.getElementById('sorteioJoinBtn').addEventListener('click', () => {
-  window.open('https://chat.whatsapp.com/FuIMaqEeIz1Jcc2Wevvk63', '_blank');
+  window.open(VIP_WPP_LINK, '_blank');
   document.getElementById('sorteioModal').classList.remove('open');
   trackEvent('vip_group_join');
 });
@@ -2414,6 +2436,59 @@ if ((typeof Notification !== 'undefined' && Notification.permission === 'granted
   document.getElementById('notifBanner').classList.add('hidden');
 }
 
+// ===== ADMIN CONFIG WHATSAPP =====
+function loadAdminWppConfig() {
+  var currentEl = document.getElementById('adminWppCurrentLink');
+  var inputEl = document.getElementById('adminWppInput');
+  if (!currentEl) return;
+  fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/config/wpp_group_link.json')
+    .then(function(r) { return r.json(); })
+    .then(function(val) {
+      if (val && typeof val === 'string') {
+        currentEl.textContent = val;
+        if (inputEl) inputEl.value = val;
+      } else {
+        currentEl.textContent = VIP_WPP_LINK;
+        if (inputEl) inputEl.value = VIP_WPP_LINK;
+      }
+    })
+    .catch(function() {
+      currentEl.textContent = VIP_WPP_LINK;
+      if (inputEl) inputEl.value = VIP_WPP_LINK;
+    });
+}
+document.getElementById('adminWppSaveBtn').addEventListener('click', function() {
+  var inputEl = document.getElementById('adminWppInput');
+  var statusEl = document.getElementById('adminWppStatus');
+  var currentEl = document.getElementById('adminWppCurrentLink');
+  var link = (inputEl ? inputEl.value.trim() : '');
+  // Validação
+  if (!link.startsWith('https://chat.whatsapp.com/')) {
+    statusEl.textContent = '❌ Link inválido. Deve começar com https://chat.whatsapp.com/';
+    statusEl.className = 'admin-wpp-status err';
+    return;
+  }
+  statusEl.textContent = '⏳ Salvando...';
+  statusEl.className = 'admin-wpp-status ok';
+  // Salvar no Firebase
+  fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/config/wpp_group_link.json?auth=' + FIREBASE_API_KEY, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(link)
+  })
+  .then(function(r) { return r.json(); })
+  .then(function() {
+    VIP_WPP_LINK = link;
+    if (currentEl) currentEl.textContent = link;
+    statusEl.textContent = '✅ Link salvo com sucesso! Todos os botões foram atualizados.';
+    statusEl.className = 'admin-wpp-status ok';
+    showToast('✅ Link do WhatsApp atualizado!', 3000);
+  })
+  .catch(function() {
+    statusEl.textContent = '❌ Erro ao salvar. Tente novamente.';
+    statusEl.className = 'admin-wpp-status err';
+  });
+});
 // ===== SHARE =====
 document.getElementById('shareWhatsapp').addEventListener('click', () => {
   const msg = encodeURIComponent(`🎰 ACESSO VIP - Plataformas exclusivas com bônus de registro!\n\n🎁 Bônus de Registro ATIVO!\n🔔 Ative as notificações e receba os lançamentos em primeira mão!\n\n📲 Acesse agora: ${APP_URL}`);
@@ -2470,6 +2545,7 @@ document.querySelectorAll('[data-admin-tab]').forEach(btn => {
     document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
     document.getElementById('admin-tab-' + btn.dataset.adminTab).classList.add('active');
     if (btn.dataset.adminTab === 'stats') loadAdminStats();
+    if (btn.dataset.adminTab === 'config') loadAdminWppConfig();
     if (btn.dataset.adminTab === 'sinais') { renderAdminSinais(); populatePlatformSelects(); }
     if (btn.dataset.adminTab === 'rtp') { renderAdminRtp(); populatePlatformSelects(); }
   });
