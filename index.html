@@ -2291,18 +2291,23 @@ if (isInstalled || window.matchMedia('(display-mode: standalone)').matches || wi
   var bubbleClose = document.getElementById('installBubbleClose');
   if (!bubble) return;
 
-  var shownThisSession = sessionStorage.getItem('av_bubble_shown') === '1';
-  var alreadyInstalled = isInstalled
-    || window.matchMedia('(display-mode: standalone)').matches
+  // Verificar se o app já está instalado (standalone = já instalado)
+  var isStandaloneMode = window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true;
 
+  // Se já está instalado como PWA, não mostrar
+  if (isStandaloneMode) return;
+
+  // Controle: não reaparecer se usuário já fechou nessa sessão
+  var closedThisSession = sessionStorage.getItem('av_bubble_closed') === '1';
+  if (closedThisSession) return;
+
   function showBubble() {
-    if (alreadyInstalled || shownThisSession) return;
+    if (window.matchMedia('(display-mode: standalone)').matches) return;
     bubble.style.display = 'flex';
-    bubble.offsetHeight; // forçar reflow
+    // Forçar reflow para garantir a animação CSS
+    void bubble.offsetHeight;
     bubble.classList.add('visible');
-    sessionStorage.setItem('av_bubble_shown', '1');
-    shownThisSession = true;
   }
 
   function hideBubble() {
@@ -2314,28 +2319,24 @@ if (isInstalled || window.matchMedia('(display-mode: standalone)').matches || wi
     }, 380);
   }
 
-  // Aparecer após 3.5 segundos
-  if (!alreadyInstalled && !shownThisSession) {
-    setTimeout(showBubble, 3500);
-  }
-
-  // Também mostrar quando o beforeinstallprompt disparar (garante Android)
-  window.addEventListener('beforeinstallprompt', function() {
-    if (!alreadyInstalled && !shownThisSession) {
-      setTimeout(showBubble, 3500);
-    }
-  });
+  // Mostrar sempre após 3.5s (independente do beforeinstallprompt)
+  // O Chrome pode não disparar o evento se o usuário visitou recentemente
+  setTimeout(showBubble, 3500);
 
   // Fechar ao clicar no X
   bubbleClose.addEventListener('click', function(e) {
     e.stopPropagation();
+    sessionStorage.setItem('av_bubble_closed', '1');
     hideBubble();
   });
 
-  // Clicar na bolha: instalar
+  // Clicar na bolha: tentar instalar
   bubble.addEventListener('click', async function(e) {
     if (e.target === bubbleClose) return;
+    sessionStorage.setItem('av_bubble_closed', '1');
+
     if (deferredPrompt) {
+      // Chrome Android: instalar direto
       deferredPrompt.prompt();
       var result = await deferredPrompt.userChoice;
       deferredPrompt = null;
@@ -2344,9 +2345,12 @@ if (isInstalled || window.matchMedia('(display-mode: standalone)').matches || wi
       }
       hideBubble();
     } else if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-      document.getElementById('iosInstallModal').classList.add('open');
+      // iOS Safari: abrir modal com instruções
+      var iosModal = document.getElementById('iosInstallModal');
+      if (iosModal) iosModal.classList.add('open');
       hideBubble();
     } else {
+      // Android fora do Chrome (Instagram, etc.): abrir no Chrome
       var appUrl = 'https://acessoplatafomas.com.br/';
       var intentUrl = 'intent://' + appUrl.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;end';
       var a = document.createElement('a');
@@ -2359,13 +2363,12 @@ if (isInstalled || window.matchMedia('(display-mode: standalone)').matches || wi
     }
   });
 
-  // Esconder se instalado
+  // Esconder permanentemente se o app for instalado
   window.addEventListener('appinstalled', function() {
-    alreadyInstalled = true;
+    sessionStorage.setItem('av_bubble_closed', '1');
     hideBubble();
   });
 })();
-
 // ===== NOTIFICATIONS =====
 async function requestNotificationPermission() {
   if (typeof Notification === 'undefined' || !('Notification' in window) || !('serviceWorker' in navigator)) {
