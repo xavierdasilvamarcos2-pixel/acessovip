@@ -2526,20 +2526,8 @@ async function sendPushNotification(title, body, tab) {
   });
   const fbData = await fbResp.json();
   if (fbData && !fbData.error) {
-    // Agora envia direto para OneSignal (funciona no PC/Chrome)
-    const payload = {
-      app_id: ONESIGNAL_APP_ID,
-      included_segments: ['Total Subscriptions'],
-      headings: { en: title, pt: title },
-      contents: { en: body, pt: body },
-      url: targetUrl,
-      chrome_web_icon: 'https://acessoplatafomas.com.br/icons/icon-192.png',
-      chrome_web_badge: 'https://acessoplatafomas.com.br/icons/icon-192.png',
-      firefox_icon: 'https://acessoplatafomas.com.br/icons/icon-192.png',
-      small_icon: 'https://acessoplatafomas.com.br/icons/icon-192.png',
-    };
     try {
-      // Usa o Cloudflare Worker como proxy seguro (solução definitiva - sem CORS, chave protegida)
+      // Usa o Cloudflare Worker com Web Push nativo (VAPID)
       const resp = await fetch(WORKER_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
