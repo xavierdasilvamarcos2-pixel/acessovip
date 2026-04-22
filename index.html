@@ -2329,20 +2329,24 @@ window.addEventListener('beforeinstallprompt', (e) => {
 window.addEventListener('appinstalled', () => {
   isInstalled = true;
   _ls.set('av_installed', '1');
+  _ls.set('av_install_counted', '1'); // Marcar para evitar dupla contagem no standalone check
   document.getElementById('installBanner').classList.add('hidden');
   installCount++;
   _ls.set('av_installs', installCount);
   showToast('✅ App instalado com sucesso!', 3000);
   trackEvent('pwa_installed');
   gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' });
-  // Incrementar contador global no Firebase
-  fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_installs.json?auth=' + FIREBASE_API_KEY)
-    .then(r => r.json()).then(cur => {
-      var next = (parseInt(cur) || 0) + 1;
-      fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_installs.json?auth=' + FIREBASE_API_KEY, {
-        method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
-      });
-    }).catch(()=>{});
+  // Incrementar contador global no Firebase (com proteção contra dupla contagem)
+  if (!_ls.get('av_install_fb_counted')) {
+    _ls.set('av_install_fb_counted', '1');
+    fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_installs.json?auth=' + FIREBASE_API_KEY)
+      .then(r => r.json()).then(cur => {
+        var next = (parseInt(cur) || 0) + 1;
+        fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_installs.json?auth=' + FIREBASE_API_KEY, {
+          method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
+        });
+      }).catch(()=>{});
+  }
 });
 
 document.getElementById('installBanner').addEventListener('click', async () => {
@@ -2872,7 +2876,7 @@ async function loadSubscriberCount() {
   if (el) el.textContent = '...';
   try {
     // Buscar contagem diretamente do Worker
-    var resp = await fetch(WORKER_URL + '/count');
+    var resp = await fetch(WORKER_URL + '/count?_=' + Date.now());
     var data = await resp.json();
     var count = data.count || 0;
     if (el) el.textContent = count.toLocaleString();
@@ -2897,28 +2901,51 @@ async function loadSubscriberCount() {
 }
 
 function loadAdminStats() {
-  // Plataformas e Em Alta: dados locais (sempre corretos)
-  document.getElementById('adminStatPlatforms').textContent = platforms.length;
-  document.getElementById('adminStatHigh').textContent = platforms.filter(p => p.isHigh).length;
-  // Installs: buscar do Firebase (contador global)
-  fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats.json')
+  // Mostrar "..." enquanto carrega
+  document.getElementById('adminStatPlatforms').textContent = '...';
+  document.getElementById('adminStatHigh').textContent = '...';
+  // Buscar plataformas do Firebase (fonte de verdade - pode ter mais que o PLATFORMS_DATA local)
+  fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/platforms.json')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var fbPlatforms = null;
+      if (data && Array.isArray(data) && data.length > 0) {
+        fbPlatforms = data.filter(function(p) { return p && p.url; });
+      } else if (data && typeof data === 'object' && !Array.isArray(data)) {
+        fbPlatforms = Object.values(data).filter(function(p) { return p && p.url; });
+      }
+      if (fbPlatforms && fbPlatforms.length > 0) {
+        document.getElementById('adminStatPlatforms').textContent = fbPlatforms.length;
+        document.getElementById('adminStatHigh').textContent = fbPlatforms.filter(function(p) { return p.isHigh; }).length;
+      } else {
+        // Fallback para dados locais
+        document.getElementById('adminStatPlatforms').textContent = platforms.length;
+        document.getElementById('adminStatHigh').textContent = platforms.filter(function(p) { return p.isHigh; }).length;
+      }
+    })
+    .catch(function() {
+      document.getElementById('adminStatPlatforms').textContent = platforms.length;
+      document.getElementById('adminStatHigh').textContent = platforms.filter(function(p) { return p.isHigh; }).length;
+    });
+  // Installs e Notificações: buscar do Firebase (contador global)
+  fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats.json?_=' + Date.now())
     .then(r => r.json()).then(stats => {
       if (stats) {
-        var installs = parseInt(stats.total_installs) || installCount;
+        var installs = parseInt(stats.total_installs) || 0;
         document.getElementById('adminStatInstalls').textContent = installs.toLocaleString();
         var notifsSent = parseInt(stats.total_notifs_sent) || 0;
         var elNotifs = document.getElementById('adminStatNotifsSent');
         if (elNotifs) elNotifs.textContent = notifsSent.toLocaleString();
       } else {
-        document.getElementById('adminStatInstalls').textContent = installCount.toLocaleString();
+        document.getElementById('adminStatInstalls').textContent = '0';
       }
     }).catch(() => {
       document.getElementById('adminStatInstalls').textContent = installCount.toLocaleString();
     });
-  // Subscribers push: buscar do Worker (Web Push nativo)
+  // Subscribers push: buscar do Worker (Web Push nativo - fonte de verdade)
   loadSubscriberCount();
 }
-document.getElementById('refreshStatsBtn').addEventListener('click', loadAdminStats);;
+document.getElementById('refreshStatsBtn').addEventListener('click', loadAdminStats);
 
 // ===== SERVICE WORKER =====
 // Nota: O OneSignal registra o OneSignalSDKWorker.js automaticamente via SDK
@@ -3130,6 +3157,17 @@ function init() {
       installCount++;
       _ls.set('av_installs', installCount);
       trackEvent('pwa_launch_standalone');
+    }
+    // Garantir que o Firebase também seja incrementado (iOS não dispara appinstalled)
+    if (!_ls.get('av_install_fb_counted')) {
+      _ls.set('av_install_fb_counted', '1');
+      fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_installs.json?auth=' + FIREBASE_API_KEY)
+        .then(function(r) { return r.json(); }).then(function(cur) {
+          var next = (parseInt(cur) || 0) + 1;
+          fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_installs.json?auth=' + FIREBASE_API_KEY, {
+            method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
+          });
+        }).catch(function(){});
     }
   }
 }
