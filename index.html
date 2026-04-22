@@ -1423,24 +1423,14 @@
       <div class="share-screen">
         <div class="screen-header" style="padding:0 0 16px">
           <div class="screen-header-title">📤 Compartilhar</div>
-          <div class="screen-header-sub">Indique e ganhe!</div>
-        </div>
-        <div class="share-stats">
-          <div class="stat-card">
-            <div class="stat-num" id="statInstalls">0</div>
-            <div class="stat-label">Instalações</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-num" id="statTokens">0</div>
-            <div class="stat-label">Notificações Ativas</div>
-          </div>
+          <div class="screen-header-sub">Indique o app para seus amigos!</div>
         </div>
         <div class="share-card">
-          <div class="share-card-title">📲 Compartilhe o App</div>
-          <div class="share-card-text">Envie o link do ACESSO VIP para seus amigos e ajude mais pessoas a encontrar as melhores plataformas com bônus!</div>
-          <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="share-card-title">🚀 Compartilhe o app com seus amigos</div>
+          <div class="share-card-text">Acesse as melhores plataformas e sinais em primeira mão</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
             <button class="share-btn share-btn-whatsapp" id="shareWhatsapp">
-              <span>📱</span> Compartilhar no WhatsApp
+              <span>📲</span> Compartilhar no WhatsApp
             </button>
             <button class="share-btn share-btn-copy" id="shareCopy">
               <span>📋</span> Copiar Link
@@ -1448,9 +1438,9 @@
           </div>
         </div>
         <div class="share-card">
-          <div class="share-card-title">🔔 Notificações Push</div>
-          <div class="share-card-text">Ative as notificações para receber alertas de novas plataformas e promoções exclusivas em primeira mão.</div>
-          <button class="share-btn" id="enableNotifBtn" style="background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff">
+          <div class="share-card-title">🔔 Ative as notificações</div>
+          <div class="share-card-text">Receba sinais ao vivo e novos lançamentos em primeira mão</div>
+          <button class="share-btn" id="enableNotifBtn" style="background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff;margin-top:4px">
             <span>🔔</span> Ativar Notificações
           </button>
         </div>
@@ -2213,8 +2203,20 @@ function renderHot() {
 
 // ===== SHARE SCREEN =====
 function renderShare() {
-  document.getElementById('statInstalls').textContent = installCount.toLocaleString();
-  document.getElementById('statTokens').textContent = pushTokens.toLocaleString();
+  // Atualizar estado do botão de notificação ao abrir a aba
+  var btn = document.getElementById('enableNotifBtn');
+  if (btn) {
+    var perm = (typeof Notification !== 'undefined') ? Notification.permission : 'default';
+    if (perm === 'granted') {
+      btn.innerHTML = '<span>✅</span> Notificações Ativas';
+      btn.style.background = 'linear-gradient(135deg,#16a34a,#15803d)';
+      btn.disabled = true;
+    } else {
+      btn.innerHTML = '<span>🔔</span> Ativar Notificações';
+      btn.style.background = 'linear-gradient(135deg,#7C3AED,#5B21B6)';
+      btn.disabled = false;
+    }
+  }
 }
 
 // ===== TAB NAVIGATION =====
@@ -2390,7 +2392,22 @@ document.getElementById('notifBannerClose').addEventListener('click', (e) => {
   document.getElementById('notifBanner').classList.add('hidden');
   _ls.set('av_notif_asked', '1');
 });
-document.getElementById('enableNotifBtn').addEventListener('click', requestNotificationPermission);
+document.getElementById('enableNotifBtn').addEventListener('click', async () => {
+  var btn = document.getElementById('enableNotifBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span>⏳</span> Aguardando...'; }
+  var granted = await requestNotificationPermission();
+  // Atualizar visual do botão após a resposta
+  if (btn) {
+    if (granted || (typeof Notification !== 'undefined' && Notification.permission === 'granted')) {
+      btn.innerHTML = '<span>✅</span> Notificações Ativas';
+      btn.style.background = 'linear-gradient(135deg,#16a34a,#15803d)';
+      btn.disabled = true;
+    } else {
+      btn.innerHTML = '<span>🔔</span> Ativar Notificações';
+      btn.disabled = false;
+    }
+  }
+});
 
 // Hide notif banner if already granted or asked
 if ((typeof Notification !== 'undefined' && Notification.permission === 'granted') || _ls.get('av_notif_asked') === '1') {
