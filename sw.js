@@ -1,108 +1,92 @@
-// Service Worker v14 - Limpa todos os caches antigos, nunca cacheia index.html
-const CACHE_NAME = 'acessovip-v14';
-const STATIC_ASSETS = [
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
-];
+// Service Worker - Acesso VIP PWA
+// Versão: v12 - Web Push nativo (sem OneSignal)
+const CACHE_NAME = 'acesso-vip-v12';
+const STATIC_ASSETS = ['/', '/index.html', '/manifest.json'];
 
-// Instalação: criar cache novo
-self.addEventListener('install', event => {
-  console.log('[SW v14] Instalando...');
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(STATIC_ASSETS).catch(() => {});
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS).catch(() => {}))
   );
-  // Ativar imediatamente sem esperar tabs fecharem
   self.skipWaiting();
 });
 
-// Ativação: deletar TODOS os caches antigos
-self.addEventListener('activate', event => {
-  console.log('[SW v14] Ativando - limpando caches antigos...');
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(
-        keys.filter(key => key !== CACHE_NAME).map(key => {
-          console.log('[SW v14] Deletando cache antigo:', key);
-          return caches.delete(key);
-        })
-      );
-    }).then(() => {
-      // Tomar controle de todos os clientes imediatamente
-      return self.clients.claim();
-    })
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
+    )
   );
+  self.clients.claim();
 });
 
-// Fetch: NUNCA cachear index.html - sempre buscar da rede
-self.addEventListener('fetch', event => {
-  const url = new URL(event.request.url);
-  
-  // index.html e raiz: SEMPRE da rede (nunca do cache)
-  if (url.pathname === '/' || url.pathname === '/index.html' || url.pathname.endsWith('/')) {
-    event.respondWith(
-      fetch(event.request).catch(() => {
-        // Se offline, tentar do cache como último recurso
-        return caches.match('/index.html');
-      })
-    );
-    return;
-  }
-  
-  // sw.js: SEMPRE da rede
-  if (url.pathname === '/sw.js') {
-    event.respondWith(fetch(event.request));
-    return;
-  }
-  
-  // Outros assets: cache first
+self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      if (cached) return cached;
-      return fetch(event.request).then(response => {
-        if (response && response.status === 200 && response.type === 'basic') {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-        }
-        return response;
-      }).catch(() => cached);
-    })
+    fetch(event.request, { cache: 'no-cache' }).then((response) => {
+      if (response && response.status === 200) {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+      }
+      return response;
+    }).catch(() => caches.match(event.request))
   );
 });
 
-// Push notifications
-self.addEventListener('push', event => {
-  let data = { title: 'ACESSO VIP', body: 'Nova notificação', url: '/?tab=hot' };
+// ============================================================
+// Web Push - Receber e exibir notificações
+// ============================================================
+self.addEventListener('push', (event) => {
+  let data = {};
   try {
-    if (event.data) data = { ...data, ...event.data.json() };
-  } catch(e) {}
-  
-  event.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.body,
-      icon: '/icon-192.png',
-      badge: '/icon-192.png',
-      data: { url: data.url || '/?tab=hot' },
-      requireInteraction: false,
-      vibrate: [200, 100, 200]
-    })
-  );
+    data = event.data ? event.data.json() : {};
+  } catch (e) {
+    data = { title: 'Acesso VIP', body: event.data ? event.data.text() : 'Nova notificação' };
+  }
+
+  const title = data.title || '🔥 ACESSO VIP';
+  const options = {
+    body: data.body || data.message || 'Confira as plataformas em alta agora!',
+    icon: data.icon || '/icons/icon-192.png',
+    badge: data.badge || '/icons/icon-72.png',
+    tag: data.tag || 'acesso-vip',
+    renotify: true,
+    requireInteraction: false,
+    data: {
+      url: data.url || 'https://acessoplatafomas.com.br/?tab=hot',
+    },
+  };
+
+  if (data.image) {
+    options.image = data.image;
+  }
+
+  event.waitUntil(self.registration.showNotification(title, options));
 });
 
-self.addEventListener('notificationclick', event => {
+// ============================================================
+// Clique na notificação - abrir a URL correta
+// ============================================================
+self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  const url = (event.notification.data && event.notification.data.url) || '/?tab=hot';
+
+  const url = (event.notification.data && event.notification.data.url)
+    ? event.notification.data.url
+    : 'https://acessoplatafomas.com.br/?tab=hot';
+
   event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
-      for (const client of clientList) {
-        if (client.url.includes(self.location.origin) && 'focus' in client) {
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
+      // Se já existe uma janela aberta, focar nela e navegar
+      for (const client of windowClients) {
+        if (client.url.includes('acessoplatafomas.com.br') && 'focus' in client) {
+          client.focus();
           client.navigate(url);
-          return client.focus();
+          return;
         }
       }
-      if (clients.openWindow) return clients.openWindow(url);
+      // Caso contrário, abrir nova janela
+      if (clients.openWindow) {
+        return clients.openWindow(url);
+      }
     })
   );
 });
