@@ -160,6 +160,64 @@
     .sinal-ativo-timer { text-align: center; flex-shrink: 0; background: rgba(16,185,129,0.12); border-radius: 10px; padding: 8px 12px; border: 1px solid rgba(16,185,129,0.3); }
     .sinal-ativo-timer-label { font-size: 9px; color: rgba(255,255,255,0.5); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
     .sinal-ativo-timer-val { font-size: 22px; font-weight: 900; color: #FBBF24; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
+
+    /* ===== BOTÃO INSTALAR FLUTUANTE ===== */
+    .install-float-btn {
+      position: fixed;
+      bottom: -120px; /* começa fora da tela */
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 32px);
+      max-width: 480px;
+      z-index: 9999;
+      background: linear-gradient(135deg, #7C3AED, #5B21B6);
+      border: none;
+      border-radius: 18px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(124,58,237,0.55);
+      transition: bottom 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-decoration: none;
+    }
+    .install-float-btn.visible {
+      bottom: 24px;
+    }
+    .install-float-btn.hiding {
+      bottom: -120px;
+      transition: bottom 0.3s ease-in;
+    }
+    .install-float-btn-icon { font-size: 32px; flex-shrink: 0; }
+    .install-float-btn-text { flex: 1; text-align: left; }
+    .install-float-btn-title { font-size: 16px; font-weight: 900; color: #fff; letter-spacing: 0.5px; }
+    .install-float-btn-sub { font-size: 12px; color: rgba(255,255,255,0.85); margin-top: 2px; font-weight: 600; }
+    .install-float-btn-arrow { font-size: 22px; flex-shrink: 0; }
+    .install-float-btn-close {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.6);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10000;
+    }
+    @keyframes float-pulse {
+      0%, 100% { transform: translateX(-50%) scale(1); box-shadow: 0 8px 32px rgba(124,58,237,0.55); }
+      50% { transform: translateX(-50%) scale(1.025); box-shadow: 0 12px 40px rgba(124,58,237,0.75); }
+    }
+    .install-float-btn.visible { animation: float-pulse 2.2s ease-in-out infinite; }
+    .install-float-btn.hiding { animation: none; }
     /* VIP Group Button */
     .vip-btn { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #25D366, #128C7E); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.3); border: none; width: calc(100% - 32px); animation: pulse-vip 2.4s ease-in-out infinite; }
     @keyframes pulse-vip { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
@@ -1381,6 +1439,17 @@
     </div>
 
   </div>
+  <!-- BOTÃO INSTALAR FLUTUANTE -->
+  <button class="install-float-btn" id="installFloatBtn" style="display:none">
+    <span class="install-float-btn-close" id="installFloatClose">✕</span>
+    <span class="install-float-btn-icon">📲</span>
+    <div class="install-float-btn-text">
+      <div class="install-float-btn-title">📲 INSTALAR APP</div>
+      <div class="install-float-btn-sub">Adicionar à tela inicial</div>
+    </div>
+    <span class="install-float-btn-arrow">⬇️</span>
+  </button>
+
   <!-- TAB BAR -->
   <div class="tab-bar">
     <button class="tab-item active" data-tab="home">
@@ -2248,6 +2317,91 @@ if (isInstalled || window.matchMedia('(display-mode: standalone)').matches || wi
   isInstalled = true;
   _ls.set('av_installed', '1');
 }
+
+// ===== BOTÃO INSTALAR FLUTUANTE =====
+(function() {
+  var floatBtn = document.getElementById('installFloatBtn');
+  var floatClose = document.getElementById('installFloatClose');
+  if (!floatBtn) return;
+
+  // Controle de sessão: mostrar apenas 1x por sessão
+  var shownThisSession = sessionStorage.getItem('av_install_float_shown') === '1';
+  var alreadyInstalled = isInstalled
+    || window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
+
+  function showFloatBtn() {
+    if (alreadyInstalled || shownThisSession) return;
+    floatBtn.style.display = 'flex';
+    // Forçar reflow para garantir a animação de entrada
+    floatBtn.offsetHeight;
+    floatBtn.classList.add('visible');
+    sessionStorage.setItem('av_install_float_shown', '1');
+    shownThisSession = true;
+  }
+
+  function hideFloatBtn() {
+    floatBtn.classList.add('hiding');
+    floatBtn.classList.remove('visible');
+    setTimeout(function() {
+      floatBtn.style.display = 'none';
+      floatBtn.classList.remove('hiding');
+    }, 350);
+  }
+
+  // Mostrar após 1.5 segundos se não instalado e não mostrado nessa sessão
+  if (!alreadyInstalled && !shownThisSession) {
+    setTimeout(showFloatBtn, 1500);
+  }
+
+  // Atualizar quando o beforeinstallprompt disparar
+  window.addEventListener('beforeinstallprompt', function() {
+    if (!alreadyInstalled && !shownThisSession) {
+      setTimeout(showFloatBtn, 1500);
+    }
+  });
+
+  // Fechar ao clicar no X
+  floatClose.addEventListener('click', function(e) {
+    e.stopPropagation();
+    hideFloatBtn();
+  });
+
+  // Clicar no botão: disparar instalação
+  floatBtn.addEventListener('click', async function(e) {
+    if (e.target === floatClose) return;
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      var result = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      if (result.outcome === 'accepted') {
+        trackEvent('pwa_install_float_accepted');
+      }
+      hideFloatBtn();
+    } else if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+      // iOS: abrir modal de instrução
+      document.getElementById('iosInstallModal').classList.add('open');
+      hideFloatBtn();
+    } else {
+      // Outros: redirecionar para Chrome
+      var appUrl = 'https://acessoplatafomas.com.br/';
+      var intentUrl = 'intent://' + appUrl.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;end';
+      var a = document.createElement('a');
+      a.href = intentUrl;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      trackEvent('pwa_install_float_chrome');
+      hideFloatBtn();
+    }
+  });
+
+  // Esconder se o app for instalado
+  window.addEventListener('appinstalled', function() {
+    alreadyInstalled = true;
+    hideFloatBtn();
+  });
+})();
 
 // ===== NOTIFICATIONS =====
 async function requestNotificationPermission() {
