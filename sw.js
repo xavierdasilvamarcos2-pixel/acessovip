@@ -58,8 +58,8 @@ self.addEventListener('push', (event) => {
   const title = data.title || '🔥 ACESSO VIP';
   const options = {
     body: data.body || data.message || 'Confira as plataformas em alta agora!',
-    icon: data.icon || '/icons/icon-192.png',
-    badge: data.badge || '/icons/icon-72.png',
+    icon: data.icon || 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/egqHBtIKPOqWIeRU.png',
+    badge: data.badge || 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/egqHBtIKPOqWIeRU.png',
     tag: data.tag || 'acesso-vip',
     renotify: true,
     requireInteraction: false,
