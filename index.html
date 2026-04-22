@@ -2952,6 +2952,18 @@ document.getElementById('testNotifBtn').addEventListener('click', async () => {
         if (tabBtn) tabBtn.click();
       }, 800);
     }
+
+    // Listener para navegação via Service Worker (clique em notificação)
+    navigator.serviceWorker && navigator.serviceWorker.addEventListener('message', function(event) {
+      if (event.data && event.data.type === 'NAVIGATE_TAB') {
+        var targetTab = event.data.tab || 'hot';
+        var tabBtn = document.querySelector('[data-tab="' + targetTab + '"]');
+        if (tabBtn) {
+          tabBtn.click();
+          window.scrollTo(0, 0);
+        }
+      }
+    });
   } catch(e) {}
 })();
 
