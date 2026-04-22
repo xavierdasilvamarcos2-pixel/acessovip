@@ -157,9 +157,7 @@
     .sinal-ativo-left { flex: 1; }
     .sinal-ativo-title { font-size: 16px; font-weight: 900; color: #10B981; letter-spacing: 0.5px; }
     .sinal-ativo-sub { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 3px; font-weight: 600; }
-    .sinal-ativo-timer { text-align: center; flex-shrink: 0; background: rgba(16,185,129,0.12); border-radius: 10px; padding: 8px 12px; border: 1px solid rgba(16,185,129,0.3); }
-    .sinal-ativo-timer-label { font-size: 9px; color: rgba(255,255,255,0.5); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
-    .sinal-ativo-timer-val { font-size: 22px; font-weight: 900; color: #FBBF24; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
+    /* sinal-ativo-timer removido */
     /* VIP Group Button */
     .vip-btn { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #25D366, #128C7E); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.3); border: none; width: calc(100% - 32px); animation: pulse-vip 2.4s ease-in-out infinite; }
     @keyframes pulse-vip { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
@@ -581,14 +579,10 @@
     <div class="screen active" id="screen-home">
       <img class="banner-img" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/XAisIaYtQacAGvnq.png" alt="ACESSO VIP Banner" />
       <!-- SINAL ATIVO BANNER -->
-      <div class="sinal-ativo-banner" id="sinalAtivoBanner">
+      <div class="sinal-ativo-banner" id="sinalAtivoBanner" onclick="document.querySelector('[data-tab=sinais]').click()" style="cursor:pointer;justify-content:center;text-align:center;">
         <div class="sinal-ativo-left">
           <div class="sinal-ativo-title">🚨 SINAL ATIVO AGORA</div>
           <div class="sinal-ativo-sub">🤖 IA analisando oportunidades em tempo real</div>
-        </div>
-        <div class="sinal-ativo-timer">
-          <div class="sinal-ativo-timer-label">⏳ RESTANTE</div>
-          <div class="sinal-ativo-timer-val" id="sinalAtivoClock">--:--</div>
         </div>
       </div>
       <!-- Notification permission banner -->
@@ -3370,81 +3364,7 @@ document.getElementById('sinalDetailBack').addEventListener('click', function() 
 var NORMAIS = ['5', '8', '10', '15', '20', '25', '30'];
 var TURBOS = ['5', '8', '10', '15', '20', '25', '30'];
 
-// ===== CONTADOR DO BANNER SINAL ATIVO (HOME) =====
-(function() {
-  var SINAL_DURATION = 7 * 60; // 7 minutos por padrão
-  var _sinalAtivoClock = null;
-  var _sinalAtivoRemaining = 0;
-  
-  function startSinalAtivoClock() {
-    var el = document.getElementById('sinalAtivoClock');
-    if (!el) return;
-    
-    // Verificar se há um sinal ativo no Firebase
-    fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/sinais.json')
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        var sinais = [];
-        if (data && typeof data === 'object') {
-          Object.values(data).forEach(function(s) {
-            if (s && s.active) sinais.push(s);
-          });
-        }
-        if (sinais.length > 0) {
-          // Pegar o sinal mais recente
-          var newest = sinais.sort(function(a,b) { return (b.createdAt||0) - (a.createdAt||0); })[0];
-          var now = Date.now();
-          var created = newest.createdAt || now;
-          var elapsed = Math.floor((now - created) / 1000);
-          var duration = newest.duration || SINAL_DURATION;
-          var remaining = Math.max(0, duration - elapsed);
-          _sinalAtivoRemaining = remaining;
-          runClock(el);
-        } else {
-          // Sem sinal ativo — iniciar contador de 5 min para próximo sinal
-          _sinalAtivoRemaining = 5 * 60;
-          runClock(el);
-        }
-      })
-      .catch(function() {
-        // Fallback: contador de 3 min
-        _sinalAtivoRemaining = 3 * 60;
-        runClock(el);
-      });
-  }
-  
-  function runClock(el) {
-    if (_sinalAtivoClock) clearInterval(_sinalAtivoClock);
-    function tick() {
-      if (!el) return;
-      var m = Math.floor(_sinalAtivoRemaining / 60);
-      var s = _sinalAtivoRemaining % 60;
-      el.textContent = m.toString().padStart(2,'0') + ':' + s.toString().padStart(2,'0');
-      if (_sinalAtivoRemaining <= 60) {
-        el.style.color = '#ef4444';
-      } else {
-        el.style.color = '#FBBF24';
-      }
-      if (_sinalAtivoRemaining <= 0) {
-        clearInterval(_sinalAtivoClock);
-        // Reiniciar com novo ciclo de 7 min
-        _sinalAtivoRemaining = SINAL_DURATION;
-        runClock(el);
-        return;
-      }
-      _sinalAtivoRemaining--;
-    }
-    tick();
-    _sinalAtivoClock = setInterval(tick, 1000);
-  }
-  
-  // Iniciar quando o DOM estiver pronto
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', startSinalAtivoClock);
-  } else {
-    setTimeout(startSinalAtivoClock, 500);
-  }
-})();
+// ===== CONTADOR DO BANNER SINAL ATIVO (HOME) - REMOVIDO =====
 
 // ===== CONTADOR REGRESSIVO DO SINAL =====
 var sinalCountdownTimer = null;
