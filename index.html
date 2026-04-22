@@ -2752,7 +2752,9 @@ async function sendPushNotification(title, body, tab) {
     body: body,
     url: targetUrl,
     timestamp: Date.now(),
-    sent: false
+    sent: false,
+    icon: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/egqHBtIKPOqWIeRU.png',
+    badge: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/egqHBtIKPOqWIeRU.png'
   };
   if (imageUrl) notifData.image = imageUrl;
   // Salva no Firebase
@@ -2769,7 +2771,14 @@ async function sendPushNotification(title, body, tab) {
       const resp = await fetch(WORKER_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: title, message: body, url: targetUrl, imageUrl: imageUrl })
+        body: JSON.stringify({
+          title: title,
+          message: body,
+          url: targetUrl,
+          imageUrl: imageUrl,
+          icon: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/egqHBtIKPOqWIeRU.png',
+          badge: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/egqHBtIKPOqWIeRU.png'
+        })
       });
       const data = await resp.json();
       if (data.id) {
