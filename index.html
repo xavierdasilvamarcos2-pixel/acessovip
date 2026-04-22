@@ -152,8 +152,12 @@
 
 
     /* ===== SINAL ATIVO BANNER ===== */
-    .sinal-ativo-banner { margin: 0 16px 12px; border-radius: 14px; background: linear-gradient(135deg, #0a2a0a, #0d4a1a); border: 1.5px solid #10B981; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 0 20px rgba(16,185,129,0.25); animation: sinal-pulse 2s ease-in-out infinite; }
-    @keyframes sinal-pulse { 0%,100% { box-shadow: 0 0 20px rgba(16,185,129,0.25); } 50% { box-shadow: 0 0 32px rgba(16,185,129,0.5); } }
+    .sinal-ativo-banner { margin: 0 16px 12px; border-radius: 14px; background: linear-gradient(135deg, #0a2a0a, #0d4a1a); border: 1.5px solid #10B981; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 0 20px rgba(16,185,129,0.25); animation: sinal-pulse-scale 2.2s ease-in-out infinite; position: relative; overflow: visible; }
+    @keyframes sinal-pulse-scale { 0%,100% { transform: scale(1); box-shadow: 0 0 20px rgba(16,185,129,0.25); } 50% { transform: scale(1.03); box-shadow: 0 0 32px rgba(16,185,129,0.55); } }
+    .ao-vivo-badge { position: absolute; top: -10px; right: 14px; display: flex; align-items: center; gap: 4px; background: #111; border: 1px solid rgba(239,68,68,0.5); border-radius: 20px; padding: 2px 8px; }
+    .ao-vivo-dot { width: 7px; height: 7px; border-radius: 50%; background: #EF4444; animation: ao-vivo-blink 1.2s ease-in-out infinite; flex-shrink: 0; }
+    @keyframes ao-vivo-blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+    .ao-vivo-text { font-size: 9px; font-weight: 900; color: #EF4444; letter-spacing: 1.5px; text-transform: uppercase; }
     .sinal-ativo-left { flex: 1; }
     .sinal-ativo-title { font-size: 16px; font-weight: 900; color: #10B981; letter-spacing: 0.5px; }
     .sinal-ativo-sub { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 3px; font-weight: 600; }
@@ -637,6 +641,10 @@
       <img class="banner-img" src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663105165765/XAisIaYtQacAGvnq.png" alt="ACESSO VIP Banner" />
       <!-- SINAL ATIVO BANNER -->
       <div class="sinal-ativo-banner" id="sinalAtivoBanner" onclick="document.querySelector('[data-tab=hot]').click()" style="cursor:pointer;justify-content:center;text-align:center;">
+        <div class="ao-vivo-badge">
+          <div class="ao-vivo-dot"></div>
+          <span class="ao-vivo-text">AO VIVO</span>
+        </div>
         <div class="sinal-ativo-left">
           <div class="sinal-ativo-title">🚨 SINAL ATIVO AGORA</div>
           <div class="sinal-ativo-sub">🤖 IA analisando oportunidades em tempo real</div>
