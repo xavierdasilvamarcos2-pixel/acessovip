@@ -497,29 +497,49 @@
     .admin-empty-icon { font-size: 48px; margin-bottom: 12px; }
     .admin-empty-text { font-size: 14px; font-weight: 600; }
   </style>
-  <!-- OneSignal Web Push SDK -->
-  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <!-- Web Push Nativo (VAPID) - sem dependências externas -->
   <script>
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(async function(OneSignal) {
-      await OneSignal.init({
-        appId: "1ee5af72-b277-4de1-9d6f-ef75b5b49e70",
-        notifyButton: { enable: false },
-        allowLocalhostAsSecureOrigin: true,
-        serviceWorkerParam: { scope: '/' },
-        serviceWorkerPath: 'OneSignalSDKWorker.js',
-      });
-      window._oneSignalReady = true;
-      window._oneSignal = OneSignal;
-      // Se já tem permissão, força opt-in para garantir registro
-      const permission = await OneSignal.Notifications.permissionNative;
-      if (permission === 'granted') {
-        try {
-          await OneSignal.User.PushSubscription.optIn();
-          console.log('[OneSignal] Registrado com sucesso. optedIn:', OneSignal.User.PushSubscription.optedIn);
-        } catch(e) { console.warn('[OneSignal] Erro ao registrar:', e); }
+    // Chave pública VAPID para Web Push nativo
+    window.VAPID_PUBLIC_KEY = 'BPTV6hbhEA7RqmyLW6AwDoNE2z5wQ6Lg1W8LQRugLXEuv6hoauT57iUB7hXnN85JYxBCwdnkEzeLOIur-Kvstu4';
+    window.WORKER_URL_BASE = 'https://acessovip-notif.xavierdasilvamarcos2.workers.dev';
+    
+    // Converter base64url para Uint8Array (necessário para applicationServerKey)
+    function urlBase64ToUint8Array(base64String) {
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+      const rawData = window.atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+      for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
       }
-    });
+      return outputArray;
+    }
+    window._urlBase64ToUint8Array = urlBase64ToUint8Array;
+    
+    // Registrar subscription no Worker quando SW estiver pronto
+    async function registerWebPushSubscription() {
+      if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+      try {
+        const reg = await navigator.serviceWorker.ready;
+        let sub = await reg.pushManager.getSubscription();
+        if (!sub) {
+          sub = await reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(window.VAPID_PUBLIC_KEY),
+          });
+        }
+        // Enviar subscription para o Worker salvar no Firebase
+        await fetch(window.WORKER_URL_BASE + '/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ subscription: sub.toJSON() }),
+        });
+        console.log('[WebPush] Subscription registrada com sucesso');
+      } catch(e) {
+        console.warn('[WebPush] Erro ao registrar subscription:', e);
+      }
+    }
+    window._registerWebPushSubscription = registerWebPushSubscription;
   </script>
 </head>
 <body>
@@ -2219,33 +2239,7 @@ async function requestNotificationPermission() {
     return false;
   }
   
-  // Usar o OneSignal SDK para registrar o usuário (garante que apareça no dashboard)
-  if (window._oneSignal) {
-    try {
-      const result = await window._oneSignal.Notifications.requestPermission();
-      notifPermission = result ? 'granted' : 'denied';
-      if (result) {
-        // Registrar no OneSignal
-        try { await window._oneSignal.User.PushSubscription.optIn(); } catch(e) {}
-        document.getElementById('notifBanner').classList.add('hidden');
-        _ls.set('av_notif_asked', '1');
-        pushTokens++;
-        _ls.set('av_tokens', pushTokens);
-        showToast('🔔 Notificações ativadas!', 3000);
-        trackEvent('notification_granted');
-        updateNotifBtn();
-        return true;
-      } else {
-        showToast('Notificações bloqueadas. Ative nas configurações do Chrome.');
-        trackEvent('notification_denied');
-        return false;
-      }
-    } catch(e) {
-      console.log('OneSignal requestPermission error:', e);
-    }
-  }
-  
-  // Fallback: usar API nativa
+  // Web Push nativo (VAPID) - sem OneSignal
   const perm = await Notification.requestPermission();
   notifPermission = perm;
   if (perm === 'granted') {
@@ -2255,6 +2249,11 @@ async function requestNotificationPermission() {
     _ls.set('av_tokens', pushTokens);
     showToast('🔔 Notificações ativadas!', 3000);
     trackEvent('notification_granted');
+    updateNotifBtn();
+    // Registrar subscription Web Push no Worker
+    if (window._registerWebPushSubscription) {
+      window._registerWebPushSubscription().catch(e => console.warn('WebPush register error:', e));
+    }
     return true;
   } else {
     showToast('Notificações bloqueadas. Ative nas configurações do Chrome.');
@@ -2644,41 +2643,34 @@ document.getElementById('testNotifBtn').addEventListener('click', async () => {
   } catch(e) {}
 })();
 
-// Buscar subscribers reais do OneSignal
+// Buscar subscribers reais do Worker (Web Push nativo)
 async function loadSubscriberCount() {
   var el = document.getElementById('notifSubscriberCount');
   var elStats = document.getElementById('adminStatTokens');
   if (el) el.textContent = '...';
   try {
-    var resp = await fetch('https://onesignal.com/api/v1/notifications?app_id=' + ONESIGNAL_APP_ID + '&limit=1', {
-      headers: { 'Authorization': 'Key ' + ONESIGNAL_API_KEY }
-    });
+    // Buscar contagem diretamente do Worker
+    var resp = await fetch(WORKER_URL + '/count');
     var data = await resp.json();
-    // total_count = total de notificações enviadas; usar para estimar
-    // Buscar diretamente os players
-    var resp2 = await fetch('https://onesignal.com/api/v1/players?app_id=' + ONESIGNAL_APP_ID + '&limit=1', {
-      headers: { 'Authorization': 'Key ' + ONESIGNAL_API_KEY }
-    });
-    var data2 = await resp2.json();
-    var count = data2.total_count || data2.total || 0;
-    if (count > 0) {
-      if (el) el.textContent = count.toLocaleString();
-      if (elStats) elStats.textContent = count.toLocaleString();
-      // Salvar no Firebase para referência
-      fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_push_subscribers.json?auth=' + FIREBASE_API_KEY, {
-        method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(count)
-      }).catch(()=>{});
-    } else {
-      // Fallback: usar valor salvo no Firebase
+    var count = data.count || 0;
+    if (el) el.textContent = count.toLocaleString();
+    if (elStats) elStats.textContent = count.toLocaleString();
+    // Atualizar Firebase com a contagem real
+    fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_push_subscribers.json?auth=' + FIREBASE_API_KEY, {
+      method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(count)
+    }).catch(()=>{});
+  } catch(e) {
+    // Fallback: usar valor salvo no Firebase
+    try {
       var fbResp = await fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_push_subscribers.json');
       var fbVal = await fbResp.json();
       var fbCount = parseInt(fbVal) || pushTokens;
       if (el) el.textContent = fbCount.toLocaleString();
       if (elStats) elStats.textContent = fbCount.toLocaleString();
+    } catch(e2) {
+      if (el) el.textContent = pushTokens.toLocaleString();
+      if (elStats) elStats.textContent = pushTokens.toLocaleString();
     }
-  } catch(e) {
-    if (el) el.textContent = pushTokens.toLocaleString();
-    if (elStats) elStats.textContent = pushTokens.toLocaleString();
   }
 }
 
