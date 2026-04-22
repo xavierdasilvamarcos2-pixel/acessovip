@@ -278,6 +278,7 @@
     .admin-nav-btn[data-admin-tab="sinais"].active { background:linear-gradient(135deg,#F59E0B,#D97706); box-shadow:0 4px 15px rgba(245,158,11,0.5); }
     .admin-nav-btn[data-admin-tab="rtp"].active { background:linear-gradient(135deg,#10B981,#059669); box-shadow:0 4px 15px rgba(16,185,129,0.5); }
     .admin-nav-btn[data-admin-tab="stats"].active { background:linear-gradient(135deg,#3B82F6,#2563EB); box-shadow:0 4px 15px rgba(59,130,246,0.5); }
+    .admin-nav-btn[data-admin-tab="ranking"].active { background:linear-gradient(135deg,#F59E0B,#D97706); box-shadow:0 4px 15px rgba(245,158,11,0.5); }
 
     .admin-content { padding:16px; overflow-y:auto; height:calc(100vh - 160px); }
     .admin-section { display:none; }
@@ -598,7 +599,73 @@
     .sinal-card-avaliar-btn { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 3px 10px; color: #94a3b8; font-size: 10px; cursor: pointer; transition: background 0.2s; }
     .sinal-card-avaliar-btn:hover, .sinal-card-avaliar-btn.ativo-ok { background: rgba(34,197,94,0.2); color: #22C55E; border-color: #22C55E; }
     .sinal-card-avaliar-btn.ativo-nao { background: rgba(239,68,68,0.2); color: #EF4444; border-color: #EF4444; }
-  </style>
+  
+    /* ===== SISTEMA DE INDICAÇÃO ===== */
+    .indica-screen { padding: 16px; }
+    .indica-hero { background: linear-gradient(135deg, #7C3AED, #5B21B6); border-radius: 18px; padding: 20px; margin-bottom: 16px; text-align: center; }
+    .indica-hero-title { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 4px; }
+    .indica-hero-sub { font-size: 13px; color: rgba(255,255,255,0.75); margin-bottom: 16px; }
+    .indica-hero-stats { display: flex; gap: 12px; justify-content: center; }
+    .indica-hero-stat { background: rgba(255,255,255,0.15); border-radius: 12px; padding: 10px 16px; text-align: center; }
+    .indica-hero-stat-num { font-size: 22px; font-weight: 900; color: #fff; }
+    .indica-hero-stat-label { font-size: 10px; color: rgba(255,255,255,0.7); }
+
+    /* Cadastro */
+    .indica-cadastro { background: var(--surface); border-radius: 16px; padding: 18px; margin-bottom: 16px; border: 1px solid var(--border); }
+    .indica-cadastro-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 14px; }
+    .indica-foto-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 14px; }
+    .indica-foto-preview { width: 72px; height: 72px; border-radius: 50%; background: var(--surface2); border: 3px solid #7C3AED; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 8px; cursor: pointer; }
+    .indica-foto-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .indica-foto-label { font-size: 12px; color: #7C3AED; font-weight: 700; cursor: pointer; }
+    .indica-input { width: 100%; background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 14px; color: var(--text); font-size: 14px; margin-bottom: 10px; box-sizing: border-box; outline: none; }
+    .indica-input:focus { border-color: #7C3AED; }
+    .indica-btn-cadastrar { width: 100%; background: linear-gradient(135deg, #7C3AED, #5B21B6); color: #fff; border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 900; cursor: pointer; }
+
+    /* Perfil cadastrado */
+    .indica-perfil { background: var(--surface); border-radius: 16px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
+    .indica-perfil-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--surface2); border: 3px solid #7C3AED; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+    .indica-perfil-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .indica-perfil-info { flex: 1; }
+    .indica-perfil-nome { font-size: 16px; font-weight: 800; color: var(--text); }
+    .indica-perfil-wpp { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .indica-perfil-indicacoes { font-size: 13px; color: #7C3AED; font-weight: 700; margin-top: 4px; }
+    .indica-perfil-edit { background: none; border: 1.5px solid var(--border); border-radius: 8px; padding: 6px 12px; font-size: 12px; color: var(--muted); cursor: pointer; }
+
+    /* Ranking */
+    .indica-ranking { background: var(--surface); border-radius: 16px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); }
+    .indica-ranking-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 12px; }
+    .indica-rank-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .indica-rank-item:last-child { border-bottom: none; }
+    .indica-rank-pos { font-size: 20px; font-weight: 900; width: 32px; text-align: center; flex-shrink: 0; }
+    .indica-rank-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .indica-rank-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .indica-rank-info { flex: 1; }
+    .indica-rank-nome { font-size: 14px; font-weight: 700; color: var(--text); }
+    .indica-rank-count { font-size: 12px; color: var(--muted); }
+    .indica-rank-badge { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 20px; flex-shrink: 0; }
+    .indica-rank-badge.gold { background: rgba(245,158,11,0.2); color: #F59E0B; }
+    .indica-rank-badge.silver { background: rgba(156,163,175,0.2); color: #9CA3AF; }
+    .indica-rank-badge.bronze { background: rgba(180,83,9,0.2); color: #B45309; }
+
+    /* Botão compartilhar */
+    .indica-share-btn { width: 100%; background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px; }
+    .indica-copy-btn { width: 100%; background: var(--surface2); color: var(--text); border: 1.5px solid var(--border); border-radius: 12px; padding: 12px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+    /* Admin ranking */
+    .admin-ranking-item { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+    .admin-ranking-pos { font-size: 28px; width: 36px; text-align: center; flex-shrink: 0; }
+    .admin-ranking-avatar { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.1); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; border: 2px solid rgba(124,58,237,0.5); }
+    .admin-ranking-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .admin-ranking-info { flex: 1; min-width: 0; }
+    .admin-ranking-nome { font-size: 14px; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .admin-ranking-wpp { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    .admin-ranking-count { font-size: 13px; color: #A78BFA; font-weight: 700; margin-top: 2px; }
+    .admin-wpp-btn { background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; border: none; border-radius: 10px; padding: 8px 14px; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+    .admin-ranking-top1 { border-color: rgba(245,158,11,0.5); background: rgba(245,158,11,0.08); }
+    .admin-ranking-top2 { border-color: rgba(156,163,175,0.5); background: rgba(156,163,175,0.06); }
+    .admin-ranking-top3 { border-color: rgba(180,83,9,0.5); background: rgba(180,83,9,0.06); }
+
+    </style>
   <!-- Web Push Nativo (VAPID) - sem dependências externas -->
   <script>
     // Chave pública VAPID para Web Push nativo
@@ -1420,36 +1487,69 @@
 
     <!-- SHARE SCREEN -->
     <div class="screen" id="screen-share">
-      <div class="share-screen">
-        <div class="screen-header" style="padding:0 0 16px">
-          <div class="screen-header-title">📤 Compartilhar</div>
-          <div class="screen-header-sub">Indique e ganhe!</div>
-        </div>
-        <div class="share-stats">
-          <div class="stat-card">
-            <div class="stat-num" id="statInstalls">0</div>
-            <div class="stat-label">Instalações</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-num" id="statTokens">0</div>
-            <div class="stat-label">Notificações Ativas</div>
-          </div>
-        </div>
-        <div class="share-card">
-          <div class="share-card-title">📲 Compartilhe o App</div>
-          <div class="share-card-text">Envie o link do ACESSO VIP para seus amigos e ajude mais pessoas a encontrar as melhores plataformas com bônus!</div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <button class="share-btn share-btn-whatsapp" id="shareWhatsapp">
-              <span>📱</span> Compartilhar no WhatsApp
-            </button>
-            <button class="share-btn share-btn-copy" id="shareCopy">
-              <span>📋</span> Copiar Link
-            </button>
+      <div class="indica-screen" style="overflow-y:auto;max-height:calc(100vh - 70px);">
+        <!-- Hero -->
+        <div class="indica-hero">
+          <div class="indica-hero-title">🏆 Indique e Ganhe!</div>
+          <div class="indica-hero-sub">Convide amigos e concorra a prêmios semanais</div>
+          <div class="indica-hero-stats">
+            <div class="indica-hero-stat">
+              <div class="indica-hero-stat-num" id="indicaMyCount">0</div>
+              <div class="indica-hero-stat-label">Minhas indicações</div>
+            </div>
+            <div class="indica-hero-stat">
+              <div class="indica-hero-stat-num" id="indicaTotalUsers">0</div>
+              <div class="indica-hero-stat-label">Participantes</div>
+            </div>
           </div>
         </div>
-        <div class="share-card">
+
+        <!-- Cadastro (mostrado se não cadastrado) -->
+        <div class="indica-cadastro" id="indicaCadastroWrap">
+          <div class="indica-cadastro-title">📋 Cadastre-se para participar</div>
+          <div class="indica-foto-wrap">
+            <div class="indica-foto-preview" id="indicaFotoPreview" onclick="document.getElementById('indicaFotoInput').click()">📷</div>
+            <label class="indica-foto-label" onclick="document.getElementById('indicaFotoInput').click()">+ Adicionar foto (opcional)</label>
+            <input type="file" id="indicaFotoInput" accept="image/*" style="display:none">
+          </div>
+          <input class="indica-input" type="text" id="indicaNomeInput" placeholder="Seu nome completo *" maxlength="50">
+          <input class="indica-input" type="tel" id="indicaWppInput" placeholder="WhatsApp (ex: 11999999999) *" maxlength="15">
+          <button class="indica-btn-cadastrar" id="indicaCadastrarBtn">✅ Cadastrar e Participar</button>
+        </div>
+
+        <!-- Perfil (mostrado se cadastrado) -->
+        <div class="indica-perfil" id="indicaPerfilWrap" style="display:none">
+          <div class="indica-perfil-avatar" id="indicaPerfilAvatar">👤</div>
+          <div class="indica-perfil-info">
+            <div class="indica-perfil-nome" id="indicaPerfilNome">-</div>
+            <div class="indica-perfil-wpp" id="indicaPerfilWpp">-</div>
+            <div class="indica-perfil-indicacoes" id="indicaPerfilCount">0 indicações</div>
+          </div>
+          <button class="indica-perfil-edit" id="indicaEditarBtn">✏️ Editar</button>
+        </div>
+
+        <!-- Botões de compartilhamento -->
+        <div id="indicaShareBtns" style="display:none;margin-bottom:16px">
+          <button class="indica-share-btn" id="indicaShareWpp">
+            <span>📱</span> Compartilhar no WhatsApp
+          </button>
+          <button class="indica-copy-btn" id="indicaCopyLink">
+            <span>📋</span> Copiar Link de Indicação
+          </button>
+        </div>
+
+        <!-- Ranking -->
+        <div class="indica-ranking">
+          <div class="indica-ranking-title">🏆 Ranking da Semana</div>
+          <div id="indicaRankingList">
+            <div style="text-align:center;color:var(--muted);padding:20px;font-size:13px">Carregando ranking...</div>
+          </div>
+        </div>
+
+        <!-- Notificações -->
+        <div class="share-card" style="margin-bottom:16px">
           <div class="share-card-title">🔔 Notificações Push</div>
-          <div class="share-card-text">Ative as notificações para receber alertas de novas plataformas e promoções exclusivas em primeira mão.</div>
+          <div class="share-card-text">Ative as notificações para receber alertas de novos sinais e promoções exclusivas.</div>
           <button class="share-btn" id="enableNotifBtn" style="background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff">
             <span>🔔</span> Ativar Notificações
           </button>
@@ -1542,6 +1642,9 @@
       </button>
       <button class="admin-nav-btn" data-admin-tab="stats">
         <span class="admin-nav-btn-icon">&#128200;</span>Stats
+      </button>
+      <button class="admin-nav-btn" data-admin-tab="ranking">
+        <span class="admin-nav-btn-icon">&#127942;</span>Ranking
       </button>
     </div>
     <!-- Content -->
@@ -1746,6 +1849,22 @@
         <button class="admin-btn-submit blue" id="refreshStatsBtn">🔄 ATUALIZAR DADOS</button>
       </div>
 
+      <!-- RANKING TAB -->
+      <div class="admin-section" id="admin-tab-ranking">
+        <div class="admin-sec-hdr">
+          <div class="admin-sec-icon" style="background:linear-gradient(135deg,#F59E0B,#D97706)">&#127942;</div>
+          <div>
+            <div class="admin-sec-ttl">Ranking de Indicações</div>
+            <div class="admin-sec-sub">Veja quem está ganhando esta semana</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:14px">
+          <button class="admin-btn-submit" style="background:linear-gradient(135deg,#F59E0B,#D97706);flex:1" id="adminRankingRefreshBtn">🔄 Atualizar</button>
+        </div>
+        <div id="adminRankingList">
+          <div style="text-align:center;color:rgba(255,255,255,0.4);padding:30px;font-size:13px">Carregando ranking...</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -4054,6 +4173,392 @@ document.addEventListener('click', function(e) {
   var tipo = btn.getAttribute('data-avalia');
   avaliarSinal(btn, tipo);
 });
+
+// ===== SISTEMA DE INDICAÇÃO =====
+(function() {
+  var FIREBASE_DB_URL = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+  var FIREBASE_API_KEY = 'AIzaSyD5rgvnm8Ytu0XqISzq7fYCk0p_PYEiuI4';
+  var STORAGE_BUCKET = 'acessovip-fb4c3.firebasestorage.app';
+  var APP_URL = 'https://acessoplatafomas.com.br';
+
+  function fbGet(path) {
+    return fetch(FIREBASE_DB_URL + path + '.json?auth=' + FIREBASE_API_KEY).then(function(r){ return r.json(); });
+  }
+  function fbSet(path, data) {
+    return fetch(FIREBASE_DB_URL + path + '.json?auth=' + FIREBASE_API_KEY, {
+      method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data)
+    }).then(function(r){ return r.json(); });
+  }
+
+  // Gerar ID único para o usuário
+  function getUserId() {
+    var id = localStorage.getItem('indica_user_id');
+    if (!id) {
+      id = 'u_' + Date.now() + '_' + Math.random().toString(36).substr(2,6);
+      localStorage.setItem('indica_user_id', id);
+    }
+    return id;
+  }
+
+  // Verificar se veio de indicação
+  function checkReferral() {
+    var params = new URLSearchParams(window.location.search);
+    var ref = params.get('ref');
+    if (ref && ref !== getUserId()) {
+      localStorage.setItem('indica_referrer', ref);
+    }
+  }
+  checkReferral();
+
+  // Converter imagem para base64
+  function fileToBase64(file) {
+    return new Promise(function(resolve) {
+      var reader = new FileReader();
+      reader.onload = function(e) { resolve(e.target.result); };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Redimensionar imagem
+  function resizeImage(base64, maxSize) {
+    return new Promise(function(resolve) {
+      var img = new Image();
+      img.onload = function() {
+        var canvas = document.createElement('canvas');
+        var size = Math.min(img.width, img.height, maxSize);
+        canvas.width = size; canvas.height = size;
+        var ctx = canvas.getContext('2d');
+        var sx = (img.width - size) / 2, sy = (img.height - size) / 2;
+        ctx.drawImage(img, sx, sy, size, size, 0, 0, size, size);
+        resolve(canvas.toDataURL('image/jpeg', 0.7));
+      };
+      img.src = base64;
+    });
+  }
+
+  // Carregar perfil do usuário
+  function loadUserProfile() {
+    var userId = getUserId();
+    fbGet('/indicacoes/usuarios/' + userId).then(function(user) {
+      if (user && user.nome) {
+        showPerfil(user);
+      } else {
+        showCadastro();
+      }
+    }).catch(function() { showCadastro(); });
+  }
+
+  function showCadastro() {
+    var cad = document.getElementById('indicaCadastroWrap');
+    var perf = document.getElementById('indicaPerfilWrap');
+    var share = document.getElementById('indicaShareBtns');
+    if (cad) cad.style.display = 'block';
+    if (perf) perf.style.display = 'none';
+    if (share) share.style.display = 'none';
+  }
+
+  function showPerfil(user) {
+    var cad = document.getElementById('indicaCadastroWrap');
+    var perf = document.getElementById('indicaPerfilWrap');
+    var share = document.getElementById('indicaShareBtns');
+    if (cad) cad.style.display = 'none';
+    if (perf) perf.style.display = 'flex';
+    if (share) share.style.display = 'block';
+
+    var nomeEl = document.getElementById('indicaPerfilNome');
+    var wppEl = document.getElementById('indicaPerfilWpp');
+    var countEl = document.getElementById('indicaPerfilCount');
+    var avatarEl = document.getElementById('indicaPerfilAvatar');
+    var myCountEl = document.getElementById('indicaMyCount');
+
+    if (nomeEl) nomeEl.textContent = user.nome || '-';
+    if (wppEl) wppEl.textContent = '📱 ' + (user.whatsapp || '-');
+    if (countEl) countEl.textContent = (user.indicacoes || 0) + ' indicações';
+    if (myCountEl) myCountEl.textContent = user.indicacoes || 0;
+
+    if (avatarEl) {
+      if (user.foto) {
+        avatarEl.innerHTML = '<img src="' + user.foto + '" alt="foto">';
+      } else {
+        avatarEl.textContent = '👤';
+      }
+    }
+  }
+
+  // Preview da foto
+  var fotoInput = document.getElementById('indicaFotoInput');
+  if (fotoInput) {
+    fotoInput.addEventListener('change', function(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      fileToBase64(file).then(function(b64) {
+        return resizeImage(b64, 200);
+      }).then(function(resized) {
+        var preview = document.getElementById('indicaFotoPreview');
+        if (preview) preview.innerHTML = '<img src="' + resized + '" alt="foto">';
+        window._indicaFotoBase64 = resized;
+      });
+    });
+  }
+
+  // Cadastrar usuário
+  var cadastrarBtn = document.getElementById('indicaCadastrarBtn');
+  if (cadastrarBtn) {
+    cadastrarBtn.addEventListener('click', function() {
+      var nome = (document.getElementById('indicaNomeInput') || {}).value || '';
+      var wpp = (document.getElementById('indicaWppInput') || {}).value || '';
+      nome = nome.trim();
+      wpp = wpp.replace(/\D/g, '');
+
+      if (!nome) { alert('Por favor, informe seu nome.'); return; }
+      if (!wpp || wpp.length < 10) { alert('Por favor, informe um WhatsApp válido.'); return; }
+
+      cadastrarBtn.textContent = '⏳ Salvando...';
+      cadastrarBtn.disabled = true;
+
+      var userId = getUserId();
+      var userData = {
+        nome: nome,
+        whatsapp: wpp,
+        foto: window._indicaFotoBase64 || '',
+        indicacoes: 0,
+        cadastro: Date.now()
+      };
+
+      // Verificar se veio de indicação
+      var referrer = localStorage.getItem('indica_referrer');
+      if (referrer) {
+        fbGet('/indicacoes/usuarios/' + referrer).then(function(refUser) {
+          if (refUser && refUser.nome) {
+            var newCount = (refUser.indicacoes || 0) + 1;
+            fbSet('/indicacoes/usuarios/' + referrer + '/indicacoes', newCount);
+          }
+        });
+        localStorage.removeItem('indica_referrer');
+      }
+
+      fbSet('/indicacoes/usuarios/' + userId, userData).then(function() {
+        cadastrarBtn.textContent = '✅ Cadastrar e Participar';
+        cadastrarBtn.disabled = false;
+        showPerfil(userData);
+        loadRanking();
+        // Atualizar contador
+        fbGet('/indicacoes/total_usuarios').then(function(total) {
+          fbSet('/indicacoes/total_usuarios', (total || 0) + 1);
+          var el = document.getElementById('indicaTotalUsers');
+          if (el) el.textContent = (total || 0) + 1;
+        });
+      }).catch(function() {
+        cadastrarBtn.textContent = '✅ Cadastrar e Participar';
+        cadastrarBtn.disabled = false;
+        alert('Erro ao salvar. Tente novamente.');
+      });
+    });
+  }
+
+  // Editar perfil
+  var editarBtn = document.getElementById('indicaEditarBtn');
+  if (editarBtn) {
+    editarBtn.addEventListener('click', function() {
+      var userId = getUserId();
+      fbGet('/indicacoes/usuarios/' + userId).then(function(user) {
+        if (user) {
+          var nomeInput = document.getElementById('indicaNomeInput');
+          var wppInput = document.getElementById('indicaWppInput');
+          if (nomeInput) nomeInput.value = user.nome || '';
+          if (wppInput) wppInput.value = user.whatsapp || '';
+          if (user.foto) {
+            window._indicaFotoBase64 = user.foto;
+            var preview = document.getElementById('indicaFotoPreview');
+            if (preview) preview.innerHTML = '<img src="' + user.foto + '" alt="foto">';
+          }
+        }
+        showCadastro();
+      });
+    });
+  }
+
+  // Compartilhar no WhatsApp
+  var shareWppBtn = document.getElementById('indicaShareWpp');
+  if (shareWppBtn) {
+    shareWppBtn.addEventListener('click', function() {
+      var userId = getUserId();
+      var link = APP_URL + '?ref=' + userId;
+      var msg = '🎯 Acesse o ACESSO VIP e encontre as melhores plataformas com bônus!\n\n' + link;
+      window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+    });
+  }
+
+  // Copiar link
+  var copyBtn = document.getElementById('indicaCopyLink');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function() {
+      var userId = getUserId();
+      var link = APP_URL + '?ref=' + userId;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(link).then(function() {
+          copyBtn.textContent = '✅ Link copiado!';
+          setTimeout(function() { copyBtn.innerHTML = '<span>📋</span> Copiar Link de Indicação'; }, 2000);
+        });
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = link; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        copyBtn.textContent = '✅ Link copiado!';
+        setTimeout(function() { copyBtn.innerHTML = '<span>📋</span> Copiar Link de Indicação'; }, 2000);
+      }
+    });
+  }
+
+  // Carregar ranking
+  function loadRanking() {
+    fbGet('/indicacoes/usuarios').then(function(users) {
+      var list = document.getElementById('indicaRankingList');
+      if (!list) return;
+
+      if (!users) {
+        list.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px">Nenhum participante ainda. Seja o primeiro!</div>';
+        var totalEl = document.getElementById('indicaTotalUsers');
+        if (totalEl) totalEl.textContent = '0';
+        return;
+      }
+
+      var arr = Object.entries(users).map(function(e) {
+        return Object.assign({_id: e[0]}, e[1]);
+      }).filter(function(u) { return u.nome; });
+
+      arr.sort(function(a, b) { return (b.indicacoes || 0) - (a.indicacoes || 0); });
+
+      var totalEl = document.getElementById('indicaTotalUsers');
+      if (totalEl) totalEl.textContent = arr.length;
+
+      // Atualizar minha posição
+      var userId = getUserId();
+      var myUser = arr.find(function(u) { return u._id === userId; });
+      if (myUser) {
+        var myCountEl = document.getElementById('indicaMyCount');
+        if (myCountEl) myCountEl.textContent = myUser.indicacoes || 0;
+      }
+
+      var medals = ['🥇', '🥈', '🥉'];
+      var badgeClasses = ['gold', 'silver', 'bronze'];
+      var badgeLabels = ['1º lugar', '2º lugar', '3º lugar'];
+
+      var html = arr.slice(0, 10).map(function(u, i) {
+        var pos = i < 3 ? medals[i] : (i + 1) + 'º';
+        var avatar = u.foto
+          ? '<img src="' + u.foto + '" alt="foto">'
+          : '👤';
+        var badge = i < 3
+          ? '<span class="indica-rank-badge ' + badgeClasses[i] + '">' + badgeLabels[i] + '</span>'
+          : '';
+        var isMe = u._id === userId ? ' style="background:rgba(124,58,237,0.1);border-radius:12px;padding:8px;"' : '';
+        return '<div class="indica-rank-item"' + isMe + '>' +
+          '<div class="indica-rank-pos">' + pos + '</div>' +
+          '<div class="indica-rank-avatar">' + avatar + '</div>' +
+          '<div class="indica-rank-info">' +
+            '<div class="indica-rank-nome">' + (u.nome || 'Usuário') + (u._id === userId ? ' (você)' : '') + '</div>' +
+            '<div class="indica-rank-count">' + (u.indicacoes || 0) + ' indicações</div>' +
+          '</div>' +
+          badge +
+        '</div>';
+      }).join('');
+
+      if (!html) html = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px">Nenhum participante ainda.</div>';
+      list.innerHTML = html;
+    }).catch(function() {
+      var list = document.getElementById('indicaRankingList');
+      if (list) list.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px">Erro ao carregar ranking.</div>';
+    });
+  }
+
+  // Carregar ranking admin
+  function loadAdminRanking() {
+    var list = document.getElementById('adminRankingList');
+    if (!list) return;
+    list.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.4);padding:30px;font-size:13px">Carregando...</div>';
+
+    fbGet('/indicacoes/usuarios').then(function(users) {
+      if (!users) {
+        list.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.4);padding:30px;font-size:13px">Nenhum participante cadastrado.</div>';
+        return;
+      }
+
+      var arr = Object.entries(users).map(function(e) {
+        return Object.assign({_id: e[0]}, e[1]);
+      }).filter(function(u) { return u.nome; });
+
+      arr.sort(function(a, b) { return (b.indicacoes || 0) - (a.indicacoes || 0); });
+
+      var medals = ['🥇', '🥈', '🥉'];
+      var topClasses = ['admin-ranking-top1', 'admin-ranking-top2', 'admin-ranking-top3'];
+
+      var html = arr.map(function(u, i) {
+        var pos = i < 3 ? medals[i] : (i + 1) + 'º';
+        var topClass = i < 3 ? topClasses[i] : '';
+        var avatar = u.foto
+          ? '<img src="' + u.foto + '" alt="foto">'
+          : '👤';
+        var wppNum = (u.whatsapp || '').replace(/\D/g, '');
+        var wppBtn = wppNum
+          ? '<button class="admin-wpp-btn" onclick="window.open('https://wa.me/55' + wppNum + '','_blank')">📲 WhatsApp</button>'
+          : '';
+        return '<div class="admin-ranking-item ' + topClass + '">' +
+          '<div class="admin-ranking-pos">' + pos + '</div>' +
+          '<div class="admin-ranking-avatar">' + avatar + '</div>' +
+          '<div class="admin-ranking-info">' +
+            '<div class="admin-ranking-nome">' + (u.nome || 'Usuário') + '</div>' +
+            '<div class="admin-ranking-wpp">📱 ' + (u.whatsapp || 'Sem WhatsApp') + '</div>' +
+            '<div class="admin-ranking-count">🏆 ' + (u.indicacoes || 0) + ' indicações</div>' +
+          '</div>' +
+          wppBtn +
+        '</div>';
+      }).join('');
+
+      if (!html) html = '<div style="text-align:center;color:rgba(255,255,255,0.4);padding:30px;font-size:13px">Nenhum participante cadastrado.</div>';
+      list.innerHTML = html;
+    }).catch(function() {
+      list.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.4);padding:30px;font-size:13px">Erro ao carregar.</div>';
+    });
+  }
+
+  // Botão atualizar ranking admin
+  document.addEventListener('click', function(e) {
+    if (e.target && e.target.id === 'adminRankingRefreshBtn') {
+      loadAdminRanking();
+    }
+  });
+
+  // Inicializar quando a aba de compartilhamento for aberta
+  var origTabSwitch = window._tabSwitch;
+  document.addEventListener('click', function(e) {
+    var tab = e.target.closest('[data-tab]');
+    if (tab && tab.dataset.tab === 'share') {
+      setTimeout(function() {
+        loadUserProfile();
+        loadRanking();
+      }, 100);
+    }
+    // Admin ranking tab
+    var adminTab = e.target.closest('[data-admin-tab]');
+    if (adminTab && adminTab.dataset.adminTab === 'ranking') {
+      setTimeout(loadAdminRanking, 100);
+    }
+  });
+
+  // Carregar ao iniciar se já estiver na aba de compartilhamento
+  window.addEventListener('load', function() {
+    var shareScreen = document.getElementById('screen-share');
+    if (shareScreen && shareScreen.classList.contains('active')) {
+      loadUserProfile();
+      loadRanking();
+    }
+  });
+
+  // Expor para uso externo
+  window.loadIndicaRanking = loadRanking;
+  window.loadAdminRanking = loadAdminRanking;
+})();
+
 </script>
 
 </body>
