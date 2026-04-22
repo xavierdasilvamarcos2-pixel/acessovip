@@ -155,7 +155,7 @@
     .sinal-ativo-timer-label { font-size: 9px; color: rgba(255,255,255,0.5); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
     .sinal-ativo-timer-val { font-size: 22px; font-weight: 900; color: #FBBF24; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
 
-    /* ===== BOLHA FLUTUANTE INSTALAR ===== */
+    
     .install-bubble {
       position: fixed;
       bottom: -110px;
@@ -565,7 +565,77 @@
     .admin-empty { text-align: center; padding: 40px 20px; color: var(--muted); }
     .admin-empty-icon { font-size: 48px; margin-bottom: 12px; }
     .admin-empty-text { font-size: 14px; font-weight: 600; }
-  </style>
+  
+/* ===== BOLHA FLUTUANTE INSTALAR ===== */
+#installBubble {
+  display: none;
+  position: fixed;
+  bottom: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  color: #fff;
+  border-radius: 50px;
+  padding: 12px 22px 12px 18px;
+  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.5);
+  cursor: pointer;
+  align-items: center;
+  gap: 10px;
+  min-width: 220px;
+  max-width: 320px;
+  transition: bottom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
+}
+#installBubble.show {
+  bottom: 80px;
+}
+#installBubble-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+#installBubble-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+#installBubble-text .ib-title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+#installBubble-text .ib-sub {
+  font-size: 11px;
+  opacity: 0.85;
+  line-height: 1.2;
+}
+#installBubble-close {
+  background: rgba(255,255,255,0.25);
+  border: none;
+  color: #fff;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  line-height: 1;
+}
+@keyframes ib-pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(255,107,53,0.5); }
+  50% { box-shadow: 0 4px 30px rgba(255,107,53,0.85), 0 0 0 6px rgba(255,107,53,0.15); }
+}
+#installBubble.show {
+  animation: ib-pulse 2.2s ease-in-out infinite;
+  animation-delay: 0.6s;
+}
+/* ===== FIM BOLHA FLUTUANTE ===== */
+
+</style>
   <!-- Web Push Nativo (VAPID) - sem dependências externas -->
   <script>
     // Chave pública VAPID para Web Push nativo
@@ -3952,5 +4022,109 @@ window.addEventListener('popstate', function(e) {
   history.pushState({ view: 'home' }, '');
 });
 </script>
+
+<!-- BOLHA FLUTUANTE INSTALAR -->
+<div id="installBubble" role="button" aria-label="Instalar App">
+  <span id="installBubble-icon">📲</span>
+  <div id="installBubble-text">
+    <span class="ib-title">Instalar App</span>
+    <span class="ib-sub">Adicionar à tela inicial</span>
+  </div>
+  <button id="installBubble-close" aria-label="Fechar">✕</button>
+</div>
+<!-- FIM BOLHA -->
+
+
+<script>
+// ===== BOLHA FLUTUANTE INSTALAR =====
+(function() {
+  // Verificar se o app já está instalado (modo standalone = já instalado)
+  var isInstalled = window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true
+    || document.referrer.includes('android-app://');
+
+  // Se já instalado, não mostrar nunca
+  if (isInstalled) return;
+
+  var bubble = document.getElementById('installBubble');
+  var bubbleClose = document.getElementById('installBubble-close');
+  if (!bubble || !bubbleClose) return;
+
+  var deferredPromptLocal = null;
+  var bubbleVisible = false;
+
+  // Capturar evento de instalação do Chrome (Android)
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    deferredPromptLocal = e;
+    // Expor para uso global também
+    window.deferredPrompt = e;
+  });
+
+  function showBubble() {
+    // Checar novamente se instalou enquanto esperava
+    if (window.matchMedia('(display-mode: standalone)').matches
+        || window.navigator.standalone === true) return;
+    if (bubbleVisible) return;
+    bubbleVisible = true;
+    bubble.style.display = 'flex';
+    // Forçar reflow antes de adicionar classe para animação funcionar
+    void bubble.offsetHeight;
+    bubble.classList.add('show');
+  }
+
+  function hideBubble() {
+    bubble.classList.remove('show');
+    setTimeout(function() {
+      bubble.style.display = 'none';
+      bubbleVisible = false;
+    }, 500);
+  }
+
+  // MOSTRAR SEMPRE após 3,5 segundos (independente do beforeinstallprompt)
+  setTimeout(showBubble, 3500);
+
+  // Fechar ao clicar no X
+  bubbleClose.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    hideBubble();
+  });
+
+  // Clicar na bolha: instalar ou mostrar instruções
+  bubble.addEventListener('click', function(e) {
+    if (e.target === bubbleClose || bubbleClose.contains(e.target)) return;
+
+    var prompt = deferredPromptLocal || window.deferredPrompt;
+
+    if (prompt) {
+      // Chrome Android: prompt nativo de instalação
+      prompt.prompt();
+      prompt.userChoice.then(function(result) {
+        deferredPromptLocal = null;
+        window.deferredPrompt = null;
+        hideBubble();
+      });
+    } else if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+      // iOS Safari: abrir modal com instruções
+      var iosModal = document.getElementById('iosInstallModal');
+      if (iosModal) iosModal.classList.add('open');
+      hideBubble();
+    } else {
+      // Fallback: mostrar modal de instruções Android
+      var androidModal = document.getElementById('androidInstallModal');
+      if (androidModal) androidModal.classList.add('open');
+      hideBubble();
+    }
+  });
+
+  // Esconder se o app for instalado durante a sessão
+  window.addEventListener('appinstalled', function() {
+    hideBubble();
+  });
+})();
+// ===== FIM BOLHA =====
+</script>
+
 </body>
 </html>
