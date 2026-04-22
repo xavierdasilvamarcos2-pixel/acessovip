@@ -125,17 +125,11 @@
     .bonus-sub { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 4px; line-height: 1.4; }
 
     /* Install Banner */
-    .install-banner { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #7C3AED, #5B21B6); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(124,58,237,0.4); animation: pulse-install 2s ease-in-out infinite; }
-    .install-banner.hidden { display: none; }
-    @keyframes pulse-install { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
-    .install-banner-text { flex: 1; }
-    .install-banner-title { font-size: 14px; font-weight: 900; color: #fff; }
-    .install-banner-sub { font-size: 11px; color: rgba(255,255,255,0.85); margin-top: 2px; }
-    .install-banner-icon { font-size: 28px; }
-    .install-banner-arrow { font-size: 20px; }
+    /* .install-banner removido - usar bolha flutuante */
+
+    /* .install-banner-* removido */
 
     /* iOS Install Banner */
-    .install-ios-banner { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #1c1c2e, #2d2d44); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.4); animation: pulse-install 2s ease-in-out infinite; border: 1px solid rgba(255,255,255,0.12); }
     .install-ios-banner.hidden { display: none; }
     /* iOS Install Modal */
     .ios-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
@@ -661,24 +655,8 @@
         </div>
         <button class="notif-banner-close" id="notifBannerClose">✕</button>
       </div>
-      <!-- Install PWA Banner -->
-      <div class="install-banner hidden" id="installBanner">
-        <span class="install-banner-icon">📲</span>
-        <div class="install-banner-text">
-          <div class="install-banner-title">INSTALAR O APP GRÁTIS</div>
-          <div class="install-banner-sub">👆 Adicione à tela inicial do celular!</div>
-        </div>
-        <span class="install-banner-arrow">⬇️</span>
-      </div>
-      <!-- Install iOS Banner -->
-      <div class="install-ios-banner hidden" id="installIosBanner">
-        <span class="install-banner-icon">🍎</span>
-        <div class="install-banner-text">
-          <div class="install-banner-title">INSTALAR NO iPHONE</div>
-          <div class="install-banner-sub">👆 Veja como adicionar à tela inicial!</div>
-        </div>
-        <span class="install-banner-arrow">⬇️</span>
-      </div>
+      <!-- Install PWA Banner removido - usar bolha flutuante -->
+      <!-- Install iOS Banner removido - usar bolha flutuante -->
       <!-- iOS Install Guide Modal -->
       <div class="ios-modal" id="iosInstallModal">
         <div class="ios-modal-box">
@@ -2254,13 +2232,13 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  if (!isInstalled) document.getElementById('installBanner').classList.remove('hidden');
+  // installBanner removido - usar bolha flutuante
 });
 
 window.addEventListener('appinstalled', () => {
   isInstalled = true;
   _ls.set('av_installed', '1');
-  document.getElementById('installBanner').classList.add('hidden');
+  // installBanner removido
   installCount++;
   _ls.set('av_installs', installCount);
   showToast('✅ App instalado com sucesso!', 3000);
@@ -2276,28 +2254,7 @@ window.addEventListener('appinstalled', () => {
     }).catch(()=>{});
 });
 
-document.getElementById('installBanner').addEventListener('click', async () => {
-  if (deferredPrompt) {
-    // Chrome: instala direto
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    if (outcome === 'accepted') {
-      trackEvent('pwa_install_accepted');
-      document.getElementById('installBanner').classList.add('hidden');
-    }
-  } else {
-    // Instagram/outros: usa intent:// para abrir no Chrome sem tela preta
-    const appUrl = 'https://acessoplatafomas.com.br/';
-    const intentUrl = 'intent://' + appUrl.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;end';
-    const a = document.createElement('a');
-    a.href = intentUrl;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    trackEvent('pwa_install_chrome_redirect');
-  }
-});
+// installBanner click listener removido - usar bolha flutuante);
 document.getElementById('installGuideClose').addEventListener('click', () => {
   document.getElementById('installGuideModal').classList.remove('open');
 });;
@@ -2308,7 +2265,7 @@ const isStandalone = window.navigator.standalone === true;
 if (isIOS && !isStandalone && !isInstalled) {
   // iPhone: mostra banner iOS com etapas, garante que banner Android fica oculto
   document.getElementById('installIosBanner').classList.remove('hidden');
-  document.getElementById('installBanner').classList.add('hidden');
+  // installBanner removido
 }
 document.getElementById('installIosBanner').addEventListener('click', () => {
   document.getElementById('iosInstallModal').classList.add('open');
@@ -2323,7 +2280,7 @@ document.getElementById('iosInstallModal').addEventListener('click', (e) => {
 
 // Hide install banner if already installed
 if (isInstalled || window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-  document.getElementById('installBanner').classList.add('hidden');
+  // installBanner removido
   isInstalled = true;
   _ls.set('av_installed', '1');
 }
