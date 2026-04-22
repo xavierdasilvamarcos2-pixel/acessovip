@@ -1899,9 +1899,9 @@ function clearSinalPlatSelect() {
 // ===== CONFIG =====
 const ADMIN_PASSWORD = 'admin2025vip';
 const APP_URL = window.location.origin;
-const ONESIGNAL_APP_ID = '1ee5af72-b277-4de1-9d6f-ef75b5b49e70';
-const ONESIGNAL_API_KEY = 'os_v2_app_d3s264vso5g6dhlp5523lne6ocsbn5fxdabuyiml62blkz6idc3f2hav5w3v2wy5hmcslhycf7u2d5vhxses6h4xau4f6dz3jqxqnha';
+// Web Push nativo (VAPID) - sem OneSignal
 const WORKER_URL = 'https://acessovip-notif.xavierdasilvamarcos2.workers.dev';
+const VAPID_PUBLIC_KEY = 'BPTV6hbhEA7RqmyLW6AwDoNE2z5wQ6Lg1W8LQRugLXEuv6hoauT57iUB7hXnN85JYxBCwdnkEzeLOIur-Kvstu4';
 const GA_ID = 'G-XXXXXXXXXX'; // Substituir pelo ID real do Google Analytics
 
 // ===== PLATFORMS DATA (embedded from DB) =====
@@ -2681,7 +2681,7 @@ function loadAdminStats() {
     }).catch(() => {
       document.getElementById('adminStatInstalls').textContent = installCount.toLocaleString();
     });
-  // Subscribers push: buscar do OneSignal
+  // Subscribers push: buscar do Worker (Web Push nativo)
   loadSubscriberCount();
 }
 document.getElementById('refreshStatsBtn').addEventListener('click', loadAdminStats);;
@@ -2759,7 +2759,7 @@ function updateNotifBtn() {
 document.getElementById('welcomeNotifBtn').addEventListener('click', async () => {
   _ls.set('av_welcome_seen', '1');
   document.getElementById('welcomeModal').classList.remove('open');
-  // Usar o OneSignal SDK para registrar o usuário
+  // Registrar subscription Web Push
   await requestNotificationPermission();
   updateNotifBtn();
 });
