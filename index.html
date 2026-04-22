@@ -1623,11 +1623,11 @@
         <div class="admin-form">
           <div class="admin-form-row">
             <label class="admin-form-label">&#128172; Título da Notificação</label>
-            <input class="admin-form-input" id="notifTitle" type="text" placeholder="Ex: 🔥 Plataforma Em Alta!" value="&#128293; Plataforma Em Alta!" />
+            <input class="admin-form-input" id="notifTitle" type="text" placeholder="Ex: 🔥 Plataforma Em Alta!" value="&#128680; ENTRADA AO VIVO" />
           </div>
           <div class="admin-form-row">
             <label class="admin-form-label">&#128221; Mensagem</label>
-            <textarea class="admin-notif-textarea" id="notifBody" placeholder="Ex: Fortune Tiger pagando muito hoje! Corre lá 🐯"></textarea>
+            <textarea class="admin-notif-textarea" id="notifBody" placeholder="🔥 Plataforma em alta agora&#10;Clique e acesse antes que mude"></textarea>
           </div>
           <div class="admin-form-row">
             <label class="admin-form-label">&#128247; Imagem (opcional)</label>
@@ -2676,7 +2676,7 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
         var now = Date.now();
         if (now - lastSent > 30 * 60 * 1000) { // 30 minutos
           _ls.set(spamKey, String(now));
-          sendPushNotification('🚨 SINAIS ATIVOS AGORA', '🎰 Nova oportunidade detectada\nEntre agora e confira', 'hot')
+          sendPushNotification('🚨 ENTRADA AO VIVO', '🔥 Plataforma em alta agora\nClique e acesse antes que mude', 'hot')
             .then(result => {
               if (result.success) showToast('📲 Notificação enviada para todos!');
               else showToast('⚠️ Erro ao enviar notificação');
@@ -2879,7 +2879,7 @@ document.getElementById('notifImageFile').addEventListener('change', function() 
   reader.readAsDataURL(file);
 });
 document.getElementById('sendNotifBtn').addEventListener('click', async () => {
-  const title = document.getElementById('notifTitle').value || '🔥 ACESSO VIP';
+  const title = document.getElementById('notifTitle').value || '🚨 ENTRADA AO VIVO';
   const body = document.getElementById('notifBody').value;
   const tab = document.getElementById('notifUrl').value || 'hot';
   if (!body) { showToast('Digite uma mensagem!'); return; }
