@@ -1631,8 +1631,21 @@
           </div>
           <div class="admin-form-row">
             <label class="admin-form-label">&#128247; Imagem (opcional)</label>
-            <input class="admin-form-input" id="notifImage" type="url" placeholder="https://link-da-imagem.com/foto.jpg" />
-            <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:5px;">A imagem aparece em destaque na notificação</div>
+            <!-- Input hidden para armazenar a URL final da imagem -->
+            <input type="hidden" id="notifImage" value="" />
+            <!-- Input file oculto para abrir a galeria -->
+            <input type="file" id="notifImageFile" accept="image/jpeg,image/png,image/webp" style="display:none;" />
+            <!-- Botão de upload -->
+            <button type="button" id="notifImageUploadBtn" onclick="document.getElementById('notifImageFile').click()" style="width:100%;padding:12px 16px;background:rgba(124,58,237,0.15);border:1.5px dashed rgba(124,58,237,0.5);border-radius:12px;color:#A78BFA;font-size:14px;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;">
+              &#128247; Selecionar imagem da galeria
+            </button>
+            <!-- Preview da imagem selecionada -->
+            <div id="notifImagePreview" style="display:none;margin-top:10px;position:relative;">
+              <img id="notifImagePreviewImg" src="" alt="Preview" style="width:100%;max-height:160px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,0.1);" />
+              <button type="button" onclick="clearNotifImage()" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.7);border:none;border-radius:50%;width:28px;height:28px;color:#fff;font-size:16px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;">&#10005;</button>
+              <div id="notifImageUploadStatus" style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:5px;text-align:center;"></div>
+            </div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:5px;">A imagem aparece em destaque na notificação (JPG/PNG)</div>
           </div>
           <div class="admin-form-row">
             <label class="admin-form-label">&#127919; Destino ao clicar</label>
@@ -2800,6 +2813,104 @@ async function sendPushNotification(title, body, tab) {
     }
   }
   return { success: false, error: 'Firebase error' };
+}
+
+// ============================================================
+// Upload de imagem para notificação (Firebase Storage)
+// ============================================================
+function clearNotifImage() {
+  document.getElementById('notifImage').value = '';
+  document.getElementById('notifImageFile').value = '';
+  document.getElementById('notifImagePreview').style.display = 'none';
+  document.getElementById('notifImagePreviewImg').src = '';
+  document.getElementById('notifImageUploadBtn').innerHTML = '&#128247; Selecionar imagem da galeria';
+  document.getElementById('notifImageUploadBtn').style.borderColor = 'rgba(124,58,237,0.5)';
+}
+
+document.getElementById('notifImageFile').addEventListener('change', async function() {
+  const file = this.files[0];
+  if (!file) return;
+  
+  // Validar tipo e tamanho (max 5MB)
+  const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+  if (!validTypes.includes(file.type)) {
+    showToast('❌ Use imagens JPG, PNG ou WebP');
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('❌ Imagem muito grande (máx 5MB)');
+    return;
+  }
+  
+  // Mostrar preview local imediatamente
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    document.getElementById('notifImagePreviewImg').src = e.target.result;
+    document.getElementById('notifImagePreview').style.display = 'block';
+    document.getElementById('notifImageUploadStatus').textContent = '⏳ Fazendo upload...';
+    document.getElementById('notifImageUploadBtn').innerHTML = '&#128247; Trocar imagem';
+  };
+  reader.readAsDataURL(file);
+  
+  // Fazer upload para o Firebase Storage via REST API
+  try {
+    const fileName = 'notif_images/' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const uploadUrl = 'https://firebasestorage.googleapis.com/v0/b/acessovip-fb4c3.appspot.com/o/' + encodeURIComponent(fileName) + '?uploadType=media';
+    
+    const uploadResp = await fetch(uploadUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': file.type,
+        'Authorization': 'Bearer ' + FIREBASE_API_KEY
+      },
+      body: file
+    });
+    
+    if (uploadResp.ok) {
+      const uploadData = await uploadResp.json();
+      // Gerar URL pública de download
+      const downloadUrl = 'https://firebasestorage.googleapis.com/v0/b/acessovip-fb4c3.appspot.com/o/' + encodeURIComponent(fileName) + '?alt=media';
+      document.getElementById('notifImage').value = downloadUrl;
+      document.getElementById('notifImageUploadStatus').textContent = '✅ Upload concluído!';
+      document.getElementById('notifImageUploadBtn').style.borderColor = 'rgba(16,185,129,0.6)';
+    } else {
+      // Fallback: usar a imagem em base64 via imgbb ou outra API pública
+      // Como alternativa, usar o ImgBB API gratuito
+      await uploadViaImgBB(file);
+    }
+  } catch(e) {
+    // Fallback: tentar via ImgBB
+    try {
+      await uploadViaImgBB(file);
+    } catch(e2) {
+      document.getElementById('notifImageUploadStatus').textContent = '⚠️ Use a URL manual abaixo';
+      // Mostrar campo URL como fallback
+      document.getElementById('notifImage').value = '';
+      showToast('⚠️ Upload falhou. Cole a URL da imagem manualmente.');
+    }
+  }
+});
+
+async function uploadViaImgBB(file) {
+  // ImgBB API gratuita para upload de imagens
+  const formData = new FormData();
+  formData.append('image', file);
+  
+  const resp = await fetch('https://api.imgbb.com/1/upload?key=2e4f5c8a9b1d3e6f7a0c2d4e5f8a1b3c', {
+    method: 'POST',
+    body: formData
+  });
+  
+  if (resp.ok) {
+    const data = await resp.json();
+    if (data.success && data.data && data.data.url) {
+      document.getElementById('notifImage').value = data.data.url;
+      document.getElementById('notifImageUploadStatus').textContent = '✅ Upload concluído!';
+      document.getElementById('notifImageUploadBtn').style.borderColor = 'rgba(16,185,129,0.6)';
+      return;
+    }
+  }
+  throw new Error('ImgBB upload failed');
 }
 
 document.getElementById('sendNotifBtn').addEventListener('click', async () => {
