@@ -1744,6 +1744,28 @@
         <div style="font-size:11px;color:rgba(255,255,255,0.3);text-align:center;margin-bottom:10px;">Instalações e assinantes são contados globalmente (todos os dispositivos)</div>
         <button class="admin-btn-submit blue" id="refreshStatsBtn">🔄 ATUALIZAR DADOS</button>
       </div>
+      <!-- CONFIG WHATSAPP TAB -->
+      <div class="admin-section" id="admin-tab-config">
+        <div class="admin-sec-hdr">
+          <div class="admin-sec-icon" style="background:linear-gradient(135deg,#25D366,#128C7E)">&#128242;</div>
+          <div>
+            <div class="admin-sec-ttl">Configuração do Grupo WhatsApp</div>
+            <div class="admin-sec-sub">Altere o link do grupo sem precisar mexer no código</div>
+          </div>
+        </div>
+        <div style="background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.2);border-radius:12px;padding:16px;margin-bottom:16px;">
+          <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">Link atual do grupo:</div>
+          <div id="adminWppCurrentLink" style="font-size:13px;color:#25D366;word-break:break-all;font-weight:600;">Carregando...</div>
+        </div>
+        <div style="margin-bottom:6px;font-size:13px;color:rgba(255,255,255,0.7);font-weight:600;">Novo link do grupo:</div>
+        <input type="url" id="adminWppInput" class="admin-wpp-input" placeholder="https://chat.whatsapp.com/XXXXX" />
+        <div id="adminWppStatus" class="admin-wpp-status"></div>
+        <button class="admin-btn-submit" id="adminWppSaveBtn" style="background:linear-gradient(135deg,#25D366,#128C7E);">💾 Salvar Link</button>
+        <div style="margin-top:16px;font-size:11px;color:rgba(255,255,255,0.3);line-height:1.6;">
+          ⚠️ O link deve começar com <strong style="color:rgba(255,255,255,0.5)">https://chat.whatsapp.com/</strong><br>
+          Após salvar, todos os botões do app serão atualizados automaticamente.
+        </div>
+      </div>
 
     </div>
   </div>
