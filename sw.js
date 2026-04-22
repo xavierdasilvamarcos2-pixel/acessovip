@@ -78,20 +78,29 @@ self.addEventListener('push', (event) => {
 // ============================================================
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  const url = (event.notification.data && event.notification.data.url)
+  const notifUrl = (event.notification.data && event.notification.data.url)
     ? event.notification.data.url
     : 'https://acessoplatafomas.com.br/?tab=hot';
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
+      // Se o app já está aberto, focar e navegar via postMessage
       for (const client of windowClients) {
         if (client.url.includes('acessoplatafomas.com.br') && 'focus' in client) {
           client.focus();
-          client.navigate(url);
+          // Extrair o tab do URL para navegar sem recarregar a página
+          try {
+            const urlObj = new URL(notifUrl);
+            const tab = urlObj.searchParams.get('tab') || 'hot';
+            client.postMessage({ type: 'NAVIGATE_TAB', tab: tab });
+          } catch(e) {
+            client.navigate(notifUrl);
+          }
           return;
         }
       }
+      // App fechado: abrir com o URL correto
       if (clients.openWindow) {
-        return clients.openWindow(url);
+        return clients.openWindow(notifUrl);
       }
     })
   );
