@@ -385,11 +385,22 @@
     .saque-notif-text { font-size: 13px; font-weight: 700; color: #155724; }
     /* Grid de cards */
     .sinais-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 12px; background: #000; }
-    .sinal-card { background: #111; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #222; cursor: pointer; }
+    .sinal-card { background: #111; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #333; cursor: pointer; box-shadow: 0 0 10px rgba(16,185,129,0.15); }
     .sinal-card-logo-wrap { position: relative; width: 100%; aspect-ratio: 1/1; background: #1a1a1a; }
     .sinal-card-logo { width: 100%; height: 100%; object-fit: cover; display: block; }
     .sinal-card-logo-ph { width: 100%; height: 100%; background: linear-gradient(135deg, #1a1a2e, #16213e); display: flex; align-items: center; justify-content: center; font-size: 36px; }
-    .sinal-card-body { padding: 6px 6px 8px; display: flex; flex-direction: column; gap: 6px; }
+    .sinal-card-body { padding: 6px 6px 8px; display: flex; flex-direction: column; gap: 3px; }
+    /* === MELHORIAS ABA SINAIS === */
+    .sinal-card { border: 1px solid #333; box-shadow: 0 0 10px rgba(16,185,129,0.15); }
+    .sinal-card-ativo-badge { background: linear-gradient(135deg, #10B981, #059669); color: #fff; font-size: 9px; font-weight: 900; padding: 3px 7px; border-radius: 6px; letter-spacing: 0.5px; text-align: center; margin-bottom: 3px; animation: sinal-pulse-badge 1.5s ease-in-out infinite; }
+    @keyframes sinal-pulse-badge { 0%,100% { opacity:1; } 50% { opacity:0.7; } }
+    .sinal-card-timer { font-size: 11px; font-weight: 900; color: #F59E0B; text-align: center; margin-bottom: 3px; letter-spacing: 0.5px; }
+    .sinal-card-ia { font-size: 9px; color: #a78bfa; text-align: center; margin-bottom: 3px; }
+    .sinal-card-estrategia { font-size: 9px; color: #6ee7b7; text-align: center; margin-bottom: 3px; background: rgba(16,185,129,0.1); border-radius: 4px; padding: 2px 4px; }
+    .sinal-card-status { display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 9px; font-weight: 800; margin-bottom: 3px; }
+    .sinal-card-people { font-size: 9px; color: #94a3b8; text-align: center; margin-bottom: 3px; }
+    .sinal-card-entrar { width: 100%; background: linear-gradient(135deg, #f97316, #ea580c); border: none; border-radius: 8px; padding: 7px 4px; color: #fff; font-size: 11px; font-weight: 900; cursor: pointer; letter-spacing: 0.5px; margin-top: 2px; }
+
     .sinal-card-name { font-size: 11px; font-weight: 800; color: #fff; text-align: center; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     /* Barra de progresso com listras diagonais */
     .sinal-progress-wrap { width: 100%; }
@@ -3132,21 +3143,38 @@ function renderSinais() {
       ? '<img class="sinal-card-logo" src="' + jogo.logo + '" alt="' + jogo.name + '" onerror="this.style.display=\'none\'">'
       : '<div class="sinal-card-logo-ph">&#127918;</div>';
     var payingTag = jogo.isPaying ? '<span style="font-size:9px;background:#F59E0B;color:#000;border-radius:4px;padding:1px 5px;font-weight:900;margin-left:4px;">&#128176; PAGANDO</span>' : '';
+    // Gerar número de pessoas (fixo por jogo, baseado no nome)
+    var seed = jogo.name.charCodeAt(0) + (jogo.name.charCodeAt(1) || 0);
+    var people = 12 + (seed % 27); // 12-38 pessoas
+    // Status baseado na assertividade
+    var statusDot, statusTxt;
+    if (pct >= 75) { statusDot = '🟢'; statusTxt = 'Ativo'; }
+    else if (pct >= 55) { statusDot = '🟡'; statusTxt = 'Finalizando'; }
+    else { statusDot = '🔴'; statusTxt = 'Encerrado'; }
+    // Estratégia
+    var estrategia = '5 giros normal + 5 turbo';
     return '<div class="sinal-card">' +
       '<div class="sinal-card-logo-wrap">' + logoHtml + '</div>' +
       '<div class="sinal-card-body">' +
+      '<div class="sinal-card-ativo-badge">🚨 SINAL ATIVO AGORA</div>' +
       '<div class="sinal-card-name">' + jogo.name + payingTag + '</div>' +
+      '<div class="sinal-card-timer" id="stimer-' + jogo._key + '">⏳ RESTAM: --:--</div>' +
+      '<div class="sinal-card-ia">🤖 IA detectou padrão de pagamento agora</div>' +
       '<div class="sinal-progress-wrap">' +
         '<div class="sinal-progress-bg">' +
           '<div class="sinal-progress-fill" id="sfill-' + jogo._key + '" style="width:' + pct + '%;background:' + color + '"></div>' +
           '<div class="sinal-progress-pct" id="spct-' + jogo._key + '">' + pct + '%</div>' +
         '</div>' +
       '</div>' +
-      '<button class="sinal-play-btn" onclick="openSinalDetail(&quot;' + jogo._key + '&quot;)">JOGAR</button>' +
+      '<div class="sinal-card-estrategia">🎯 ' + estrategia + '</div>' +
+      '<div class="sinal-card-status"><span>' + statusDot + '</span><span style="color:#e2e8f0">' + statusTxt + '</span></div>' +
+      '<div class="sinal-card-people">💬 ' + people + ' pessoas entrando agora</div>' +
+      '<button class="sinal-card-entrar" onclick="openSinalDetail(&quot;' + jogo._key + '&quot;)">🚀 ENTRAR AGORA</button>' +
       '</div>' +
     '</div>';
   }).join('');
 
+  // Tempo base para cada card (entre 4 e 9 minutos)
   list.forEach(function(jogo) {
     var id = setInterval(function() {
       var fill = document.getElementById('sfill-' + jogo._key);
@@ -3159,6 +3187,26 @@ function renderSinais() {
       pctEl.textContent = newPct + '%';
     }, 3000 + Math.random() * 2000);
     sinaisIntervals.push(id);
+    // Contador regressivo individual por card
+    var seed2 = (jogo.name.charCodeAt(0) || 65) + (jogo.name.charCodeAt(1) || 65);
+    var totalSecs = 240 + (seed2 % 300); // 4 a 9 minutos
+    var remaining = totalSecs;
+    var timerId = setInterval(function() {
+      var timerEl = document.getElementById('stimer-' + jogo._key);
+      if (!timerEl) { clearInterval(timerId); return; }
+      remaining--;
+      if (remaining <= 0) {
+        remaining = 240 + Math.floor(Math.random() * 300); // reiniciar
+      }
+      var m = Math.floor(remaining / 60);
+      var s = remaining % 60;
+      timerEl.textContent = '⏳ RESTAM: ' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+      // Cor do timer baseada no tempo restante
+      if (remaining <= 60) timerEl.style.color = '#EF4444'; // vermelho < 1min
+      else if (remaining <= 120) timerEl.style.color = '#F59E0B'; // amarelo < 2min
+      else timerEl.style.color = '#F59E0B';
+    }, 1000);
+    sinaisIntervals.push(timerId);
   });
 }
 
