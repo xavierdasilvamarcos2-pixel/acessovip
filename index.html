@@ -125,8 +125,8 @@
     .bonus-sub { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 4px; line-height: 1.4; }
 
     /* Install Banner */
-    .install-banner { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #7C3AED, #5B21B6); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(124,58,237,0.4); animation: pulse-install 2s ease-in-out infinite; }
-    .install-banner.hidden { display: none; }
+    .install-banner { display: none !important; }
+    .install-banner.hidden { display: none !important; }
     @keyframes pulse-install { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
     .install-banner-text { flex: 1; }
     .install-banner-title { font-size: 14px; font-weight: 900; color: #fff; }
@@ -512,6 +512,63 @@
     .admin-empty { text-align: center; padding: 40px 20px; color: var(--muted); }
     .admin-empty-icon { font-size: 48px; margin-bottom: 12px; }
     .admin-empty-text { font-size: 14px; font-weight: 600; }
+
+    /* ===== BOLHAS FLUTUANTES ===== */
+    .bolha-flutuante {
+      position: fixed;
+      bottom: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+      min-width: 220px;
+      max-width: 320px;
+      transition: bottom 0.5s cubic-bezier(0.32,0.72,0,1), opacity 0.5s;
+      opacity: 0;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .bolha-flutuante.visivel {
+      bottom: 90px;
+      opacity: 1;
+      pointer-events: all;
+      animation: bolha-pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes bolha-pulse {
+      0%, 100% { transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.04); }
+    }
+    .bolha-install {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+    }
+    .bolha-notif {
+      background: linear-gradient(135deg, #7C3AED, #5B21B6);
+    }
+    .bolha-icon { font-size: 22px; flex-shrink: 0; }
+    .bolha-texto { flex: 1; }
+    .bolha-titulo { font-size: 13px; font-weight: 900; color: #fff; }
+    .bolha-sub { font-size: 10px; color: rgba(255,255,255,0.85); margin-top: 1px; }
+    .bolha-fechar {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      color: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      line-height: 1;
+    }
   </style>
   <!-- Web Push Nativo (VAPID) - sem dependências externas -->
   <script>
@@ -594,8 +651,8 @@
         </div>
         <button class="notif-banner-close" id="notifBannerClose">✕</button>
       </div>
-      <!-- Install PWA Banner -->
-      <div class="install-banner hidden" id="installBanner">
+      <!-- Install PWA Banner - substituído por bolha flutuante -->
+      <div class="install-banner hidden" id="installBanner" style="display:none!important">
         <span class="install-banner-icon">📲</span>
         <div class="install-banner-text">
           <div class="install-banner-title">INSTALAR O APP GRÁTIS</div>
@@ -603,8 +660,8 @@
         </div>
         <span class="install-banner-arrow">⬇️</span>
       </div>
-      <!-- Install iOS Banner -->
-      <div class="install-ios-banner hidden" id="installIosBanner">
+      <!-- Install iOS Banner - substituído por bolha flutuante -->
+      <div class="install-ios-banner hidden" id="installIosBanner" style="display:none!important">
         <span class="install-banner-icon">🍎</span>
         <div class="install-banner-text">
           <div class="install-banner-title">INSTALAR NO iPHONE</div>
@@ -3798,5 +3855,128 @@ window.addEventListener('popstate', function(e) {
   history.pushState({ view: 'home' }, '');
 });
 </script>
+
+  <!-- BOLHA FLUTUANTE - INSTALAR APP -->
+  <div class="bolha-flutuante bolha-install" id="bolhaInstall">
+    <span class="bolha-icon">📲</span>
+    <div class="bolha-texto">
+      <div class="bolha-titulo">Instalar App</div>
+      <div class="bolha-sub">Adicionar à tela inicial</div>
+    </div>
+    <button class="bolha-fechar" id="bolhaInstallFechar">✕</button>
+  </div>
+
+  <!-- BOLHA FLUTUANTE - ATIVAR NOTIFICAÇÕES -->
+  <div class="bolha-flutuante bolha-notif" id="bolhaNotif">
+    <span class="bolha-icon">🔔</span>
+    <div class="bolha-texto">
+      <div class="bolha-titulo">Ativar notificações</div>
+      <div class="bolha-sub">Receba sinais e lançamentos</div>
+    </div>
+    <button class="bolha-fechar" id="bolhaNotifFechar">✕</button>
+  </div>
+
+  <script>
+  // ===== BOLHAS FLUTUANTES =====
+  (function() {
+    var isStandalone = window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true;
+    var jaFechouInstall = sessionStorage.getItem('bolha_install_fechou');
+    var jaFechouNotif = sessionStorage.getItem('bolha_notif_fechou');
+    var notifJaAtiva = (typeof Notification !== 'undefined' && Notification.permission === 'granted');
+
+    // BOLHA INSTALAR
+    if (!isStandalone && !jaFechouInstall) {
+      setTimeout(function() {
+        var bolha = document.getElementById('bolhaInstall');
+        if (bolha) bolha.classList.add('visivel');
+      }, 3000);
+    }
+
+    // BOLHA NOTIFICAÇÃO
+    if (!notifJaAtiva && !jaFechouNotif) {
+      setTimeout(function() {
+        var bolha = document.getElementById('bolhaNotif');
+        if (bolha) bolha.classList.add('visivel');
+      }, 6000);
+    }
+
+    // Fechar bolha instalar
+    document.addEventListener('DOMContentLoaded', function() {
+      var btnFecharInstall = document.getElementById('bolhaInstallFechar');
+      if (btnFecharInstall) {
+        btnFecharInstall.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var bolha = document.getElementById('bolhaInstall');
+          if (bolha) bolha.classList.remove('visivel');
+          sessionStorage.setItem('bolha_install_fechou', '1');
+        });
+      }
+
+      // Fechar bolha notif
+      var btnFecharNotif = document.getElementById('bolhaNotifFechar');
+      if (btnFecharNotif) {
+        btnFecharNotif.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var bolha = document.getElementById('bolhaNotif');
+          if (bolha) bolha.classList.remove('visivel');
+          sessionStorage.setItem('bolha_notif_fechou', '1');
+        });
+      }
+
+      // Clique na bolha instalar
+      var bolhaInstall = document.getElementById('bolhaInstall');
+      if (bolhaInstall) {
+        bolhaInstall.addEventListener('click', function(e) {
+          if (e.target.id === 'bolhaInstallFechar') return;
+          bolhaInstall.classList.remove('visivel');
+          sessionStorage.setItem('bolha_install_fechou', '1');
+          if (window.deferredPrompt) {
+            window.deferredPrompt.prompt();
+            window.deferredPrompt.userChoice.then(function() {
+              window.deferredPrompt = null;
+            });
+          } else {
+            // Fallback: mostrar modal iOS ou instruções
+            var iosModal = document.getElementById('iosInstallModal');
+            if (iosModal) iosModal.style.display = 'flex';
+            else {
+              var installGuide = document.getElementById('installGuideModal');
+              if (installGuide) installGuide.classList.add('open');
+            }
+          }
+        });
+      }
+
+      // Clique na bolha notificação
+      var bolhaNotif = document.getElementById('bolhaNotif');
+      if (bolhaNotif) {
+        bolhaNotif.addEventListener('click', function(e) {
+          if (e.target.id === 'bolhaNotifFechar') return;
+          bolhaNotif.classList.remove('visivel');
+          sessionStorage.setItem('bolha_notif_fechou', '1');
+          if (typeof requestNotificationPermission === 'function') {
+            requestNotificationPermission();
+          } else if (typeof Notification !== 'undefined') {
+            Notification.requestPermission();
+          }
+        });
+      }
+    });
+
+    // Esconder bolha instalar quando app for instalado
+    window.addEventListener('appinstalled', function() {
+      var bolha = document.getElementById('bolhaInstall');
+      if (bolha) bolha.classList.remove('visivel');
+    });
+
+    // Capturar evento de instalação PWA
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      window.deferredPrompt = e;
+    });
+  })();
+  </script>
+
 </body>
 </html>
