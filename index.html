@@ -125,11 +125,17 @@
     .bonus-sub { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 4px; line-height: 1.4; }
 
     /* Install Banner */
-    /* .install-banner removido - usar bolha flutuante */
-
-    /* .install-banner-* removido */
+    .install-banner { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #7C3AED, #5B21B6); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(124,58,237,0.4); animation: pulse-install 2s ease-in-out infinite; }
+    .install-banner.hidden { display: none; }
+    @keyframes pulse-install { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+    .install-banner-text { flex: 1; }
+    .install-banner-title { font-size: 14px; font-weight: 900; color: #fff; }
+    .install-banner-sub { font-size: 11px; color: rgba(255,255,255,0.85); margin-top: 2px; }
+    .install-banner-icon { font-size: 28px; }
+    .install-banner-arrow { font-size: 20px; }
 
     /* iOS Install Banner */
+    .install-ios-banner { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #1c1c2e, #2d2d44); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.4); animation: pulse-install 2s ease-in-out infinite; border: 1px solid rgba(255,255,255,0.12); }
     .install-ios-banner.hidden { display: none; }
     /* iOS Install Modal */
     .ios-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
@@ -154,71 +160,6 @@
     .sinal-ativo-timer { text-align: center; flex-shrink: 0; background: rgba(16,185,129,0.12); border-radius: 10px; padding: 8px 12px; border: 1px solid rgba(16,185,129,0.3); }
     .sinal-ativo-timer-label { font-size: 9px; color: rgba(255,255,255,0.5); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
     .sinal-ativo-timer-val { font-size: 22px; font-weight: 900; color: #FBBF24; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
-
-    
-    .install-bubble {
-      position: fixed;
-      bottom: -110px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 9999;
-      background: linear-gradient(135deg, #7C3AED, #4F46E5);
-      border: none;
-      border-radius: 50px;
-      padding: 14px 24px 14px 18px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      box-shadow: 0 8px 30px rgba(124,58,237,0.6);
-      transition: bottom 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
-      white-space: nowrap;
-      min-width: 200px;
-      max-width: 320px;
-    }
-    .install-bubble.visible {
-      bottom: 80px;
-      animation: bubble-pulse 2.4s ease-in-out infinite;
-    }
-    .install-bubble.hiding {
-      bottom: -110px;
-      animation: none;
-      transition: bottom 0.35s ease-in;
-    }
-    @keyframes bubble-pulse {
-      0%, 100% {
-        box-shadow: 0 8px 30px rgba(124,58,237,0.6), 0 0 0 0 rgba(124,58,237,0.35);
-        transform: translateX(-50%) scale(1);
-      }
-      50% {
-        box-shadow: 0 12px 40px rgba(124,58,237,0.75), 0 0 0 8px rgba(124,58,237,0);
-        transform: translateX(-50%) scale(1.04);
-      }
-    }
-    .install-bubble-icon { font-size: 26px; flex-shrink: 0; }
-    .install-bubble-text { flex: 1; text-align: left; }
-    .install-bubble-title { font-size: 15px; font-weight: 900; color: #fff; letter-spacing: 0.3px; line-height: 1.2; }
-    .install-bubble-sub { font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 1px; font-weight: 600; }
-    .install-bubble-close {
-      position: absolute;
-      top: -9px;
-      right: -9px;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.65);
-      border: 1.5px solid rgba(255,255,255,0.25);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 900;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 10000;
-      line-height: 1;
-    }
-
     /* VIP Group Button */
     .vip-btn { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #25D366, #128C7E); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.3); border: none; width: calc(100% - 32px); animation: pulse-vip 2.4s ease-in-out infinite; }
     @keyframes pulse-vip { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
@@ -565,77 +506,7 @@
     .admin-empty { text-align: center; padding: 40px 20px; color: var(--muted); }
     .admin-empty-icon { font-size: 48px; margin-bottom: 12px; }
     .admin-empty-text { font-size: 14px; font-weight: 600; }
-  
-/* ===== BOLHA FLUTUANTE INSTALAR ===== */
-#installBubble {
-  display: none;
-  position: fixed;
-  bottom: -120px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 99999;
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
-  color: #fff;
-  border-radius: 50px;
-  padding: 12px 22px 12px 18px;
-  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.5);
-  cursor: pointer;
-  align-items: center;
-  gap: 10px;
-  min-width: 220px;
-  max-width: 320px;
-  transition: bottom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  white-space: nowrap;
-}
-#installBubble.show {
-  bottom: 80px;
-}
-#installBubble-icon {
-  font-size: 22px;
-  flex-shrink: 0;
-}
-#installBubble-text {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-#installBubble-text .ib-title {
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.2;
-}
-#installBubble-text .ib-sub {
-  font-size: 11px;
-  opacity: 0.85;
-  line-height: 1.2;
-}
-#installBubble-close {
-  background: rgba(255,255,255,0.25);
-  border: none;
-  color: #fff;
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
-  font-size: 13px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  padding: 0;
-  line-height: 1;
-}
-@keyframes ib-pulse {
-  0%, 100% { box-shadow: 0 4px 20px rgba(255,107,53,0.5); }
-  50% { box-shadow: 0 4px 30px rgba(255,107,53,0.85), 0 0 0 6px rgba(255,107,53,0.15); }
-}
-#installBubble.show {
-  animation: ib-pulse 2.2s ease-in-out infinite;
-  animation-delay: 0.6s;
-}
-/* ===== FIM BOLHA FLUTUANTE ===== */
-
-</style>
+  </style>
   <!-- Web Push Nativo (VAPID) - sem dependências externas -->
   <script>
     // Chave pública VAPID para Web Push nativo
@@ -721,8 +592,24 @@
         </div>
         <button class="notif-banner-close" id="notifBannerClose">✕</button>
       </div>
-      <!-- Install PWA Banner removido - usar bolha flutuante -->
-      <!-- Install iOS Banner removido - usar bolha flutuante -->
+      <!-- Install PWA Banner -->
+      <div class="install-banner hidden" id="installBanner">
+        <span class="install-banner-icon">📲</span>
+        <div class="install-banner-text">
+          <div class="install-banner-title">INSTALAR O APP GRÁTIS</div>
+          <div class="install-banner-sub">👆 Adicione à tela inicial do celular!</div>
+        </div>
+        <span class="install-banner-arrow">⬇️</span>
+      </div>
+      <!-- Install iOS Banner -->
+      <div class="install-ios-banner hidden" id="installIosBanner">
+        <span class="install-banner-icon">🍎</span>
+        <div class="install-banner-text">
+          <div class="install-banner-title">INSTALAR NO iPHONE</div>
+          <div class="install-banner-sub">👆 Veja como adicionar à tela inicial!</div>
+        </div>
+        <span class="install-banner-arrow">⬇️</span>
+      </div>
       <!-- iOS Install Guide Modal -->
       <div class="ios-modal" id="iosInstallModal">
         <div class="ios-modal-box">
@@ -1494,16 +1381,6 @@
     </div>
 
   </div>
-  <!-- BOLHA FLUTUANTE INSTALAR -->
-  <button class="install-bubble" id="installBubble" style="display:none">
-    <span class="install-bubble-close" id="installBubbleClose">✕</span>
-    <span class="install-bubble-icon">📲</span>
-    <div class="install-bubble-text">
-      <div class="install-bubble-title">Instalar App</div>
-      <div class="install-bubble-sub">Adicionar à tela inicial</div>
-    </div>
-  </button>
-
   <!-- TAB BAR -->
   <div class="tab-bar">
     <button class="tab-item active" data-tab="home">
@@ -2298,13 +2175,13 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  // installBanner removido - usar bolha flutuante
+  if (!isInstalled) document.getElementById('installBanner').classList.remove('hidden');
 });
 
 window.addEventListener('appinstalled', () => {
   isInstalled = true;
   _ls.set('av_installed', '1');
-  // installBanner removido
+  document.getElementById('installBanner').classList.add('hidden');
   installCount++;
   _ls.set('av_installs', installCount);
   showToast('✅ App instalado com sucesso!', 3000);
@@ -2320,7 +2197,28 @@ window.addEventListener('appinstalled', () => {
     }).catch(()=>{});
 });
 
-// installBanner click listener removido - usar bolha flutuante);
+document.getElementById('installBanner').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    // Chrome: instala direto
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    if (outcome === 'accepted') {
+      trackEvent('pwa_install_accepted');
+      document.getElementById('installBanner').classList.add('hidden');
+    }
+  } else {
+    // Instagram/outros: usa intent:// para abrir no Chrome sem tela preta
+    const appUrl = 'https://acessoplatafomas.com.br/';
+    const intentUrl = 'intent://' + appUrl.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;end';
+    const a = document.createElement('a');
+    a.href = intentUrl;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    trackEvent('pwa_install_chrome_redirect');
+  }
+});
 document.getElementById('installGuideClose').addEventListener('click', () => {
   document.getElementById('installGuideModal').classList.remove('open');
 });;
@@ -2331,7 +2229,7 @@ const isStandalone = window.navigator.standalone === true;
 if (isIOS && !isStandalone && !isInstalled) {
   // iPhone: mostra banner iOS com etapas, garante que banner Android fica oculto
   document.getElementById('installIosBanner').classList.remove('hidden');
-  // installBanner removido
+  document.getElementById('installBanner').classList.add('hidden');
 }
 document.getElementById('installIosBanner').addEventListener('click', () => {
   document.getElementById('iosInstallModal').classList.add('open');
@@ -2346,95 +2244,11 @@ document.getElementById('iosInstallModal').addEventListener('click', (e) => {
 
 // Hide install banner if already installed
 if (isInstalled || window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-  // installBanner removido
+  document.getElementById('installBanner').classList.add('hidden');
   isInstalled = true;
   _ls.set('av_installed', '1');
 }
 
-// ===== BOLHA FLUTUANTE INSTALAR =====
-(function() {
-  var bubble = document.getElementById('installBubble');
-  var bubbleClose = document.getElementById('installBubbleClose');
-  if (!bubble) return;
-
-  // Verificar se o app já está instalado (standalone = já instalado)
-  var isStandaloneMode = window.matchMedia('(display-mode: standalone)').matches
-    || window.navigator.standalone === true;
-
-  // Se já está instalado como PWA, não mostrar
-  if (isStandaloneMode) return;
-
-  // Controle: não reaparecer se usuário já fechou nessa sessão
-  var closedThisSession = sessionStorage.getItem('av_bubble_closed') === '1';
-  if (closedThisSession) return;
-
-  function showBubble() {
-    if (window.matchMedia('(display-mode: standalone)').matches) return;
-    bubble.style.display = 'flex';
-    // Forçar reflow para garantir a animação CSS
-    void bubble.offsetHeight;
-    bubble.classList.add('visible');
-  }
-
-  function hideBubble() {
-    bubble.classList.add('hiding');
-    bubble.classList.remove('visible');
-    setTimeout(function() {
-      bubble.style.display = 'none';
-      bubble.classList.remove('hiding');
-    }, 380);
-  }
-
-  // Mostrar sempre após 3.5s (independente do beforeinstallprompt)
-  // O Chrome pode não disparar o evento se o usuário visitou recentemente
-  setTimeout(showBubble, 3500);
-
-  // Fechar ao clicar no X
-  bubbleClose.addEventListener('click', function(e) {
-    e.stopPropagation();
-    sessionStorage.setItem('av_bubble_closed', '1');
-    hideBubble();
-  });
-
-  // Clicar na bolha: tentar instalar
-  bubble.addEventListener('click', async function(e) {
-    if (e.target === bubbleClose) return;
-    sessionStorage.setItem('av_bubble_closed', '1');
-
-    if (deferredPrompt) {
-      // Chrome Android: instalar direto
-      deferredPrompt.prompt();
-      var result = await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      if (result.outcome === 'accepted') {
-        trackEvent('pwa_bubble_install_accepted');
-      }
-      hideBubble();
-    } else if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-      // iOS Safari: abrir modal com instruções
-      var iosModal = document.getElementById('iosInstallModal');
-      if (iosModal) iosModal.classList.add('open');
-      hideBubble();
-    } else {
-      // Android fora do Chrome (Instagram, etc.): abrir no Chrome
-      var appUrl = 'https://acessoplatafomas.com.br/';
-      var intentUrl = 'intent://' + appUrl.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;end';
-      var a = document.createElement('a');
-      a.href = intentUrl;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      trackEvent('pwa_bubble_chrome');
-      hideBubble();
-    }
-  });
-
-  // Esconder permanentemente se o app for instalado
-  window.addEventListener('appinstalled', function() {
-    sessionStorage.setItem('av_bubble_closed', '1');
-    hideBubble();
-  });
-})();
 // ===== NOTIFICATIONS =====
 async function requestNotificationPermission() {
   if (typeof Notification === 'undefined' || !('Notification' in window) || !('serviceWorker' in navigator)) {
@@ -4022,109 +3836,5 @@ window.addEventListener('popstate', function(e) {
   history.pushState({ view: 'home' }, '');
 });
 </script>
-
-<!-- BOLHA FLUTUANTE INSTALAR -->
-<div id="installBubble" role="button" aria-label="Instalar App">
-  <span id="installBubble-icon">📲</span>
-  <div id="installBubble-text">
-    <span class="ib-title">Instalar App</span>
-    <span class="ib-sub">Adicionar à tela inicial</span>
-  </div>
-  <button id="installBubble-close" aria-label="Fechar">✕</button>
-</div>
-<!-- FIM BOLHA -->
-
-
-<script>
-// ===== BOLHA FLUTUANTE INSTALAR =====
-(function() {
-  // Verificar se o app já está instalado (modo standalone = já instalado)
-  var isInstalled = window.matchMedia('(display-mode: standalone)').matches
-    || window.navigator.standalone === true
-    || document.referrer.includes('android-app://');
-
-  // Se já instalado, não mostrar nunca
-  if (isInstalled) return;
-
-  var bubble = document.getElementById('installBubble');
-  var bubbleClose = document.getElementById('installBubble-close');
-  if (!bubble || !bubbleClose) return;
-
-  var deferredPromptLocal = null;
-  var bubbleVisible = false;
-
-  // Capturar evento de instalação do Chrome (Android)
-  window.addEventListener('beforeinstallprompt', function(e) {
-    e.preventDefault();
-    deferredPromptLocal = e;
-    // Expor para uso global também
-    window.deferredPrompt = e;
-  });
-
-  function showBubble() {
-    // Checar novamente se instalou enquanto esperava
-    if (window.matchMedia('(display-mode: standalone)').matches
-        || window.navigator.standalone === true) return;
-    if (bubbleVisible) return;
-    bubbleVisible = true;
-    bubble.style.display = 'flex';
-    // Forçar reflow antes de adicionar classe para animação funcionar
-    void bubble.offsetHeight;
-    bubble.classList.add('show');
-  }
-
-  function hideBubble() {
-    bubble.classList.remove('show');
-    setTimeout(function() {
-      bubble.style.display = 'none';
-      bubbleVisible = false;
-    }, 500);
-  }
-
-  // MOSTRAR SEMPRE após 3,5 segundos (independente do beforeinstallprompt)
-  setTimeout(showBubble, 3500);
-
-  // Fechar ao clicar no X
-  bubbleClose.addEventListener('click', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    hideBubble();
-  });
-
-  // Clicar na bolha: instalar ou mostrar instruções
-  bubble.addEventListener('click', function(e) {
-    if (e.target === bubbleClose || bubbleClose.contains(e.target)) return;
-
-    var prompt = deferredPromptLocal || window.deferredPrompt;
-
-    if (prompt) {
-      // Chrome Android: prompt nativo de instalação
-      prompt.prompt();
-      prompt.userChoice.then(function(result) {
-        deferredPromptLocal = null;
-        window.deferredPrompt = null;
-        hideBubble();
-      });
-    } else if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-      // iOS Safari: abrir modal com instruções
-      var iosModal = document.getElementById('iosInstallModal');
-      if (iosModal) iosModal.classList.add('open');
-      hideBubble();
-    } else {
-      // Fallback: mostrar modal de instruções Android
-      var androidModal = document.getElementById('androidInstallModal');
-      if (androidModal) androidModal.classList.add('open');
-      hideBubble();
-    }
-  });
-
-  // Esconder se o app for instalado durante a sessão
-  window.addEventListener('appinstalled', function() {
-    hideBubble();
-  });
-})();
-// ===== FIM BOLHA =====
-</script>
-
 </body>
 </html>
