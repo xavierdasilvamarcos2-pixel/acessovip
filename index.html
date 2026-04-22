@@ -379,10 +379,7 @@
     .sinais-live-num { font-size: 14px; font-weight: 900; color: #fff; }
     @keyframes blink { 0%,100%{opacity:1;box-shadow:0 0 6px #10B981} 50%{opacity:0.3;box-shadow:none} }
     /* Notificação flutuante de saque */
-    .saque-notif { position: fixed; top: 60px; left: 50%; transform: translateX(-50%) translateY(-80px); z-index: 300; background: #d4edda; border: 1px solid #28a745; border-radius: 10px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; min-width: 240px; max-width: 320px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); transition: transform 0.4s cubic-bezier(0.32,0.72,0,1), opacity 0.4s; opacity: 0; pointer-events: none; }
-    .saque-notif.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-    .saque-notif-dot { width: 10px; height: 10px; border-radius: 50%; background: #28a745; flex-shrink: 0; }
-    .saque-notif-text { font-size: 13px; font-weight: 700; color: #155724; }
+    /* saque-notif removido */
     /* Grid de cards */
     .sinais-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 12px; background: #000; }
     .sinal-card { background: #111; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #333; cursor: pointer; box-shadow: 0 0 10px rgba(16,185,129,0.15); }
@@ -1667,10 +1664,7 @@
   </div>
 </div>
 <!-- NOTIFICACAO SAQUE -->
-<div class="saque-notif" id="saqueNotif">
-  <div class="saque-notif-dot"></div>
-  <div class="saque-notif-text" id="saqueNotifText">Débora AA. Sacou: R$ 414,00</div>
-</div>
+<!-- saque-notif removido -->
 <!-- SINAL DETAIL SCREEN -->
 <div class="sinal-detail" id="sinalDetail">
   <div class="sinal-detail-hdr">
@@ -3562,7 +3556,7 @@ document.getElementById('sinalGerarBtn').addEventListener('click', function() {
 });
 
 // Iniciar loop de notificações de saque
-startSaqueLoop();
+// startSaqueLoop(); // removido
 // ===== LIVE COUNTER =====
 // Atualiza contadores LIVE com valores aleatórios 200+
 function updateLiveCounters() {
