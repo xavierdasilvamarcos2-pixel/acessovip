@@ -1767,6 +1767,11 @@
               <option value="launch">🆕 Lançamentos</option>
             </select>
           </div>
+          <div class="admin-form-row" id="notifPlatRow" style="display:none;">
+            <label class="admin-form-label">🎯 ID da Plataforma (opcional)</label>
+            <input class="admin-form-input" id="notifPlatId" type="text" placeholder="Ex: 150001 (deixe vazio para não especificar)" style="background:#1a1a2e;color:#fff;border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:10px 12px;font-size:14px;" />
+            <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;">Ao clicar na notificação, abre direto essa plataforma nos sinais</div>
+          </div>
           <button class="admin-btn-submit red" id="sendNotifBtn">&#128228; ENVIAR PARA TODOS</button>
           <button style="width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;" id="testNotifBtn">🧪 ENVIAR NOTIFICAÇÃO DE TESTE</button>
           <div id="notifResult" style="margin-top:12px;font-size:13px;color:rgba(255,255,255,0.4);text-align:center;"></div>
@@ -2851,16 +2856,18 @@ async function sendPushNotification(title, body, tab) {
   else if (tab === 'launch') targetUrl = 'https://acessoplatafomas.com.br/?tab=home&highlight=launch';
   else targetUrl = 'https://acessoplatafomas.com.br/';
   const imageUrl = document.getElementById('notifImage') ? document.getElementById('notifImage').value.trim() : '';
+  const platId = document.getElementById('notifPlatId') ? document.getElementById('notifPlatId').value.trim() : '';
   const notifData = {
     title: title,
     body: body,
     url: targetUrl,
     timestamp: Date.now(),
     sent: false,
-    icon: 'https://acessoplatafomas.com.br/icons/notif-icon-mono.png',
-    badge: 'https://acessoplatafomas.com.br/icons/icon-192.png'
+    icon: 'https://acessoplatafomas.com.br/icons/icon-192.png',
+    badge: 'https://acessoplatafomas.com.br/icons/notif-icon-mono.png'
   };
   if (imageUrl) notifData.image = imageUrl;
+  if (platId) notifData.platId = platId;
   // Salva no Firebase
   const fbUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com/pending_notifications/' + Date.now() + '.json?auth=' + FIREBASE_API_KEY;
   const fbResp = await fetch(fbUrl, {
@@ -2875,14 +2882,14 @@ async function sendPushNotification(title, body, tab) {
       const resp = await fetch(WORKER_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: JSON.stringify(Object.assign({
           title: title,
           message: body,
           url: targetUrl,
-          imageUrl: imageUrl,
-          icon: 'https://acessoplatafomas.com.br/icons/notif-icon-mono.png',
-          badge: 'https://acessoplatafomas.com.br/icons/icon-192.png'
-        })
+          image: imageUrl,
+          icon: 'https://acessoplatafomas.com.br/icons/icon-192.png',
+          badge: 'https://acessoplatafomas.com.br/icons/notif-icon-mono.png'
+        }, platId ? { platId: platId } : {}))
       });
       const data = await resp.json();
       if (data.id) {
@@ -3057,11 +3064,21 @@ document.getElementById('testNotifBtn').addEventListener('click', async () => {
   try {
     var params = new URLSearchParams(window.location.search);
     var tab = params.get('tab');
+    var platId = params.get('plataforma');
     if (tab) {
       // Aguardar o app inicializar antes de navegar
       setTimeout(function() {
         var tabBtn = document.querySelector('[data-tab="' + tab + '"]');
         if (tabBtn) tabBtn.click();
+        // Se veio com parâmetro de plataforma, abrir o sinal direto
+        if (platId) {
+          setTimeout(function() {
+            var pid = parseInt(platId);
+            if (typeof openSinalDetail === 'function') {
+              openSinalDetail(pid);
+            }
+          }, 600);
+        }
       }, 800);
     }
 
@@ -3074,9 +3091,31 @@ document.getElementById('testNotifBtn').addEventListener('click', async () => {
           tabBtn.click();
           window.scrollTo(0, 0);
         }
+        // Se veio com platId, abrir o sinal direto após a aba carregar
+        if (event.data.platId) {
+          setTimeout(function() {
+            var platId = parseInt(event.data.platId);
+            if (typeof openSinalDetail === 'function') {
+              openSinalDetail(platId);
+            }
+          }, 600);
+        }
       }
     });
   } catch(e) {}
+})();
+
+// Mostrar/ocultar campo de plataforma baseado no destino selecionado
+(function() {
+  var sel = document.getElementById('notifUrl');
+  var row = document.getElementById('notifPlatRow');
+  if (sel && row) {
+    function togglePlatRow() {
+      row.style.display = sel.value === 'hot' ? 'block' : 'none';
+    }
+    sel.addEventListener('change', togglePlatRow);
+    togglePlatRow(); // estado inicial
+  }
 })();
 
 // Buscar subscribers reais do Worker (Web Push nativo)
