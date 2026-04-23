@@ -1983,7 +1983,20 @@
       <div id="sinalSaquesLista"></div>
     </div>
 
-    <button class="sinal-gerar-btn" id="sinalGerarBtn">&#127919; GERAR NOVO SINAL</button>
+    <!-- BADGE SINAL PRONTO -->
+    <div id="sinalReadyBadge" style="display:none;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(5,150,105,0.1));border:1px solid rgba(16,185,129,0.4);border-radius:12px;padding:10px 16px;margin-bottom:12px;">
+      <span style="font-size:18px">&#9989;</span>
+      <span style="font-size:13px;font-weight:900;color:#10B981;letter-spacing:0.5px">SINAL PRONTO PARA EXECU&#199;&#195;O</span>
+    </div>
+    <!-- DICAS DE CONFIANÇA -->
+    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px 14px;margin-bottom:12px;">
+      <div style="font-size:11px;color:#94a3b8;line-height:1.9;">
+        <div>&#9888;&#65039; <strong style="color:#FBBF24">Se n&#227;o bater</strong>, troque de plataforma</div>
+        <div>&#128161; <strong style="color:#10B981">Dica:</strong> pare ap&#243;s o ganho e consolide</div>
+        <div>&#128260; Gere novo sinal se o jogo esfriar</div>
+      </div>
+    </div>
+    <button class="sinal-gerar-btn" id="sinalGerarBtn">&#128260; GERAR NOVO SINAL</button>
 
     <!-- URGÊNCIA -->
     <div class="sinal-urgency-block">
@@ -3763,19 +3776,38 @@ function openSinalDetail(key) {
     }
   }
 
-  document.getElementById('sinalNormal').textContent = 'modo normal';
-  document.getElementById('sinalTurbo').textContent = 'modo turbo';
-  document.getElementById('sinalAssert').textContent = '...';
-  document.getElementById('sinalCountdown').textContent = '--:--';
+  // Gerar sinal automaticamente ao abrir a tela de detalhe
   if (sinalCountdownTimer) { clearInterval(sinalCountdownTimer); sinalCountdownTimer = null; }
   if (sinalSaquesTimer) { clearInterval(sinalSaquesTimer); sinalSaquesTimer = null; }
-  // Ocultar blocos extras
-  var _blocks = ['sinalStrategyBlock','sinalProBlock','sinalBarsBlock'];
-  _blocks.forEach(function(id) { var el = document.getElementById(id); if(el) el.style.display='none'; });
-
+  if (sinalTimer) { clearInterval(sinalTimer); sinalTimer = null; }
+  var _autoNormal = NORMAIS[Math.floor(Math.random() * NORMAIS.length)];
+  var _autoTurbo = TURBOS[Math.floor(Math.random() * TURBOS.length)];
+  var _autoAssertNum = (Math.floor(Math.random() * 20) + 75) + '.' + Math.floor(Math.random() * 99).toString().padStart(2, '0');
+  var _autoTotalSecs = (Math.floor(Math.random() * 20) + 5) * 60;
+  document.getElementById('sinalNormal').textContent = 'modo normal';
+  document.getElementById('sinalTurbo').textContent = 'modo turbo';
+  document.getElementById('sinalAssert').textContent = '\u{1F4CA} ' + _autoAssertNum + '% - ASSERTIVIDADE ALTA';
+  startSinalCountdown(_autoTotalSecs);
+  fillSinalExtras(_autoNormal, _autoTurbo, _autoAssertNum);
+  // Mostrar badge SINAL PRONTO
+  var _readyBadge = document.getElementById('sinalReadyBadge');
+  if (_readyBadge) _readyBadge.style.display = 'flex';
+  // Botão GERAR NOVO SINAL: iniciar cooldown de 30s
   var btn = document.getElementById('sinalGerarBtn');
-  btn.classList.remove('waiting');
-  btn.textContent = '\u{1F3AF} GERAR NOVO SINAL';
+  btn.classList.add('waiting');
+  var _autoSeconds = 30;
+  btn.textContent = 'Aguarde: ' + _autoSeconds + 's';
+  sinalTimer = setInterval(function() {
+    _autoSeconds--;
+    if (_autoSeconds <= 0) {
+      clearInterval(sinalTimer);
+      sinalTimer = null;
+      btn.classList.remove('waiting');
+      btn.textContent = '\u{1F504} GERAR NOVO SINAL';
+    } else {
+      btn.textContent = 'Aguarde: ' + _autoSeconds + 's';
+    }
+  }, 1000);
   if (sinalTimer) { clearInterval(sinalTimer); sinalTimer = null; }
 
   // Mostrar plataforma vinculada
