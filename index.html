@@ -3585,8 +3585,6 @@ function renderSinais() {
     if (pct >= 75) { statusDot = '🟢'; statusTxt = 'Ativo'; }
     else if (pct >= 55) { statusDot = '🟡'; statusTxt = 'Finalizando'; }
     else { statusDot = '🔴'; statusTxt = 'Encerrado'; }
-    // Estratégia
-    var estrategia = '5 giros normal + 5 turbo';
     return '<div class="sinal-card">' +
       '<div class="sinal-card-logo-wrap">' + logoHtml + '</div>' +
       '<div class="sinal-card-body">' +
@@ -3601,7 +3599,6 @@ function renderSinais() {
           '<div class="sinal-progress-pct" id="spct-' + jogo._key + '">' + pct + '%</div>' +
         '</div>' +
       '</div>' +
-      '<div class="sinal-card-estrategia">🎯 ' + estrategia + '</div>' +
       '<div class="sinal-card-status"><span>' + statusDot + '</span><span style="color:#e2e8f0">' + statusTxt + '</span></div>' +
       '<div class="sinal-card-people">💬 ' + people + ' pessoas entrando agora</div>' +
       '<button class="sinal-card-entrar" onclick="openSinalDetail(&quot;' + jogo._key + '&quot;)">🚀 ENTRAR AGORA</button>' +
