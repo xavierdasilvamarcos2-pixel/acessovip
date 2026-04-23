@@ -119,7 +119,7 @@
     .screen.active { display: block; }
 
     /* ===== HOME SCREEN ===== */
-    .banner-img { width: calc(100% - 32px); margin: 12px 16px 0; border-radius: 20px; display: block; height: auto; max-height: 420px; object-fit: cover; }
+    .banner-img { width: calc(100% - 32px); margin: 8px 16px 0; border-radius: 16px; display: block; height: auto; max-height: 220px; object-fit: cover; object-position: top; }
     .bonus-section { margin: 12px 16px 8px; text-align: center; }
     .bonus-title { font-size: 20px; font-weight: 900; color: var(--text); }
     .bonus-sub { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 4px; line-height: 1.4; }
@@ -152,7 +152,7 @@
 
 
     /* ===== SINAL ATIVO BANNER ===== */
-    .sinal-ativo-banner { margin: 0 16px 12px; border-radius: 14px; background: linear-gradient(135deg, #0a2a0a, #0d4a1a); border: 1.5px solid #10B981; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 0 20px rgba(16,185,129,0.25); animation: sinal-pulse-scale 2.2s ease-in-out infinite; position: relative; overflow: visible; }
+    .sinal-ativo-banner { margin: 12px 16px 12px; border-radius: 14px; background: linear-gradient(135deg, #0a2a0a, #0d4a1a); border: 2px solid #10B981; padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 0 24px rgba(16,185,129,0.4); animation: sinal-pulse-scale 2.2s ease-in-out infinite; position: relative; overflow: visible; cursor: pointer; -webkit-tap-highlight-color: transparent; }
     @keyframes sinal-pulse-scale { 0%,100% { transform: scale(1); box-shadow: 0 0 20px rgba(16,185,129,0.25); } 50% { transform: scale(1.03); box-shadow: 0 0 32px rgba(16,185,129,0.55); } }
     .ao-vivo-badge { position: absolute; top: -10px; right: 14px; display: flex; align-items: center; gap: 4px; background: #111; border: 1px solid rgba(239,68,68,0.5); border-radius: 20px; padding: 2px 8px; }
     .ao-vivo-dot { width: 7px; height: 7px; border-radius: 50%; background: #EF4444; animation: ao-vivo-blink 1.2s ease-in-out infinite; flex-shrink: 0; }
@@ -163,14 +163,14 @@
     .sinal-ativo-sub { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 3px; font-weight: 600; }
     /* sinal-ativo-timer removido */
     /* VIP Group Button */
-    .vip-btn { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #25D366, #128C7E); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.3); border: none; width: calc(100% - 32px); animation: pulse-vip 2.4s ease-in-out infinite; }
+    .vip-btn { margin: 0 16px 16px; border-radius: var(--radius); background: linear-gradient(135deg, #25D366, #128C7E); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.3); border: none; width: calc(100% - 32px); animation: pulse-vip 2.4s ease-in-out infinite; }
     @keyframes pulse-vip { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
     .vip-btn-text { flex: 1; text-align: left; }
     .vip-btn-title { font-size: 15px; font-weight: 900; color: #fff; letter-spacing: 0.5px; }
     .vip-btn-sub { font-size: 11px; color: rgba(255,255,255,0.9); margin-top: 2px; font-weight: 600; }
 
     /* Search */
-    .search-wrap { margin: 0 16px 12px; background: var(--surface); border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+    .search-wrap { margin: 0 16px 16px; background: var(--surface); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.06); }
     .search-input { flex: 1; background: none; border: none; outline: none; color: var(--text); font-size: 15px; }
     .search-input::placeholder { color: var(--muted); }
     .search-clear { background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 0 4px; }
@@ -182,7 +182,7 @@
 
     /* Platform Grid */
     .platform-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 0; padding: 0 8px; padding-bottom: 16px; }
-    .platform-card { display: flex; flex-direction: column; align-items: center; padding: 8px 4px 16px; position: relative; cursor: pointer; }
+    .platform-card { display: flex; flex-direction: column; align-items: center; padding: 10px 4px 18px; position: relative; cursor: pointer; }
     .platform-icon-wrap { position: relative; width: 95px; height: 95px; }
     .platform-icon { width: 95px; height: 95px; border-radius: 50%; object-fit: contain; background: #fff; display: block; }
     .platform-icon-placeholder { width: 95px; height: 95px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 36px; }
@@ -671,7 +671,7 @@
     <div class="screen active" id="screen-home">
       <img class="banner-img" src="https://raw.githubusercontent.com/xavierdasilvamarcos2-pixel/acessovip/main/banner.jpg" alt="ACESSO VIP Banner" />
       <!-- SINAL ATIVO BANNER -->
-      <div class="sinal-ativo-banner" id="sinalAtivoBanner" onclick="document.querySelector('[data-tab=hot]').click()" style="cursor:pointer;justify-content:center;text-align:center;">
+      <div class="sinal-ativo-banner" id="sinalAtivoBanner" onclick="document.querySelector('[data-tab=hot]').click()" style="cursor:pointer;">
         <div class="ao-vivo-badge">
           <div class="ao-vivo-dot"></div>
           <span class="ao-vivo-text">AO VIVO</span>
@@ -680,6 +680,7 @@
           <div class="sinal-ativo-title">🚨 SINAL ATIVO AGORA</div>
           <div class="sinal-ativo-sub">🤖 IA analisando oportunidades em tempo real</div>
         </div>
+        <div style="font-size:20px;color:#10B981;font-weight:900;flex-shrink:0;">›</div>
       </div>
       <!-- Notification permission banner -->
       <div class="notif-banner" id="notifBanner" style="display:none">
@@ -4168,7 +4169,7 @@ window.addEventListener('popstate', function(e) {
   <div class="bolha-flutuante bolha-install" id="bolhaInstall">
     <span class="bolha-icon">📲</span>
     <div class="bolha-texto">
-      <div class="bolha-titulo">Instalar App</div>
+      <div class="bolha-titulo">INSTALAR GRÁTIS</div>
       <div class="bolha-sub">Adicionar à tela inicial</div>
     </div>
     <button class="bolha-fechar" id="bolhaInstallFechar">✕</button>
