@@ -1,6 +1,6 @@
 // Service Worker - Acesso VIP PWA
-// Versão: v15 - NUNCA cacheia index.html (sempre busca versão mais recente)
-const CACHE_NAME = 'acesso-vip-v15';
+// Versão: v16 - Notificação com imagem + redirect melhorado
+const CACHE_NAME = 'acesso-vip-v16';
 // NÃO incluir index.html nem / no cache - sempre buscar do servidor
 const STATIC_ASSETS = ['/manifest.json'];
 
@@ -78,20 +78,21 @@ self.addEventListener('push', (event) => {
 // ============================================================
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  const notifUrl = (event.notification.data && event.notification.data.url)
-    ? event.notification.data.url
-    : 'https://acessoplatafomas.com.br/?tab=hot';
+  const notifData = event.notification.data || {};
+  const notifUrl = notifData.url || 'https://acessoplatafomas.com.br/?tab=hot';
+  const platId = notifData.platId || null;
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
       // Se o app já está aberto, focar e navegar via postMessage
       for (const client of windowClients) {
         if (client.url.includes('acessoplatafomas.com.br') && 'focus' in client) {
           client.focus();
-          // Extrair o tab do URL para navegar sem recarregar a página
           try {
             const urlObj = new URL(notifUrl);
             const tab = urlObj.searchParams.get('tab') || 'hot';
-            client.postMessage({ type: 'NAVIGATE_TAB', tab: tab });
+            const msg = { type: 'NAVIGATE_TAB', tab: tab };
+            if (platId) msg.platId = platId;
+            client.postMessage(msg);
           } catch(e) {
             client.navigate(notifUrl);
           }
