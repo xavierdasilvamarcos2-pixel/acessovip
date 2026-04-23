@@ -1926,85 +1926,52 @@
       <div class="sinal-mult-block-text">&#128176; MULTIPLICADOR ALTO ATIVO (AT&#201; 2.500x)</div>
     </div>
 
-    <!-- PAINEL DE SINAL -->
+    <!-- BADGE SINAL PRONTO -->
+    <div id="sinalReadyBadge" style="display:none;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,rgba(16,185,129,0.18),rgba(5,150,105,0.12));border:1.5px solid rgba(16,185,129,0.5);border-radius:14px;padding:12px 16px;margin-bottom:16px;">
+      <span style="font-size:20px">&#9989;</span>
+      <span style="font-size:14px;font-weight:900;color:#10B981;letter-spacing:0.5px">SINAL PRONTO PARA EXECU&#199;&#195;O</span>
+    </div>
+    <!-- PAINEL DE SINAL (simplificado) -->
     <div class="sinal-panel">
-      <!-- Resumo de entrada - sem números, apenas descrição -->
+      <!-- Estratégia única -->
       <div class="sinal-panel-row" id="sinalStrategyRow">
-        <span class="sinal-panel-label">&#127919; JOGADA INICIAL</span>
-        <span class="sinal-panel-val" id="sinalNormal" style="font-size:13px;font-weight:700">modo normal</span>
+        <span class="sinal-panel-label">&#127919; ESTRAT&#201;GIA</span>
+        <span class="sinal-panel-val" id="sinalNormal" style="font-size:13px;font-weight:700;text-align:right;max-width:60%">modo normal</span>
       </div>
-      <div class="sinal-panel-row" id="sinalTurboRow">
-        <span class="sinal-panel-label">&#9889; EM SEGUIDA</span>
-        <span class="sinal-panel-val" id="sinalTurbo" style="font-size:13px;font-weight:700">modo turbo</span>
+      <!-- IDs mantidos para compatibilidade, ocultos -->
+      <span id="sinalTurbo" style="display:none">modo turbo</span>
+      <!-- Assertividade -->
+      <div class="sinal-panel-row">
+        <span class="sinal-panel-label">&#128202; ASSERTIVIDADE</span>
+        <span class="sinal-panel-val assert sinal-assert-big" id="sinalAssert">...</span>
       </div>
       <!-- Contador regressivo -->
       <div class="sinal-countdown-row">
         <span class="sinal-countdown-label">&#9203; TEMPO RESTANTE</span>
         <span class="sinal-countdown-val" id="sinalCountdown">--:--</span>
       </div>
-      <!-- Assertividade maior -->
-      <div class="sinal-panel-row">
-        <span class="sinal-panel-label">&#128202; ASSERTIVIDADE</span>
-        <span class="sinal-panel-val assert sinal-assert-big" id="sinalAssert">...</span>
+    </div>
+    <!-- IDs de compatibilidade ocultos -->
+    <div id="sinalStrategyBlock" style="display:none"><span id="sinalStratStep1"></span><span id="sinalStratStep2"></span></div>
+    <div id="sinalProBlock" style="display:none"></div>
+    <div id="sinalBarsBlock" style="display:none"><span id="sinalBarPot"></span><span id="sinalBarPotLabel"></span><span id="sinalBarRisk"></span><span id="sinalBarRiskLabel"></span></div>
+    <!-- DICA CURTA -->
+    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:10px 14px;margin-bottom:14px;">
+      <div style="font-size:12px;color:#94a3b8;line-height:1.7;">
+        <div>&#9888;&#65039; <strong style="color:#FBBF24">Se n&#227;o bater</strong>, troque de plataforma e pare ap&#243;s o ganho</div>
       </div>
     </div>
-
-    <!-- ESTRATÉGIA CLARA -->
-    <div class="sinal-strategy-block" id="sinalStrategyBlock" style="display:none">
-      <div class="sinal-strategy-title">&#127919; ENTRADA RECOMENDADA:</div>
-      <div class="sinal-strategy-step" id="sinalStratStep1"></div>
-      <div class="sinal-strategy-step" id="sinalStratStep2"></div>
-      <div class="sinal-strategy-tip">&#128073; SE BATER: continuar mais 10 giros e parar<br>&#128073; SE N&#195;O BATER: parar e trocar jogo</div>
-    </div>
-
-    <!-- MODO PRO -->
-    <div class="sinal-pro-block" id="sinalProBlock" style="display:none">
-      <div class="sinal-pro-title">&#129504; MODO PRO:</div>
-      <div class="sinal-pro-step">&#128260; 5 giros normal</div>
-      <div class="sinal-pro-step">&#9889; 5 giros turbo</div>
-      <div class="sinal-pro-step" style="color:#a5b4fc;font-size:12px">&#128073; alternar at&#233; o jogo responder</div>
-    </div>
-
-    <!-- INDICADORES VISUAIS -->
-    <div class="sinal-bars-block" id="sinalBarsBlock" style="display:none">
-      <div class="sinal-bar-row">
-        <div class="sinal-bar-label"><span>POTENCIAL</span><span id="sinalBarPotLabel">80%</span></div>
-        <div class="sinal-bar-track"><div class="sinal-bar-fill" id="sinalBarPot" style="width:80%;background:linear-gradient(90deg,#10B981,#34d399)"></div></div>
-      </div>
-      <div class="sinal-bar-row" style="margin-bottom:0">
-        <div class="sinal-bar-label"><span>RISCO</span><span id="sinalBarRiskLabel">30%</span></div>
-        <div class="sinal-bar-track"><div class="sinal-bar-fill" id="sinalBarRisk" style="width:30%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div></div>
-      </div>
-    </div>
-
-    <!-- SAQUES RECENTES -->
-    <div class="sinal-saques-block">
-      <div class="sinal-saques-title">&#128176; SAQUES RECENTES</div>
+    <!-- SAQUES RECENTES (compacto) -->
+    <div style="background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.15);border-radius:12px;padding:8px 12px;margin-bottom:14px;overflow:hidden;">
+      <div style="font-size:10px;font-weight:700;color:rgba(16,185,129,0.7);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;">&#128176; Saques recentes</div>
       <div id="sinalSaquesLista"></div>
     </div>
-
-    <!-- BADGE SINAL PRONTO -->
-    <div id="sinalReadyBadge" style="display:none;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(5,150,105,0.1));border:1px solid rgba(16,185,129,0.4);border-radius:12px;padding:10px 16px;margin-bottom:12px;">
-      <span style="font-size:18px">&#9989;</span>
-      <span style="font-size:13px;font-weight:900;color:#10B981;letter-spacing:0.5px">SINAL PRONTO PARA EXECU&#199;&#195;O</span>
-    </div>
-    <!-- DICAS DE CONFIANÇA -->
-    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px 14px;margin-bottom:12px;">
-      <div style="font-size:11px;color:#94a3b8;line-height:1.9;">
-        <div>&#9888;&#65039; <strong style="color:#FBBF24">Se n&#227;o bater</strong>, troque de plataforma</div>
-        <div>&#128161; <strong style="color:#10B981">Dica:</strong> pare ap&#243;s o ganho e consolide</div>
-        <div>&#128260; Gere novo sinal se o jogo esfriar</div>
-      </div>
-    </div>
     <button class="sinal-gerar-btn" id="sinalGerarBtn">&#128260; GERAR NOVO SINAL</button>
-
     <!-- URGÊNCIA -->
     <div class="sinal-urgency-block">
       <div class="sinal-urgency-line">&#128293; fluxo de pagamento ativo agora</div>
       <div class="sinal-urgency-line" style="animation-delay:0.5s">&#9888;&#65039; &#250;ltimos minutos de alta distribui&#231;&#227;o</div>
     </div>
-
-
     <!-- Card da plataforma vinculada -->
     <div class="sinal-plat-card" id="sinalPlatCard" style="display:none;">
       <div class="sinal-plat-card-label">&#127919; Jogue nessa plataforma</div>
@@ -3805,7 +3772,7 @@ function openSinalDetail(key) {
       btn.classList.remove('waiting');
       btn.textContent = '\u{1F504} GERAR NOVO SINAL';
     } else {
-      btn.textContent = '\u23F3 Pr\u00f3xima oportunidade em ' + _autoSeconds + 's';
+      btn.textContent = '\u26A1 Nova an\u00e1lise em andamento\u2026';
     }
   }, 1000);
   if (sinalTimer) { clearInterval(sinalTimer); sinalTimer = null; }
@@ -3954,7 +3921,7 @@ document.getElementById('sinalGerarBtn').addEventListener('click', function() {
   fillSinalExtras(normal, turbo, assertNum);
   var seconds = 30;
   btn.classList.add('waiting');
-  btn.textContent = 'Aguarde: ' + seconds + 's';
+  btn.textContent = '\u26A1 Nova an\u00e1lise em andamento\u2026';
   if (sinalTimer) clearInterval(sinalTimer);
   sinalTimer = setInterval(function() {
     seconds--;
@@ -3964,7 +3931,7 @@ document.getElementById('sinalGerarBtn').addEventListener('click', function() {
       btn.classList.remove('waiting');
       btn.textContent = '\u{1F3AF} GERAR NOVO SINAL';
     } else {
-      btn.textContent = 'Aguarde: ' + seconds + 's';
+      btn.textContent = '\u26A1 Nova an\u00e1lise em andamento\u2026';
     }
   }, 1000);
 });
