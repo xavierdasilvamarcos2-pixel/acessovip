@@ -3796,7 +3796,7 @@ function openSinalDetail(key) {
   var btn = document.getElementById('sinalGerarBtn');
   btn.classList.add('waiting');
   var _autoSeconds = 30;
-  btn.textContent = 'Aguarde: ' + _autoSeconds + 's';
+  btn.textContent = '\u26A1 Nova an\u00e1lise em andamento\u2026';
   sinalTimer = setInterval(function() {
     _autoSeconds--;
     if (_autoSeconds <= 0) {
@@ -3805,7 +3805,7 @@ function openSinalDetail(key) {
       btn.classList.remove('waiting');
       btn.textContent = '\u{1F504} GERAR NOVO SINAL';
     } else {
-      btn.textContent = 'Aguarde: ' + _autoSeconds + 's';
+      btn.textContent = '\u23F3 Pr\u00f3xima oportunidade em ' + _autoSeconds + 's';
     }
   }, 1000);
   if (sinalTimer) { clearInterval(sinalTimer); sinalTimer = null; }
@@ -3927,30 +3927,14 @@ function fillSinalExtras(normal, turbo, assert) {
   // Extrair número do normal e turbo
   var nVal = parseInt(normal) || 10;
   var tVal = parseInt(turbo) || 20;
-  // Estratégia
-  var stratBlock = document.getElementById('sinalStrategyBlock');
+  // Mostrar estratégia unificada no painel principal
+  var sinalNormalEl = document.getElementById('sinalNormal');
+  if (sinalNormalEl) sinalNormalEl.textContent = nVal + ' giros normal + ' + tVal + ' giros turbo';
+  // Manter IDs de compatibilidade ocultos
   var step1 = document.getElementById('sinalStratStep1');
   var step2 = document.getElementById('sinalStratStep2');
-  if (stratBlock && step1 && step2) {
-    step1.textContent = '1\uFE0F\u20E3 ' + nVal + ' giros no NORMAL';
-    step2.textContent = '2\uFE0F\u20E3 ' + tVal + ' giros no TURBO';
-    stratBlock.style.display = 'block';
-  }
-  // Modo Pro
-  var proBlock = document.getElementById('sinalProBlock');
-  if (proBlock) proBlock.style.display = 'block';
-  // Indicadores visuais
-  var barsBlock = document.getElementById('sinalBarsBlock');
-  if (barsBlock) {
-    var assertNum = parseFloat(assert) || 75;
-    var potPct = Math.min(Math.round(assertNum * 1.05), 98);
-    var riskPct = Math.max(Math.round((100 - assertNum) * 0.6), 10);
-    document.getElementById('sinalBarPot').style.width = potPct + '%';
-    document.getElementById('sinalBarPotLabel').textContent = potPct + '%';
-    document.getElementById('sinalBarRisk').style.width = riskPct + '%';
-    document.getElementById('sinalBarRiskLabel').textContent = riskPct + '%';
-    barsBlock.style.display = 'block';
-  }
+  if (step1) step1.textContent = nVal + ' giros no NORMAL';
+  if (step2) step2.textContent = tVal + ' giros no TURBO';
 }
 
 document.getElementById('sinalGerarBtn').addEventListener('click', function() {
