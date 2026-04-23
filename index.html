@@ -3927,35 +3927,30 @@ document.getElementById('sinalGerarBtn').addEventListener('click', function() {
   var normal = NORMAIS[Math.floor(Math.random() * NORMAIS.length)];
   var turbo = TURBOS[Math.floor(Math.random() * TURBOS.length)];
   var assertNum = (Math.floor(Math.random() * 20) + 75) + '.' + Math.floor(Math.random() * 99).toString().padStart(2, '0');
+  var assert = assertNum + '%';
   // Contador regressivo: entre 5 e 25 minutos
   var totalSecs = (Math.floor(Math.random() * 20) + 5) * 60;
-  // Animação de carregamento breve
-  btn.textContent = '⏳ Analisando...';
+  // Resumo de cima: sempre texto descritivo, sem números
+  document.getElementById('sinalNormal').textContent = 'modo normal';
+  document.getElementById('sinalTurbo').textContent = 'modo turbo';
+  document.getElementById('sinalAssert').textContent = '\uD83D\uDCCA ' + assertNum + '% - ASSERTIVIDADE ALTA';
+  startSinalCountdown(totalSecs);
+  fillSinalExtras(normal, turbo, assertNum);
+  var seconds = 30;
   btn.classList.add('waiting');
-  setTimeout(function() {
-    document.getElementById('sinalNormal').textContent = 'modo normal';
-    document.getElementById('sinalTurbo').textContent = 'modo turbo';
-    document.getElementById('sinalAssert').textContent = '\u{1F4CA} ' + assertNum + '% - ASSERTIVIDADE ALTA';
-    startSinalCountdown(totalSecs);
-    fillSinalExtras(normal, turbo, assertNum);
-    // Mostrar badge SINAL PRONTO
-    var badge = document.getElementById('sinalReadyBadge');
-    if (badge) badge.style.display = 'flex';
-    var seconds = 30;
-    btn.textContent = 'Aguarde: ' + seconds + 's';
-    if (sinalTimer) clearInterval(sinalTimer);
-    sinalTimer = setInterval(function() {
-      seconds--;
-      if (seconds <= 0) {
-        clearInterval(sinalTimer);
-        sinalTimer = null;
-        btn.classList.remove('waiting');
-        btn.textContent = '\u{1F504} GERAR NOVO SINAL';
-      } else {
-        btn.textContent = 'Aguarde: ' + seconds + 's';
-      }
-    }, 1000);
-  }, 800); // 0.8s de animação de análise
+  btn.textContent = 'Aguarde: ' + seconds + 's';
+  if (sinalTimer) clearInterval(sinalTimer);
+  sinalTimer = setInterval(function() {
+    seconds--;
+    if (seconds <= 0) {
+      clearInterval(sinalTimer);
+      sinalTimer = null;
+      btn.classList.remove('waiting');
+      btn.textContent = '\u{1F3AF} GERAR NOVO SINAL';
+    } else {
+      btn.textContent = 'Aguarde: ' + seconds + 's';
+    }
+  }, 1000);
 });
 
 // Iniciar loop de notificações de saque
