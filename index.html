@@ -524,90 +524,68 @@
     .admin-empty-text { font-size: 14px; font-weight: 600; }
 
 
-    /* ===== POP-UP OBRIGATÓRIO DE INSTALAÇÃO ===== */
+    /* ===== POP-UP DE INSTALAÇÃO (SELETIVO) ===== */
+    /* Pop-up menor, sem bloquear o app todo */
     #installBlockPopup {
       position: fixed;
-      inset: 0;
-      z-index: 99999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: rgba(0,0,0,0.92);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9990;
+      width: calc(100% - 32px);
+      max-width: 400px;
+      display: block;
     }
     #installBlockPopup.hidden { display: none !important; }
     .install-popup-box {
-      background: linear-gradient(160deg, #1a1035, #0d0d1a);
-      border: 1.5px solid rgba(124,58,237,0.4);
-      border-radius: 24px;
-      padding: 28px 24px 24px;
-      width: 100%;
-      max-width: 360px;
+      background: linear-gradient(160deg, #1a1035, #0d1a2e);
+      border: 1.5px solid rgba(124,58,237,0.5);
+      border-radius: 20px;
+      padding: 18px 18px 16px;
       text-align: center;
-      box-shadow: 0 0 60px rgba(124,58,237,0.3), 0 20px 60px rgba(0,0,0,0.6);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 0 30px rgba(124,58,237,0.2);
       animation: popup-entrada 0.4s cubic-bezier(0.32,0.72,0,1);
     }
     @keyframes popup-entrada {
-      from { transform: scale(0.85) translateY(30px); opacity: 0; }
-      to   { transform: scale(1) translateY(0); opacity: 1; }
+      from { transform: translateY(20px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
     }
-    .install-popup-icon { font-size: 52px; margin-bottom: 8px; display: block; }
+    .install-popup-icon { font-size: 32px; margin-bottom: 4px; display: block; }
     .install-popup-title {
-      font-size: 22px;
+      font-size: 17px;
       font-weight: 900;
       color: #fff;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       letter-spacing: 0.3px;
     }
     .install-popup-sub {
-      font-size: 13px;
-      color: rgba(255,255,255,0.55);
-      margin-bottom: 20px;
-    }
-    .install-popup-benefits {
-      background: rgba(255,255,255,0.05);
-      border-radius: 14px;
-      padding: 14px 16px;
-      margin-bottom: 22px;
-      text-align: left;
-    }
-    .install-popup-benefit {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 6px 0;
-      font-size: 14px;
-      color: rgba(255,255,255,0.85);
-      font-weight: 600;
-    }
-    .install-popup-benefit:not(:last-child) {
-      border-bottom: 1px solid rgba(255,255,255,0.07);
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 14px;
     }
     .install-popup-btn {
       width: 100%;
-      padding: 16px;
-      border-radius: 14px;
+      padding: 13px;
+      border-radius: 12px;
       border: none;
-      font-size: 17px;
+      font-size: 15px;
       font-weight: 900;
       cursor: pointer;
       background: linear-gradient(135deg, #7C3AED, #5B21B6);
       color: #fff;
       letter-spacing: 0.5px;
-      box-shadow: 0 4px 24px rgba(124,58,237,0.5);
+      box-shadow: 0 4px 20px rgba(124,58,237,0.5);
       animation: popup-btn-pulse 2s ease-in-out infinite;
       -webkit-tap-highlight-color: transparent;
     }
     @keyframes popup-btn-pulse {
-      0%,100% { box-shadow: 0 4px 24px rgba(124,58,237,0.5); transform: scale(1); }
-      50% { box-shadow: 0 4px 36px rgba(124,58,237,0.8); transform: scale(1.02); }
+      0%,100% { box-shadow: 0 4px 20px rgba(124,58,237,0.5); transform: scale(1); }
+      50% { box-shadow: 0 4px 30px rgba(124,58,237,0.8); transform: scale(1.02); }
     }
     .install-popup-skip {
       display: block;
-      margin-top: 14px;
-      font-size: 12px;
+      margin-top: 10px;
+      font-size: 11px;
       color: rgba(255,255,255,0.3);
       cursor: default;
       user-select: none;
@@ -617,10 +595,53 @@
       cursor: pointer;
       text-decoration: underline;
     }
-    .install-popup-timer {
-      font-size: 11px;
-      color: rgba(255,255,255,0.35);
-      margin-top: 8px;
+    /* Overlay de bloqueio para abas específicas */
+    .tab-lock-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9980;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .tab-lock-overlay.hidden { display: none !important; }
+    .tab-lock-box {
+      background: linear-gradient(160deg, #1a1035, #0d0d1a);
+      border: 1.5px solid rgba(124,58,237,0.4);
+      border-radius: 20px;
+      padding: 24px 20px;
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(124,58,237,0.3);
+    }
+    .tab-lock-icon { font-size: 40px; margin-bottom: 8px; display: block; }
+    .tab-lock-title { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 6px; }
+    .tab-lock-sub { font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 18px; line-height: 1.5; }
+    .tab-lock-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-size: 15px;
+      font-weight: 900;
+      cursor: pointer;
+      background: linear-gradient(135deg, #7C3AED, #5B21B6);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(124,58,237,0.5);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tab-lock-back {
+      display: block;
+      margin-top: 12px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      cursor: pointer;
+      text-decoration: underline;
     }
 
     /* ===== BOLHAS FLUTUANTES ===== */
@@ -4265,21 +4286,24 @@ window.addEventListener('popstate', function(e) {
 });
 </script>
 
-  <!-- POP-UP OBRIGATÓRIO DE INSTALAÇÃO -->
-  <div id="installBlockPopup">
+  <!-- POP-UP DE INSTALAÇÃO (flutuante, não bloqueia o app) -->
+  <div id="installBlockPopup" class="hidden">
     <div class="install-popup-box">
       <span class="install-popup-icon">📲</span>
-      <div class="install-popup-title">BAIXE O APP AGORA</div>
-      <div class="install-popup-sub">Acesso rápido direto na sua tela inicial</div>
-      <div class="install-popup-benefits">
-        <div class="install-popup-benefit">📡 Sinais em tempo real</div>
-        <div class="install-popup-benefit">⚡ Acesso mais rápido</div>
-        <div class="install-popup-benefit">🔔 Notificações instantâneas</div>
-        <div class="install-popup-benefit">🎯 Plataformas exclusivas</div>
-      </div>
-      <button class="install-popup-btn" id="installPopupBtn">🚀 INSTALAR APP</button>
-      <span class="install-popup-skip" id="installPopupSkip">Continuar sem instalar</span>
-      <div class="install-popup-timer" id="installPopupTimer">Disponível em <span id="installPopupCountdown">10</span>s</div>
+      <div class="install-popup-title">Baixe o app para liberar os sinais</div>
+      <div class="install-popup-sub">Ative para acessar sinais ao vivo e favoritos</div>
+      <button class="install-popup-btn" id="installPopupBtn">🚀 Instalar App</button>
+      <span class="install-popup-skip" id="installPopupSkip">Agora não</span>
+    </div>
+  </div>
+  <!-- OVERLAY DE BLOQUEIO PARA ABAS SINAIS/FAVORITOS -->
+  <div id="tabLockOverlay" class="tab-lock-overlay hidden">
+    <div class="tab-lock-box">
+      <span class="tab-lock-icon">🔒</span>
+      <div class="tab-lock-title">Instale para liberar</div>
+      <div class="tab-lock-sub">Instale o app para acessar os <strong>Sinais ao Vivo</strong> e <strong>Favoritos</strong> gratuitamente.</div>
+      <button class="tab-lock-btn" id="tabLockInstallBtn">🚀 Instalar App</button>
+      <span class="tab-lock-back" id="tabLockBack">← Voltar</span>
     </div>
   </div>
 
@@ -4405,94 +4429,128 @@ window.addEventListener('popstate', function(e) {
   })();
   
 
-// ===== POP-UP OBRIGATÓRIO DE INSTALAÇÃO =====
+// ===== POP-UP DE INSTALAÇÃO (SELETIVO) =====
 (function() {
   var STORAGE_KEY = 'av_popup_install_done';
   
-  // Verificar se já instalou ou já dispensou permanentemente
-  var jaInstalou = localStorage.getItem('av_installed') === '1'
-    || localStorage.getItem(STORAGE_KEY) === '1'
-    || window.matchMedia('(display-mode: standalone)').matches
-    || window.navigator.standalone === true;
-  
-  if (jaInstalou) return; // Não mostrar o pop-up
-  
-  var popup = document.getElementById('installBlockPopup');
-  var btnInstalar = document.getElementById('installPopupBtn');
-  var btnSkip = document.getElementById('installPopupSkip');
-  var countdown = document.getElementById('installPopupCountdown');
-  var timerEl = document.getElementById('installPopupTimer');
-  
-  if (!popup) return;
-  
-  // Mostrar o pop-up
-  popup.classList.remove('hidden');
-  
-  // Countdown de 10 segundos para liberar o botão "Continuar sem instalar"
-  var segundos = 10;
-  var interval = setInterval(function() {
-    segundos--;
-    if (countdown) countdown.textContent = segundos;
-    if (segundos <= 0) {
-      clearInterval(interval);
-      if (btnSkip) {
-        btnSkip.classList.add('ativo');
-        btnSkip.style.cursor = 'pointer';
-      }
-      if (timerEl) timerEl.style.display = 'none';
-    }
-  }, 1000);
-  
-  // Fechar pop-up e liberar app
-  function fecharPopup() {
-    popup.classList.add('hidden');
-    localStorage.setItem(STORAGE_KEY, '1');
-    clearInterval(interval);
+  // Verificar se já instalou
+  function jaInstalou() {
+    return localStorage.getItem('av_installed') === '1'
+      || localStorage.getItem(STORAGE_KEY) === '1'
+      || window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true;
   }
   
-  // Botão INSTALAR APP
-  if (btnInstalar) {
-    btnInstalar.addEventListener('click', function() {
-      // Tentar acionar instalação PWA nativa
-      if (window.deferredPrompt) {
-        window.deferredPrompt.prompt();
-        window.deferredPrompt.userChoice.then(function(choice) {
-          window.deferredPrompt = null;
-          if (choice.outcome === 'accepted') {
-            localStorage.setItem('av_installed', '1');
-          }
-          fecharPopup();
-        });
-      } else {
-        // iOS ou sem prompt disponível: mostrar modal de instruções
-        fecharPopup();
-        var iosModal = document.getElementById('iosInstallModal');
-        if (iosModal) {
-          iosModal.style.display = 'flex';
-          iosModal.classList.add('open');
-        } else {
-          var guideModal = document.getElementById('installGuideModal');
-          if (guideModal) guideModal.classList.add('open');
+  // Função para acionar instalação PWA
+  function acionarInstalacao(onDone) {
+    if (window.deferredPrompt) {
+      window.deferredPrompt.prompt();
+      window.deferredPrompt.userChoice.then(function(choice) {
+        window.deferredPrompt = null;
+        if (choice.outcome === 'accepted') {
+          localStorage.setItem('av_installed', '1');
+          localStorage.setItem(STORAGE_KEY, '1');
         }
+        if (onDone) onDone();
+      });
+    } else {
+      // iOS ou sem prompt: mostrar guia
+      if (onDone) onDone();
+      var iosModal = document.getElementById('iosInstallModal');
+      if (iosModal) { iosModal.style.display = 'flex'; iosModal.classList.add('open'); }
+      else {
+        var guideModal = document.getElementById('installGuideModal');
+        if (guideModal) guideModal.classList.add('open');
       }
-    });
+    }
   }
   
-  // Botão "Continuar sem instalar" — só ativo após 10s
-  if (btnSkip) {
-    btnSkip.addEventListener('click', function() {
-      if (!btnSkip.classList.contains('ativo')) return;
-      fecharPopup();
-    });
+  // ---- POP-UP FLUTUANTE (aparece na HOME após 3s) ----
+  if (!jaInstalou()) {
+    setTimeout(function() {
+      var popup = document.getElementById('installBlockPopup');
+      if (popup && !jaInstalou()) popup.classList.remove('hidden');
+    }, 3000);
+    
+    var btnInstalar = document.getElementById('installPopupBtn');
+    var btnSkip = document.getElementById('installPopupSkip');
+    
+    if (btnInstalar) {
+      btnInstalar.addEventListener('click', function() {
+        var popup = document.getElementById('installBlockPopup');
+        if (popup) popup.classList.add('hidden');
+        acionarInstalacao(null);
+      });
+    }
+    if (btnSkip) {
+      btnSkip.classList.add('ativo');
+      btnSkip.addEventListener('click', function() {
+        var popup = document.getElementById('installBlockPopup');
+        if (popup) popup.classList.add('hidden');
+      });
+    }
   }
   
-  // Bloquear toque fora do pop-up
-  popup.addEventListener('click', function(e) {
-    if (e.target === popup) {
-      // Não fechar ao clicar no overlay
-      e.stopPropagation();
+  // ---- BLOQUEIO SELETIVO: Sinais ao Vivo (data-tab=hot) e Favoritos (data-tab=favs) ----
+  // Interceptar clique nas abas bloqueadas
+  document.addEventListener('click', function(e) {
+    if (jaInstalou()) return; // Já instalou, não bloquear
+    
+    var target = e.target.closest('[data-tab]');
+    if (!target) return;
+    var tab = target.getAttribute('data-tab');
+    
+    if (tab === 'hot' || tab === 'favs') {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      mostrarTabLock();
+    }
+  }, true); // capture=true para interceptar antes do handler original
+  
+  // Interceptar clique no "Sinal Ativo Agora"
+  document.addEventListener('click', function(e) {
+    if (jaInstalou()) return;
+    var target = e.target.closest('#sinalAtivoBanner');
+    if (!target) return;
+    e.stopImmediatePropagation();
+    e.preventDefault();
+    mostrarTabLock();
+  }, true);
+  
+  function mostrarTabLock() {
+    var overlay = document.getElementById('tabLockOverlay');
+    if (overlay) overlay.classList.remove('hidden');
+    // Esconder pop-up flutuante se estiver visível
+    var popup = document.getElementById('installBlockPopup');
+    if (popup) popup.classList.add('hidden');
+  }
+  
+  function fecharTabLock() {
+    var overlay = document.getElementById('tabLockOverlay');
+    if (overlay) overlay.classList.add('hidden');
+    // Voltar para home
+    var homeTab = document.querySelector('[data-tab=home]');
+    if (homeTab) homeTab.click();
+  }
+  
+  // Botão instalar no overlay de aba
+  document.addEventListener('click', function(e) {
+    if (e.target.id === 'tabLockInstallBtn') {
+      var overlay = document.getElementById('tabLockOverlay');
+      if (overlay) overlay.classList.add('hidden');
+      acionarInstalacao(function() {
+        // Após instalar, liberar a aba clicada
+        if (jaInstalou()) {
+          var hotTab = document.querySelector('[data-tab=hot]');
+          if (hotTab) hotTab.click();
+        }
+      });
+    }
+    if (e.target.id === 'tabLockBack') {
+      fecharTabLock();
     }
   });
+  
 })();
 
 // ===== AVALIAÇÃO DE SINAIS =====
