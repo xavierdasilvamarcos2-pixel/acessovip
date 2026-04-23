@@ -2924,7 +2924,7 @@ function clearNotifImage() {
 
 async function getUploadToken() {
   // Busca o token de upload do Firebase (não fica exposto no código)
-  const resp = await fetch(FIREBASE_DB + '/config/gh_upload_token.json');
+  const resp = await fetch(FIREBASE_DB_URL + '/config/gh_upload_token.json');
   if (!resp.ok) throw new Error('Token não encontrado');
   const token = await resp.json();
   return token;
@@ -2971,37 +2971,49 @@ document.getElementById('notifImageFile').addEventListener('change', function() 
   reader.readAsDataURL(file);
 });
 document.getElementById('sendNotifBtn').addEventListener('click', async () => {
-  const title = document.getElementById('notifTitle').value || '🚨 ENTRADA AO VIVO';
-  const body = document.getElementById('notifBody').value;
+  const titleInput = document.getElementById('notifTitle');
+  const bodyInput = document.getElementById('notifBody');
+  const title = (titleInput && titleInput.value.trim()) ? titleInput.value.trim() : '🚨 ENTRADA AO VIVO';
+  const body = bodyInput ? bodyInput.value.trim() : '';
   const tab = document.getElementById('notifUrl').value || 'hot';
-  if (!body) { showToast('Digite uma mensagem!'); return; }
+  // Validação obrigatória
+  if (!body) {
+    showToast('⚠️ Preencha a mensagem antes de enviar!');
+    if (bodyInput) { bodyInput.focus(); bodyInput.style.borderColor = '#F87171'; setTimeout(() => { bodyInput.style.borderColor = ''; }, 2000); }
+    return;
+  }
   const imgField = document.getElementById('notifImage');
   const resultEl = document.getElementById('notifResult');
   const deliveryBox = document.getElementById('notifDeliveryBox');
   const deliveryNum = document.getElementById('notifDeliveryNum');
+  const sendBtn = document.getElementById('sendNotifBtn');
   if (deliveryBox) deliveryBox.style.display = 'none';
+  // Feedback de loading
   resultEl.style.color = 'rgba(255,255,255,0.5)';
   resultEl.textContent = '⏳ Enviando para todos os dispositivos...';
-  const result = await sendPushNotification(title, body, tab);
-  if (result.success) {
-    if (result.queued) {
-      resultEl.textContent = '';
-      if (deliveryBox) { deliveryBox.style.display = 'block'; if (deliveryNum) deliveryNum.textContent = '?'; }
-      showToast('✅ Notificação enviada!');
-    } else {
+  if (sendBtn) { sendBtn.disabled = true; sendBtn.textContent = '⏳ Enviando...'; }
+  try {
+    const result = await sendPushNotification(title, body, tab);
+    if (result.success) {
       const count = result.recipients || 0;
       const countFmt = count > 0 ? count.toLocaleString('pt-BR') : '?';
       resultEl.textContent = '';
       if (deliveryBox) { deliveryBox.style.display = 'block'; if (deliveryNum) deliveryNum.textContent = countFmt; }
       showToast('✅ Notificação enviada para ' + countFmt + ' dispositivos!');
+      trackEvent('notification_sent', { title });
+      if (bodyInput) bodyInput.value = '';
+      if (imgField) { imgField.value = ''; try { clearNotifImage(); } catch(e){} }
+    } else {
+      resultEl.style.color = '#F87171';
+      resultEl.textContent = '❌ Erro: ' + (result.error || 'Falha desconhecida');
+      showToast('❌ Erro ao enviar notificação.');
     }
-    trackEvent('notification_sent', { title });
-    document.getElementById('notifBody').value = '';
-    if (imgField) imgField.value = '';
-  } else {
+  } catch(err) {
     resultEl.style.color = '#F87171';
-    resultEl.textContent = '⚠️ Erro: ' + result.error;
-    showToast('⚠️ Erro ao enviar notificação.');
+    resultEl.textContent = '❌ Erro inesperado: ' + err.message;
+    showToast('❌ Erro inesperado ao enviar.');
+  } finally {
+    if (sendBtn) { sendBtn.disabled = false; sendBtn.innerHTML = '&#128228; ENVIAR PARA TODOS'; }
   }
 });
 
@@ -3010,24 +3022,33 @@ document.getElementById('testNotifBtn').addEventListener('click', async () => {
   const resultEl = document.getElementById('notifResult');
   const deliveryBox = document.getElementById('notifDeliveryBox');
   const deliveryNum = document.getElementById('notifDeliveryNum');
+  const testBtn = document.getElementById('testNotifBtn');
   if (deliveryBox) deliveryBox.style.display = 'none';
   resultEl.style.color = 'rgba(255,255,255,0.5)';
-  resultEl.textContent = '⏳ Enviando teste...';
-  const result = await sendPushNotification(
-    '🔔 NOTIFICAÇÃO ATIVA!',
-    'Você já pode receber sinais e atualizações em tempo real.',
-    'hot'
-  );
-  if (result.success) {
-    const count = result.recipients || 0;
-    const countFmt = count > 0 ? count.toLocaleString('pt-BR') : '?';
-    resultEl.textContent = '';
-    if (deliveryBox) { deliveryBox.style.display = 'block'; if (deliveryNum) deliveryNum.textContent = countFmt; }
-    showToast('🧪 Notificação de teste enviada!');
-  } else {
+  resultEl.textContent = '⏳ Enviando notificação de teste...';
+  if (testBtn) { testBtn.disabled = true; testBtn.textContent = '⏳ Enviando teste...'; }
+  try {
+    const result = await sendPushNotification(
+      '🔔 NOTIFICAÇÃO ATIVA!',
+      'Você já pode receber sinais e atualizações em tempo real.',
+      'hot'
+    );
+    if (result.success) {
+      const count = result.recipients || 0;
+      const countFmt = count > 0 ? count.toLocaleString('pt-BR') : '?';
+      resultEl.textContent = '';
+      if (deliveryBox) { deliveryBox.style.display = 'block'; if (deliveryNum) deliveryNum.textContent = countFmt; }
+      showToast('🧪 Notificação de teste enviada para ' + countFmt + ' dispositivos!');
+    } else {
+      resultEl.style.color = '#F87171';
+      resultEl.textContent = '❌ Erro: ' + (result.error || 'Falha desconhecida');
+      showToast('❌ Erro ao enviar teste.');
+    }
+  } catch(err) {
     resultEl.style.color = '#F87171';
-    resultEl.textContent = '⚠️ Erro: ' + result.error;
-    showToast('⚠️ Erro ao enviar teste.');
+    resultEl.textContent = '❌ Erro inesperado: ' + err.message;
+  } finally {
+    if (testBtn) { testBtn.disabled = false; testBtn.textContent = '🧪 ENVIAR NOTIFICAÇÃO DE TESTE'; }
   }
 });
 
