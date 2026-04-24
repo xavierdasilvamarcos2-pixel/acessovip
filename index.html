@@ -2153,6 +2153,21 @@ const APP_URL = window.location.origin;
     document.body.style.paddingTop = (parseInt(document.body.style.paddingTop || 0) + h) + 'px';
   }, 100);
 })();
+
+// Banner de aviso para Instagram WebView
+(function showInstagramBanner() {
+  if (!isRestrictedWebView()) return;
+  var banner = document.createElement('div');
+  banner.id = 'igWebviewBanner';
+  banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99998;background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff;padding:10px 16px;font-size:13px;font-weight:700;text-align:center;display:flex;align-items:center;justify-content:space-between;gap:8px;';
+  banner.innerHTML = '<span>📲 Para melhor experiência, abra no Chrome</span><button onclick="openExternalLink(\'https://acessoplatafomas.com.br/\')" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">Abrir ↗</button>';
+  document.body.insertBefore(banner, document.body.firstChild);
+  // Ajustar padding do body para não cobrir conteúdo
+  setTimeout(function() {
+    var h = banner.offsetHeight;
+    document.body.style.paddingTop = (parseInt(document.body.style.paddingTop || 0) + h) + 'px';
+  }, 100);
+})();
 // Web Push nativo (VAPID) - sem OneSignal
 const WORKER_URL = 'https://acessovip-notif.xavierdasilvamarcos2.workers.dev';
 const VAPID_PUBLIC_KEY = 'BPTV6hbhEA7RqmyLW6AwDoNE2z5wQ6Lg1W8LQRugLXEuv6hoauT57iUB7hXnN85JYxBCwdnkEzeLOIur-Kvstu4';
