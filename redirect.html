@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0f0f1a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>ACESSO VIP — Carregando...</title>
+
+  <!-- Redirect imediato via meta (fallback para ambientes sem JS) -->
+  <meta http-equiv="refresh" content="2;url=https://acessoplatafomas.com.br" />
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      background: #0f0f1a;
+      color: #ECEDEE;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #app {
+      height: 100vh;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      padding: 32px;
+      text-align: center;
+    }
+
+    .logo-wrap {
+      position: relative;
+      animation: logo-in 0.5s ease-out both;
+    }
+
+    .logo-wrap img {
+      width: 96px;
+      height: 96px;
+      border-radius: 22px;
+      box-shadow: 0 0 40px rgba(124, 58, 237, 0.55);
+    }
+
+    .pulse-ring {
+      position: absolute;
+      inset: -12px;
+      border-radius: 34px;
+      border: 2px solid rgba(124, 58, 237, 0.4);
+      animation: pulse-ring 1.6s ease-out infinite;
+    }
+
+    @keyframes pulse-ring {
+      0%   { transform: scale(1);    opacity: 0.7; }
+      100% { transform: scale(1.25); opacity: 0; }
+    }
+
+    @keyframes logo-in {
+      from { transform: scale(0.8); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
+    .title {
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 0.5px;
+      animation: fade-up 0.5s 0.15s ease-out both;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      margin-top: -16px;
+      animation: fade-up 0.5s 0.25s ease-out both;
+    }
+
+    .status {
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: fade-up 0.5s 0.35s ease-out both;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #7C3AED;
+      animation: dot-blink 1s ease-in-out infinite;
+    }
+
+    @keyframes dot-blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
+    @keyframes fade-up {
+      from { transform: translateY(12px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    /* Botão fallback — aparece somente se o redirect automático falhar */
+    .btn-fallback {
+      display: none;
+      margin-top: 8px;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, #7C3AED, #9F67FF);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 4px 24px rgba(124,58,237,0.4);
+      animation: fade-up 0.4s ease-out both;
+    }
+
+    /* Barra de progresso */
+    .progress-bar {
+      width: 160px;
+      height: 3px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      animation: fade-up 0.5s 0.4s ease-out both;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #7C3AED, #9F67FF);
+      border-radius: 10px;
+      animation: progress-go 1.6s 0.1s ease-out forwards;
+    }
+
+    @keyframes progress-go {
+      from { width: 0%; }
+      to   { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="logo-wrap">
+      <div class="pulse-ring"></div>
+      <img
+        src="https://acessoplatafomas.com.br/icons/icon-192.png"
+        alt="ACESSO VIP"
+        onerror="this.style.display='none'"
+      />
+    </div>
+
+    <div class="title">ACESSO VIP</div>
+    <div class="subtitle">Plataformas exclusivas com bônus</div>
+
+    <div class="status">
+      <div class="dot"></div>
+      <span id="statusText">Acessando plataforma...</span>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+
+    <!-- Botão fallback (aparece se o redirect automático falhar) -->
+    <a id="btnFallback" class="btn-fallback" href="https://acessoplatafomas.com.br">
+      Acessar agora →
+    </a>
+  </div>
+
+  <script>
+    (function () {
+      var TARGET = 'https://acessoplatafomas.com.br';
+      var ua = navigator.userAgent || '';
+      var isInstagram = ua.indexOf('Instagram') !== -1;
+      var isFacebook  = ua.indexOf('FBAN') !== -1 || ua.indexOf('FBAV') !== -1;
+      var isInWebView = isInstagram || isFacebook;
+      var isAndroid   = /Android/i.test(ua);
+      var isIOS       = /iPhone|iPad|iPod/i.test(ua);
+
+      function goNow(url) {
+        window.location.replace(url);
+      }
+
+      function showFallback() {
+        document.getElementById('statusText').textContent = 'Toque para acessar';
+        document.getElementById('btnFallback').style.display = 'inline-block';
+      }
+
+      // ── Estratégia para escapar do WebView do Instagram/Facebook ──
+      if (isInWebView) {
+        if (isAndroid) {
+          // Android: intent:// força abertura no Chrome
+          var intentUrl = 'intent://' + TARGET.replace(/^https?:\/\//, '') +
+            '#Intent;scheme=https;package=com.android.chrome;end';
+          try {
+            window.location.href = intentUrl;
+          } catch (e) {}
+
+          // Fallback: abrir no navegador padrão via _blank trick
+          setTimeout(function () {
+            var a = document.createElement('a');
+            a.href = TARGET;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }, 400);
+
+        } else if (isIOS) {
+          // iOS: usar o esquema x-safari para forçar Safari
+          try {
+            window.location.href = 'x-safari-' + TARGET;
+          } catch (e) {}
+
+          // Fallback: redirect direto (iOS às vezes aceita)
+          setTimeout(function () {
+            goNow(TARGET);
+          }, 500);
+
+        } else {
+          // Outro WebView: redirect direto
+          setTimeout(function () { goNow(TARGET); }, 600);
+        }
+
+        // Último fallback: mostrar botão após 2.5s se nada funcionou
+        setTimeout(showFallback, 2500);
+
+      } else {
+        // ── Navegador normal (Chrome, Safari, etc.) ──
+        // Redirect simples após 1.5s
+        setTimeout(function () { goNow(TARGET); }, 1500);
+      }
+    })();
+  </script>
+</body>
+</html>
