@@ -3036,6 +3036,13 @@ async function sendPushNotification(title, body, tab) {
   if (fbData && !fbData.error) {
     try {
       // Usa o Cloudflare Worker com Web Push nativo (VAPID)
+      // Buscar logo da plataforma para usar como ícone
+      var workerIcon = 'https://acessoplatafomas.com.br/icons/icon-192.png';
+      if (platId) {
+        var _allPlats = (typeof platforms !== 'undefined' && platforms.length > 0) ? platforms : (typeof PLATFORMS_DATA !== 'undefined' ? PLATFORMS_DATA : []);
+        var _fp = _allPlats.find(function(p) { return String(p.id) === String(platId); });
+        if (_fp && _fp.imageUrl) workerIcon = _fp.imageUrl;
+      }
       const resp = await fetch(WORKER_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -3043,8 +3050,8 @@ async function sendPushNotification(title, body, tab) {
           title: title,
           message: body,
           url: targetUrl,
-          image: imageUrl,
-          icon: 'https://acessoplatafomas.com.br/icons/icon-192.png',
+          image: imageUrl || workerIcon,
+          icon: workerIcon,
           badge: 'https://acessoplatafomas.com.br/icons/notif-icon-mono.png'
         }, platId ? { platId: platId } : {}))
       });
