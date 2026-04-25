@@ -1734,14 +1734,37 @@
           <button onclick="loadSubscriberCount()" style="background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);border-radius:8px;padding:6px 12px;color:#A78BFA;font-size:12px;cursor:pointer;font-weight:700">🔄 Atualizar</button>
         </div>
         <div class="admin-form">
+          <!-- SELEÇÃO DE PLATAFORMA (gera título automático) -->
+          <div class="admin-form-row">
+            <label class="admin-form-label">🎯 Plataforma da Notificação</label>
+            <select class="admin-form-input" id="notifPlatSelect" style="background:#1a1a2e;color:#fff;border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:10px 12px;font-size:14px;" onchange="onNotifPlatSelect()">
+              <option value="">— Selecionar plataforma —</option>
+            </select>
+            <!-- Preview da plataforma selecionada -->
+            <div id="notifPlatPreview" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);border-radius:10px;display:flex;align-items:center;gap:12px;">
+              <img id="notifPlatLogo" src="" alt="" style="width:44px;height:44px;border-radius:10px;object-fit:cover;background:#222;" onerror="this.style.display='none'" />
+              <div>
+                <div id="notifPlatName" style="font-size:14px;font-weight:800;color:#A78BFA;"></div>
+                <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">Logo será usada como ícone da notificação</div>
+              </div>
+            </div>
+          </div>
           <div class="admin-form-row">
             <label class="admin-form-label">&#128172; Título da Notificação</label>
-            <input class="admin-form-input" id="notifTitle" type="text" placeholder="Ex: 🔥 Plataforma Em Alta!" value="&#128680; ENTRADA AO VIVO" />
+            <input class="admin-form-input" id="notifTitle" type="text" placeholder="Ex: 🔥 SPIN77 EM ALTA AGORA" value="&#128680; ENTRADA AO VIVO" />
+            <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;">Preenchido automaticamente ao selecionar plataforma</div>
           </div>
           <div class="admin-form-row">
-            <label class="admin-form-label">&#128221; Mensagem</label>
-            <textarea class="admin-notif-textarea" id="notifBody" placeholder="🔥 Plataforma em alta agora&#10;Clique e acesse antes que mude"></textarea>
+            <label class="admin-form-label">&#128221; Linha Principal (impacto)</label>
+            <input class="admin-form-input" id="notifBodyLine1" type="text" placeholder="🔥 Plataforma em alta agora" value="🔥 Plataforma em alta agora" />
           </div>
+          <div class="admin-form-row">
+            <label class="admin-form-label">🤖 Linha IA (justificativa)</label>
+            <input class="admin-form-input" id="notifBodyLine2" type="text" placeholder="🤖 IA detectou alta distribuição — entre agora" value="🤖 IA detectou alta distribuição — entre agora" />
+            <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;">Ambas as linhas aparecem na notificação</div>
+          </div>
+          <!-- Campo oculto para compatibilidade com sendPushNotification -->
+          <textarea id="notifBody" style="display:none;"></textarea>
           <div class="admin-form-row">
             <label class="admin-form-label">&#128247; Imagem (opcional)</label>
             <!-- Input hidden para armazenar a URL final da imagem -->
@@ -2898,6 +2921,83 @@ document.getElementById('addPlatformBtn').addEventListener('click', () => {
   trackEvent('platform_added', { name });
 });
 
+// ===== NOTIFICAÇÃO: Preencher dropdown de plataformas =====
+function populateNotifPlatSelect() {
+  var sel = document.getElementById('notifPlatSelect');
+  if (!sel) return;
+  // Limpar opções exceto a primeira
+  while (sel.options.length > 1) sel.remove(1);
+  var allPlats = (platforms.length > 0 ? platforms : PLATFORMS_DATA).filter(function(p) { return p.url && p.name; });
+  // Ordenar: em alta primeiro, depois por nome
+  allPlats.sort(function(a, b) {
+    if (a.isHigh && !b.isHigh) return -1;
+    if (!a.isHigh && b.isHigh) return 1;
+    return a.name.localeCompare(b.name);
+  });
+  allPlats.forEach(function(p) {
+    var opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = (p.isHigh ? '🔥 ' : '') + p.name;
+    opt.dataset.logo = p.imageUrl || '';
+    opt.dataset.name = p.name;
+    sel.appendChild(opt);
+  });
+}
+
+function onNotifPlatSelect() {
+  var sel = document.getElementById('notifPlatSelect');
+  var preview = document.getElementById('notifPlatPreview');
+  var logoImg = document.getElementById('notifPlatLogo');
+  var nameEl = document.getElementById('notifPlatName');
+  var titleInput = document.getElementById('notifTitle');
+  var line1Input = document.getElementById('notifBodyLine1');
+  var line2Input = document.getElementById('notifBodyLine2');
+  var platIdInput = document.getElementById('notifPlatId');
+
+  if (!sel || !sel.value) {
+    if (preview) preview.style.display = 'none';
+    return;
+  }
+  var opt = sel.options[sel.selectedIndex];
+  var platName = opt.dataset.name || opt.textContent.replace('🔥 ', '');
+  var logoUrl = opt.dataset.logo || '';
+  var platId = sel.value;
+
+  // Atualizar preview
+  if (preview) preview.style.display = 'flex';
+  if (logoImg) { logoImg.src = logoUrl; logoImg.style.display = logoUrl ? 'block' : 'none'; }
+  if (nameEl) nameEl.textContent = platName;
+
+  // Preencher título automaticamente
+  if (titleInput) titleInput.value = '🔥 ' + platName.toUpperCase() + ' EM ALTA AGORA';
+
+  // Preencher linha principal automaticamente
+  if (line1Input) line1Input.value = '🔥 ' + platName + ' em alta agora';
+
+  // Preencher linha IA automaticamente
+  if (line2Input) line2Input.value = '🤖 IA analisou e detectou alta distribuição na ' + platName;
+
+  // Preencher ID da plataforma
+  if (platIdInput) platIdInput.value = platId;
+
+  // Preencher notifImage com logo da plataforma (se não tiver imagem manual)
+  var notifImageField = document.getElementById('notifImage');
+  var notifImagePreview = document.getElementById('notifImagePreview');
+  if (notifImageField && !notifImageField.value && logoUrl) {
+    notifImageField.value = logoUrl;
+    // Mostrar preview da logo como imagem da notificação
+    if (!notifImagePreview || notifImagePreview.style.display === 'none') {
+      if (notifImagePreview) {
+        var previewImg = document.getElementById('notifImagePreviewImg');
+        if (previewImg) previewImg.src = logoUrl;
+        notifImagePreview.style.display = 'block';
+        var statusEl = document.getElementById('notifImageUploadStatus');
+        if (statusEl) statusEl.textContent = '✅ Logo da plataforma selecionada';
+      }
+    }
+  }
+}
+
 // ===== SEND NOTIFICATION via Firebase REST (sem CORS) =====
 async function sendPushNotification(title, body, tab) {
   // Salva no Firebase como notificação pendente
@@ -2908,13 +3008,19 @@ async function sendPushNotification(title, body, tab) {
   else targetUrl = 'https://acessoplatafomas.com.br/';
   const imageUrl = document.getElementById('notifImage') ? document.getElementById('notifImage').value.trim() : '';
   const platId = document.getElementById('notifPlatId') ? document.getElementById('notifPlatId').value.trim() : '';
+  // Usar logo da plataforma como icon se disponível
+  var notifIcon = 'https://acessoplatafomas.com.br/icons/icon-192.png';
+  if (platId) {
+    var selPlat = (platforms.length > 0 ? platforms : PLATFORMS_DATA).find(function(p) { return String(p.id) === String(platId); });
+    if (selPlat && selPlat.imageUrl) notifIcon = selPlat.imageUrl;
+  }
   const notifData = {
     title: title,
     body: body,
     url: targetUrl,
     timestamp: Date.now(),
     sent: false,
-    icon: 'https://acessoplatafomas.com.br/icons/icon-192.png',
+    icon: notifIcon,
     badge: 'https://acessoplatafomas.com.br/icons/notif-icon-mono.png'
   };
   if (imageUrl) notifData.image = imageUrl;
@@ -3030,14 +3136,19 @@ document.getElementById('notifImageFile').addEventListener('change', function() 
 });
 document.getElementById('sendNotifBtn').addEventListener('click', async () => {
   const titleInput = document.getElementById('notifTitle');
+  const line1Input = document.getElementById('notifBodyLine1');
+  const line2Input = document.getElementById('notifBodyLine2');
   const bodyInput = document.getElementById('notifBody');
   const title = (titleInput && titleInput.value.trim()) ? titleInput.value.trim() : '🚨 ENTRADA AO VIVO';
-  const body = bodyInput ? bodyInput.value.trim() : '';
+  // Combinar as 2 linhas em uma mensagem
+  const line1 = (line1Input && line1Input.value.trim()) ? line1Input.value.trim() : '';
+  const line2 = (line2Input && line2Input.value.trim()) ? line2Input.value.trim() : '';
+  const body = line1 && line2 ? line1 + '\n' + line2 : (line1 || line2 || (bodyInput ? bodyInput.value.trim() : ''));
   const tab = document.getElementById('notifUrl').value || 'hot';
   // Validação obrigatória
-  if (!body) {
-    showToast('⚠️ Preencha a mensagem antes de enviar!');
-    if (bodyInput) { bodyInput.focus(); bodyInput.style.borderColor = '#F87171'; setTimeout(() => { bodyInput.style.borderColor = ''; }, 2000); }
+  if (!line1 && !line2) {
+    showToast('⚠️ Preencha pelo menos a linha principal antes de enviar!');
+    if (line1Input) { line1Input.focus(); line1Input.style.borderColor = '#F87171'; setTimeout(() => { line1Input.style.borderColor = ''; }, 2000); }
     return;
   }
   const imgField = document.getElementById('notifImage');
@@ -3171,6 +3282,8 @@ document.getElementById('testNotifBtn').addEventListener('click', async () => {
 
 // Buscar subscribers reais do Worker (Web Push nativo)
 async function loadSubscriberCount() {
+  // Preencher dropdown de plataformas ao abrir o admin
+  try { populateNotifPlatSelect(); } catch(e) {}
   var el = document.getElementById('notifSubscriberCount');
   var elStats = document.getElementById('adminStatTokens');
   if (el) el.textContent = '...';
