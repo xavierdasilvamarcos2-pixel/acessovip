@@ -1,6 +1,6 @@
 // Service Worker - Acesso VIP PWA
-// Versão: v16 - Notificação com imagem + redirect melhorado
-const CACHE_NAME = 'acesso-vip-v16';
+// Versão: v17 - Ícone com URL absoluta + fallback para data.image
+const CACHE_NAME = 'acesso-vip-v17';
 // NÃO incluir index.html nem / no cache - sempre buscar do servidor
 const STATIC_ASSETS = ['/manifest.json'];
 
@@ -56,18 +56,24 @@ self.addEventListener('push', (event) => {
     data = { title: 'Acesso VIP', body: event.data ? event.data.text() : 'Nova notificação' };
   }
   const title = data.title || '🔥 ACESSO VIP';
+  // Ícone: usar data.icon, depois data.image, depois URL absoluta do app (nunca path relativo)
+  const defaultIcon = 'https://acessoplatafomas.com.br/icons/icon-192.png';
+  const notifIcon = (data.icon && data.icon.startsWith('http')) ? data.icon
+    : (data.image && data.image.startsWith('http')) ? data.image
+    : defaultIcon;
   const options = {
     body: data.body || data.message || 'Confira as plataformas em alta agora!',
-    icon: data.icon || '/icons/icon-192.png',
-    badge: data.badge || '/icons/notif-icon-mono.png',
+    icon: notifIcon,
+    badge: (data.badge && data.badge.startsWith('http')) ? data.badge : 'https://acessoplatafomas.com.br/icons/notif-icon-mono.png',
     tag: data.tag || 'acesso-vip',
     renotify: true,
     requireInteraction: false,
     data: {
       url: data.url || 'https://acessoplatafomas.com.br/?tab=hot',
+      platId: data.platId || null,
     },
   };
-  if (data.image) {
+  if (data.image && data.image.startsWith('http')) {
     options.image = data.image;
   }
   event.waitUntil(self.registration.showNotification(title, options));
