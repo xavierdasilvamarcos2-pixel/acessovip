@@ -596,23 +596,17 @@
       -webkit-tap-highlight-color: transparent;
     }
     /* ===== EFEITO VISUAL NAS ÁREAS BLOQUEADAS ===== */
-    /* Menu inferior bloqueado */
-    .tab-bar.locked {
-      opacity: 0.55;
+    /* Botão da aba Sinais bloqueado */
+    .tab-item.locked {
+      opacity: 0.5;
       position: relative;
     }
-    .tab-bar.locked::after {
-      content: "🔒 Instale para liberar";
-      position: absolute;
-      top: -22px;
-      left: 0;
-      right: 0;
-      text-align: center;
+    .tab-item.locked .tab-icon::after {
+      content: "🔒";
       font-size: 10px;
-      font-weight: 700;
-      color: rgba(255,255,255,0.5);
-      letter-spacing: 0.3px;
-      pointer-events: none;
+      position: absolute;
+      top: 0;
+      right: -4px;
     }
     /* Sinal ativo bloqueado */
     #sinalAtivoBanner.locked {
@@ -692,6 +686,94 @@
       line-height: 1;
     }
 
+    /* ===== FAIXA VERMELHA DE INSTALAÇÃO ===== */
+    #faixaInstall {
+      display: none;
+      background: linear-gradient(90deg, #b91c1c, #dc2626, #b91c1c);
+      background-size: 200% 100%;
+      animation: faixa-shimmer 2.5s linear infinite;
+      padding: 9px 16px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 0.4px;
+      cursor: pointer;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 100;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #faixaInstall.visivel { display: block; }
+    @keyframes faixa-shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ===== TELA DE BLOQUEIO DA ABA SINAIS ===== */
+    #sinaisBloqueioTela {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 28px;
+      text-align: center;
+      gap: 20px;
+      min-height: 60vh;
+    }
+    #sinaisBloqueioTela.visivel { display: flex; }
+    #sinaisConteudo.oculto { display: none !important; }
+    .sinais-bloqueio-icon { font-size: 56px; animation: sinais-bloqueio-pulse 2s ease-in-out infinite; }
+    @keyframes sinais-bloqueio-pulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+    .sinais-bloqueio-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.3;
+    }
+    .sinais-bloqueio-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+      max-width: 280px;
+    }
+    .sinais-bloqueio-btn {
+      width: 100%;
+      max-width: 280px;
+      padding: 16px;
+      border-radius: 16px;
+      border: none;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      background: linear-gradient(135deg, #7C3AED, #5B21B6);
+      color: #fff;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 28px rgba(124,58,237,0.55);
+      animation: popup-btn-pulse 2s ease-in-out infinite;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sinais-bloqueio-features {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      max-width: 280px;
+    }
+    .sinais-bloqueio-feature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.8);
+    }
+
     /* ===== MELHORIAS ABA SINAIS ===== */
     .sinais-top-destaque { margin: 0 12px 10px; background: linear-gradient(135deg, #1a0a00, #3d1f00); border: 1.5px solid #f97316; border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; animation: top-destaque-pulse 2s ease-in-out infinite; }
     @keyframes top-destaque-pulse { 0%,100% { box-shadow: 0 0 12px rgba(249,115,22,0.3); } 50% { box-shadow: 0 0 24px rgba(249,115,22,0.6); } }
@@ -764,6 +846,10 @@
 </head>
 <body>
 <div id="app">
+  <!-- FAIXA VERMELHA DE INSTALAÇÃO -->
+  <div id="faixaInstall" onclick="window._acionarInstalacaoGlobal && window._acionarInstalacaoGlobal()">
+    ⚠️ Instale o app para liberar os sinais ao vivo
+  </div>
   <!-- HEADER -->
   <div class="header">
     <div class="header-inner">
@@ -1520,6 +1606,20 @@
 
     <!-- HOT SCREEN -->
     <div class="screen" id="screen-hot">
+      <!-- TELA DE BLOQUEIO (visível apenas para não-instalados) -->
+      <div id="sinaisBloqueioTela">
+        <div class="sinais-bloqueio-icon">🔒</div>
+        <div class="sinais-bloqueio-title">Instale o app para acessar os Sinais ao Vivo</div>
+        <div class="sinais-bloqueio-sub">Receba atualizações em tempo real com IA e nunca perca uma entrada</div>
+        <div class="sinais-bloqueio-features">
+          <div class="sinais-bloqueio-feature">🤖 IA analisa e detecta alta distribuição em tempo real</div>
+          <div class="sinais-bloqueio-feature">📲 Notificações instantâneas de sinais ativos</div>
+          <div class="sinais-bloqueio-feature">📈 Plataformas em alta com maior assertividade</div>
+        </div>
+        <button class="sinais-bloqueio-btn" id="sinaisBloqueioBtn">🚀 Instalar App Grátis</button>
+      </div>
+      <!-- CONTEÚDOM DOS SINAIS (ocultado quando bloqueado) -->
+      <div id="sinaisConteudo">
       <div class="sinais-header">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
           <div class="sinais-header-title">🎯 Sinais ao Vivo</div>
@@ -1535,6 +1635,7 @@
       <div id="hotList">
         <div class="empty-state">Nenhuma plataforma em alta no momento.</div>
       </div>
+      </div><!-- /sinaisConteudo -->
     </div>
 
     <!-- SHARE SCREEN -->
@@ -4510,8 +4611,8 @@ window.addEventListener('popstate', function(e) {
   <div class="bolha-flutuante bolha-install" id="bolhaInstall">
     <span class="bolha-icon">📲</span>
     <div class="bolha-texto">
-      <div class="bolha-titulo">INSTALAR GRÁTIS</div>
-      <div class="bolha-sub">Adicionar à tela inicial</div>
+      <div class="bolha-titulo">Instale para receber os melhores sinais com IA</div>
+      <div class="bolha-sub">Grátis • Rápido • Sem cadastro</div>
     </div>
     <button class="bolha-fechar" id="bolhaInstallFechar">✕</button>
   </div>
@@ -4643,18 +4744,43 @@ window.addEventListener('popstate', function(e) {
   // Aplicar efeito visual de bloqueio nas áreas
   function aplicarBloqueioVisual() {
     if (jaInstalou()) return;
-    var tabBar = document.querySelector('.tab-bar');
-    if (tabBar) tabBar.classList.add('locked');
+    // Tab bar: marcar apenas o botão da aba hot como locked
+    var tabHotBtn = document.querySelector('[data-tab="hot"]');
+    if (tabHotBtn) tabHotBtn.classList.add('locked');
+    // Sinal ativo banner locked
     var sinalBanner = document.getElementById('sinalAtivoBanner');
     if (sinalBanner) sinalBanner.classList.add('locked');
+    // Faixa vermelha
+    var faixa = document.getElementById('faixaInstall');
+    if (faixa) faixa.classList.add('visivel');
+    // Tela de bloqueio da aba sinais
+    var bloqueioTela = document.getElementById('sinaisBloqueioTela');
+    if (bloqueioTela) bloqueioTela.classList.add('visivel');
+    // Ocultar conteúdo dos sinais
+    var sinaisConteudo = document.getElementById('sinaisConteudo');
+    if (sinaisConteudo) sinaisConteudo.classList.add('oculto');
   }
   
   // Remover efeito visual (após instalar)
   function removerBloqueioVisual() {
-    var tabBar = document.querySelector('.tab-bar');
-    if (tabBar) tabBar.classList.remove('locked');
+    // Botão da aba hot
+    var tabHotBtn = document.querySelector('[data-tab="hot"]');
+    if (tabHotBtn) tabHotBtn.classList.remove('locked');
+    // Sinal ativo banner
     var sinalBanner = document.getElementById('sinalAtivoBanner');
     if (sinalBanner) sinalBanner.classList.remove('locked');
+    // Faixa vermelha
+    var faixa = document.getElementById('faixaInstall');
+    if (faixa) { faixa.classList.remove('visivel'); faixa.style.display = 'none'; }
+    // Tela de bloqueio
+    var bloqueioTela = document.getElementById('sinaisBloqueioTela');
+    if (bloqueioTela) bloqueioTela.classList.remove('visivel');
+    // Mostrar conteúdo dos sinais
+    var sinaisConteudo = document.getElementById('sinaisConteudo');
+    if (sinaisConteudo) sinaisConteudo.classList.remove('oculto');
+    // Bolha de instalação
+    var bolha = document.getElementById('bolhaInstall');
+    if (bolha) { bolha.classList.remove('visivel'); bolha.style.display = 'none'; }
   }
   
   // Mostrar pop-up central
@@ -4702,18 +4828,24 @@ window.addEventListener('popstate', function(e) {
       aplicarBloqueioVisual();
     }
     
-    // Botão instalar no pop-up
+    // Expor função globalmente para uso externo (faixa, bolha, etc.)
+    window._acionarInstalacaoGlobal = acionarInstalacao;
+
+    // Botão instalar no pop-up e na tela de bloqueio
     document.addEventListener('click', function(e) {
       if (e.target.id === 'installPopupBtn') acionarInstalacao();
       if (e.target.id === 'installPopupClose') fecharPopup();
+      if (e.target.id === 'sinaisBloqueioBtn') acionarInstalacao();
     });
     
-    // BLOQUEIO: Todas as abas do menu inferior
+    // BLOQUEIO: Somente a aba Sinais ao Vivo (hot)
     document.addEventListener('click', function(e) {
       if (jaInstalou()) return;
       var target = e.target.closest('[data-tab]');
       if (!target) return;
-      // Bloquear TODAS as abas (home, favs, hot, share)
+      var tab = target.getAttribute('data-tab');
+      // Bloquear SOMENTE a aba hot (sinais ao vivo)
+      if (tab !== 'hot') return;
       e.stopImmediatePropagation();
       e.preventDefault();
       mostrarPopup();
