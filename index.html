@@ -2847,11 +2847,22 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
         var now = Date.now();
         if (now - lastSent > 30 * 60 * 1000) { // 30 minutos
           _ls.set(spamKey, String(now));
-          sendPushNotification('🚨 ENTRADA AO VIVO', '🔥 Plataforma em alta agora\nClique e acesse antes que mude', 'hot')
-            .then(result => {
-              if (result.success) showToast('📲 Notificação enviada para todos!');
-              else showToast('⚠️ Erro ao enviar notificação');
-            });
+          (function() {
+            var platName = (p.name || 'Plataforma').toUpperCase();
+            var platNameLower = p.name || 'Plataforma';
+            var title = '🔥 ' + platName + ' EM ALTA AGORA';
+            var body = '🔥 ' + platNameLower + ' em alta agora\n🤖 IA analisou possível entrada e detectou alta distribuição na ' + platNameLower;
+            // Setar temporariamente notifPlatId para a função usar a logo correta
+            var platIdEl = document.getElementById('notifPlatId');
+            var prevVal = platIdEl ? platIdEl.value : '';
+            if (platIdEl) platIdEl.value = String(p.id);
+            sendPushNotification(title, body, 'hot')
+              .then(result => {
+                if (platIdEl) platIdEl.value = prevVal;
+                if (result.success) showToast('📲 Notificação enviada para todos!');
+                else showToast('⚠️ Erro ao enviar notificação');
+              });
+          })();
         } else {
           showToast('⏳ Aguarde 30min para enviar outra notificação desta plataforma');
         }
