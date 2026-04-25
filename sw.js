@@ -105,9 +105,17 @@ self.addEventListener('notificationclick', (event) => {
           return;
         }
       }
-      // App fechado: abrir com o URL correto
+      // App fechado: abrir com o URL correto (incluir platId se disponível)
       if (clients.openWindow) {
-        return clients.openWindow(notifUrl);
+        let openUrl = notifUrl;
+        if (platId) {
+          try {
+            const u = new URL(notifUrl);
+            u.searchParams.set('plataforma', String(platId));
+            openUrl = u.toString();
+          } catch(e) {}
+        }
+        return clients.openWindow(openUrl);
       }
     })
   );
