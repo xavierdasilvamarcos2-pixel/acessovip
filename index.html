@@ -2849,16 +2849,11 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
           _ls.set(spamKey, String(now));
           (function() {
             var platName = (p.name || 'Plataforma').toUpperCase();
-            var platNameLower = p.name || 'Plataforma';
+            var platLogo = p.imageUrl || 'https://acessoplatafomas.com.br/icons/icon-192.png';
             var title = '🔥 ' + platName + ' EM ALTA AGORA';
-            var body = '🔥 ' + platNameLower + ' em alta agora\n🤖 IA analisou possível entrada e detectou alta distribuição na ' + platNameLower;
-            // Setar temporariamente notifPlatId para a função usar a logo correta
-            var platIdEl = document.getElementById('notifPlatId');
-            var prevVal = platIdEl ? platIdEl.value : '';
-            if (platIdEl) platIdEl.value = String(p.id);
-            sendPushNotification(title, body, 'hot')
+            var body = '🤖 IA analisou e detectou alta distribuição na ' + platName;
+            sendPushNotification(title, body, 'hot', platLogo)
               .then(result => {
-                if (platIdEl) platIdEl.value = prevVal;
                 if (result.success) showToast('📲 Notificação enviada para todos!');
                 else showToast('⚠️ Erro ao enviar notificação');
               });
@@ -3010,7 +3005,7 @@ function onNotifPlatSelect() {
 }
 
 // ===== SEND NOTIFICATION via Firebase REST (sem CORS) =====
-async function sendPushNotification(title, body, tab) {
+async function sendPushNotification(title, body, tab, overrideIcon) {
   // Salva no Firebase como notificação pendente
   // O Firebase aceita escrita sem bloqueio de CORS
   var targetUrl;
@@ -3019,9 +3014,9 @@ async function sendPushNotification(title, body, tab) {
   else targetUrl = 'https://acessoplatafomas.com.br/';
   const imageUrl = document.getElementById('notifImage') ? document.getElementById('notifImage').value.trim() : '';
   const platId = document.getElementById('notifPlatId') ? document.getElementById('notifPlatId').value.trim() : '';
-  // Usar logo da plataforma como icon se disponível
-  var notifIcon = 'https://acessoplatafomas.com.br/icons/icon-192.png';
-  if (platId) {
+  // Usar logo da plataforma como icon se disponível (overrideIcon tem prioridade)
+  var notifIcon = overrideIcon || 'https://acessoplatafomas.com.br/icons/icon-192.png';
+  if (!overrideIcon && platId) {
     var selPlat = (platforms.length > 0 ? platforms : PLATFORMS_DATA).find(function(p) { return String(p.id) === String(platId); });
     if (selPlat && selPlat.imageUrl) notifIcon = selPlat.imageUrl;
   }
@@ -3047,9 +3042,9 @@ async function sendPushNotification(title, body, tab) {
   if (fbData && !fbData.error) {
     try {
       // Usa o Cloudflare Worker com Web Push nativo (VAPID)
-      // Buscar logo da plataforma para usar como ícone
-      var workerIcon = 'https://acessoplatafomas.com.br/icons/icon-192.png';
-      if (platId) {
+      // Buscar logo da plataforma para usar como ícone (overrideIcon tem prioridade)
+      var workerIcon = overrideIcon || 'https://acessoplatafomas.com.br/icons/icon-192.png';
+      if (!overrideIcon && platId) {
         var _allPlats = (typeof platforms !== 'undefined' && platforms.length > 0) ? platforms : (typeof PLATFORMS_DATA !== 'undefined' ? PLATFORMS_DATA : []);
         var _fp = _allPlats.find(function(p) { return String(p.id) === String(platId); });
         if (_fp && _fp.imageUrl) workerIcon = _fp.imageUrl;
