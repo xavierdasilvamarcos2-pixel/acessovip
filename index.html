@@ -869,7 +869,7 @@
     <div class="screen active" id="screen-home">
       <img class="banner-img" src="https://raw.githubusercontent.com/xavierdasilvamarcos2-pixel/acessovip/main/banner.jpg" alt="ACESSO VIP Banner" />
       <!-- SINAL ATIVO BANNER -->
-      <div class="sinal-ativo-banner" id="sinalAtivoBanner" onclick="document.querySelector('[data-tab=hot]').click()" style="cursor:pointer;">
+      <div class="sinal-ativo-banner" id="sinalAtivoBanner" onclick="window._irParaAbaHot ? window._irParaAbaHot() : document.querySelector('[data-tab=hot]').click()" style="cursor:pointer;">
         <div class="ao-vivo-badge">
           <div class="ao-vivo-dot"></div>
           <span class="ao-vivo-text">AO VIVO</span>
@@ -2535,10 +2535,33 @@ function renderShare() {
 }
 
 // ===== TAB NAVIGATION =====
+// Função global de verificação de instalação
+function _appInstalado() {
+  return localStorage.getItem('av_installed') === '1'
+    || localStorage.getItem('av_popup_install_done') === '1'
+    || window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
+}
+// Função global de bloqueio (usada pelo sinalAtivoBanner e outros)
+window._irParaAbaHot = function() {
+  if (!_appInstalado()) {
+    var popup = document.getElementById('installBlockPopup');
+    if (popup) popup.classList.remove('hidden');
+    return;
+  }
+  var tabHot = document.querySelector('[data-tab="hot"]');
+  if (tabHot) tabHot.click();
+};
 const tabs = document.querySelectorAll('.tab-item');
 tabs.forEach(tab => {
   tab.addEventListener('click', () => {
     const name = tab.dataset.tab;
+    // BLOQUEIO FUNCIONAL: impedir acesso à aba hot sem instalação
+    if (name === 'hot' && !_appInstalado()) {
+      var popup = document.getElementById('installBlockPopup');
+      if (popup) popup.classList.remove('hidden');
+      return; // NÃO prosseguir
+    }
     tabs.forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -3344,7 +3367,13 @@ document.getElementById('testNotifBtn').addEventListener('click', async () => {
     if (tab) {
       // Aguardar o app inicializar antes de navegar
       setTimeout(function() {
-        var tabBtn = document.querySelector('[data-tab="' + tab + '"]');
+        // BLOQUEIO: se tab=hot e não instalado, mostrar popup
+        if (tab === 'hot' && typeof _appInstalado === 'function' && !_appInstalado()) {
+          var popup = document.getElementById('installBlockPopup');
+          if (popup) popup.classList.remove('hidden');
+          return;
+        }
+        var tabBtn = document.querySelector('[data-tab="' + tab + '"');
         if (tabBtn) tabBtn.click();
         // Se veio com parâmetro de plataforma, abrir o sinal direto
         if (platId) {
@@ -4838,28 +4867,8 @@ window.addEventListener('popstate', function(e) {
       if (e.target.id === 'sinaisBloqueioBtn') acionarInstalacao();
     });
     
-    // BLOQUEIO: Somente a aba Sinais ao Vivo (hot)
-    document.addEventListener('click', function(e) {
-      if (jaInstalou()) return;
-      var target = e.target.closest('[data-tab]');
-      if (!target) return;
-      var tab = target.getAttribute('data-tab');
-      // Bloquear SOMENTE a aba hot (sinais ao vivo)
-      if (tab !== 'hot') return;
-      e.stopImmediatePropagation();
-      e.preventDefault();
-      mostrarPopup();
-    }, true);
-    
-    // BLOQUEIO: Sinal Ativo Agora
-    document.addEventListener('click', function(e) {
-      if (jaInstalou()) return;
-      var target = e.target.closest('#sinalAtivoBanner');
-      if (!target) return;
-      e.stopImmediatePropagation();
-      e.preventDefault();
-      mostrarPopup();
-    }, true);
+    // NOTA: O bloqueio funcional da aba hot está diretamente no handler TAB NAVIGATION
+    // e no onclick do sinalAtivoBanner via window._irParaAbaHot()
     
     // Fechar pop-up ao clicar no overlay (fundo escuro)
     document.addEventListener('click', function(e) {
