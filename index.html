@@ -2447,9 +2447,29 @@ function openPlatform(id) {
 }
 
 // ===== HOME SCREEN =====
+// Ordenação prioritária da HOME:
+// 1º Lançamento (isLaunch=true)
+// 2º Em Alta (isHigh=true), mais recente primeiro (highAt desc)
+// 3º Restante por position original
+function sortPlatformsHome(list) {
+  return [...list].sort((a, b) => {
+    const aLaunch = a.isLaunch ? 1 : 0;
+    const bLaunch = b.isLaunch ? 1 : 0;
+    if (aLaunch !== bLaunch) return bLaunch - aLaunch; // lançamento primeiro
+    const aHigh = a.isHigh ? 1 : 0;
+    const bHigh = b.isHigh ? 1 : 0;
+    if (aHigh !== bHigh) return bHigh - aHigh; // em alta antes do normal
+    if (a.isHigh && b.isHigh) {
+      // Ambos em alta: mais recente primeiro
+      return (b.highAt || 0) - (a.highAt || 0);
+    }
+    // Restante: ordem original por position
+    return (a.position || 0) - (b.position || 0);
+  });
+}
 function renderHome() {
   const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
-  let list = [...platforms].sort((a, b) => (a.position || 0) - (b.position || 0));
+  let list = sortPlatformsHome(platforms);
   if (q) list = list.filter(p => p.name.toLowerCase().includes(q));
   document.getElementById('platformCount').textContent = `${list.length} disponíveis`;
   renderGrid('platformGrid', list);
@@ -2961,6 +2981,13 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
       if (g3n) p.games.push({ name: g3n, rtp: g3r });
       p.hot_game = g1n || p.hot_game;
       p.hot_rtp = g1r || p.hot_rtp;
+      if (!p.isHigh) {
+        // Ativando Em Alta: salvar timestamp para ordenação
+        p.highAt = Date.now();
+      } else {
+        // Desativando: limpar timestamp
+        delete p.highAt;
+      }
       p.isHigh = !p.isHigh;
       saveState(); renderAdminPlatforms(); renderHome(); renderHot(); renderSinais();
       showToast(p.isHigh ? `🔥 ${p.name} marcada como Em Alta e adicionada aos Sinais!` : `${p.name} removida de Em Alta e dos Sinais`);
