@@ -549,6 +549,7 @@
       text-align: center;
       box-shadow: 0 0 50px rgba(124,58,237,0.3), 0 20px 50px rgba(0,0,0,0.6);
       animation: popup-entrada 0.35s cubic-bezier(0.32,0.72,0,1);
+      position: relative;
     }
     @keyframes popup-entrada {
       from { transform: scale(0.88) translateY(24px); opacity: 0; }
@@ -588,12 +589,25 @@
       50% { box-shadow: 0 4px 34px rgba(124,58,237,0.85); transform: scale(1.02); }
     }
     .install-popup-close {
-      display: block;
-      margin-top: 14px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.35);
+      display: none; /* legado, substituído pelo .install-popup-x */
+    }
+    .install-popup-x {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: rgba(255,255,255,0.6);
+      font-size: 16px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
     }
     /* ===== EFEITO VISUAL NAS ÁREAS BLOQUEADAS ===== */
     /* Botão da aba Sinais bloqueado */
@@ -2576,8 +2590,9 @@ const tabs = document.querySelectorAll('.tab-item');
 tabs.forEach(tab => {
   tab.addEventListener('click', () => {
     const name = tab.dataset.tab;
-    // BLOQUEIO FUNCIONAL: impedir acesso à aba hot sem instalação
-    if (name === 'hot' && !_appInstalado()) {
+    // BLOQUEIO FUNCIONAL COMPLETO: bloquear todas as abas exceto home
+    var _abasBloqueadas = ['hot', 'favs', 'share'];
+    if (_abasBloqueadas.indexOf(name) !== -1 && !_appInstalado()) {
       var popup = document.getElementById('installBlockPopup');
       if (popup) popup.classList.remove('hidden');
       return; // NÃO prosseguir
@@ -2631,6 +2646,12 @@ function loadVipWppLink() {
 loadVipWppLink();
 // ===== VIP GROUP MODAL =====
 document.getElementById('vipBtn').addEventListener('click', () => {
+  // BLOQUEIO: Grupo VIP requer instalação
+  if (!_appInstalado()) {
+    var popup = document.getElementById('installBlockPopup');
+    if (popup) popup.classList.remove('hidden');
+    return;
+  }
   document.getElementById('sorteioModal').classList.add('open');
   trackEvent('vip_group_open');
 });
@@ -3394,8 +3415,9 @@ document.getElementById('testNotifBtn').addEventListener('click', async () => {
     if (tab) {
       // Aguardar o app inicializar antes de navegar
       setTimeout(function() {
-        // BLOQUEIO: se tab=hot e não instalado, mostrar popup
-        if (tab === 'hot' && typeof _appInstalado === 'function' && !_appInstalado()) {
+        // BLOQUEIO: se tab é área restrita e não instalado, mostrar popup
+        var _tabsRestritas = ['hot', 'favs', 'share'];
+        if (_tabsRestritas.indexOf(tab) !== -1 && typeof _appInstalado === 'function' && !_appInstalado()) {
           var popup = document.getElementById('installBlockPopup');
           if (popup) popup.classList.remove('hidden');
           return;
@@ -4624,11 +4646,11 @@ window.addEventListener('popstate', function(e) {
   <!-- POP-UP DE INSTALAÇÃO (central, aparece ao clicar em área bloqueada) -->
   <div id="installBlockPopup" class="hidden">
     <div class="install-popup-box">
+      <button class="install-popup-x" id="installPopupClose" aria-label="Fechar">✕</button>
       <span class="install-popup-icon">📲</span>
-      <div class="install-popup-title">Baixe o app para liberar tudo</div>
-      <div class="install-popup-sub">Acesse sinais ao vivo, favoritos e notificações</div>
-      <button class="install-popup-btn" id="installPopupBtn">🚀 Instalar App</button>
-      <span class="install-popup-close" id="installPopupClose">✕ Fechar</span>
+      <div class="install-popup-title">Instale o aplicativo oficial</div>
+      <div class="install-popup-sub">Para acessar sinais ao vivo, estratégias e grupo VIP, é necessário instalar o aplicativo.</div>
+      <button class="install-popup-btn" id="installPopupBtn">👉 INSTALAR AGORA</button>
     </div>
   </div>
   <!-- Overlay legado (oculto) -->
