@@ -3668,31 +3668,44 @@ async function sendPushNotification(title, body, tab, overrideIcon, overridePlat
         var _fp = _allPlats.find(function(p) { return String(p.id) === String(platId); });
         if (_fp && _fp.imageUrl) workerIcon = _fp.imageUrl;
       }
-      const resp = await fetch(WORKER_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(Object.assign({
-          title: title,
-          message: body,
-          url: targetUrl,
-          image: imageUrl || workerIcon,
-          icon: workerIcon,
-          badge: 'https://acessoplatafomas.com.br/icons/notif-icon-mono.png'
-        }, platId ? { platId: platId } : {}))
-      });
-      const data = await resp.json();
-      if (data.id) {
-        // Incrementar contador global de notificações enviadas no Firebase
-        fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_notifs_sent.json?auth=' + FIREBASE_API_KEY)
-          .then(r => r.json()).then(cur => {
-            var next = (parseInt(cur) || 0) + 1;
-            fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_notifs_sent.json?auth=' + FIREBASE_API_KEY, {
-              method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
-            });
-          }).catch(()=>{});
-        return { success: true, recipients: data.recipients };
+      // ESTRATÉGIA DE PAGINAÇÃO: chama o Worker em loop com offset
+      // Cada invocação processa no máximo 45 usuários para não ultrapassar o limite do Cloudflare
+      const basePayload = Object.assign({
+        title: title,
+        message: body,
+        url: targetUrl,
+        image: imageUrl || workerIcon,
+        icon: workerIcon,
+        badge: 'https://acessoplatafomas.com.br/icons/notif-icon-mono.png'
+      }, platId ? { platId: platId } : {});
+
+      let totalRecipients = 0;
+      let currentOffset = 0;
+      let isDone = false;
+      let attempts = 0;
+      const MAX_ATTEMPTS = 50; // segurança para evitar loop infinito
+
+      while (!isDone && attempts < MAX_ATTEMPTS) {
+        attempts++;
+        const resp = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(Object.assign({}, basePayload, { offset: currentOffset }))
+        });
+        const data = await resp.json();
+        if (data.error) {
+          return { success: false, error: data.error };
+        }
+        totalRecipients += (data.recipients || 0);
+        isDone = data.done !== false; // se done=true ou não veio nextOffset, terminou
+        currentOffset = data.nextOffset || 0;
+        if (!data.nextOffset) isDone = true;
+      }
+
+      if (totalRecipients >= 0) {
+        return { success: true, recipients: totalRecipients };
       } else {
-        return { success: false, error: JSON.stringify(data.errors || data) };
+        return { success: false, error: 'Falha no envio' };
       }
     } catch(e) {
       // CORS bloqueou - notificação salva no Firebase para envio posterior
