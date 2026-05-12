@@ -4924,54 +4924,73 @@ if (_sinalDetailEl) {
   };
 }
 
-// Interceptar abertura do adminPanelWrap
-var _adminWrap = document.getElementById('adminPanelWrap');
-if (_adminWrap) {
-  var _origAdminStyle = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style');
-  // Monitorar via MutationObserver
-  new MutationObserver(function(mutations) {
-    mutations.forEach(function(m) {
-      if (m.attributeName === 'style' && _adminWrap.style.display === 'block') {
-        pushNavState({ view: 'admin' });
-      }
-    });
-  }).observe(_adminWrap, { attributes: true });
-}
+// (MutationObserver do admin movido para depois do handler popstate)
 
 // Handler do evento popstate (botão físico voltar)
 window.addEventListener('popstate', function(e) {
-  // 1. Fechar sinalDetail se estiver aberto
-  var sinalDetailEl = document.getElementById('sinalDetail');
-  if (sinalDetailEl && sinalDetailEl.classList.contains('open')) {
-    document.getElementById('sinalDetailBack').click();
-    return;
-  }
-  // 2. Fechar admin se estiver aberto
+  // ===== PRIORIDADE 1: PAINEL ADMIN =====
+  // Se o painel admin estiver aberto, NUNCA sair dele pelo botão voltar.
+  // Sempre navegar para o menu home do admin.
   var adminWrap = document.getElementById('adminPanelWrap');
   if (adminWrap && adminWrap.style.display === 'block') {
-    adminWrap.style.display = 'none';
-    document.getElementById('adminLoginWrap').style.display = 'flex';
-    document.getElementById('adminPasswordInput').value = '';
+    // Verificar se já está no menu home do admin
+    var homeSection = document.getElementById('admin-tab-home');
+    if (homeSection && homeSection.classList.contains('active')) {
+      // Já está no menu home: empurrar estado para não sair do app
+      history.pushState({ view: 'admin', tab: 'home' }, '');
+    } else {
+      // Está em alguma seção interna: voltar para o menu home do admin
+      adminGoTo('home');
+      history.pushState({ view: 'admin', tab: 'home' }, '');
+    }
+    return;
+  }
+
+  // ===== PRIORIDADE 2: SINAL DETAIL =====
+  var sinalDetailEl = document.getElementById('sinalDetail');
+  if (sinalDetailEl && sinalDetailEl.classList.contains('open')) {
+    var sinalBack = document.getElementById('sinalDetailBack');
+    if (sinalBack) sinalBack.click();
     history.pushState({ view: 'home' }, '');
     return;
   }
-  // 3. Fechar qualquer modal aberto
+
+  // ===== PRIORIDADE 3: MODAIS ABERTOS =====
   var openModal = document.querySelector('.modal-overlay.open, .ios-modal.open');
   if (openModal) {
     openModal.classList.remove('open');
     history.pushState({ view: 'home' }, '');
     return;
   }
-  // 4. Se estiver em aba diferente de home, voltar para home
+
+  // ===== PRIORIDADE 4: ABAS DO APP =====
   var activeTab = document.querySelector('.tab-item.active');
   if (activeTab && activeTab.dataset.tab !== 'home') {
-    document.querySelector('[data-tab="home"]').click();
+    var homeTabBtn = document.querySelector('[data-tab="home"]');
+    if (homeTabBtn) homeTabBtn.click();
     history.pushState({ view: 'home' }, '');
     return;
   }
-  // 5. Se já estiver na home, empurrar estado para não fechar o app
+
+  // ===== PRIORIDADE 5: JÁ NA HOME =====
+  // Empurrar estado para não fechar o app
   history.pushState({ view: 'home' }, '');
 });
+
+// Garantir que ao abrir o painel admin, empurramos um estado no histórico
+// para que o primeiro "voltar" vá ao menu home do admin (não saia do painel)
+var _adminWrapNav = document.getElementById('adminPanelWrap');
+if (_adminWrapNav) {
+  new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      if (m.attributeName === 'style' && _adminWrapNav.style.display === 'block') {
+        // Empurrar 2 estados: um para o painel e outro para garantir o buffer
+        history.pushState({ view: 'admin', tab: 'home' }, '');
+        history.pushState({ view: 'admin', tab: 'home' }, '');
+      }
+    });
+  }).observe(_adminWrapNav, { attributes: true });
+}
 </script>
 
   <!-- POP-UP DE INSTALAÇÃO (central, aparece ao clicar em área bloqueada) -->
