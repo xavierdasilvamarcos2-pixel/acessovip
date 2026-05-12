@@ -1,0 +1,105 @@
+name: Backup Automático Firebase
+
+on:
+  schedule:
+    # Roda todo dia às 03:00 UTC (00:00 Brasília)
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    # Permite rodar manualmente pelo painel do GitHub Actions
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    name: Backup do Firebase RTDB
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Fazer backup do Firebase RTDB
+        env:
+          FIREBASE_DB_URL: ${{ secrets.FIREBASE_DB_URL }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+        run: |
+          python3 << 'EOF'
+          import urllib.request
+          import json
+          import os
+          import datetime
+
+          db_url = os.environ.get('FIREBASE_DB_URL', 'https://acessovip-fb4c3-default-rtdb.firebaseio.com')
+          api_key = os.environ.get('FIREBASE_API_KEY', 'AIzaSyD5rgvnm8Ytu0XqISzq7fYCk0p_PYEiuI4')
+
+          # Buscar todos os dados do Firebase
+          url = f"{db_url}/.json?auth={api_key}"
+          print(f"Buscando dados de: {db_url}")
+
+          req = urllib.request.Request(url)
+          with urllib.request.urlopen(req, timeout=30) as response:
+              data = json.loads(response.read().decode('utf-8'))
+
+          # Criar pasta de backups se não existir
+          os.makedirs('backups', exist_ok=True)
+
+          # Nome do arquivo com data e hora
+          now = datetime.datetime.utcnow()
+          filename = f"backups/firebase_backup_{now.strftime('%Y-%m-%d_%H-%M-%S')}.json"
+
+          # Salvar backup
+          with open(filename, 'w', encoding='utf-8') as f:
+              json.dump(data, f, ensure_ascii=False, indent=2)
+
+          print(f"✅ Backup salvo em: {filename}")
+
+          # Contar plataformas
+          platforms = data.get('platforms', [])
+          if isinstance(platforms, list):
+              count = len(platforms)
+          elif isinstance(platforms, dict):
+              count = len(platforms)
+          else:
+              count = 0
+          print(f"📊 Total de plataformas no backup: {count}")
+
+          # Salvar resumo do backup
+          summary = {
+              "backup_date": now.isoformat() + "Z",
+              "backup_file": filename,
+              "platforms_count": count,
+              "status": "success"
+          }
+          with open('backups/latest_backup_summary.json', 'w') as f:
+              json.dump(summary, f, indent=2)
+
+          print("✅ Backup concluído com sucesso!")
+          EOF
+
+      - name: Manter apenas os últimos 30 backups
+        run: |
+          cd backups
+          # Listar backups ordenados por data (mais antigos primeiro)
+          ls -t firebase_backup_*.json 2>/dev/null | tail -n +31 | xargs -r rm -f
+          echo "Backups mantidos: $(ls firebase_backup_*.json 2>/dev/null | wc -l)"
+
+      - name: Commitar backup no repositório
+        run: |
+          git config --global user.name "GitHub Actions - Backup Bot"
+          git config --global user.email "actions@github.com"
+          git add backups/
+          
+          # Verificar se há mudanças para commitar
+          if git diff --staged --quiet; then
+            echo "Nenhuma mudança para commitar"
+          else
+            DATE=$(date -u '+%Y-%m-%d %H:%M UTC')
+            git commit -m "🔒 Backup automático Firebase - $DATE"
+            git push
+            echo "✅ Backup commitado no repositório"
+          fi
