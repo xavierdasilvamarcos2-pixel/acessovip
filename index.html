@@ -1289,36 +1289,66 @@
     .ranking-item.top1 { animation: rankingPulse 2.5s infinite; }
 
     /* Nome input modal */
+    /* ===== MODAL CADASTRO RANKING ===== */
     .ranking-name-modal {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.92);
       z-index: 10000; display: flex; align-items: center; justify-content: center;
-      padding: 20px;
+      padding: 20px; backdrop-filter: blur(4px);
     }
     .ranking-name-modal.hidden { display: none; }
     .ranking-name-box {
-      background: #1e293b; border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px; padding: 24px 20px; width: 100%; max-width: 340px;
-      text-align: center;
+      background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid rgba(124,58,237,0.35);
+      border-radius: 20px; padding: 28px 22px; width: 100%; max-width: 360px;
+      text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     }
+    .rnm-trophy { font-size: 44px; margin-bottom: 8px; display: block; }
     .ranking-name-box h3 {
-      font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 6px;
+      font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 6px;
     }
-    .ranking-name-box p {
-      font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 16px;
+    .rnm-prizes {
+      display: flex; justify-content: center; gap: 10px;
+      margin: 12px 0 16px; flex-wrap: wrap;
+    }
+    .rnm-prize-badge {
+      background: rgba(255,255,255,0.07); border-radius: 10px;
+      padding: 6px 10px; font-size: 12px; font-weight: 700; color: #fff;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .rnm-prize-badge.gold { border-color: rgba(255,215,0,0.4); color: #FFD700; }
+    .rnm-prize-badge.silver { border-color: rgba(192,192,192,0.4); color: #C0C0C0; }
+    .rnm-prize-badge.bronze { border-color: rgba(205,127,50,0.4); color: #CD7F32; }
+    .rnm-desc {
+      font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 18px;
+      line-height: 1.5;
+    }
+    .rnm-field-label {
+      font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      text-align: left; margin-bottom: 5px; margin-top: 12px;
     }
     .ranking-name-input {
       width: 100%; background: rgba(255,255,255,0.07);
       border: 1px solid rgba(255,255,255,0.15); border-radius: 10px;
-      color: #fff; font-size: 16px; padding: 12px 14px;
-      outline: none; box-sizing: border-box;
+      padding: 12px 14px; color: #fff; font-size: 14px; outline: none;
+      margin-bottom: 4px; transition: border-color 0.2s;
     }
-    .ranking-name-input:focus { border-color: #6366f1; }
+    .ranking-name-input:focus { border-color: rgba(124,58,237,0.6); }
     .ranking-name-confirm {
-      width: 100%; margin-top: 12px;
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
-      color: #fff; font-size: 15px; font-weight: 700;
-      border: none; border-radius: 10px; padding: 13px;
-      cursor: pointer;
+      width: 100%; padding: 13px; border-radius: 12px; border: none;
+      background: linear-gradient(135deg, #7C3AED, #5B21B6);
+      color: #fff; font-size: 15px; font-weight: 800; cursor: pointer;
+      margin-top: 14px; letter-spacing: 0.3px;
+    }
+    .rnm-privacy {
+      font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 10px;
+      line-height: 1.4;
+    }
+    .rnm-skip {
+      font-size: 11px; margin-top: 8px;
+      cursor: pointer; text-decoration: underline; background: none;
+      border: none; color: rgba(255,255,255,0.3); display: block;
+      width: 100%; text-align: center; padding: 4px;
     }
     /* ===== FIM RANKING SYSTEM ===== */
 </style>
@@ -2020,8 +2050,15 @@
             </div>
           </div>
         </div>
+        <!-- Botão editar perfil -->
+        <button id="rankingEditProfileBtn" onclick="window._rankingEditProfile && window._rankingEditProfile()"
+          style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);
+          border-radius:10px;padding:7px 14px;color:rgba(255,255,255,0.6);font-size:12px;
+          font-weight:600;cursor:pointer;margin-top:8px;width:100%">
+          ✏️ Editar meu nome/WhatsApp
+        </button>
         <!-- Botão compartilhar -->
-        <button class="ranking-share-btn" id="rankingShareBtn" style="margin-top:12px">
+        <button class="ranking-share-btn" id="rankingShareBtn" style="margin-top:8px">
           🚀 Compartilhar meu link
         </button>
         <!-- Link de convite -->
@@ -2697,11 +2734,28 @@
 <!-- MODAL NOME RANKING -->
 <div class="ranking-name-modal hidden" id="rankingNameModal">
   <div class="ranking-name-box">
-    <h3>🏆 Entre no Ranking!</h3>
-    <p>Como quer aparecer no ranking de indicações?</p>
+    <span class="rnm-trophy">🏆</span>
+    <h3>Participe do Ranking!</h3>
+    <div class="rnm-prizes">
+      <div class="rnm-prize-badge gold">🥇 R$50 PIX</div>
+      <div class="rnm-prize-badge silver">🥈 R$20 PIX</div>
+      <div class="rnm-prize-badge bronze">🥉 R$10 PIX</div>
+    </div>
+    <div class="rnm-desc">
+      Compartilhe seu link e ganhe pontos automaticamente.<br>
+      Os 3 com mais pontos da semana ganham prêmios via PIX.<br>
+      <strong style="color:rgba(255,255,255,0.7)">Preencha seus dados para participar e receber o prêmio.</strong>
+    </div>
+    <div class="rnm-field-label">📛 Nome ou apelido</div>
     <input class="ranking-name-input" type="text" id="rankingNameInput"
-      placeholder="Seu nome ou apelido" maxlength="30" />
-    <button class="ranking-name-confirm" id="rankingNameConfirm">Confirmar e Entrar</button>
+      placeholder="Como quer aparecer no ranking" maxlength="30" autocomplete="name" />
+    <div class="rnm-field-label">📲 WhatsApp (com DDD)</div>
+    <input class="ranking-name-input" type="tel" id="rankingPhoneInput"
+      placeholder="(11) 99999-9999" maxlength="20" autocomplete="tel"
+      style="margin-top:0" />
+    <button class="ranking-name-confirm" id="rankingNameConfirm">🚀 Entrar no Ranking</button>
+    <div class="rnm-privacy">🔒 Seus dados são usados apenas para identificação e envio do prêmio. Não serão compartilhados.</div>
+    <button class="rnm-skip" id="rankingSkipBtn">Entrar sem cadastro (não receberá prêmio)</button>
   </div>
 </div>
 <!-- TOAST PONTOS -->
@@ -6453,6 +6507,17 @@ document.addEventListener('click', function(e) {
   function setUserName(name) {
     localStorage.setItem('rv_name', name.trim().slice(0, 30));
   }
+  function getUserPhone() {
+    return localStorage.getItem('rv_phone') || '';
+  }
+  function setUserPhone(phone) {
+    // Sanitizar: manter apenas dígitos, +, (, ), -, espaço
+    var clean = phone.replace(/[^\d+\(\)\-\s]/g, '').trim().slice(0, 20);
+    localStorage.setItem('rv_phone', clean);
+  }
+  function hasFullProfile() {
+    return !!(getUserName() && getUserPhone());
+  }
 
   function getMyPoints() {
     return parseInt(localStorage.getItem('rv_pts') || '0', 10);
@@ -6640,6 +6705,8 @@ document.addEventListener('click', function(e) {
       }
       current.week = week;
       current.name = name;
+      var phone = getUserPhone();
+      if (phone) current.phone = phone;
       current.fp = getDeviceFingerprint();
       current.lastSeen = Date.now();
       if (!current.pts) current.pts = 0;
@@ -6798,21 +6865,57 @@ document.addEventListener('click', function(e) {
   // ── Modal de nome ────────────────────────────────────────────────────────────
   function showNameModal(onConfirm) {
     var modal = document.getElementById('rankingNameModal');
-    var input = document.getElementById('rankingNameInput');
+    var nameInput = document.getElementById('rankingNameInput');
+    var phoneInput = document.getElementById('rankingPhoneInput');
     var btn = document.getElementById('rankingNameConfirm');
-    if (!modal || !input || !btn) { if (onConfirm) onConfirm(); return; }
+    var skipBtn = document.getElementById('rankingSkipBtn');
+    if (!modal || !nameInput || !btn) { if (onConfirm) onConfirm(); return; }
+    // Preencher campos com dados já salvos (se houver)
+    if (getUserName()) nameInput.value = getUserName();
+    if (getUserPhone() && phoneInput) phoneInput.value = getUserPhone();
     modal.classList.remove('hidden');
-    input.focus();
-    function confirm() {
-      var name = input.value.trim();
-      if (!name) { input.style.borderColor = '#ef4444'; return; }
+    nameInput.focus();
+    // Máscara de telefone simples
+    if (phoneInput) {
+      phoneInput.addEventListener('input', function() {
+        var v = phoneInput.value.replace(/\D/g, '');
+        if (v.length <= 10) {
+          phoneInput.value = v.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3').replace(/-$/, '');
+        } else {
+          phoneInput.value = v.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3').replace(/-$/, '');
+        }
+      });
+    }
+    function doConfirm() {
+      var name = nameInput.value.trim();
+      if (!name) {
+        nameInput.style.borderColor = '#ef4444';
+        nameInput.focus();
+        return;
+      }
+      var phone = phoneInput ? phoneInput.value.trim() : '';
+      if (!phone || phone.replace(/\D/g,'').length < 10) {
+        if (phoneInput) { phoneInput.style.borderColor = '#ef4444'; phoneInput.focus(); }
+        return;
+      }
+      setUserName(name);
+      if (phone) setUserPhone(phone);
+      modal.classList.add('hidden');
+      syncMyProfile();
+      if (onConfirm) onConfirm();
+    }
+    function doSkip() {
+      // Entrar sem cadastro completo — só pede o nome
+      var name = nameInput.value.trim() || ('User' + getOrCreateUserId().slice(0,6));
       setUserName(name);
       modal.classList.add('hidden');
       syncMyProfile();
       if (onConfirm) onConfirm();
     }
-    btn.onclick = confirm;
-    input.onkeydown = function(e) { if (e.key === 'Enter') confirm(); };
+    btn.onclick = doConfirm;
+    if (skipBtn) skipBtn.onclick = doSkip;
+    nameInput.onkeydown = function(e) { if (e.key === 'Enter' && phoneInput) phoneInput.focus(); };
+    if (phoneInput) phoneInput.onkeydown = function(e) { if (e.key === 'Enter') doConfirm(); };
   }
 
   // ── Inicialização ────────────────────────────────────────────────────────────
@@ -6883,8 +6986,8 @@ document.addEventListener('click', function(e) {
     document.querySelectorAll('.tab-item').forEach(function(tab) {
       tab.addEventListener('click', function() {
         if (tab.dataset.tab === 'ranking') {
-          // Verificar se tem nome
-          if (!getUserName()) {
+          // Verificar se tem cadastro completo (nome + phone)
+          if (!getUserName() || !getUserPhone()) {
             setTimeout(function() {
               showNameModal(function() { renderRankingScreen(); });
             }, 100);
@@ -6900,6 +7003,14 @@ document.addEventListener('click', function(e) {
   }
 
   // ── Admin: carregar ranking ───────────────────────────────────────────────────
+  // Função para editar perfil
+  window._rankingEditProfile = function() {
+    showNameModal(function() {
+      loadRanking();
+      updateMyRankCard();
+    });
+  };
+
   window.adminLoadRanking = function() {
     var week = getWeekKey();
     var weekEl = document.getElementById('adminRankWeek');
@@ -6913,7 +7024,7 @@ document.addEventListener('click', function(e) {
           var u = data[uid];
           totalUsers++;
           if (u.week === week) {
-            list.push({ uid: uid, name: u.name || uid.slice(0,8), pts: u.pts || 0, refs: u.refs || 0, fp: u.fp || '' });
+            list.push({ uid: uid, name: u.name || uid.slice(0,8), pts: u.pts || 0, refs: u.refs || 0, fp: u.fp || '', phone: u.phone || '' });
           }
         });
         totalClicks = list.reduce(function(s, u) { return s + u.refs; }, 0);
@@ -6936,7 +7047,10 @@ document.addEventListener('click', function(e) {
         html += '<div style="font-size:16px;min-width:24px;text-align:center;color:rgba(255,255,255,0.4);font-weight:700">' + (i+1) + '</div>';
         html += '<div style="flex:1;min-width:0">';
         html += '<div style="font-size:13px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escapeHtml(u.name) + '</div>';
-        html += '<div style="font-size:11px;color:rgba(255,255,255,0.4)">' + u.refs + ' indicações · ID: ' + u.uid.slice(0,10) + '</div>';
+        var phoneLink = u.phone
+          ? '<a href="https://wa.me/55' + u.phone.replace(/\D/g,'') + '" target="_blank" style="color:#25D366;font-size:11px;text-decoration:none">📲 ' + escapeHtml(u.phone) + '</a>'
+          : '<span style="color:rgba(255,255,255,0.25);font-size:11px">Sem WhatsApp</span>';
+        html += '<div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:1px">' + phoneLink + ' · ' + u.refs + ' indicações · ID: ' + u.uid.slice(0,8) + '</div>';
         html += '</div>';
         html += '<div style="text-align:right;flex-shrink:0">';
         html += '<div style="font-size:16px;font-weight:900;color:#F59E0B">' + u.pts + '</div>';
