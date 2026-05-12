@@ -946,7 +946,40 @@
     .perm-blocked::after { content:'\1F512';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:18px;pointer-events:none; }
     .log-entry-user { font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap; }
     .log-entry-user span { background:rgba(255,255,255,0.06);border-radius:4px;padding:1px 6px; }
-  </style>
+  
+/* === Downloads Analytics === */
+.dl-kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.dl-kpi{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 12px;text-align:center}
+.dl-kpi.green{border-color:rgba(52,211,153,0.25);background:rgba(52,211,153,0.06)}
+.dl-kpi.blue{border-color:rgba(96,165,250,0.25);background:rgba(96,165,250,0.06)}
+.dl-kpi.orange{border-color:rgba(251,146,60,0.25);background:rgba(251,146,60,0.06)}
+.dl-kpi.purple{border-color:rgba(167,139,250,0.25);background:rgba(167,139,250,0.06)}
+.dl-kpi-icon{font-size:22px;margin-bottom:4px}
+.dl-kpi-val{font-size:26px;font-weight:800;color:#fff;line-height:1}
+.dl-kpi-lbl{font-size:10px;color:rgba(255,255,255,0.45);margin-top:4px;line-height:1.3}
+.dl-day-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.dl-day-row{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
+.dl-day-row.today{border-color:rgba(52,211,153,0.3);background:rgba(52,211,153,0.06)}
+.dl-day-label{font-size:12px;font-weight:700;color:rgba(255,255,255,0.85)}
+.dl-day-sub{font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;display:flex;gap:10px;flex-wrap:wrap}
+.dl-day-os{display:flex;align-items:center;gap:4px}
+.dl-day-total{font-size:20px;font-weight:800;color:#34D399}
+.dl-day-total.zero{color:rgba(255,255,255,0.2);font-size:16px}
+.dl-bar-wrap{margin-bottom:16px}
+.dl-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.dl-bar-lbl{font-size:11px;color:rgba(255,255,255,0.6);width:80px;flex-shrink:0;text-align:right}
+.dl-bar-track{flex:1;height:8px;background:rgba(255,255,255,0.07);border-radius:4px;overflow:hidden}
+.dl-bar-fill{height:100%;border-radius:4px;transition:width 0.6s ease}
+.dl-bar-val{font-size:11px;font-weight:700;color:rgba(255,255,255,0.7);width:30px;text-align:right;flex-shrink:0}
+.dl-install-log{display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto}
+.dl-install-item{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+.dl-install-os-icon{font-size:20px;flex-shrink:0}
+.dl-install-info{flex:1;min-width:0}
+.dl-install-os-name{font-size:12px;font-weight:700;color:rgba(255,255,255,0.85)}
+.dl-install-time{font-size:10px;color:rgba(255,255,255,0.4);margin-top:1px}
+.dl-install-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:rgba(52,211,153,0.15);color:#34D399;border:1px solid rgba(52,211,153,0.3)}
+.dl-empty{text-align:center;color:rgba(255,255,255,0.25);font-size:12px;padding:20px 0}
+</style>
   <!-- Web Push Nativo (VAPID) - sem dependências externas -->
   <script>
     // Chave pública VAPID para Web Push nativo
@@ -2288,6 +2321,42 @@
             <div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:16px">Carregando...</div>
           </div>
 
+                    <!-- Downloads / Instalações -->
+          <div class="analytics-section-title" style="margin-top:20px">&#128229; Downloads / Instalações</div>
+          <div class="dl-kpi-grid" id="dlKpiGrid">
+            <div class="dl-kpi green">
+              <div class="dl-kpi-icon">&#128229;</div>
+              <div class="dl-kpi-val" id="dlKpiToday">...</div>
+              <div class="dl-kpi-lbl">Hoje</div>
+            </div>
+            <div class="dl-kpi blue">
+              <div class="dl-kpi-icon">&#128337;</div>
+              <div class="dl-kpi-val" id="dlKpi7d">...</div>
+              <div class="dl-kpi-lbl">Últimos 7 dias</div>
+            </div>
+            <div class="dl-kpi orange">
+              <div class="dl-kpi-icon">&#129504;</div>
+              <div class="dl-kpi-val" id="dlKpiAndroid">...</div>
+              <div class="dl-kpi-lbl">Android hoje</div>
+            </div>
+            <div class="dl-kpi purple">
+              <div class="dl-kpi-icon">&#63743;</div>
+              <div class="dl-kpi-val" id="dlKpiIos">...</div>
+              <div class="dl-kpi-lbl">iPhone hoje</div>
+            </div>
+          </div>
+          <div class="analytics-section-title" style="font-size:12px;margin-bottom:8px">&#128197; Últimos 7 dias</div>
+          <div class="dl-day-list" id="dlDayList">
+            <div class="dl-empty">Carregando...</div>
+          </div>
+          <div class="analytics-section-title" style="font-size:12px;margin-bottom:8px">&#129504; Android vs &#63743; iPhone (7 dias)</div>
+          <div class="dl-bar-wrap" id="dlOsBar">
+            <div class="dl-empty">Carregando...</div>
+          </div>
+          <div class="analytics-section-title" style="font-size:12px;margin-bottom:8px">&#128203; Instalações Recentes</div>
+          <div class="dl-install-log" id="dlInstallLog">
+            <div class="dl-empty">Nenhuma instalação registrada ainda.</div>
+          </div>
           <button class="admin-btn-submit blue" style="margin-top:14px" onclick="loadAnalytics()">&#128260; ATUALIZAR ANALYTICS</button>
         </div>
       </div>
@@ -3043,13 +3112,31 @@ window.addEventListener('appinstalled', () => {
   // Incrementar contador global no Firebase (com proteção contra dupla contagem)
   if (!_ls.get('av_install_fb_counted')) {
     _ls.set('av_install_fb_counted', '1');
-    fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_installs.json?auth=' + FIREBASE_API_KEY)
+    var installOs = /iphone|ipad|ipod/i.test(navigator.userAgent) ? 'ios'
+                  : /android/i.test(navigator.userAgent) ? 'android' : 'other';
+    var installDay = new Date();
+    var installDayKey = installDay.getFullYear() + '-' + String(installDay.getMonth()+1).padStart(2,'0') + '-' + String(installDay.getDate()).padStart(2,'0');
+    var fbBase = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+    var fbAuth = '?auth=' + FIREBASE_API_KEY;
+    fetch(fbBase + '/stats/total_installs.json' + fbAuth)
       .then(r => r.json()).then(cur => {
         var next = (parseInt(cur) || 0) + 1;
-        fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_installs.json?auth=' + FIREBASE_API_KEY, {
+        fetch(fbBase + '/stats/total_installs.json' + fbAuth, {
           method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
         });
       }).catch(()=>{});
+    fetch(fbBase + '/analytics/installs_daily/' + installDayKey + '/' + installOs + '.json' + fbAuth)
+      .then(r => r.json()).then(cur => {
+        var next = (parseInt(cur) || 0) + 1;
+        fetch(fbBase + '/analytics/installs_daily/' + installDayKey + '/' + installOs + '.json' + fbAuth, {
+          method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
+        });
+      }).catch(()=>{});
+    var logKey = Date.now() + '_' + Math.random().toString(36).substr(2,6);
+    fetch(fbBase + '/install_log/' + logKey + '.json' + fbAuth, {
+      method: 'PUT', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ os: installOs, ts: Date.now(), day: installDayKey })
+    }).catch(()=>{});
   }
 });
 
@@ -5709,6 +5796,7 @@ function loadAnalytics() {
     var online = results[1] || {};
     var totalAccesses = parseInt(results[2]) || 0;
     _analyticsData = { daily: daily, online: online, total: totalAccesses };
+    loadDownloadsAnalytics();
     renderAnalytics();
   });
 }
@@ -5848,6 +5936,124 @@ function analyticsSetPeriod(days, btn) {
 }
 
 // ===== AVALIAÇÃO DE SINAIS =====
+
+// === Downloads Analytics ===
+var _dlData = null;
+
+function loadDownloadsAnalytics() {
+  var base = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+  var auth = '?auth=' + FIREBASE_API_KEY;
+  Promise.all([
+    fetch(base + '/analytics/installs_daily.json' + auth).then(function(r){return r.json();}).catch(function(){return null;}),
+    fetch(base + '/install_log.json' + auth).then(function(r){return r.json();}).catch(function(){return null;})
+  ]).then(function(results) {
+    _dlData = { daily: results[0] || {}, log: results[1] || {} };
+    renderDownloadsAnalytics();
+  });
+}
+
+function renderDownloadsAnalytics() {
+  if (!_dlData) return;
+  var daily = _dlData.daily || {};
+  var log   = _dlData.log   || {};
+  var today = getTodayKey();
+  var todayData    = daily[today] || {};
+  var todayAndroid = todayData.android || 0;
+  var todayIos     = todayData.ios     || 0;
+  var todayOther   = todayData.other   || 0;
+  var todayTotal   = todayAndroid + todayIos + todayOther;
+  var sum7d = 0;
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(); d.setDate(d.getDate() - i);
+    var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    var dd = daily[key] || {};
+    sum7d += (dd.android || 0) + (dd.ios || 0) + (dd.other || 0);
+  }
+  function el(id) { return document.getElementById(id); }
+  if (el('dlKpiToday'))   el('dlKpiToday').textContent   = todayTotal;
+  if (el('dlKpi7d'))      el('dlKpi7d').textContent      = sum7d;
+  if (el('dlKpiAndroid')) el('dlKpiAndroid').textContent = todayAndroid;
+  if (el('dlKpiIos'))     el('dlKpiIos').textContent     = todayIos;
+  var dayLabels = ['Hoje','Ontem','2 dias atrás','3 dias atrás','4 dias atrás','5 dias atrás','6 dias atrás'];
+  var dayListEl = el('dlDayList');
+  if (dayListEl) {
+    var rows = '';
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(); d.setDate(d.getDate() - i);
+      var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      var dd = daily[key] || {};
+      var tot = (dd.android || 0) + (dd.ios || 0) + (dd.other || 0);
+      var dateStr = String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
+      var osSub = '';
+      if (dd.android > 0) osSub += '<span class="dl-day-os">&#129504; ' + dd.android + ' Android</span>';
+      if (dd.ios > 0)     osSub += '<span class="dl-day-os">&#63743; '  + dd.ios     + ' iPhone</span>';
+      if (dd.other > 0)   osSub += '<span class="dl-day-os">&#127760; ' + dd.other   + ' Outros</span>';
+      rows += '<div class="dl-day-row' + (i === 0 ? ' today' : '') + '">'
+            + '<div>'
+            + '<div class="dl-day-label">' + dayLabels[i] + ' &mdash; ' + dateStr + '</div>'
+            + (osSub ? '<div class="dl-day-sub">' + osSub + '</div>'
+                     : '<div class="dl-day-sub" style="color:rgba(255,255,255,0.2)">Nenhuma instalação</div>')
+            + '</div>'
+            + '<div class="dl-day-total' + (tot === 0 ? ' zero' : '') + '">' + tot + '</div>'
+            + '</div>';
+    }
+    dayListEl.innerHTML = rows;
+  }
+  var osBarEl = el('dlOsBar');
+  if (osBarEl) {
+    var totA = 0, totI = 0, totO = 0;
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(); d.setDate(d.getDate() - i);
+      var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      var dd = daily[key] || {};
+      totA += dd.android || 0;
+      totI += dd.ios     || 0;
+      totO += dd.other   || 0;
+    }
+    var maxOs = Math.max(totA, totI, totO, 1);
+    var osRows = [
+      { label: '&#129504; Android', val: totA, color: '#34D399' },
+      { label: '&#63743; iPhone',   val: totI, color: '#60A5FA' }
+    ];
+    if (totO > 0) osRows.push({ label: '&#127760; Outros', val: totO, color: '#9CA3AF' });
+    osBarEl.innerHTML = osRows.map(function(o) {
+      var pct = Math.round(o.val / maxOs * 100);
+      return '<div class="dl-bar-row">'
+           + '<div class="dl-bar-lbl">' + o.label + '</div>'
+           + '<div class="dl-bar-track"><div class="dl-bar-fill" style="width:' + pct + '%;background:' + o.color + '"></div></div>'
+           + '<div class="dl-bar-val" style="color:' + o.color + '">' + o.val + '</div>'
+           + '</div>';
+    }).join('');
+  }
+  var logEl = el('dlInstallLog');
+  if (logEl) {
+    var entries = Object.entries(log);
+    if (entries.length === 0) {
+      logEl.innerHTML = '<div class="dl-empty">Nenhuma instalação registrada ainda.<br><span style="font-size:10px;opacity:0.5">As instalações aparecerão aqui em tempo real.</span></div>';
+    } else {
+      entries.sort(function(a, b) { return (b[1].ts || 0) - (a[1].ts || 0); });
+      var osIcons = { android: '&#129504;', ios: '&#63743;', other: '&#127760;' };
+      var osNames = { android: 'Android', ios: 'iPhone (iOS)', other: 'Outro' };
+      logEl.innerHTML = entries.slice(0, 30).map(function(entry) {
+        var v = entry[1];
+        var osKey  = v.os || 'other';
+        var icon   = osIcons[osKey] || '&#127760;';
+        var name   = osNames[osKey] || 'Outro';
+        var ts     = v.ts ? new Date(v.ts) : null;
+        var tStr   = ts ? (String(ts.getDate()).padStart(2,'0') + '/' + String(ts.getMonth()+1).padStart(2,'0') + ' ' + String(ts.getHours()).padStart(2,'0') + ':' + String(ts.getMinutes()).padStart(2,'0')) : '—';
+        return '<div class="dl-install-item">'
+             + '<div class="dl-install-os-icon">' + icon + '</div>'
+             + '<div class="dl-install-info">'
+             + '<div class="dl-install-os-name">' + name + '</div>'
+             + '<div class="dl-install-time">&#128336; ' + tStr + '</div>'
+             + '</div>'
+             + '<div class="dl-install-badge">NOVO</div>'
+             + '</div>';
+      }).join('');
+    }
+  }
+}
+
 function avaliarSinal(btn, tipo) {
   var container = btn.parentElement;
   var btns = container.querySelectorAll('.sinal-card-avaliar-btn');
