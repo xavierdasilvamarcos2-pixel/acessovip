@@ -1028,6 +1028,299 @@
       border-radius: 4px;
     }
     /* ===== FIM CARROSSEL ===== */
+
+    /* ===== RANKING SYSTEM ===== */
+    /* Tab Ranking no nav */
+    .tab-item.ranking-tab-btn { position: relative; }
+    .ranking-tab-badge {
+      position: absolute; top: 4px; right: 6px;
+      background: #F59E0B; color: #000; font-size: 9px; font-weight: 800;
+      border-radius: 8px; padding: 1px 5px; line-height: 1.4;
+    }
+
+    /* Screen Ranking */
+    #screen-ranking {
+      overflow-y: auto;
+      padding-bottom: 80px;
+    }
+    .ranking-header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      padding: 20px 16px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .ranking-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(245,158,11,0.15) 0%, transparent 70%);
+    }
+    .ranking-header-title {
+      font-size: 22px; font-weight: 900; color: #fff;
+      text-shadow: 0 0 20px rgba(245,158,11,0.5);
+      position: relative; z-index: 1;
+    }
+    .ranking-header-sub {
+      font-size: 13px; color: rgba(255,255,255,0.7);
+      margin-top: 4px; position: relative; z-index: 1;
+    }
+    .ranking-week-badge {
+      display: inline-block;
+      background: rgba(245,158,11,0.2);
+      border: 1px solid rgba(245,158,11,0.4);
+      color: #F59E0B; font-size: 11px; font-weight: 700;
+      border-radius: 20px; padding: 4px 12px; margin-top: 8px;
+      position: relative; z-index: 1;
+    }
+    .ranking-timer {
+      font-size: 12px; color: rgba(255,255,255,0.6);
+      margin-top: 6px; position: relative; z-index: 1;
+    }
+    .ranking-timer span { color: #F59E0B; font-weight: 700; }
+
+    /* Prêmios */
+    .ranking-prizes {
+      display: flex; gap: 8px;
+      padding: 16px 16px 8px;
+    }
+    .ranking-prize-card {
+      flex: 1; border-radius: 12px; padding: 10px 6px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .ranking-prize-card.gold {
+      background: linear-gradient(135deg, #78350f, #92400e);
+      border: 1px solid #F59E0B;
+      box-shadow: 0 0 12px rgba(245,158,11,0.3);
+    }
+    .ranking-prize-card.silver {
+      background: linear-gradient(135deg, #1e293b, #334155);
+      border: 1px solid #94a3b8;
+    }
+    .ranking-prize-card.bronze {
+      background: linear-gradient(135deg, #1c1917, #292524);
+      border: 1px solid #b45309;
+    }
+    .ranking-prize-medal { font-size: 22px; display: block; }
+    .ranking-prize-place { font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+    .ranking-prize-value {
+      font-size: 15px; font-weight: 900; color: #fff;
+      margin-top: 2px;
+    }
+    .ranking-prize-card.gold .ranking-prize-value { color: #F59E0B; }
+    .ranking-prize-card.silver .ranking-prize-value { color: #e2e8f0; }
+    .ranking-prize-card.bronze .ranking-prize-value { color: #d97706; }
+
+    /* Lista do ranking */
+    .ranking-list {
+      padding: 0 16px;
+    }
+    .ranking-list-title {
+      font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.5);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin: 12px 0 8px;
+    }
+    .ranking-item {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 12px 14px;
+      margin-bottom: 8px;
+      transition: transform 0.15s;
+    }
+    .ranking-item:active { transform: scale(0.98); }
+    .ranking-item.top1 {
+      background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(120,53,15,0.2));
+      border-color: rgba(245,158,11,0.4);
+    }
+    .ranking-item.top2 {
+      background: linear-gradient(135deg, rgba(148,163,184,0.1), rgba(30,41,59,0.2));
+      border-color: rgba(148,163,184,0.3);
+    }
+    .ranking-item.top3 {
+      background: linear-gradient(135deg, rgba(180,83,9,0.1), rgba(28,25,23,0.2));
+      border-color: rgba(180,83,9,0.3);
+    }
+    .ranking-item.is-me {
+      border-color: rgba(99,102,241,0.6) !important;
+      box-shadow: 0 0 0 1px rgba(99,102,241,0.3);
+    }
+    .ranking-pos {
+      font-size: 18px; font-weight: 900; color: rgba(255,255,255,0.3);
+      min-width: 28px; text-align: center;
+    }
+    .ranking-pos.medal { font-size: 22px; }
+    .ranking-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 700; color: #fff;
+      flex-shrink: 0; text-transform: uppercase;
+    }
+    .ranking-info { flex: 1; min-width: 0; }
+    .ranking-name {
+      font-size: 14px; font-weight: 700; color: #fff;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ranking-name-you { color: #818cf8; }
+    .ranking-meta {
+      font-size: 11px; color: rgba(255,255,255,0.5);
+      margin-top: 2px;
+    }
+    .ranking-pts {
+      text-align: right; flex-shrink: 0;
+    }
+    .ranking-pts-num {
+      font-size: 18px; font-weight: 900; color: #F59E0B;
+    }
+    .ranking-pts-label {
+      font-size: 10px; color: rgba(255,255,255,0.4);
+    }
+
+    /* Meu card */
+    .my-rank-card {
+      margin: 12px 16px;
+      background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.15));
+      border: 1px solid rgba(99,102,241,0.4);
+      border-radius: 14px; padding: 14px 16px;
+    }
+    .my-rank-title {
+      font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;
+    }
+    .my-rank-row {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .my-rank-pos-big {
+      font-size: 28px; font-weight: 900; color: #818cf8;
+      min-width: 50px; text-align: center;
+    }
+    .my-rank-stats {
+      flex: 1; display: flex; gap: 12px;
+    }
+    .my-rank-stat {
+      flex: 1; text-align: center;
+      background: rgba(255,255,255,0.05); border-radius: 8px; padding: 8px 4px;
+    }
+    .my-rank-stat-num {
+      font-size: 18px; font-weight: 900; color: #fff;
+    }
+    .my-rank-stat-label {
+      font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px;
+    }
+
+    /* Botão compartilhar */
+    .ranking-share-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: linear-gradient(135deg, #7C3AED, #5B21B6);
+      color: #fff; font-size: 15px; font-weight: 700;
+      border: none; border-radius: 12px; padding: 14px 20px;
+      width: 100%; cursor: pointer; margin-top: 4px;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .ranking-share-btn:active { opacity: 0.85; transform: scale(0.98); }
+
+    /* Link de convite */
+    .ranking-link-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 10px 14px;
+      margin-top: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .ranking-link-text {
+      flex: 1; font-size: 12px; color: rgba(255,255,255,0.6);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ranking-link-copy {
+      background: rgba(99,102,241,0.3); border: none;
+      color: #818cf8; font-size: 12px; font-weight: 700;
+      border-radius: 6px; padding: 4px 10px; cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* Pontos ganhos — toast */
+    .pts-toast {
+      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: linear-gradient(135deg, #059669, #047857);
+      color: #fff; font-size: 14px; font-weight: 700;
+      border-radius: 30px; padding: 10px 20px;
+      box-shadow: 0 4px 20px rgba(5,150,105,0.4);
+      z-index: 9999; opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none; white-space: nowrap;
+    }
+    .pts-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Histórico de vencedores */
+    .ranking-history-section {
+      padding: 0 16px 16px;
+    }
+    .ranking-history-item {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px; padding: 10px 12px; margin-bottom: 6px;
+    }
+    .ranking-history-week {
+      font-size: 11px; color: rgba(255,255,255,0.4); min-width: 70px;
+    }
+    .ranking-history-name {
+      flex: 1; font-size: 13px; color: #fff; font-weight: 600;
+    }
+    .ranking-history-pts {
+      font-size: 13px; color: #F59E0B; font-weight: 700;
+    }
+
+    /* Loading ranking */
+    .ranking-loading {
+      text-align: center; padding: 40px 16px; color: rgba(255,255,255,0.4);
+      font-size: 14px;
+    }
+    .ranking-empty {
+      text-align: center; padding: 30px 16px; color: rgba(255,255,255,0.4);
+      font-size: 14px;
+    }
+
+    /* Animação pulso no 1º lugar */
+    @keyframes rankingPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(245,158,11,0); }
+    }
+    .ranking-item.top1 { animation: rankingPulse 2.5s infinite; }
+
+    /* Nome input modal */
+    .ranking-name-modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      z-index: 10000; display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .ranking-name-modal.hidden { display: none; }
+    .ranking-name-box {
+      background: #1e293b; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; padding: 24px 20px; width: 100%; max-width: 340px;
+      text-align: center;
+    }
+    .ranking-name-box h3 {
+      font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 6px;
+    }
+    .ranking-name-box p {
+      font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 16px;
+    }
+    .ranking-name-input {
+      width: 100%; background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15); border-radius: 10px;
+      color: #fff; font-size: 16px; padding: 12px 14px;
+      outline: none; box-sizing: border-box;
+    }
+    .ranking-name-input:focus { border-color: #6366f1; }
+    .ranking-name-confirm {
+      width: 100%; margin-top: 12px;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #fff; font-size: 15px; font-weight: 700;
+      border: none; border-radius: 10px; padding: 13px;
+      cursor: pointer;
+    }
+    /* ===== FIM RANKING SYSTEM ===== */
 </style>
   <!-- Web Push Nativo (VAPID) - sem dependências externas -->
   <script>
@@ -1678,6 +1971,80 @@
       </div>
     </div>
 
+
+    <!-- RANKING SCREEN -->
+    <div class="screen" id="screen-ranking">
+      <!-- Header com gradiente -->
+      <div class="ranking-header">
+        <div class="ranking-header-title">🏆 Ranking de Indicações</div>
+        <div class="ranking-header-sub">Indique amigos e concorra a prêmios semanais</div>
+        <div class="ranking-week-badge" id="rankingWeekBadge">Semana atual</div>
+        <div class="ranking-timer">Reinicia em: <span id="rankingCountdown">--</span></div>
+      </div>
+
+      <!-- Prêmios -->
+      <div class="ranking-prizes">
+        <div class="ranking-prize-card gold">
+          <span class="ranking-prize-medal">🥇</span>
+          <div class="ranking-prize-place">1º lugar</div>
+          <div class="ranking-prize-value">R$50</div>
+          <div style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px">PIX</div>
+        </div>
+        <div class="ranking-prize-card silver">
+          <span class="ranking-prize-medal">🥈</span>
+          <div class="ranking-prize-place">2º lugar</div>
+          <div class="ranking-prize-value">R$20</div>
+          <div style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px">PIX</div>
+        </div>
+        <div class="ranking-prize-card bronze">
+          <span class="ranking-prize-medal">🥉</span>
+          <div class="ranking-prize-place">3º lugar</div>
+          <div class="ranking-prize-value">R$10</div>
+          <div style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px">PIX</div>
+        </div>
+      </div>
+
+      <!-- Minha posição -->
+      <div class="my-rank-card" id="myRankCard">
+        <div class="my-rank-title">📊 Minha Posição</div>
+        <div class="my-rank-row">
+          <div class="my-rank-pos-big" id="myRankPos">#--</div>
+          <div class="my-rank-stats">
+            <div class="my-rank-stat">
+              <div class="my-rank-stat-num" id="myRankPts">0</div>
+              <div class="my-rank-stat-label">Pontos</div>
+            </div>
+            <div class="my-rank-stat">
+              <div class="my-rank-stat-num" id="myRankRefs">0</div>
+              <div class="my-rank-stat-label">Indicações</div>
+            </div>
+          </div>
+        </div>
+        <!-- Botão compartilhar -->
+        <button class="ranking-share-btn" id="rankingShareBtn" style="margin-top:12px">
+          🚀 Compartilhar meu link
+        </button>
+        <!-- Link de convite -->
+        <div class="ranking-link-box">
+          <span class="ranking-link-text" id="rankingLinkText">Carregando...</span>
+          <button class="ranking-link-copy" id="rankingLinkCopy">Copiar</button>
+        </div>
+      </div>
+
+      <!-- Lista ranking -->
+      <div class="ranking-list">
+        <div class="ranking-list-title">🔥 Top Indicadores</div>
+        <div id="rankingListContainer">
+          <div class="ranking-loading">⏳ Carregando ranking...</div>
+        </div>
+      </div>
+
+      <!-- Histórico de vencedores -->
+      <div class="ranking-history-section" id="rankingHistorySection" style="display:none">
+        <div class="ranking-list-title" style="margin-top:16px">🏅 Vencedores Anteriores</div>
+        <div id="rankingHistoryList"></div>
+      </div>
+    </div>
     <!-- SINAIS SCREEN -->
     <div class="screen" id="screen-sinais">
       <div class="sinais-header">
@@ -1714,6 +2081,10 @@
     <button class="tab-item" data-tab="share">
       <span class="tab-icon">📤</span>
       <span>Compartilhar</span>
+    </button>
+    <button class="tab-item ranking-tab-btn" data-tab="ranking">
+      <span class="tab-icon">🏆</span>
+      <span>Ranking</span>
     </button>
 
   </div>
@@ -1760,6 +2131,7 @@
       <button class="admin-nav-btn" data-admin-tab="config">WhatsApp</button>
       <button class="admin-nav-btn" data-admin-tab="trash">Lixeira</button>
       <button class="admin-nav-btn" data-admin-tab="log">Histórico</button>
+      <button class="admin-nav-btn" data-admin-tab="ranking">🏆 Ranking</button>
     </div>
     <!-- Content -->
     <div class="admin-content">
@@ -2266,9 +2638,74 @@
         </div><!-- /padding -->
       </div>
 
+
+      <!-- RANKING ADMIN TAB -->
+      <div class="admin-section" id="admin-tab-ranking">
+        <div class="admin-section-back" onclick="adminGoTo('home')">
+          <span class="admin-section-back-arrow">&#8592;</span> Menu Principal
+        </div>
+        <div style="padding:0 16px 16px">
+          <div class="admin-sec-hdr">
+            <div class="admin-sec-icon" style="background:linear-gradient(135deg,#78350f,#92400e)">🏆</div>
+            <div>
+              <div class="admin-sec-ttl">Ranking de Indicações</div>
+              <div class="admin-sec-sub">Controle completo do sistema de pontuação semanal</div>
+            </div>
+          </div>
+
+          <!-- Semana atual + botão reset -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin:12px 0 8px">
+            <div style="font-size:13px;color:rgba(255,255,255,0.6)">Semana: <strong style="color:#F59E0B" id="adminRankWeek">--</strong></div>
+            <button onclick="adminRankingReset()" style="background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);color:#f87171;font-size:12px;font-weight:700;border-radius:8px;padding:6px 12px;cursor:pointer">
+              🔄 Resetar Semana
+            </button>
+          </div>
+
+          <!-- Stats rápidas -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+            <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:12px;text-align:center">
+              <div style="font-size:22px;font-weight:900;color:#F59E0B" id="adminRankTotalUsers">0</div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.4)">Participantes</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:12px;text-align:center">
+              <div style="font-size:22px;font-weight:900;color:#10B981" id="adminRankTotalClicks">0</div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.4)">Cliques totais</div>
+            </div>
+          </div>
+
+          <!-- Ranking completo -->
+          <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">
+            Ranking Completo
+          </div>
+          <div id="adminRankingList">
+            <div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">⏳ Carregando...</div>
+          </div>
+
+          <!-- Histórico de vencedores -->
+          <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px">
+            Histórico de Vencedores
+          </div>
+          <div id="adminRankHistory">
+            <div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">Nenhum histórico ainda</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- MODAL NOME RANKING -->
+<div class="ranking-name-modal hidden" id="rankingNameModal">
+  <div class="ranking-name-box">
+    <h3>🏆 Entre no Ranking!</h3>
+    <p>Como quer aparecer no ranking de indicações?</p>
+    <input class="ranking-name-input" type="text" id="rankingNameInput"
+      placeholder="Seu nome ou apelido" maxlength="30" />
+    <button class="ranking-name-confirm" id="rankingNameConfirm">Confirmar e Entrar</button>
+  </div>
+</div>
+<!-- TOAST PONTOS -->
+<div class="pts-toast" id="ptsToast"></div>
 <!-- MODAL DE CONFIRMAÇÃO DUPLA AO DELETAR -->
 <div id="deleteConfirmOverlay" style="display:none;">
   <div id="deleteConfirmBox">
@@ -2842,7 +3279,7 @@ tabs.forEach(tab => {
   tab.addEventListener('click', () => {
     const name = tab.dataset.tab;
     // BLOQUEIO FUNCIONAL COMPLETO: bloquear todas as abas exceto home
-    var _abasBloqueadas = ['hot', 'favs', 'share'];
+    var _abasBloqueadas = ['hot', 'favs', 'share', 'ranking'];
     if (_abasBloqueadas.indexOf(name) !== -1 && !_appInstalado()) {
       var popup = document.getElementById('installBlockPopup');
       if (popup) popup.classList.remove('hidden');
@@ -2857,6 +3294,7 @@ tabs.forEach(tab => {
     if (name === 'favs') renderFavs();
     if (name === 'hot') renderHot();
     if (name === 'share') renderShare();
+    if (name === 'ranking') { /* handled by ranking system */ }
     if (name === 'sinais') { renderSinais(); loadSinaisData(); }
 
     trackEvent('tab_switch', { tab: name });
@@ -3278,6 +3716,7 @@ function adminGoTo(tab) {
   if (tab === 'log') loadAuditLog();
   if (tab === 'platforms') renderAdminPlatforms();
   if (tab === 'analytics') loadAnalytics();
+  if (tab === 'ranking') { window.adminLoadRanking && window.adminLoadRanking(); }
 }
 
 // Manter compatibilidade com os data-admin-tab buttons (nav escondida)
@@ -5976,6 +6415,615 @@ document.addEventListener('click', function(e) {
     initCarousel();
   }
 })();
+
+// ===== RANKING SYSTEM =====
+(function() {
+  'use strict';
+
+  // ── Constantes ──────────────────────────────────────────────────────────────
+  var FIREBASE_URL = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+  var POINTS = { click: 1, newUser: 3, notification: 5 };
+
+  // ── Utilitários ─────────────────────────────────────────────────────────────
+  function getWeekKey() {
+    var d = new Date();
+    // Semana começa na segunda-feira
+    var day = d.getDay(); // 0=dom
+    var diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    var monday = new Date(d.setDate(diff));
+    var y = monday.getFullYear();
+    var m = String(monday.getMonth() + 1).padStart(2, '0');
+    var dd = String(monday.getDate()).padStart(2, '0');
+    return y + '-W' + m + '-' + dd;
+  }
+
+  function getOrCreateUserId() {
+    var id = localStorage.getItem('rv_uid');
+    if (!id) {
+      id = 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+      localStorage.setItem('rv_uid', id);
+    }
+    return id;
+  }
+
+  function getUserName() {
+    return localStorage.getItem('rv_name') || '';
+  }
+
+  function setUserName(name) {
+    localStorage.setItem('rv_name', name.trim().slice(0, 30));
+  }
+
+  function getMyPoints() {
+    return parseInt(localStorage.getItem('rv_pts') || '0', 10);
+  }
+
+  function setMyPoints(pts) {
+    localStorage.setItem('rv_pts', String(pts));
+  }
+
+  function getMyRefs() {
+    return parseInt(localStorage.getItem('rv_refs') || '0', 10);
+  }
+
+  function setMyRefs(refs) {
+    localStorage.setItem('rv_refs', String(refs));
+  }
+
+  function getMyWeek() {
+    return localStorage.getItem('rv_week') || '';
+  }
+
+  function setMyWeek(wk) {
+    localStorage.setItem('rv_week', wk);
+  }
+
+  function getReferrerId() {
+    // Verificar ?ref= na URL
+    var params = new URLSearchParams(window.location.search);
+    return params.get('ref') || null;
+  }
+
+  function getShareLink() {
+    var uid = getOrCreateUserId();
+    var base = window.location.origin + window.location.pathname;
+    return base + '?ref=' + uid;
+  }
+
+  function showPtsToast(msg) {
+    var el = document.getElementById('ptsToast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(function() { el.classList.remove('show'); }, 3000);
+  }
+
+  // ── Anti-fraude: fingerprint leve ───────────────────────────────────────────
+  function getDeviceFingerprint() {
+    var nav = window.navigator;
+    var parts = [
+      nav.userAgent,
+      nav.language,
+      screen.width + 'x' + screen.height,
+      nav.hardwareConcurrency || 0,
+      Intl.DateTimeFormat().resolvedOptions().timeZone || ''
+    ];
+    // Hash simples
+    var str = parts.join('|');
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash |= 0;
+    }
+    return Math.abs(hash).toString(36);
+  }
+
+  // ── Firebase REST ────────────────────────────────────────────────────────────
+  function fbGet(path, cb) {
+    fetch(FIREBASE_URL + path + '.json')
+      .then(function(r) { return r.json(); })
+      .then(function(d) { cb(null, d); })
+      .catch(function(e) { cb(e, null); });
+  }
+
+  function fbSet(path, data, cb) {
+    fetch(FIREBASE_URL + path + '.json', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) { if (cb) cb(null, d); })
+    .catch(function(e) { if (cb) cb(e, null); });
+  }
+
+  function fbPatch(path, data, cb) {
+    fetch(FIREBASE_URL + path + '.json', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) { if (cb) cb(null, d); })
+    .catch(function(e) { if (cb) cb(e, null); });
+  }
+
+  // ── Adicionar pontos ao usuário ──────────────────────────────────────────────
+  function addPoints(uid, pts, reason, cb) {
+    var week = getWeekKey();
+    var path = '/ranking/users/' + uid;
+    fbGet(path + '.json', function(err, data) {
+      var current = data || { pts: 0, refs: 0, week: week, name: getUserName() || uid.slice(0,8), fp: getDeviceFingerprint() };
+      // Reset se semana mudou
+      if (current.week !== week) {
+        current.pts = 0;
+        current.refs = 0;
+        current.week = week;
+      }
+      current.pts = (current.pts || 0) + pts;
+      if (reason === 'newUser') current.refs = (current.refs || 0) + 1;
+      current.lastSeen = Date.now();
+      if (getUserName()) current.name = getUserName();
+      fbSet(path, current, function() {
+        if (cb) cb(current.pts);
+      });
+    });
+  }
+
+  // ── Registrar clique de referral ─────────────────────────────────────────────
+  function registerReferralClick(referrerId) {
+    var fp = getDeviceFingerprint();
+    var myUid = getOrCreateUserId();
+    // Não pontuar auto-referral
+    if (referrerId === myUid) return;
+    var week = getWeekKey();
+    var clickKey = '/ranking/clicks/' + referrerId + '/' + fp;
+    fbGet(clickKey + '.json', function(err, existing) {
+      if (existing && existing.week === week) return; // Já registrado nesta semana
+      // Registrar clique
+      fbSet(clickKey, { week: week, ts: Date.now(), fp: fp }, function() {
+        // +1 ponto para quem indicou
+        addPoints(referrerId, POINTS.click, 'click', null);
+      });
+    });
+  }
+
+  // ── Registrar novo usuário via referral ──────────────────────────────────────
+  function registerNewUserViaReferral(referrerId) {
+    var fp = getDeviceFingerprint();
+    var myUid = getOrCreateUserId();
+    if (referrerId === myUid) return;
+    var week = getWeekKey();
+    var newUserKey = '/ranking/new_users/' + referrerId + '/' + fp;
+    fbGet(newUserKey + '.json', function(err, existing) {
+      if (existing && existing.week === week) return;
+      fbSet(newUserKey, { week: week, ts: Date.now(), fp: fp }, function() {
+        addPoints(referrerId, POINTS.newUser, 'newUser', null);
+      });
+    });
+  }
+
+  // ── Registrar notificação ativada via referral ───────────────────────────────
+  function registerNotificationViaReferral(referrerId) {
+    var fp = getDeviceFingerprint();
+    var myUid = getOrCreateUserId();
+    if (!referrerId || referrerId === myUid) return;
+    var week = getWeekKey();
+    var notifKey = '/ranking/notif_activations/' + referrerId + '/' + fp;
+    fbGet(notifKey + '.json', function(err, existing) {
+      if (existing) return; // Só uma vez por dispositivo
+      fbSet(notifKey, { week: week, ts: Date.now(), fp: fp }, function() {
+        addPoints(referrerId, POINTS.notification, 'notification', null);
+      });
+    });
+  }
+
+  // ── Salvar/atualizar meu perfil no Firebase ──────────────────────────────────
+  function syncMyProfile() {
+    var uid = getOrCreateUserId();
+    var week = getWeekKey();
+    var name = getUserName();
+    if (!name) return; // Sem nome ainda, não sincronizar
+    var myWeek = getMyWeek();
+    var path = '/ranking/users/' + uid;
+    fbGet(path + '.json', function(err, data) {
+      var current = data || {};
+      // Reset se semana mudou
+      if (current.week && current.week !== week) {
+        // Salvar no histórico antes de resetar
+        if (current.pts > 0) {
+          var histPath = '/ranking/history/' + current.week + '/' + uid;
+          fbSet(histPath, { name: current.name || uid.slice(0,8), pts: current.pts, refs: current.refs || 0 }, null);
+        }
+        current.pts = 0;
+        current.refs = 0;
+      }
+      current.week = week;
+      current.name = name;
+      current.fp = getDeviceFingerprint();
+      current.lastSeen = Date.now();
+      if (!current.pts) current.pts = 0;
+      if (!current.refs) current.refs = 0;
+      fbSet(path, current, function() {
+        setMyPoints(current.pts);
+        setMyRefs(current.refs);
+        setMyWeek(week);
+      });
+    });
+  }
+
+  // ── Carregar ranking ─────────────────────────────────────────────────────────
+  function loadRanking(cb) {
+    var week = getWeekKey();
+    fbGet('/ranking/users.json', function(err, data) {
+      if (!data) { cb([]); return; }
+      var list = [];
+      Object.keys(data).forEach(function(uid) {
+        var u = data[uid];
+        if (u.week === week && u.pts > 0) {
+          list.push({ uid: uid, name: u.name || uid.slice(0,8), pts: u.pts || 0, refs: u.refs || 0 });
+        }
+      });
+      list.sort(function(a, b) { return b.pts - a.pts; });
+      cb(list);
+    });
+  }
+
+  // ── Carregar histórico ───────────────────────────────────────────────────────
+  function loadHistory(cb) {
+    fbGet('/ranking/history.json', function(err, data) {
+      if (!data) { cb([]); return; }
+      var weeks = Object.keys(data).sort().reverse().slice(0, 5);
+      var result = [];
+      weeks.forEach(function(wk) {
+        var users = data[wk];
+        if (!users) return;
+        var top = Object.values(users).sort(function(a,b){ return b.pts - a.pts; })[0];
+        if (top) result.push({ week: wk, name: top.name, pts: top.pts });
+      });
+      cb(result);
+    });
+  }
+
+  // ── Renderizar ranking na tela ───────────────────────────────────────────────
+  function renderRankingScreen() {
+    var uid = getOrCreateUserId();
+    var week = getWeekKey();
+    var weekLabel = 'Semana ' + week.replace('W', '').replace('-', '/');
+    var badge = document.getElementById('rankingWeekBadge');
+    if (badge) badge.textContent = weekLabel;
+
+    // Countdown até segunda-feira
+    updateCountdown();
+
+    // Link de convite
+    var linkEl = document.getElementById('rankingLinkText');
+    if (linkEl) linkEl.textContent = getShareLink();
+
+    // Carregar ranking
+    var container = document.getElementById('rankingListContainer');
+    if (container) container.innerHTML = '<div class="ranking-loading">⏳ Carregando ranking...</div>';
+
+    loadRanking(function(list) {
+      // Atualizar minha posição
+      var myPos = list.findIndex(function(u) { return u.uid === uid; });
+      var myData = list[myPos] || { pts: getMyPoints(), refs: getMyRefs() };
+      var myPosEl = document.getElementById('myRankPos');
+      var myPtsEl = document.getElementById('myRankPts');
+      var myRefsEl = document.getElementById('myRankRefs');
+      if (myPosEl) myPosEl.textContent = myPos >= 0 ? '#' + (myPos + 1) : '#--';
+      if (myPtsEl) myPtsEl.textContent = myData.pts || 0;
+      if (myRefsEl) myRefsEl.textContent = myData.refs || 0;
+
+      // Renderizar lista
+      if (!container) return;
+      if (list.length === 0) {
+        container.innerHTML = '<div class="ranking-empty">🌟 Seja o primeiro a indicar amigos!</div>';
+        return;
+      }
+      var medals = ['🥇', '🥈', '🥉'];
+      var topClasses = ['top1', 'top2', 'top3'];
+      var html = '';
+      list.slice(0, 20).forEach(function(u, i) {
+        var isMe = u.uid === uid;
+        var posDisplay = i < 3 ? '<span class="ranking-pos medal">' + medals[i] + '</span>' : '<span class="ranking-pos">' + (i+1) + '</span>';
+        var initial = (u.name || '?').charAt(0).toUpperCase();
+        var topClass = i < 3 ? topClasses[i] : '';
+        var meClass = isMe ? ' is-me' : '';
+        var nameCls = isMe ? ' ranking-name-you' : '';
+        html += '<div class="ranking-item ' + topClass + meClass + '">';
+        html += posDisplay;
+        html += '<div class="ranking-avatar">' + initial + '</div>';
+        html += '<div class="ranking-info">';
+        html += '<div class="ranking-name' + nameCls + '">' + escapeHtml(u.name) + (isMe ? ' (você)' : '') + '</div>';
+        html += '<div class="ranking-meta">' + u.refs + ' indicações</div>';
+        html += '</div>';
+        html += '<div class="ranking-pts"><div class="ranking-pts-num">' + u.pts + '</div><div class="ranking-pts-label">pts</div></div>';
+        html += '</div>';
+      });
+      container.innerHTML = html;
+    });
+
+    // Histórico
+    loadHistory(function(history) {
+      var section = document.getElementById('rankingHistorySection');
+      var histList = document.getElementById('rankingHistoryList');
+      if (!section || !histList) return;
+      if (history.length === 0) { section.style.display = 'none'; return; }
+      section.style.display = 'block';
+      var html = '';
+      history.forEach(function(h) {
+        html += '<div class="ranking-history-item">';
+        html += '<div class="ranking-history-week">' + h.week + '</div>';
+        html += '<div class="ranking-history-name">🥇 ' + escapeHtml(h.name) + '</div>';
+        html += '<div class="ranking-history-pts">' + h.pts + ' pts</div>';
+        html += '</div>';
+      });
+      histList.innerHTML = html;
+    });
+  }
+
+  function escapeHtml(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function updateCountdown() {
+    var el = document.getElementById('rankingCountdown');
+    if (!el) return;
+    var now = new Date();
+    var day = now.getDay();
+    var daysUntilMonday = day === 0 ? 1 : 8 - day;
+    var nextMonday = new Date(now);
+    nextMonday.setDate(now.getDate() + daysUntilMonday);
+    nextMonday.setHours(0, 0, 0, 0);
+    var diff = nextMonday - now;
+    var days = Math.floor(diff / 86400000);
+    var hours = Math.floor((diff % 86400000) / 3600000);
+    var mins = Math.floor((diff % 3600000) / 60000);
+    el.textContent = days + 'd ' + hours + 'h ' + mins + 'm';
+  }
+
+  // ── Compartilhar ─────────────────────────────────────────────────────────────
+  function doShare() {
+    var link = getShareLink();
+    var msg = '🎯 Acesse o ACESSO VIP — as melhores plataformas e sinais ao vivo!\n\n' + link;
+    if (navigator.share) {
+      navigator.share({ title: 'ACESSO VIP', text: msg, url: link }).catch(function(){});
+    } else {
+      var wa = 'https://wa.me/?text=' + encodeURIComponent(msg);
+      window.open(wa, '_blank');
+    }
+  }
+
+  // ── Modal de nome ────────────────────────────────────────────────────────────
+  function showNameModal(onConfirm) {
+    var modal = document.getElementById('rankingNameModal');
+    var input = document.getElementById('rankingNameInput');
+    var btn = document.getElementById('rankingNameConfirm');
+    if (!modal || !input || !btn) { if (onConfirm) onConfirm(); return; }
+    modal.classList.remove('hidden');
+    input.focus();
+    function confirm() {
+      var name = input.value.trim();
+      if (!name) { input.style.borderColor = '#ef4444'; return; }
+      setUserName(name);
+      modal.classList.add('hidden');
+      syncMyProfile();
+      if (onConfirm) onConfirm();
+    }
+    btn.onclick = confirm;
+    input.onkeydown = function(e) { if (e.key === 'Enter') confirm(); };
+  }
+
+  // ── Inicialização ────────────────────────────────────────────────────────────
+  function init() {
+    var uid = getOrCreateUserId();
+    var referrerId = getReferrerId();
+    var week = getWeekKey();
+
+    // Processar referral
+    if (referrerId && referrerId !== uid) {
+      // Registrar clique
+      registerReferralClick(referrerId);
+      // Salvar referrer para uso posterior (notificação)
+      if (!localStorage.getItem('rv_referrer')) {
+        localStorage.setItem('rv_referrer', referrerId);
+        // +3 pontos por novo usuário
+        registerNewUserViaReferral(referrerId);
+      }
+    }
+
+    // Verificar reset semanal local
+    var savedWeek = getMyWeek();
+    if (savedWeek && savedWeek !== week) {
+      setMyPoints(0);
+      setMyRefs(0);
+      setMyWeek(week);
+    }
+
+    // Sincronizar perfil se já tem nome
+    if (getUserName()) {
+      setTimeout(syncMyProfile, 2000);
+    }
+
+    // Interceptar ativação de notificação para dar pontos ao referrer
+    var origNotifHandler = window._onNotifGranted;
+    window._onNotifGranted = function() {
+      var referrer = localStorage.getItem('rv_referrer');
+      if (referrer) registerNotificationViaReferral(referrer);
+      if (origNotifHandler) origNotifHandler();
+    };
+
+    // Botões da tela ranking
+    document.addEventListener('click', function(e) {
+      // Botão compartilhar ranking
+      if (e.target.id === 'rankingShareBtn' || e.target.closest('#rankingShareBtn')) {
+        if (!getUserName()) {
+          showNameModal(function() { doShare(); });
+        } else {
+          doShare();
+        }
+      }
+      // Copiar link
+      if (e.target.id === 'rankingLinkCopy' || e.target.closest('#rankingLinkCopy')) {
+        var link = getShareLink();
+        navigator.clipboard.writeText(link).then(function() {
+          var btn = document.getElementById('rankingLinkCopy');
+          if (btn) { btn.textContent = '✅'; setTimeout(function(){ btn.textContent = 'Copiar'; }, 2000); }
+        }).catch(function() {
+          var ta = document.createElement('textarea');
+          ta.value = link; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+          var btn = document.getElementById('rankingLinkCopy');
+          if (btn) { btn.textContent = '✅'; setTimeout(function(){ btn.textContent = 'Copiar'; }, 2000); }
+        });
+      }
+    });
+
+    // Registrar tab click para renderizar ranking
+    document.querySelectorAll('.tab-item').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        if (tab.dataset.tab === 'ranking') {
+          // Verificar se tem nome
+          if (!getUserName()) {
+            setTimeout(function() {
+              showNameModal(function() { renderRankingScreen(); });
+            }, 100);
+          } else {
+            renderRankingScreen();
+          }
+        }
+      });
+    });
+
+    // Atualizar countdown a cada minuto
+    setInterval(updateCountdown, 60000);
+  }
+
+  // ── Admin: carregar ranking ───────────────────────────────────────────────────
+  window.adminLoadRanking = function() {
+    var week = getWeekKey();
+    var weekEl = document.getElementById('adminRankWeek');
+    if (weekEl) weekEl.textContent = week;
+
+    fbGet('/ranking/users.json', function(err, data) {
+      var totalUsers = 0, totalClicks = 0;
+      var list = [];
+      if (data) {
+        Object.keys(data).forEach(function(uid) {
+          var u = data[uid];
+          totalUsers++;
+          if (u.week === week) {
+            list.push({ uid: uid, name: u.name || uid.slice(0,8), pts: u.pts || 0, refs: u.refs || 0, fp: u.fp || '' });
+          }
+        });
+        totalClicks = list.reduce(function(s, u) { return s + u.refs; }, 0);
+      }
+      var tuEl = document.getElementById('adminRankTotalUsers');
+      var tcEl = document.getElementById('adminRankTotalClicks');
+      if (tuEl) tuEl.textContent = totalUsers;
+      if (tcEl) tcEl.textContent = totalClicks;
+
+      list.sort(function(a,b){ return b.pts - a.pts; });
+      var container = document.getElementById('adminRankingList');
+      if (!container) return;
+      if (list.length === 0) {
+        container.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">Nenhum participante esta semana</div>';
+        return;
+      }
+      var html = '';
+      list.forEach(function(u, i) {
+        html += '<div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:10px 12px;margin-bottom:6px">';
+        html += '<div style="font-size:16px;min-width:24px;text-align:center;color:rgba(255,255,255,0.4);font-weight:700">' + (i+1) + '</div>';
+        html += '<div style="flex:1;min-width:0">';
+        html += '<div style="font-size:13px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escapeHtml(u.name) + '</div>';
+        html += '<div style="font-size:11px;color:rgba(255,255,255,0.4)">' + u.refs + ' indicações · ID: ' + u.uid.slice(0,10) + '</div>';
+        html += '</div>';
+        html += '<div style="text-align:right;flex-shrink:0">';
+        html += '<div style="font-size:16px;font-weight:900;color:#F59E0B">' + u.pts + '</div>';
+        html += '<div style="font-size:10px;color:rgba(255,255,255,0.4)">pts</div>';
+        html += '</div>';
+        html += '<button onclick="adminRankingEditPts(\'' + u.uid + '\',' + u.pts + ',\'' + escapeHtml(u.name) + '\')" style="background:rgba(99,102,241,0.2);border:1px solid rgba(99,102,241,0.3);color:#818cf8;font-size:11px;font-weight:700;border-radius:6px;padding:4px 8px;cursor:pointer;flex-shrink:0">Editar</button>';
+        html += '</div>';
+      });
+      container.innerHTML = html;
+    });
+
+    // Histórico
+    loadHistory(function(history) {
+      var histEl = document.getElementById('adminRankHistory');
+      if (!histEl) return;
+      if (history.length === 0) {
+        histEl.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">Nenhum histórico ainda</div>';
+        return;
+      }
+      var html = '';
+      history.forEach(function(h) {
+        html += '<div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px 12px;margin-bottom:6px">';
+        html += '<div style="font-size:11px;color:rgba(255,255,255,0.4);min-width:80px">' + h.week + '</div>';
+        html += '<div style="flex:1;font-size:13px;color:#fff;font-weight:600">🥇 ' + escapeHtml(h.name) + '</div>';
+        html += '<div style="font-size:13px;color:#F59E0B;font-weight:700">' + h.pts + ' pts</div>';
+        html += '</div>';
+      });
+      histEl.innerHTML = html;
+    });
+  };
+
+  window.adminRankingEditPts = function(uid, currentPts, name) {
+    var newPts = prompt('Editar pontos de ' + name + '\nPontos atuais: ' + currentPts + '\n\nNovos pontos:', currentPts);
+    if (newPts === null) return;
+    var pts = parseInt(newPts, 10);
+    if (isNaN(pts) || pts < 0) { alert('Valor inválido'); return; }
+    var week = getWeekKey();
+    fbPatch('/ranking/users/' + uid, { pts: pts, week: week }, function() {
+      alert('Pontos atualizados!');
+      window.adminLoadRanking();
+    });
+  };
+
+  window.adminRankingReset = function() {
+    if (!confirm('Tem certeza que quer resetar o ranking desta semana?\n\nOs vencedores serão salvos no histórico.')) return;
+    var week = getWeekKey();
+    fbGet('/ranking/users.json', function(err, data) {
+      if (!data) { alert('Nenhum dado para resetar'); return; }
+      // Salvar top 3 no histórico
+      var list = [];
+      Object.keys(data).forEach(function(uid) {
+        var u = data[uid];
+        if (u.week === week && u.pts > 0) list.push({ uid: uid, name: u.name, pts: u.pts, refs: u.refs || 0 });
+      });
+      list.sort(function(a,b){ return b.pts - a.pts; });
+      list.slice(0,3).forEach(function(u) {
+        fbSet('/ranking/history/' + week + '/' + u.uid, { name: u.name, pts: u.pts, refs: u.refs }, null);
+      });
+      // Resetar pontos de todos
+      var updates = {};
+      Object.keys(data).forEach(function(uid) {
+        updates[uid + '/pts'] = 0;
+        updates[uid + '/refs'] = 0;
+      });
+      fbPatch('/ranking/users', updates, function() {
+        alert('Ranking resetado! Histórico salvo.');
+        window.adminLoadRanking();
+      });
+    });
+  };
+
+  // Inicializar quando DOM estiver pronto
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  // Expor para uso externo
+  window._rankingRenderNotifGranted = function() {
+    var referrer = localStorage.getItem('rv_referrer');
+    if (referrer) registerNotificationViaReferral(referrer);
+  };
+
+})();
+// ===== FIM RANKING SYSTEM =====
+
 // ===== FIM CARROSSEL =====
 
 </script>
