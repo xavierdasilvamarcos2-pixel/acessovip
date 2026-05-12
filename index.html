@@ -1149,13 +1149,208 @@
       min-width: 28px; text-align: center;
     }
     .ranking-pos.medal { font-size: 22px; }
+    /* ── Avatar base ── */
     .ranking-avatar {
-      width: 40px; height: 40px; border-radius: 50%;
+      width: 44px; height: 44px; border-radius: 50%;
       background: linear-gradient(135deg, #6366f1, #8b5cf6);
       display: flex; align-items: center; justify-content: center;
       font-size: 18px; font-weight: 700; color: #fff;
       flex-shrink: 0; text-transform: uppercase;
+      overflow: hidden; position: relative;
+      border: 2px solid rgba(255,255,255,0.1);
     }
+    .ranking-avatar img {
+      width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+    }
+    /* Molduras top 3 */
+    .ranking-item.top1 .ranking-avatar {
+      border: 2.5px solid #FFD700;
+      box-shadow: 0 0 10px rgba(255,215,0,0.5), 0 0 20px rgba(255,215,0,0.2);
+    }
+    .ranking-item.top2 .ranking-avatar {
+      border: 2.5px solid #C0C0C0;
+      box-shadow: 0 0 8px rgba(192,192,192,0.4);
+    }
+    .ranking-item.top3 .ranking-avatar {
+      border: 2.5px solid #CD7F32;
+      box-shadow: 0 0 8px rgba(205,127,50,0.4);
+    }
+
+    /* ── Top 3 Podium (acima da lista) ── */
+    @keyframes podium-float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    @keyframes podium-glow-gold {
+      0%,100% { box-shadow: 0 0 20px rgba(255,215,0,0.4), 0 0 40px rgba(255,215,0,0.15); }
+      50% { box-shadow: 0 0 30px rgba(255,215,0,0.7), 0 0 60px rgba(255,215,0,0.3); }
+    }
+    @keyframes crown-bounce {
+      0%,100% { transform: translateX(-50%) translateY(0) rotate(-5deg); }
+      50% { transform: translateX(-50%) translateY(-3px) rotate(5deg); }
+    }
+    .ranking-podium {
+      display: flex; align-items: flex-end; justify-content: center;
+      gap: 8px; padding: 16px 16px 8px; margin-bottom: 4px;
+    }
+    .podium-card {
+      flex: 1; max-width: 110px; text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .podium-card.p1 { order: 2; }
+    .podium-card.p2 { order: 1; }
+    .podium-card.p3 { order: 3; }
+    /* Avatar grande do pódio */
+    .podium-avatar-wrap {
+      position: relative; margin-bottom: 6px;
+    }
+    .podium-avatar {
+      border-radius: 50%; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; color: #fff; text-transform: uppercase;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    }
+    .podium-card.p1 .podium-avatar {
+      width: 72px; height: 72px; font-size: 28px;
+      border: 3px solid #FFD700;
+      animation: podium-glow-gold 2.5s ease-in-out infinite;
+    }
+    .podium-card.p2 .podium-avatar {
+      width: 58px; height: 58px; font-size: 22px;
+      border: 2.5px solid #C0C0C0;
+      box-shadow: 0 0 14px rgba(192,192,192,0.3);
+    }
+    .podium-card.p3 .podium-avatar {
+      width: 54px; height: 54px; font-size: 20px;
+      border: 2.5px solid #CD7F32;
+      box-shadow: 0 0 12px rgba(205,127,50,0.3);
+    }
+    .podium-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    /* Coroa do 1º lugar */
+    .podium-crown {
+      position: absolute; top: -18px; left: 50%;
+      transform: translateX(-50%) rotate(-5deg);
+      font-size: 20px;
+      animation: crown-bounce 2s ease-in-out infinite;
+    }
+    /* Medalha do pódio */
+    .podium-medal {
+      position: absolute; bottom: -4px; right: -4px;
+      font-size: 18px; line-height: 1;
+    }
+    /* Plataforma do pódio */
+    .podium-platform {
+      border-radius: 10px 10px 0 0; width: 100%; margin-top: 6px;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 8px 4px 10px;
+    }
+    .podium-card.p1 .podium-platform {
+      background: linear-gradient(160deg, #3d2800, #1a1000);
+      border: 1px solid rgba(255,215,0,0.4); border-bottom: none;
+      height: 56px;
+    }
+    .podium-card.p2 .podium-platform {
+      background: linear-gradient(160deg, #1e1e2e, #0d0d1a);
+      border: 1px solid rgba(192,192,192,0.25); border-bottom: none;
+      height: 44px;
+    }
+    .podium-card.p3 .podium-platform {
+      background: linear-gradient(160deg, #2a1500, #120800);
+      border: 1px solid rgba(205,127,50,0.25); border-bottom: none;
+      height: 38px;
+    }
+    .podium-name {
+      font-size: 11px; font-weight: 800; color: #fff;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 90px; margin-bottom: 2px;
+    }
+    .podium-pts {
+      font-size: 13px; font-weight: 900;
+    }
+    .podium-card.p1 .podium-pts { color: #FFD700; }
+    .podium-card.p2 .podium-pts { color: #C0C0C0; }
+    .podium-card.p3 .podium-pts { color: #CD7F32; }
+
+    /* ── Meu Perfil card ── */
+    .my-profile-avatar-wrap {
+      position: relative; width: 64px; height: 64px; flex-shrink: 0;
+    }
+    .my-profile-avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; font-weight: 900; color: #fff;
+      text-transform: uppercase; overflow: hidden;
+      border: 2.5px solid rgba(99,102,241,0.6);
+    }
+    .my-profile-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .my-profile-edit-btn {
+      position: absolute; bottom: 0; right: 0;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #7C3AED; border: 2px solid #0d0d1f;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; cursor: pointer;
+    }
+
+    /* ── Modal de perfil (editar) ── */
+    @keyframes profile-modal-in {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .profile-edit-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.92); backdrop-filter: blur(8px);
+      z-index: 10001; display: flex; align-items: flex-end; justify-content: center;
+    }
+    .profile-edit-modal.hidden { display: none; }
+    .profile-edit-box {
+      background: linear-gradient(160deg, #1a0a2e 0%, #0d0d1f 100%);
+      border: 1px solid rgba(124,58,237,0.4);
+      border-radius: 24px 24px 0 0;
+      padding: 0 0 32px; width: 100%; max-width: 480px;
+      animation: profile-modal-in 0.3s ease;
+    }
+    .profile-edit-handle {
+      width: 36px; height: 4px; background: rgba(255,255,255,0.15);
+      border-radius: 2px; margin: 12px auto 0;
+    }
+    .profile-edit-inner { padding: 16px 22px 0; }
+    .profile-edit-title {
+      font-size: 18px; font-weight: 900; color: #fff;
+      text-align: center; margin-bottom: 20px;
+    }
+    /* Upload de avatar no modal de edição */
+    .avatar-upload-area {
+      display: flex; flex-direction: column; align-items: center;
+      margin-bottom: 20px;
+    }
+    .avatar-upload-preview {
+      width: 88px; height: 88px; border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px; font-weight: 900; color: #fff;
+      text-transform: uppercase; overflow: hidden;
+      border: 3px solid rgba(124,58,237,0.5);
+      margin-bottom: 12px; cursor: pointer; position: relative;
+    }
+    .avatar-upload-preview img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .avatar-upload-overlay {
+      position: absolute; inset: 0; border-radius: 50%;
+      background: rgba(0,0,0,0.5);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; opacity: 0; transition: opacity 0.2s;
+    }
+    .avatar-upload-preview:hover .avatar-upload-overlay { opacity: 1; }
+    .avatar-upload-btns {
+      display: flex; gap: 8px;
+    }
+    .avatar-upload-btn {
+      background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.4);
+      color: #a78bfa; font-size: 12px; font-weight: 700;
+      border-radius: 20px; padding: 7px 14px; cursor: pointer;
+    }
+    /* Input oculto para arquivo */
+    #avatarFileInput { display: none; }
     .ranking-info { flex: 1; min-width: 0; }
     .ranking-name {
       font-size: 14px; font-weight: 700; color: #fff;
@@ -2217,31 +2412,37 @@
         </div>
       </div>
 
-      <!-- Minha posição -->
+      <!-- Minha posição / Meu Perfil -->
       <div class="my-rank-card" id="myRankCard">
-        <div class="my-rank-title">📊 Minha Posição</div>
-        <div class="my-rank-row">
-          <div class="my-rank-pos-big" id="myRankPos">#--</div>
-          <div class="my-rank-stats">
-            <div class="my-rank-stat">
-              <div class="my-rank-stat-num" id="myRankPts">0</div>
-              <div class="my-rank-stat-label">Pontos</div>
-            </div>
-            <div class="my-rank-stat">
-              <div class="my-rank-stat-num" id="myRankRefs">0</div>
-              <div class="my-rank-stat-label">Indicações</div>
+        <div class="my-rank-title">👤 Meu Perfil</div>
+        <div class="my-rank-row" style="align-items:flex-start;gap:14px">
+          <!-- Avatar do usuário -->
+          <div class="my-profile-avatar-wrap" onclick="window._rankingEditProfile && window._rankingEditProfile()">
+            <div class="my-profile-avatar" id="myProfileAvatarDisplay">?</div>
+            <div class="my-profile-edit-btn">✏️</div>
+          </div>
+          <!-- Info do usuário -->
+          <div style="flex:1;min-width:0">
+            <div style="font-size:16px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="myProfileNameDisplay">—</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px" id="myProfilePhoneDisplay"></div>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <div class="my-rank-stat" style="flex:1">
+                <div class="my-rank-stat-num" id="myRankPos">#--</div>
+                <div class="my-rank-stat-label">Posição</div>
+              </div>
+              <div class="my-rank-stat" style="flex:1">
+                <div class="my-rank-stat-num" id="myRankPts">0</div>
+                <div class="my-rank-stat-label">Pontos</div>
+              </div>
+              <div class="my-rank-stat" style="flex:1">
+                <div class="my-rank-stat-num" id="myRankRefs">0</div>
+                <div class="my-rank-stat-label">Indicações</div>
+              </div>
             </div>
           </div>
         </div>
-        <!-- Botão editar perfil -->
-        <button id="rankingEditProfileBtn" onclick="window._rankingEditProfile && window._rankingEditProfile()"
-          style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);
-          border-radius:10px;padding:7px 14px;color:rgba(255,255,255,0.6);font-size:12px;
-          font-weight:600;cursor:pointer;margin-top:8px;width:100%">
-          ✏️ Editar meu nome/WhatsApp
-        </button>
         <!-- Botão compartilhar -->
-        <button class="ranking-share-btn" id="rankingShareBtn" style="margin-top:8px">
+        <button class="ranking-share-btn" id="rankingShareBtn" style="margin-top:12px">
           🚀 Compartilhar meu link
         </button>
         <!-- Link de convite -->
@@ -2251,9 +2452,47 @@
         </div>
       </div>
 
-      <!-- Lista ranking -->
+      <!-- Pódio Top 3 -->
+      <div class="ranking-podium" id="rankingPodium" style="display:none">
+        <!-- p2 = 2º, p1 = 1º (centro/maior), p3 = 3º -->
+        <div class="podium-card p2" id="podiumCard2">
+          <div class="podium-avatar-wrap">
+            <div class="podium-avatar" id="podiumAvatar2">?</div>
+            <div class="podium-medal">🥈</div>
+          </div>
+          <div class="podium-name" id="podiumName2">—</div>
+          <div class="podium-platform">
+            <div class="podium-pts" id="podiumPts2">0</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.3)">pts</div>
+          </div>
+        </div>
+        <div class="podium-card p1" id="podiumCard1">
+          <div class="podium-avatar-wrap">
+            <div class="podium-crown">👑</div>
+            <div class="podium-avatar" id="podiumAvatar1">?</div>
+            <div class="podium-medal">🥇</div>
+          </div>
+          <div class="podium-name" id="podiumName1">—</div>
+          <div class="podium-platform">
+            <div class="podium-pts" id="podiumPts1">0</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.3)">pts</div>
+          </div>
+        </div>
+        <div class="podium-card p3" id="podiumCard3">
+          <div class="podium-avatar-wrap">
+            <div class="podium-avatar" id="podiumAvatar3">?</div>
+            <div class="podium-medal">🥉</div>
+          </div>
+          <div class="podium-name" id="podiumName3">—</div>
+          <div class="podium-platform">
+            <div class="podium-pts" id="podiumPts3">0</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.3)">pts</div>
+          </div>
+        </div>
+      </div>
+      <!-- Lista ranking (posições 4+) -->
       <div class="ranking-list">
-        <div class="ranking-list-title">🔥 Top Indicadores</div>
+        <div class="ranking-list-title" id="rankingListTitle">🔥 Top Indicadores</div>
         <div id="rankingListContainer">
           <div class="ranking-loading">⏳ Carregando ranking...</div>
         </div>
@@ -2987,6 +3226,48 @@
 </div>
 <!-- TOAST PONTOS -->
 <div class="pts-toast" id="ptsToast"></div>
+<!-- MODAL EDITAR PERFIL -->
+<div class="profile-edit-modal hidden" id="profileEditModal">
+  <div class="profile-edit-box">
+    <div class="profile-edit-handle"></div>
+    <div class="profile-edit-inner">
+      <div class="profile-edit-title">✏️ Editar Perfil</div>
+      <!-- Upload de avatar -->
+      <div class="avatar-upload-area">
+        <div class="avatar-upload-preview" id="avatarUploadPreview" onclick="document.getElementById('avatarFileInput').click()">
+          <span id="avatarUploadInitial">?</span>
+          <div class="avatar-upload-overlay">📷</div>
+        </div>
+        <div class="avatar-upload-btns">
+          <button class="avatar-upload-btn" onclick="document.getElementById('avatarFileInput').click()">
+            🖼️ Galeria
+          </button>
+          <button class="avatar-upload-btn" id="avatarCameraBtn">
+            📷 Câmera
+          </button>
+          <button class="avatar-upload-btn" id="avatarRemoveBtn" style="display:none;color:#f87171;border-color:rgba(239,68,68,0.4)">
+            🗑️ Remover
+          </button>
+        </div>
+        <input type="file" id="avatarFileInput" accept="image/*" capture="environment" />
+      </div>
+      <!-- Campos -->
+      <div class="rnm-field-label"><span>👤</span> Nome ou apelido</div>
+      <input class="ranking-name-input" type="text" id="profileEditName"
+        placeholder="Como quer aparecer no ranking" maxlength="30" autocomplete="name" />
+      <div class="rnm-field-label"><span>📲</span> WhatsApp com DDD</div>
+      <input class="ranking-name-input" type="tel" id="profileEditPhone"
+        placeholder="(11) 99999-9999" maxlength="20" autocomplete="tel" />
+      <!-- Botões -->
+      <button class="ranking-name-confirm" id="profileEditSaveBtn" style="margin-top:16px">
+        💾 Salvar Perfil
+      </button>
+      <button class="rnm-skip" id="profileEditCancelBtn">Cancelar</button>
+    </div>
+  </div>
+</div>
+<!-- Input câmera oculto -->
+<input type="file" id="avatarCameraInput" accept="image/*" capture="user" style="display:none" />
 <!-- MODAL DE CONFIRMAÇÃO DUPLA AO DELETAR -->
 <div id="deleteConfirmOverlay" style="display:none;">
   <div id="deleteConfirmBox">
@@ -6745,6 +7026,110 @@ document.addEventListener('click', function(e) {
   function hasFullProfile() {
     return !!(getUserName() && getUserPhone());
   }
+  // ── Avatar / Foto de perfil ──────────────────────────────────────────────────
+  function getUserAvatar() {
+    return localStorage.getItem('rv_avatar') || '';
+  }
+  function setUserAvatar(base64) {
+    if (base64) {
+      localStorage.setItem('rv_avatar', base64);
+    } else {
+      localStorage.removeItem('rv_avatar');
+    }
+  }
+  // Renderizar um avatar (img ou inicial) em um elemento DOM
+  function renderAvatarEl(el, name, avatarB64) {
+    if (!el) return;
+    var initial = (name || '?').charAt(0).toUpperCase();
+    if (avatarB64) {
+      el.innerHTML = '<img src="' + avatarB64 + '" alt="avatar" />';
+    } else {
+      el.innerHTML = initial;
+    }
+  }
+  // Comprimir imagem para base64 (max 200x200, qualidade 0.72)
+  function compressImage(file, cb) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var img = new Image();
+      img.onload = function() {
+        var canvas = document.createElement('canvas');
+        var MAX = 200;
+        var w = img.width, h = img.height;
+        if (w > h) { if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; } }
+        else { if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; } }
+        canvas.width = w; canvas.height = h;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        cb(canvas.toDataURL('image/jpeg', 0.72));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+  // Inicializar upload de avatar no modal de edição
+  function initAvatarUpload() {
+    var fileInput = document.getElementById('avatarFileInput');
+    var cameraInput = document.getElementById('avatarCameraInput');
+    var cameraBtn = document.getElementById('avatarCameraBtn');
+    var removeBtn = document.getElementById('avatarRemoveBtn');
+    var preview = document.getElementById('avatarUploadPreview');
+    // Preencher preview com avatar atual
+    var currentAvatar = getUserAvatar();
+    var currentName = getUserName();
+    if (currentAvatar && preview) {
+      preview.innerHTML = '<img src="' + currentAvatar + '" alt="avatar" /><div class="avatar-upload-overlay">📷</div>';
+      if (removeBtn) removeBtn.style.display = 'inline-block';
+    } else if (preview) {
+      preview.innerHTML = '<span id="avatarUploadInitial">' + (currentName || '?').charAt(0).toUpperCase() + '</span><div class="avatar-upload-overlay">📷</div>';
+    }
+    function handleFile(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+      compressImage(file, function(b64) {
+        setUserAvatar(b64);
+        if (preview) {
+          preview.innerHTML = '<img src="' + b64 + '" alt="avatar" /><div class="avatar-upload-overlay">📷</div>';
+        }
+        if (removeBtn) removeBtn.style.display = 'inline-block';
+        updateMyProfileCard();
+      });
+    }
+    if (fileInput) {
+      fileInput.onchange = function() { if (this.files[0]) handleFile(this.files[0]); };
+    }
+    if (cameraInput) {
+      cameraInput.onchange = function() { if (this.files[0]) handleFile(this.files[0]); };
+    }
+    if (cameraBtn) {
+      cameraBtn.onclick = function() {
+        if (cameraInput) cameraInput.click();
+        else if (fileInput) fileInput.click();
+      };
+    }
+    if (removeBtn) {
+      removeBtn.onclick = function() {
+        setUserAvatar('');
+        var name = getUserName();
+        if (preview) {
+          preview.innerHTML = '<span id="avatarUploadInitial">' + (name||'?').charAt(0).toUpperCase() + '</span><div class="avatar-upload-overlay">📷</div>';
+        }
+        removeBtn.style.display = 'none';
+        updateMyProfileCard();
+      };
+    }
+  }
+  // Atualizar o card "Meu Perfil" com dados atuais
+  function updateMyProfileCard() {
+    var name = getUserName();
+    var phone = getUserPhone();
+    var avatar = getUserAvatar();
+    var nameEl = document.getElementById('myProfileNameDisplay');
+    var phoneEl = document.getElementById('myProfilePhoneDisplay');
+    var avatarEl = document.getElementById('myProfileAvatarDisplay');
+    if (nameEl) nameEl.textContent = name || '—';
+    if (phoneEl) phoneEl.textContent = phone ? '📲 ' + phone : '';
+    renderAvatarEl(avatarEl, name, avatar);
+  }
 
   function getMyPoints() {
     return parseInt(localStorage.getItem('rv_pts') || '0', 10);
@@ -6934,6 +7319,7 @@ document.addEventListener('click', function(e) {
       current.name = name;
       var phone = getUserPhone();
       if (phone) current.phone = phone;
+      // Não salvar avatar no Firebase (muito grande) — fica só no localStorage
       current.fp = getDeviceFingerprint();
       current.lastSeen = Date.now();
       if (!current.pts) current.pts = 0;
@@ -6993,6 +7379,8 @@ document.addEventListener('click', function(e) {
     // Link de convite
     var linkEl = document.getElementById('rankingLinkText');
     if (linkEl) linkEl.textContent = getShareLink();
+    // Atualizar card "Meu Perfil"
+    updateMyProfileCard();
 
     // Carregar ranking
     var container = document.getElementById('rankingListContainer');
@@ -7015,26 +7403,68 @@ document.addEventListener('click', function(e) {
         container.innerHTML = '<div class="ranking-empty">🌟 Seja o primeiro a indicar amigos!</div>';
         return;
       }
+      // Renderizar pódio Top 3
+      var podium = document.getElementById('rankingPodium');
+      var listTitle = document.getElementById('rankingListTitle');
+      if (podium) {
+        if (list.length >= 1) {
+          podium.style.display = 'flex';
+          // Preencher pódio (p1=1º, p2=2º, p3=3º)
+          [1, 2, 3].forEach(function(rank) {
+            var u = list[rank - 1];
+            var avatarEl = document.getElementById('podiumAvatar' + rank);
+            var nameEl = document.getElementById('podiumName' + rank);
+            var ptsEl = document.getElementById('podiumPts' + rank);
+            if (!u) {
+              if (avatarEl) avatarEl.innerHTML = '?';
+              if (nameEl) nameEl.textContent = '—';
+              if (ptsEl) ptsEl.textContent = '0';
+              return;
+            }
+            var initial = (u.name || '?').charAt(0).toUpperCase();
+            // Avatar: se for o usuário atual, usar avatar local
+            var avatarB64 = (u.uid === uid) ? getUserAvatar() : (u.avatar || '');
+            renderAvatarEl(avatarEl, u.name, avatarB64);
+            if (nameEl) nameEl.textContent = u.name || '—';
+            if (ptsEl) ptsEl.textContent = u.pts || 0;
+          });
+          if (listTitle) listTitle.textContent = list.length > 3 ? '🔥 Outros Participantes' : '🔥 Top Indicadores';
+        } else {
+          podium.style.display = 'none';
+        }
+      }
+      // Renderizar lista (posições 4+ se tiver pódio, ou todas se não)
+      var startIdx = list.length >= 3 ? 3 : 0;
       var medals = ['🥇', '🥈', '🥉'];
       var topClasses = ['top1', 'top2', 'top3'];
       var html = '';
-      list.slice(0, 20).forEach(function(u, i) {
+      list.slice(startIdx, 20).forEach(function(u, i) {
+        var realIdx = startIdx + i;
         var isMe = u.uid === uid;
-        var posDisplay = i < 3 ? '<span class="ranking-pos medal">' + medals[i] + '</span>' : '<span class="ranking-pos">' + (i+1) + '</span>';
+        var posDisplay = realIdx < 3
+          ? '<span class="ranking-pos medal">' + medals[realIdx] + '</span>'
+          : '<span class="ranking-pos">' + (realIdx + 1) + '</span>';
         var initial = (u.name || '?').charAt(0).toUpperCase();
-        var topClass = i < 3 ? topClasses[i] : '';
+        var topClass = realIdx < 3 ? topClasses[realIdx] : '';
         var meClass = isMe ? ' is-me' : '';
         var nameCls = isMe ? ' ranking-name-you' : '';
+        var avatarB64 = (u.uid === uid) ? getUserAvatar() : (u.avatar || '');
+        var avatarContent = avatarB64
+          ? '<img src="' + avatarB64 + '" alt="avatar" />'
+          : initial;
         html += '<div class="ranking-item ' + topClass + meClass + '">';
         html += posDisplay;
-        html += '<div class="ranking-avatar">' + initial + '</div>';
+        html += '<div class="ranking-avatar">' + avatarContent + '</div>';
         html += '<div class="ranking-info">';
-        html += '<div class="ranking-name' + nameCls + '">' + escapeHtml(u.name) + (isMe ? ' (você)' : '') + '</div>';
+        html += '<div class="ranking-name' + nameCls + '">' + escapeHtml(u.name) + (isMe ? ' <span style="font-size:10px;color:#818cf8">(você)</span>' : '') + '</div>';
         html += '<div class="ranking-meta">' + u.refs + ' indicações</div>';
         html += '</div>';
         html += '<div class="ranking-pts"><div class="ranking-pts-num">' + u.pts + '</div><div class="ranking-pts-label">pts</div></div>';
         html += '</div>';
       });
+      if (startIdx === 3 && list.length <= 3) {
+        html = '<div class="ranking-empty" style="font-size:12px;color:rgba(255,255,255,0.3)">Apenas os 3 primeiros participam do pódio</div>';
+      }
       container.innerHTML = html;
     });
 
@@ -7245,13 +7675,53 @@ document.addEventListener('click', function(e) {
     }, 10000 + Math.random() * 5000);
   })();
 
-  // Função para editar perfil
+  // Função para editar perfil — abre o modal premium de perfil
   window._rankingEditProfile = function() {
-    showNameModal(function() {
-      loadRanking();
-      updateMyRankCard();
-    });
+    var modal = document.getElementById('profileEditModal');
+    var nameInput = document.getElementById('profileEditName');
+    var phoneInput = document.getElementById('profileEditPhone');
+    var saveBtn = document.getElementById('profileEditSaveBtn');
+    var cancelBtn = document.getElementById('profileEditCancelBtn');
+    if (!modal) {
+      // Fallback: usar modal antigo
+      showNameModal(function() { renderRankingScreen(); });
+      return;
+    }
+    // Preencher campos com dados atuais
+    if (nameInput) nameInput.value = getUserName();
+    if (phoneInput) phoneInput.value = getUserPhone();
+    // Inicializar upload de avatar
+    initAvatarUpload();
+    // Mostrar modal
+    modal.classList.remove('hidden');
+    // Salvar
+    if (saveBtn) {
+      saveBtn.onclick = function() {
+        var name = nameInput ? nameInput.value.trim() : '';
+        var phone = phoneInput ? phoneInput.value.trim() : '';
+        if (!name) {
+          if (nameInput) { nameInput.style.borderColor = '#ef4444'; nameInput.focus(); }
+          return;
+        }
+        setUserName(name);
+        if (phone) setUserPhone(phone);
+        modal.classList.add('hidden');
+        updateMyProfileCard();
+        syncMyProfile();
+        renderRankingScreen();
+      };
+    }
+    // Cancelar
+    if (cancelBtn) {
+      cancelBtn.onclick = function() { modal.classList.add('hidden'); };
+    }
+    // Fechar ao clicar fora
+    modal.onclick = function(e) {
+      if (e.target === modal) modal.classList.add('hidden');
+    };
   };
+  // Atualizar meu rank card (compatibilidade)
+  function updateMyRankCard() { updateMyProfileCard(); }
 
   window.adminLoadRanking = function() {
     var week = getWeekKey();
