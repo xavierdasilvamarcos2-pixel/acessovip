@@ -850,6 +850,19 @@
     .log-entry.log-restore .log-entry-action { color:#60A5FA; }
     .log-entry.log-high .log-entry-action { color:#F59E0B; }
     #logEmpty { text-align:center;padding:30px 20px;color:rgba(255,255,255,0.3);font-size:13px; }
+
+    /* ===== SISTEMA DE USUÁRIOS / PERMISSÕES ===== */
+    .admin-user-badge { display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800;letter-spacing:0.5px; }
+    .admin-user-badge.role-admin { background:linear-gradient(135deg,rgba(124,58,237,0.4),rgba(124,58,237,0.2));border:1px solid rgba(124,58,237,0.6);color:#A78BFA; }
+    .admin-user-badge.role-editor { background:linear-gradient(135deg,rgba(16,185,129,0.3),rgba(16,185,129,0.1));border:1px solid rgba(16,185,129,0.5);color:#34D399; }
+    .admin-user-badge.role-viewer { background:linear-gradient(135deg,rgba(59,130,246,0.3),rgba(59,130,246,0.1));border:1px solid rgba(59,130,246,0.5);color:#60A5FA; }
+    .admin-login-name-row { display:flex;gap:8px;margin-bottom:10px; }
+    .admin-login-name-input { flex:1;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.15);border-radius:12px;padding:12px 14px;color:#fff;font-size:14px;font-weight:600;outline:none; }
+    .admin-login-name-input::placeholder { color:rgba(255,255,255,0.3); }
+    .perm-blocked { opacity:0.35;pointer-events:none;position:relative; }
+    .perm-blocked::after { content:'\1F512';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:18px;pointer-events:none; }
+    .log-entry-user { font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap; }
+    .log-entry-user span { background:rgba(255,255,255,0.06);border-radius:4px;padding:1px 6px; }
   </style>
   <!-- Web Push Nativo (VAPID) - sem dependências externas -->
   <script>
@@ -1768,7 +1781,8 @@
     <div class="admin-login-wrap">
       <div class="admin-login-icon">&#128274;</div>
       <div class="admin-login-title">Painel Admin</div>
-      <div class="admin-login-sub">Digite a senha para acessar o painel de controle</div>
+      <div class="admin-login-sub">Identifique-se e insira a senha de acesso</div>
+      <input class="admin-login-input" type="text" id="adminNameInput" placeholder="&#128100; Seu nome (ex: Marcos, Manu...)" style="margin-bottom:10px;" />
       <input class="admin-login-input" type="password" id="adminPasswordInput" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" />
       <button class="admin-login-btn" id="adminLoginBtn">&#128275; ENTRAR</button>
     </div>
@@ -1780,10 +1794,11 @@
       <div class="admin-hdr-top">
         <div>
           <div class="admin-hdr-title">&#9881;&#65039; Painel Admin</div>
-          <div class="admin-hdr-sub">Gerencie tudo do seu app aqui</div>
+          <div id="adminUserInfo" style="display:flex;align-items:center;gap:6px;margin-top:4px;">
+            <span id="adminUserBadge" class="admin-user-badge role-admin">&#128100; Carregando...</span>
+          </div>
         </div>
         <div style="display:flex;gap:8px;align-items:center">
-          <span class="admin-hdr-badge">PRO</span>
           <button class="admin-logout-btn" id="adminLogoutBtn">Sair</button>
         </div>
       </div>
@@ -2371,8 +2386,17 @@ function clearSinalPlatSelect() {
 }
 
 // ===== CONFIG =====
-const ADMIN_PASSWORD = 'admin2025vip';
+// Usuários do painel admin: { senha: { role, label, icon } }
+// roles: 'admin' (acesso total), 'editor' (sem excluir permanente/limpar log), 'viewer' (só visualiza)
+const ADMIN_USERS = {
+  'admin2025vip': { role: 'admin',  label: 'Administrador',  icon: '&#128081;' },
+  'editor2025':   { role: 'editor', label: 'Editor',         icon: '&#9999;&#65039;' },
+  'viewer2025':   { role: 'viewer', label: 'Visualizador',   icon: '&#128065;&#65039;' }
+};
 const APP_URL = window.location.origin;
+
+// Usuário atualmente logado
+var _adminCurrentUser = { name: '', role: '', label: '', icon: '' };
 
 // Banner de aviso para Instagram WebView
 (function showInstagramBanner() {
@@ -2992,22 +3016,98 @@ document.getElementById('headerLogo').addEventListener('click', () => {
 });
 document.getElementById('adminBack').addEventListener('click', () => {
   document.getElementById('adminScreen').style.display = 'none';
+  // Resetar usuário ao sair
+  _adminCurrentUser = { name: '', role: '', label: '', icon: '' };
+  adminLoggedIn = false;
+  document.getElementById('adminPanelWrap').style.display = 'none';
+  document.getElementById('adminLoginWrap').style.display = 'flex';
+  document.getElementById('adminPasswordInput').value = '';
+  document.getElementById('adminNameInput').value = '';
+  window._editorMode = false;
+});
+
+// Logout pelo botão Sair
+document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+  _adminCurrentUser = { name: '', role: '', label: '', icon: '' };
+  adminLoggedIn = false;
+  window._editorMode = false;
+  document.getElementById('adminPanelWrap').style.display = 'none';
+  document.getElementById('adminLoginWrap').style.display = 'flex';
+  document.getElementById('adminPasswordInput').value = '';
+  document.getElementById('adminNameInput').value = '';
+  showToast('&#128275; Sessão encerrada');
 });
 
 // ===== ADMIN =====
+
+// Obter IP do usuário (assíncrono, armazena globalmente)
+var _adminUserIP = 'N/D';
+var _adminUserDevice = (function() {
+  var ua = navigator.userAgent;
+  if (/iPhone|iPad/i.test(ua)) return 'iOS';
+  if (/Android/i.test(ua)) return 'Android';
+  if (/Windows/i.test(ua)) return 'Windows';
+  if (/Mac/i.test(ua)) return 'Mac';
+  return 'Desconhecido';
+})();
+
+fetch('https://api.ipify.org?format=json', { cache: 'no-store' })
+  .then(function(r) { return r.json(); })
+  .then(function(d) { _adminUserIP = d.ip || 'N/D'; })
+  .catch(function() { _adminUserIP = 'N/D'; });
+
 document.getElementById('adminLoginBtn').addEventListener('click', () => {
-  const pass = document.getElementById('adminPasswordInput').value;
-  if (pass === ADMIN_PASSWORD) {
+  const pass = document.getElementById('adminPasswordInput').value.trim();
+  const name = (document.getElementById('adminNameInput').value.trim() || 'Anônimo');
+  const userConfig = ADMIN_USERS[pass];
+  if (userConfig) {
     adminLoggedIn = true;
+    _adminCurrentUser = {
+      name: name,
+      role: userConfig.role,
+      label: userConfig.label,
+      icon: userConfig.icon
+    };
+    // Atualizar badge no header
+    var badge = document.getElementById('adminUserBadge');
+    if (badge) {
+      badge.className = 'admin-user-badge role-' + userConfig.role;
+      badge.innerHTML = userConfig.icon + ' ' + name + ' &mdash; ' + userConfig.label;
+    }
+    // Aplicar restrições visuais por role
+    applyRoleRestrictions(userConfig.role);
     document.getElementById('adminLoginWrap').style.display = 'none';
     document.getElementById('adminPanelWrap').style.display = 'block';
     renderAdminPlatforms();
     loadAdminStats();
     populatePlatformSelects();
+    // Registrar login no log
+    addAuditLog('login', '(acesso ao painel)', null);
   } else {
     showToast('Senha incorreta!');
   }
 });
+
+function applyRoleRestrictions(role) {
+  // Viewer: bloquear todas as ações de escrita
+  if (role === 'viewer') {
+    // Bloquear botões de adicionar, notificações, sinais, config
+    ['admin-tab-add','admin-tab-notifications','admin-tab-sinais','admin-tab-config'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.add('perm-blocked');
+    });
+    // Bloquear botões de lixeira permanente e limpar log (via CSS)
+    document.querySelectorAll('.trash-btn-perm,.trash-btn-restore,.admin-btn-del,.admin-btn-high,.admin-btn-launch,.admin-btn-up,.admin-btn-down').forEach(function(b) {
+      b.disabled = true; b.style.opacity = '0.3'; b.style.pointerEvents = 'none';
+    });
+  }
+  // Editor: bloquear apenas exclusão permanente e limpar histórico
+  if (role === 'editor') {
+    // Marcar os botões de excluir permanente e limpar log como bloqueados
+    // (serão bloqueados dinamicamente nas funções)
+    window._editorMode = true;
+  }
+}
 
 document.querySelectorAll('[data-admin-tab]').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -5113,6 +5213,10 @@ function renderTrash() {
 }
 
 function restoreFromTrash(platId) {
+  if (_adminCurrentUser.role === 'viewer') {
+    showToast('&#128274; Você não tem permissão para restaurar plataformas');
+    return;
+  }
   var trashKey = 'trash_' + platId;
   var p = _trashData[trashKey];
   if (!p) { showToast('Item não encontrado na lixeira'); return; }
@@ -5136,6 +5240,11 @@ function restoreFromTrash(platId) {
 }
 
 function permanentDelete(platId) {
+  // Apenas admin pode excluir permanentemente
+  if (_adminCurrentUser.role !== 'admin') {
+    showToast('&#128274; Apenas o Administrador pode excluir permanentemente');
+    return;
+  }
   if (!confirm('EXCLUIR PERMANENTEMENTE? Esta ação NÃO pode ser desfeita!')) return;
   var trashKey = 'trash_' + platId;
   var p = _trashData[trashKey];
@@ -5159,7 +5268,12 @@ function addAuditLog(type, platName, platId) {
     platName: platName,
     platId: platId,
     ts: now,
-    tsStr: new Date(now).toLocaleString('pt-BR')
+    tsStr: new Date(now).toLocaleString('pt-BR'),
+    // Identificação do usuário
+    userName: _adminCurrentUser.name || 'Anônimo',
+    userRole: _adminCurrentUser.label || 'Desconhecido',
+    userIP: _adminUserIP || 'N/D',
+    userDevice: _adminUserDevice || 'Desconhecido'
   };
   var key = 'log_' + now + '_' + Math.random().toString(36).substr(2,5);
   if (window._fbREST) {
@@ -5200,21 +5314,38 @@ function renderAuditLog() {
     'high_on':     { icon: '&#128293;', label: 'Marcada como Em Alta', cls: 'log-high' },
     'high_off':    { icon: '&#128202;', label: 'Removida de Em Alta', cls: 'log-high' },
     'launch_on':   { icon: '&#128640;', label: 'Marcada como Lançamento', cls: 'log-add' },
-    'launch_off':  { icon: '&#128640;', label: 'Removida de Lançamento', cls: 'log-high' }
+    'launch_off':  { icon: '&#128640;', label: 'Removida de Lançamento', cls: 'log-high' },
+    'login':       { icon: '&#128275;', label: 'Login no painel', cls: 'log-restore' },
+    'edit':        { icon: '&#9999;&#65039;', label: 'Plataforma editada', cls: 'log-high' }
   };
   listEl.innerHTML = items.map(function(e) {
     var t = typeMap[e.type] || { icon: '&#128203;', label: e.type, cls: '' };
+    var userInfo = '';
+    if (e.userName || e.userRole || e.userIP) {
+      userInfo = '<div class="log-entry-user">'
+        + (e.userName ? '<span>&#128100; ' + e.userName + '</span>' : '')
+        + (e.userRole ? '<span>' + e.userRole + '</span>' : '')
+        + (e.userIP && e.userIP !== 'N/D' ? '<span>&#127760; ' + e.userIP + '</span>' : '')
+        + (e.userDevice ? '<span>&#128241; ' + e.userDevice + '</span>' : '')
+        + '</div>';
+    }
     return '<div class="log-entry ' + t.cls + '">'
       + '<div class="log-entry-icon">' + t.icon + '</div>'
       + '<div class="log-entry-body">'
       + '<div class="log-entry-action">' + t.label + '</div>'
       + '<div class="log-entry-name">' + (e.platName || 'Desconhecida') + '</div>'
       + '<div class="log-entry-time">&#128336; ' + (e.tsStr || '') + '</div>'
+      + userInfo
       + '</div></div>';
   }).join('');
 }
 
 function clearAuditLog() {
+  // Apenas admin pode limpar o histórico
+  if (_adminCurrentUser.role !== 'admin') {
+    showToast('&#128274; Apenas o Administrador pode limpar o histórico');
+    return;
+  }
   if (!confirm('Limpar todo o histórico de alterações? Esta ação não pode ser desfeita.')) return;
   if (window._fbREST) {
     window._fbREST.set('/audit_log', null).catch(function(){});
