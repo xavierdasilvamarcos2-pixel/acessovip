@@ -812,6 +812,44 @@
     .sinal-card-avaliar-btn { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 3px 10px; color: #94a3b8; font-size: 10px; cursor: pointer; transition: background 0.2s; }
     .sinal-card-avaliar-btn:hover, .sinal-card-avaliar-btn.ativo-ok { background: rgba(34,197,94,0.2); color: #22C55E; border-color: #22C55E; }
     .sinal-card-avaliar-btn.ativo-nao { background: rgba(239,68,68,0.2); color: #EF4444; border-color: #EF4444; }
+
+    /* ===== MODAL DE CONFIRMAÇÃO DUPLA ===== */
+    #deleteConfirmOverlay { position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px); }
+    #deleteConfirmBox { background:linear-gradient(135deg,#1a1a2e,#16213e);border:1.5px solid rgba(239,68,68,0.5);border-radius:20px;padding:28px 22px;max-width:340px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.6); }
+    #deleteConfirmBox .dcb-icon { font-size:48px;margin-bottom:12px; }
+    #deleteConfirmBox .dcb-title { font-size:18px;font-weight:900;color:#F87171;margin-bottom:8px; }
+    #deleteConfirmBox .dcb-name { font-size:15px;font-weight:700;color:#fff;margin-bottom:6px;word-break:break-word; }
+    #deleteConfirmBox .dcb-warn { font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:20px;line-height:1.5; }
+    #deleteConfirmBox .dcb-step { font-size:11px;color:#F59E0B;font-weight:700;margin-bottom:14px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:6px 12px; }
+    .dcb-btn-row { display:flex;gap:10px; }
+    .dcb-btn-cancel { flex:1;padding:12px;border-radius:12px;border:1.5px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);font-size:14px;font-weight:700;cursor:pointer; }
+    .dcb-btn-confirm { flex:1;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#EF4444,#DC2626);color:#fff;font-size:14px;font-weight:900;cursor:pointer; }
+    .dcb-btn-confirm:disabled { opacity:0.4;cursor:not-allowed; }
+    .dcb-countdown { font-size:11px;color:rgba(255,255,255,0.4);margin-top:8px; }
+
+    /* ===== LIXEIRA ===== */
+    .trash-card { background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.2);border-radius:14px;padding:14px;margin-bottom:10px; }
+    .trash-card-header { display:flex;align-items:center;gap:10px;margin-bottom:8px; }
+    .trash-card-img { width:40px;height:40px;border-radius:8px;object-fit:contain;background:#222;flex-shrink:0; }
+    .trash-card-name { font-size:14px;font-weight:800;color:#F87171; }
+    .trash-card-meta { font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px; }
+    .trash-card-actions { display:flex;gap:8px;margin-top:8px; }
+    .trash-btn-restore { flex:1;padding:9px;border-radius:10px;border:1.5px solid rgba(16,185,129,0.5);background:rgba(16,185,129,0.1);color:#34D399;font-size:12px;font-weight:700;cursor:pointer; }
+    .trash-btn-perm { flex:1;padding:9px;border-radius:10px;border:1.5px solid rgba(239,68,68,0.4);background:rgba(239,68,68,0.1);color:#F87171;font-size:12px;font-weight:700;cursor:pointer; }
+    #trashEmpty { text-align:center;padding:30px 20px;color:rgba(255,255,255,0.3);font-size:13px; }
+
+    /* ===== LOG DE ALTERAÇÕES ===== */
+    .log-entry { display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;margin-bottom:8px; }
+    .log-entry-icon { font-size:20px;flex-shrink:0;margin-top:1px; }
+    .log-entry-body { flex:1;min-width:0; }
+    .log-entry-action { font-size:12px;font-weight:800;color:#A78BFA; }
+    .log-entry-name { font-size:13px;font-weight:700;color:#fff;margin-top:1px;word-break:break-word; }
+    .log-entry-time { font-size:10px;color:rgba(255,255,255,0.35);margin-top:3px; }
+    .log-entry.log-add .log-entry-action { color:#34D399; }
+    .log-entry.log-del .log-entry-action { color:#F87171; }
+    .log-entry.log-restore .log-entry-action { color:#60A5FA; }
+    .log-entry.log-high .log-entry-action { color:#F59E0B; }
+    #logEmpty { text-align:center;padding:30px 20px;color:rgba(255,255,255,0.3);font-size:13px; }
   </style>
   <!-- Web Push Nativo (VAPID) - sem dependências externas -->
   <script>
@@ -1770,6 +1808,12 @@
       <button class="admin-nav-btn" data-admin-tab="config">
         <span class="admin-nav-btn-icon">&#128242;</span>WhatsApp
       </button>
+      <button class="admin-nav-btn" data-admin-tab="trash">
+        <span class="admin-nav-btn-icon">&#128465;&#65039;</span>Lixeira
+      </button>
+      <button class="admin-nav-btn" data-admin-tab="log">
+        <span class="admin-nav-btn-icon">&#128203;</span>Histórico
+      </button>
     </div>
     <!-- Content -->
     <div class="admin-content">
@@ -2035,7 +2079,60 @@
         </div>
       </div>
 
+      <!-- LIXEIRA TAB -->
+      <div class="admin-section" id="admin-tab-trash">
+        <div class="admin-sec-hdr">
+          <div class="admin-sec-icon red">&#128465;&#65039;</div>
+          <div>
+            <div class="admin-sec-ttl">Lixeira</div>
+            <div class="admin-sec-sub">Plataformas deletadas — restaure ou exclua permanentemente</div>
+          </div>
+        </div>
+        <div class="admin-info-box" style="background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.25);margin-bottom:14px;">
+          &#9888;&#65039; Plataformas na lixeira <strong>não aparecem no app</strong>. Restaure para reativá-las ou exclua permanentemente.
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <span style="font-size:12px;color:rgba(255,255,255,0.4);">Itens na lixeira: <strong id="trashCount" style="color:#F87171;">0</strong></span>
+          <button onclick="loadTrash()" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:5px 12px;color:#F87171;font-size:11px;font-weight:700;cursor:pointer;">&#128260; Atualizar</button>
+        </div>
+        <div id="trashList"><div id="trashEmpty">&#128465;&#65039; Lixeira vazia</div></div>
+      </div>
+
+      <!-- LOG DE ALTERAÇÕES TAB -->
+      <div class="admin-section" id="admin-tab-log">
+        <div class="admin-sec-hdr">
+          <div class="admin-sec-icon" style="background:linear-gradient(135deg,#6366F1,#4F46E5)">&#128203;</div>
+          <div>
+            <div class="admin-sec-ttl">Histórico de Alterações</div>
+            <div class="admin-sec-sub">Registro de todas as ações realizadas no painel</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <span style="font-size:12px;color:rgba(255,255,255,0.4);">Total de registros: <strong id="logCount" style="color:#A78BFA;">0</strong></span>
+          <div style="display:flex;gap:8px;">
+            <button onclick="loadAuditLog()" style="background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);border-radius:8px;padding:5px 12px;color:#A78BFA;font-size:11px;font-weight:700;cursor:pointer;">&#128260; Atualizar</button>
+            <button onclick="clearAuditLog()" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);border-radius:8px;padding:5px 12px;color:#F87171;font-size:11px;font-weight:700;cursor:pointer;">&#128465; Limpar</button>
+          </div>
+        </div>
+        <div id="logList"><div id="logEmpty">&#128203; Nenhuma alteração registrada ainda</div></div>
+      </div>
+
     </div>
+  </div>
+</div>
+<!-- MODAL DE CONFIRMAÇÃO DUPLA AO DELETAR -->
+<div id="deleteConfirmOverlay" style="display:none;">
+  <div id="deleteConfirmBox">
+    <div class="dcb-icon">&#128465;&#65039;</div>
+    <div class="dcb-title">Mover para Lixeira?</div>
+    <div class="dcb-name" id="dcbPlatName"></div>
+    <div class="dcb-warn">A plataforma será movida para a lixeira e <strong>não aparecerá mais no app</strong>. Você poderá restaurá-la depois na aba Lixeira.</div>
+    <div class="dcb-step" id="dcbStep">&#9312; Primeiro clique: confirmar intenção</div>
+    <div class="dcb-btn-row">
+      <button class="dcb-btn-cancel" onclick="closeDeleteConfirm()">&#10005; Cancelar</button>
+      <button class="dcb-btn-confirm" id="dcbConfirmBtn" onclick="dcbNextStep()">&#128465; Mover para Lixeira</button>
+    </div>
+    <div class="dcb-countdown" id="dcbCountdown"></div>
   </div>
 </div>
 <!-- NOTIFICACAO SAQUE -->
@@ -2922,6 +3019,8 @@ document.querySelectorAll('[data-admin-tab]').forEach(btn => {
     if (btn.dataset.adminTab === 'config') loadAdminWppConfig();
     if (btn.dataset.adminTab === 'sinais') { renderAdminSinais(); populatePlatformSelects(); }
     if (btn.dataset.adminTab === 'rtp') { renderAdminRtp(); populatePlatformSelects(); }
+    if (btn.dataset.adminTab === 'trash') loadTrash();
+    if (btn.dataset.adminTab === 'log') loadAuditLog();
   });
 });
 
@@ -3074,11 +3173,8 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
     }
   }
   if (del) {
-    if (confirm('Remover esta plataforma?')) {
-      platforms = platforms.filter(x => x.id != del);
-      saveState(); renderAdminPlatforms(); renderHome();
-      showToast('Plataforma removida');
-    }
+    const p = platforms.find(x => x.id == del);
+    if (p) openDeleteConfirm(del, p.name);
   }
 });
 
@@ -3091,6 +3187,7 @@ document.getElementById('addPlatformBtn').addEventListener('click', () => {
   const newP = { id: Date.now(), name, url, imageUrl: logoUrl, isHigh: false, isLaunch: isLaunch, hot_game: '', position: -1 };
   platforms.unshift(newP);
   saveState(); renderHome(); renderAdminPlatforms();
+  addAuditLog('add', name, newP.id);
   document.getElementById('addLogoUrl').value = '';
   document.getElementById('addName').value = '';
   document.getElementById('addUrl').value = '';
@@ -4897,6 +4994,235 @@ window.addEventListener('popstate', function(e) {
   }
   
 })();
+
+// ===== CONFIRMAÇÃO DUPLA AO DELETAR =====
+var _dcbPlatId = null;
+var _dcbStep = 0;
+var _dcbTimer = null;
+
+function openDeleteConfirm(platId, platName) {
+  _dcbPlatId = platId;
+  _dcbStep = 0;
+  document.getElementById('dcbPlatName').textContent = platName;
+  document.getElementById('dcbStep').innerHTML = '&#9312; Clique em "Mover para Lixeira" para confirmar';
+  document.getElementById('dcbConfirmBtn').textContent = '&#128465; Mover para Lixeira';
+  document.getElementById('dcbConfirmBtn').disabled = false;
+  document.getElementById('dcbCountdown').textContent = '';
+  document.getElementById('deleteConfirmOverlay').style.display = 'flex';
+}
+
+function closeDeleteConfirm() {
+  document.getElementById('deleteConfirmOverlay').style.display = 'none';
+  if (_dcbTimer) { clearInterval(_dcbTimer); _dcbTimer = null; }
+  _dcbPlatId = null;
+  _dcbStep = 0;
+}
+
+function dcbNextStep() {
+  if (_dcbStep === 0) {
+    // Primeiro clique: pede segunda confirmação com contagem regressiva
+    _dcbStep = 1;
+    document.getElementById('dcbStep').innerHTML = '&#9313; <strong style="color:#EF4444">TEM CERTEZA?</strong> Clique novamente para confirmar';
+    document.getElementById('dcbConfirmBtn').textContent = '&#9888;&#65039; SIM, MOVER PARA LIXEIRA';
+    document.getElementById('dcbConfirmBtn').style.background = 'linear-gradient(135deg,#DC2626,#991B1B)';
+    // Habilitar após 2 segundos (evita clique acidental)
+    document.getElementById('dcbConfirmBtn').disabled = true;
+    var secs = 2;
+    document.getElementById('dcbCountdown').textContent = 'Aguarde ' + secs + 's...';
+    _dcbTimer = setInterval(function() {
+      secs--;
+      if (secs <= 0) {
+        clearInterval(_dcbTimer);
+        _dcbTimer = null;
+        document.getElementById('dcbConfirmBtn').disabled = false;
+        document.getElementById('dcbCountdown').textContent = '';
+      } else {
+        document.getElementById('dcbCountdown').textContent = 'Aguarde ' + secs + 's...';
+      }
+    }, 1000);
+  } else if (_dcbStep === 1) {
+    // Segundo clique: executar exclusão (mover para lixeira)
+    var platId = _dcbPlatId;
+    var p = platforms.find(function(x) { return x.id == platId; });
+    if (p) {
+      // Mover para lixeira no Firebase
+      var trashItem = Object.assign({}, p, {
+        deletedAt: Date.now(),
+        deletedAtStr: new Date().toLocaleString('pt-BR')
+      });
+      var trashKey = 'trash_' + platId;
+      if (window._fbREST) {
+        window._fbREST.set('/platforms_trash/' + trashKey, trashItem).catch(function(){});
+      }
+      // Remover do array principal
+      platforms = platforms.filter(function(x) { return x.id != platId; });
+      saveState();
+      renderAdminPlatforms();
+      renderHome();
+      addAuditLog('delete', p.name, platId);
+      showToast('&#128465;&#65039; ' + p.name + ' movida para a lixeira');
+    }
+    closeDeleteConfirm();
+  }
+}
+
+// Fechar modal ao clicar no overlay
+document.getElementById('deleteConfirmOverlay').addEventListener('click', function(e) {
+  if (e.target === document.getElementById('deleteConfirmOverlay')) closeDeleteConfirm();
+});
+
+// ===== LIXEIRA =====
+var _trashData = {};
+
+function loadTrash() {
+  var listEl = document.getElementById('trashList');
+  if (!listEl) return;
+  listEl.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.4);">&#128260; Carregando...</div>';
+  if (!window._fbREST) { listEl.innerHTML = '<div id="trashEmpty">&#128465;&#65039; Lixeira vazia</div>'; return; }
+  window._fbREST.get('/platforms_trash').then(function(data) {
+    _trashData = data || {};
+    renderTrash();
+  }).catch(function() {
+    listEl.innerHTML = '<div id="trashEmpty">&#128465;&#65039; Lixeira vazia</div>';
+  });
+}
+
+function renderTrash() {
+  var listEl = document.getElementById('trashList');
+  if (!listEl) return;
+  var items = Object.values(_trashData || {}).filter(function(x) { return x && x.id; });
+  items.sort(function(a, b) { return (b.deletedAt || 0) - (a.deletedAt || 0); });
+  var countEl = document.getElementById('trashCount');
+  if (countEl) countEl.textContent = items.length;
+  if (items.length === 0) {
+    listEl.innerHTML = '<div id="trashEmpty">&#128465;&#65039; Lixeira vazia</div>';
+    return;
+  }
+  listEl.innerHTML = items.map(function(p) {
+    return '<div class="trash-card">'
+      + '<div class="trash-card-header">'
+      + (p.imageUrl ? '<img class="trash-card-img" src="' + p.imageUrl + '" alt="" onerror="this.style.display=\'none\'" />' : '<div class="trash-card-img" style="display:flex;align-items:center;justify-content:center;font-size:18px;">&#128279;</div>')
+      + '<div><div class="trash-card-name">' + (p.name || 'Sem nome') + '</div>'
+      + '<div class="trash-card-meta">Deletada em: ' + (p.deletedAtStr || 'data desconhecida') + '</div></div>'
+      + '</div>'
+      + '<div class="trash-card-actions">'
+      + '<button class="trash-btn-restore" onclick="restoreFromTrash(' + p.id + ')">&#9851;&#65039; Restaurar</button>'
+      + '<button class="trash-btn-perm" onclick="permanentDelete(' + p.id + ')">&#128465; Excluir Definitivo</button>'
+      + '</div></div>';
+  }).join('');
+}
+
+function restoreFromTrash(platId) {
+  var trashKey = 'trash_' + platId;
+  var p = _trashData[trashKey];
+  if (!p) { showToast('Item não encontrado na lixeira'); return; }
+  // Remover campos de lixeira
+  var restored = Object.assign({}, p);
+  delete restored.deletedAt;
+  delete restored.deletedAtStr;
+  // Adicionar de volta ao array de plataformas
+  platforms.push(restored);
+  saveState();
+  renderHome();
+  renderAdminPlatforms();
+  // Remover da lixeira no Firebase
+  if (window._fbREST) {
+    window._fbREST.set('/platforms_trash/' + trashKey, null).catch(function(){});
+  }
+  delete _trashData[trashKey];
+  renderTrash();
+  addAuditLog('restore', p.name, platId);
+  showToast('&#9851;&#65039; ' + p.name + ' restaurada com sucesso!');
+}
+
+function permanentDelete(platId) {
+  if (!confirm('EXCLUIR PERMANENTEMENTE? Esta ação NÃO pode ser desfeita!')) return;
+  var trashKey = 'trash_' + platId;
+  var p = _trashData[trashKey];
+  var pName = p ? p.name : 'Plataforma';
+  if (window._fbREST) {
+    window._fbREST.set('/platforms_trash/' + trashKey, null).catch(function(){});
+  }
+  delete _trashData[trashKey];
+  renderTrash();
+  addAuditLog('perm_delete', pName, platId);
+  showToast('&#128465;&#65039; ' + pName + ' excluída permanentemente');
+}
+
+// ===== LOG DE ALTERAÇÕES (AUDIT LOG) =====
+var _auditLogData = {};
+
+function addAuditLog(type, platName, platId) {
+  var now = Date.now();
+  var entry = {
+    type: type,
+    platName: platName,
+    platId: platId,
+    ts: now,
+    tsStr: new Date(now).toLocaleString('pt-BR')
+  };
+  var key = 'log_' + now + '_' + Math.random().toString(36).substr(2,5);
+  if (window._fbREST) {
+    window._fbREST.set('/audit_log/' + key, entry).catch(function(){});
+  }
+  _auditLogData[key] = entry;
+}
+
+function loadAuditLog() {
+  var listEl = document.getElementById('logList');
+  if (!listEl) return;
+  listEl.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.4);">&#128260; Carregando...</div>';
+  if (!window._fbREST) { listEl.innerHTML = '<div id="logEmpty">&#128203; Nenhuma alteração registrada ainda</div>'; return; }
+  window._fbREST.get('/audit_log').then(function(data) {
+    _auditLogData = data || {};
+    renderAuditLog();
+  }).catch(function() {
+    listEl.innerHTML = '<div id="logEmpty">&#128203; Nenhuma alteração registrada ainda</div>';
+  });
+}
+
+function renderAuditLog() {
+  var listEl = document.getElementById('logList');
+  if (!listEl) return;
+  var items = Object.values(_auditLogData || {}).filter(function(x) { return x && x.type; });
+  items.sort(function(a, b) { return (b.ts || 0) - (a.ts || 0); });
+  var countEl = document.getElementById('logCount');
+  if (countEl) countEl.textContent = items.length;
+  if (items.length === 0) {
+    listEl.innerHTML = '<div id="logEmpty">&#128203; Nenhuma alteração registrada ainda</div>';
+    return;
+  }
+  var typeMap = {
+    'add':         { icon: '&#10133;', label: 'Plataforma adicionada', cls: 'log-add' },
+    'delete':      { icon: '&#128465;&#65039;', label: 'Movida para lixeira', cls: 'log-del' },
+    'restore':     { icon: '&#9851;&#65039;', label: 'Restaurada da lixeira', cls: 'log-restore' },
+    'perm_delete': { icon: '&#128683;', label: 'Excluída permanentemente', cls: 'log-del' },
+    'high_on':     { icon: '&#128293;', label: 'Marcada como Em Alta', cls: 'log-high' },
+    'high_off':    { icon: '&#128202;', label: 'Removida de Em Alta', cls: 'log-high' },
+    'launch_on':   { icon: '&#128640;', label: 'Marcada como Lançamento', cls: 'log-add' },
+    'launch_off':  { icon: '&#128640;', label: 'Removida de Lançamento', cls: 'log-high' }
+  };
+  listEl.innerHTML = items.map(function(e) {
+    var t = typeMap[e.type] || { icon: '&#128203;', label: e.type, cls: '' };
+    return '<div class="log-entry ' + t.cls + '">'
+      + '<div class="log-entry-icon">' + t.icon + '</div>'
+      + '<div class="log-entry-body">'
+      + '<div class="log-entry-action">' + t.label + '</div>'
+      + '<div class="log-entry-name">' + (e.platName || 'Desconhecida') + '</div>'
+      + '<div class="log-entry-time">&#128336; ' + (e.tsStr || '') + '</div>'
+      + '</div></div>';
+  }).join('');
+}
+
+function clearAuditLog() {
+  if (!confirm('Limpar todo o histórico de alterações? Esta ação não pode ser desfeita.')) return;
+  if (window._fbREST) {
+    window._fbREST.set('/audit_log', null).catch(function(){});
+  }
+  _auditLogData = {};
+  renderAuditLog();
+  showToast('&#128203; Histórico limpo');
+}
 
 // ===== AVALIAÇÃO DE SINAIS =====
 function avaliarSinal(btn, tipo) {
