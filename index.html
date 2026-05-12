@@ -182,7 +182,7 @@
 
     /* Platform Grid */
     .platform-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 0; padding: 0 8px; padding-bottom: 16px; }
-    .platform-card { display: flex; flex-direction: column; align-items: center; padding: 10px 4px 18px; position: relative; cursor: pointer; }
+    .platform-card { display: flex; flex-direction: column; align-items: center; padding: 8px 4px 8px; position: relative; cursor: pointer; }
     .platform-icon-wrap { position: relative; width: 95px; height: 95px; }
     .platform-icon { width: 95px; height: 95px; border-radius: 50%; object-fit: contain; background: #fff; display: block; }
     .platform-icon-placeholder { width: 95px; height: 95px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 36px; }
@@ -191,9 +191,9 @@
     @keyframes pulse-launch { 0%,100% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-50%) scale(1.07); } }
     .badge-high { position: absolute; top: -4px; right: -4px; background: var(--red); color: #fff; font-size: 9px; font-weight: 900; padding: 2px 5px; border-radius: 6px; letter-spacing: 1px; z-index: 2; animation: blink-high 1s ease-in-out infinite; }
     @keyframes blink-high { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-    .platform-access-btn { margin-top: 8px; background: linear-gradient(135deg, var(--green), #059669); padding: 5px 12px; border-radius: 6px; border: none; cursor: pointer; box-shadow: 0 2px 8px rgba(16,185,129,0.35); }
+    .platform-access-btn { display: none; margin-top: 8px; background: linear-gradient(135deg, var(--green), #059669); padding: 5px 12px; border-radius: 6px; border: none; cursor: pointer; box-shadow: 0 2px 8px rgba(16,185,129,0.35); }
     .platform-access-text { color: #fff; font-size: 10px; font-weight: 900; letter-spacing: 0.5px; }
-    .platform-name { font-size: 11px; color: var(--muted); margin-top: 4px; text-align: center; max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .platform-name { display: none; font-size: 11px; color: var(--muted); margin-top: 4px; text-align: center; max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     /* Loading */
     .loading-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; gap: 16px; }
@@ -1139,10 +1139,6 @@
         <button class="platform-fav" data-fav="150051">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s4/app-icon/3409648/1.png" alt="25t" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://25f02.com/?pid=3261998855" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'25t',platform_id:150051})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">25t</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://ee11f.com/?pid=3127759524" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'EE11',platform_id:1})">
@@ -1150,10 +1146,6 @@
         <button class="platform-fav" data-fav="1">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s4/app-icon/2431520/EE112.png" alt="EE11" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://ee11f.com/?pid=3127759524" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'EE11',platform_id:1})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">EE11</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://66e99y.com/?pid=1845365740" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'6615',platform_id:30001})">
@@ -1161,10 +1153,6 @@
         <button class="platform-fav" data-fav="30001">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s2/app-icon/7176422/6615.png" alt="6615" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://66e99y.com/?pid=1845365740" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'6615',platform_id:30001})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">6615</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://65h1.com/?ai=10&ic=2ynUaFade8&ch=12&ph=9bs" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'65H',platform_id:120001})">
@@ -1172,10 +1160,6 @@
         <button class="platform-fav" data-fav="120001">🤍</button>
         <div class="platform-icon-placeholder">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://65h1.com/?ai=10&ic=2ynUaFade8&ch=12&ph=9bs" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'65H',platform_id:120001})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">65H</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://spn977.com/?code=af4R4JJd" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'SPIN77',platform_id:150001})">
@@ -1183,10 +1167,6 @@
         <button class="platform-fav" data-fav="150001">🤍</button>
         <img class="platform-icon" src="https://dz68qzgzvzly6.cloudfront.net/spin77/uploads/setting/file/icon.png" alt="SPIN77" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://spn977.com/?code=af4R4JJd" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'SPIN77',platform_id:150001})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">SPIN77</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://5sgame.pro/?pid=3849329030" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'6231',platform_id:150002})">
@@ -1194,10 +1174,6 @@
         <button class="platform-fav" data-fav="150002">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s4/1755557992297/logo480.png" alt="6231" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://5sgame.pro/?pid=3849329030" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'6231',platform_id:150002})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">6231</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://96f1.com/?pid=3660993884" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'96F',platform_id:150003})">
@@ -1205,10 +1181,6 @@
         <button class="platform-fav" data-fav="150003">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s4/1757334528977/996.png" alt="96F" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://96f1.com/?pid=3660993884" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'96F',platform_id:150003})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">96F</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://99rr885.com/?a=e6qo9c0g" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'99RR',platform_id:150004})">
@@ -1216,10 +1188,6 @@
         <button class="platform-fav" data-fav="150004">🤍</button>
         <img class="platform-icon" src="https://ofs.cloudofs.com/images/poster/747y1761158749631877.jpg" alt="99RR" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://99rr885.com/?a=e6qo9c0g" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'99RR',platform_id:150004})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">99RR</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://qq5557.com/?pid=3975570585" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'QQ555',platform_id:150005})">
@@ -1227,10 +1195,6 @@
         <button class="platform-fav" data-fav="150005">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s4/app-icon/5821251/tuicon.png" alt="QQ555" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://qq5557.com/?pid=3975570585" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'QQ555',platform_id:150005})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">QQ555</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://9eee23.vip/?pid=4605515437" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'9EEE',platform_id:150006})">
@@ -1238,10 +1202,6 @@
         <button class="platform-fav" data-fav="150006">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/6879138/logo1.png" alt="9EEE" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://9eee23.vip/?pid=4605515437" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'9EEE',platform_id:150006})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">9EEE</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://58678c.win/?pid=4692313200" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'58678',platform_id:150007})">
@@ -1249,10 +1209,6 @@
         <button class="platform-fav" data-fav="150007">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/6757082/APP1.gif" alt="58678" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://58678c.win/?pid=4692313200" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'58678',platform_id:150007})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">58678</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://7ggg111.vip/?pid=1275939217" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'7gggg',platform_id:150008})">
@@ -1260,10 +1216,6 @@
         <button class="platform-fav" data-fav="150008">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s2/app-icon/6148951/XX.png" alt="7gggg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://7ggg111.vip/?pid=1275939217" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'7gggg',platform_id:150008})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">7gggg</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://83hz6.com/?pid=1258279813" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'83H',platform_id:150009})">
@@ -1271,10 +1223,6 @@
         <button class="platform-fav" data-fav="150009">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s2/app-icon/7673876/logo.png" alt="83H" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://83hz6.com/?pid=1258279813" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'83H',platform_id:150009})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">83H</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://88777br.com/?pid=3186032814" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'777br',platform_id:150010})">
@@ -1282,10 +1230,6 @@
         <button class="platform-fav" data-fav="150010">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s4/app-icon/7955700/777br.png" alt="777br" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://88777br.com/?pid=3186032814" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'777br',platform_id:150010})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">777br</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://59r35.com/?pid=3963693619" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'59r',platform_id:150011})">
@@ -1293,10 +1237,6 @@
         <button class="platform-fav" data-fav="150011">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s4/app-icon/4384167/LOGO.png" alt="59r" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://59r35.com/?pid=3963693619" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'59r',platform_id:150011})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">59r</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://5gg779.vip/?pid=3221742011" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'5ggg',platform_id:150012})">
@@ -1304,10 +1244,6 @@
         <button class="platform-fav" data-fav="150012">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s4/app-icon/3731546/1.png" alt="5ggg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://5gg779.vip/?pid=3221742011" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'5ggg',platform_id:150012})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">5ggg</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://63b85.com/?pid=4741818567" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'63b',platform_id:150013})">
@@ -1315,10 +1251,6 @@
         <button class="platform-fav" data-fav="150013">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/6791717/logo-.png" alt="63b" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://63b85.com/?pid=4741818567" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'63b',platform_id:150013})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">63b</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://rree.fun/?a=8hsx4svu" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'rree',platform_id:150014})">
@@ -1326,10 +1258,6 @@
         <button class="platform-fav" data-fav="150014">🤍</button>
         <img class="platform-icon" src="https://oss.topofs.net/images/poster/pdc61762084961560313.jpg" alt="rree" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://rree.fun/?a=8hsx4svu" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'rree',platform_id:150014})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">rree</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://ppff88.com/?a=06psgsoz" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'ppff',platform_id:150015})">
@@ -1337,10 +1265,6 @@
         <button class="platform-fav" data-fav="150015">🤍</button>
         <img class="platform-icon" src="https://oss.cloudofs.com/images/avatar/y5q71758096230840056.jpg" alt="ppff" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://ppff88.com/?a=06psgsoz" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'ppff',platform_id:150015})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">ppff</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://ka777a6.com/?a=0ci2sd9e" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'KA777',platform_id:150016})">
@@ -1348,10 +1272,6 @@
         <button class="platform-fav" data-fav="150016">🤍</button>
         <img class="platform-icon" src="https://oss.cloudofs.com/images/logo/logo30009lAzj_320.png" alt="KA777" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://ka777a6.com/?a=0ci2sd9e" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'KA777',platform_id:150016})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">KA777</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://68g15.com/?pid=4442489828" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'68G',platform_id:150017})">
@@ -1359,10 +1279,6 @@
         <button class="platform-fav" data-fav="150017">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/8709779/1.png" alt="68G" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://68g15.com/?pid=4442489828" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'68G',platform_id:150017})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">68G</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://11tt7.com/?pid=3783700305" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'11tt',platform_id:150018})">
@@ -1370,10 +1286,6 @@
         <button class="platform-fav" data-fav="150018">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/6475857/76pp.png" alt="11tt" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://11tt7.com/?pid=3783700305" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'11tt',platform_id:150018})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">11tt</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://75wzm.com/?pid=2659674483" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'75w',platform_id:150019})">
@@ -1381,10 +1293,6 @@
         <button class="platform-fav" data-fav="150019">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s3/app-icon/4433026/logo3.png" alt="75w" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://75wzm.com/?pid=2659674483" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'75w',platform_id:150019})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">75w</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://yF2vbx.com/?pid=2496666202" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'22cc',platform_id:150020})">
@@ -1392,10 +1300,6 @@
         <button class="platform-fav" data-fav="150020">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s3/app-icon/3731525/ICON.png" alt="22cc" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://yF2vbx.com/?pid=2496666202" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'22cc',platform_id:150020})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">22cc</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://95ye9.com/?pid=2490203175" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'95y',platform_id:150021})">
@@ -1403,10 +1307,6 @@
         <button class="platform-fav" data-fav="150021">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s3/app-icon/7686135/11111.png" alt="95y" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://95ye9.com/?pid=2490203175" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'95y',platform_id:150021})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">95y</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://rr6603.com/?pid=4123220040" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'rr66',platform_id:150022})">
@@ -1414,10 +1314,6 @@
         <button class="platform-fav" data-fav="150022">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/1803215/iconArtboard-1-copy-3.png" alt="rr66" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://rr6603.com/?pid=4123220040" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'rr66',platform_id:150022})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">rr66</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://kk4401.com/?pid=4796535625" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'kk44',platform_id:150023})">
@@ -1425,10 +1321,6 @@
         <button class="platform-fav" data-fav="150023">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/4379055/icon.png" alt="kk44" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://kk4401.com/?pid=4796535625" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'kk44',platform_id:150023})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">kk44</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://abc999.gold/?a=1oaevrfp" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'abc',platform_id:150024})">
@@ -1436,10 +1328,6 @@
         <button class="platform-fav" data-fav="150024">🤍</button>
         <img class="platform-icon" src="https://oss.cloudofs.com/images/avatar/5lwt1760512882671636.jpg" alt="abc" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://abc999.gold/?a=1oaevrfp" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'abc',platform_id:150024})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">abc</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://59c03.cc/?pid=4330509791" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'59c',platform_id:150025})">
@@ -1447,10 +1335,6 @@
         <button class="platform-fav" data-fav="150025">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/1614740/1.png" alt="59c" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://59c03.cc/?pid=4330509791" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'59c',platform_id:150025})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">59c</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://2UUU86.vip/?pid=3117560984" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'2uuu',platform_id:150026})">
@@ -1458,10 +1342,6 @@
         <button class="platform-fav" data-fav="150026">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s4/app-icon/9770253/image_2025-08-26_15-40-32.png" alt="2uuu" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://2UUU86.vip/?pid=3117560984" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'2uuu',platform_id:150026})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">2uuu</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://8eee33.vip/?pid=4852839003" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'8eee',platform_id:150027})">
@@ -1469,10 +1349,6 @@
         <button class="platform-fav" data-fav="150027">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/2576874/8EEE.COM-applogo2.png" alt="8eee" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://8eee33.vip/?pid=4852839003" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'8eee',platform_id:150027})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">8eee</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://d11vips.com/?a=584bncwe" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'D11',platform_id:150028})">
@@ -1480,10 +1356,6 @@
         <button class="platform-fav" data-fav="150028">🤍</button>
         <img class="platform-icon" src="https://oss.goodoss.net/images/avatar/o1ub1748862079417678.jpg" alt="D11" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://d11vips.com/?a=584bncwe" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'D11',platform_id:150028})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">D11</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://33nn06.com/?pid=4783457761" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'33nn',platform_id:150029})">
@@ -1491,10 +1363,6 @@
         <button class="platform-fav" data-fav="150029">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/4077356/33NN111.png" alt="33nn" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://33nn06.com/?pid=4783457761" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'33nn',platform_id:150029})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">33nn</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://45doi.com/?pid=4806028440" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'45d',platform_id:150030})">
@@ -1502,10 +1370,6 @@
         <button class="platform-fav" data-fav="150030">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/1451512/45dLOGO.png" alt="45d" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://45doi.com/?pid=4806028440" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'45d',platform_id:150030})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">45d</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://72d1z.com/?pid=4663073155" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'72d',platform_id:150031})">
@@ -1513,10 +1377,6 @@
         <button class="platform-fav" data-fav="150031">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/5196855/logo.jpg" alt="72d" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://72d1z.com/?pid=4663073155" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'72d',platform_id:150031})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">72d</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://1rr66.vip/?pid=4209607125" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'1rr',platform_id:150032})">
@@ -1524,10 +1384,6 @@
         <button class="platform-fav" data-fav="150032">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/5313825/512.png" alt="1rr" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://1rr66.vip/?pid=4209607125" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'1rr',platform_id:150032})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">1rr</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://72e88.com/?pid=4276199883" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'72e',platform_id:150033})">
@@ -1535,10 +1391,6 @@
         <button class="platform-fav" data-fav="150033">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/4651676/Rectangle.png" alt="72e" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://72e88.com/?pid=4276199883" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'72e',platform_id:150033})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">72e</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://5ppp11.vip/?pid=2286867683" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'5ppp',platform_id:150034})">
@@ -1546,10 +1398,6 @@
         <button class="platform-fav" data-fav="150034">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s3/app-icon/5210475/LG.png" alt="5ppp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://5ppp11.vip/?pid=2286867683" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'5ppp',platform_id:150034})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">5ppp</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://73h2y.com/?pid=4456093778" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'73h',platform_id:150035})">
@@ -1557,10 +1405,6 @@
         <button class="platform-fav" data-fav="150035">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/4023464/logo.png" alt="73h" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://73h2y.com/?pid=4456093778" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'73h',platform_id:150035})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">73h</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://26tx04.com/?pid=4422743651" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'26t',platform_id:150036})">
@@ -1568,10 +1412,6 @@
         <button class="platform-fav" data-fav="150036">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/4895635/APPLOGO.png" alt="26t" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://26tx04.com/?pid=4422743651" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'26t',platform_id:150036})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">26t</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://68d44.com/?pid=4130118728" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'68d',platform_id:150037})">
@@ -1579,10 +1419,6 @@
         <button class="platform-fav" data-fav="150037">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/1361816/11.png" alt="68d" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://68d44.com/?pid=4130118728" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'68d',platform_id:150037})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">68d</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://93d01.com/?pid=4735860756" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'93d',platform_id:150038})">
@@ -1590,10 +1426,6 @@
         <button class="platform-fav" data-fav="150038">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/9918106/aaa.png" alt="93d" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://93d01.com/?pid=4735860756" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'93d',platform_id:150038})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">93d</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://44ww07.com/?pid=4426246794" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'44ww',platform_id:150039})">
@@ -1601,10 +1433,6 @@
         <button class="platform-fav" data-fav="150039">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/4552161/44ww-icon-512x512.png" alt="44ww" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://44ww07.com/?pid=4426246794" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'44ww',platform_id:150039})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">44ww</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://85t02.cc/?pid=4201798367" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'85t',platform_id:150040})">
@@ -1612,10 +1440,6 @@
         <button class="platform-fav" data-fav="150040">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/4729049/1pp.png" alt="85t" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://85t02.cc/?pid=4201798367" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'85t',platform_id:150040})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">85t</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://552x002.com/?pid=4903785126" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'552x',platform_id:150041})">
@@ -1623,10 +1447,6 @@
         <button class="platform-fav" data-fav="150041">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/2576572/552X-yuanjiao.png" alt="552x" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://552x002.com/?pid=4903785126" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'552x',platform_id:150041})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">552x</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://xx11-5.com/?pid=4536553993" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'xx11',platform_id:150042})">
@@ -1634,10 +1454,6 @@
         <button class="platform-fav" data-fav="150042">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/9933402/final.png" alt="xx11" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://xx11-5.com/?pid=4536553993" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'xx11',platform_id:150042})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">xx11</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://sp1.games?code=f474df7s" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'sp1',platform_id:150043})">
@@ -1645,10 +1461,6 @@
         <button class="platform-fav" data-fav="150043">🤍</button>
         <img class="platform-icon" src="https://dz68qzgzvzly6.cloudfront.net/sp1/uploads/setting/file/icon.png" alt="sp1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://sp1.games?code=f474df7s" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'sp1',platform_id:150043})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">sp1</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://838x3.com/?pid=4170166547" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'838x',platform_id:150044})">
@@ -1656,10 +1468,6 @@
         <button class="platform-fav" data-fav="150044">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/3896314/838X1.png" alt="838x" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://838x3.com/?pid=4170166547" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'838x',platform_id:150044})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">838x</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://q8q11.vip/?pid=3811254972" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'q8q',platform_id:150045})">
@@ -1667,10 +1475,6 @@
         <button class="platform-fav" data-fav="150045">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s4/app-icon/2301791/B1.png" alt="q8q" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://q8q11.vip/?pid=3811254972" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'q8q',platform_id:150045})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">q8q</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://7jjj06.com/?pid=3284108173" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'7jjjj',platform_id:150046})">
@@ -1678,10 +1482,6 @@
         <button class="platform-fav" data-fav="150046">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s4/app-icon/5416567/7JJJ-Logo-Icon1.png" alt="7jjjj" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://7jjj06.com/?pid=3284108173" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'7jjjj',platform_id:150046})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">7jjjj</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://61t3z.com/?pid=4207343585" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'61t',platform_id:150047})">
@@ -1689,10 +1489,6 @@
         <button class="platform-fav" data-fav="150047">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/5682213/logo1.png" alt="61t" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://61t3z.com/?pid=4207343585" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'61t',platform_id:150047})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">61t</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://5ttt55.vip/?pid=4077582316" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'5ttt',platform_id:150048})">
@@ -1700,10 +1496,6 @@
         <button class="platform-fav" data-fav="150048">🤍</button>
         <img class="platform-icon" src="https://upload-us.i-j-2-k.com/s5/app-icon/3420958/LG.png" alt="5ttt" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://5ttt55.vip/?pid=4077582316" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'5ttt',platform_id:150048})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">5ttt</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://63v05.com/?pid=3984650262" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'63v',platform_id:150049})">
@@ -1711,10 +1503,6 @@
         <button class="platform-fav" data-fav="150049">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s4/app-icon/8703338/C.png" alt="63v" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://63v05.com/?pid=3984650262" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'63v',platform_id:150049})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">63v</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://15qx03.com/?pid=2515286760" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'15q',platform_id:150050})">
@@ -1722,10 +1510,6 @@
         <button class="platform-fav" data-fav="150050">🤍</button>
         <img class="platform-icon" src="https://upload-us.f-1-g-h.com/s3/app-icon/4839541/15q.PNG" alt="15q" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://15qx03.com/?pid=2515286760" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'15q',platform_id:150050})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">15q</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://5yyy11.vip/?pid=4016851750" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'5yyy11',platform_id:270002})">
@@ -1733,10 +1517,6 @@
         <button class="platform-fav" data-fav="270002">🤍</button>
         <div class="platform-icon-placeholder">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://5yyy11.vip/?pid=4016851750" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'5yyy11',platform_id:270002})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">5yyy11</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://5yyy11.vip/?pid=4016851750" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'5yyy11',platform_id:270003})">
@@ -1744,10 +1524,6 @@
         <button class="platform-fav" data-fav="270003">🤍</button>
         <div class="platform-icon-placeholder">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://5yyy11.vip/?pid=4016851750" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'5yyy11',platform_id:270003})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">5yyy11</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://vip.yg4.net/?param=2-R6C9M0JT" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'YG4',platform_id:90001})">
@@ -1755,10 +1531,6 @@
         <button class="platform-fav" data-fav="90001">🤍</button>
         <img class="platform-icon" src="https://static.9f2games.com/images/cba4f961da3ccb88d2f57a57b6e499d0.webp" alt="YG4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://vip.yg4.net/?param=2-R6C9M0JT" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'YG4',platform_id:90001})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">YG4</span>
     </div>
 <div class="platform-card">
       <a class="platform-icon-wrap" href="https://51pg20.com/?code=Rfad4473" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'5151',platform_id:120002})">
@@ -1766,10 +1538,6 @@
         <button class="platform-fav" data-fav="120002">🤍</button>
         <img class="platform-icon" src="https://d2x8e21b8kcyud.cloudfront.net/5151/uploads/setting/file/icon.png" alt="5151" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="platform-icon-placeholder" style="display:none">🔗</div>
       </a>
-      <a class="platform-access-btn" href="https://51pg20.com/?code=Rfad4473" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'5151',platform_id:120002})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">5151</span>
     </div>
 </div>
     </div>
@@ -2834,10 +2602,6 @@ function renderPlatformCard(p, showFav = true) {
         ${favBtn}
         ${imgHtml}
       </a>
-      <a class="platform-access-btn" href="${p.url}" target="_blank" rel="noopener noreferrer" onclick="trackEvent('platform_click',{platform_name:'${p.name.replace(/'/g,'').replace(/"/g,'')}',platform_id:${p.id}})">
-        <span class="platform-access-text">ACESSAR</span>
-      </a>
-      <span class="platform-name">${p.name}</span>
     </div>`;
 }
 
