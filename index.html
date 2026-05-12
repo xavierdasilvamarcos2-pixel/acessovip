@@ -3668,44 +3668,28 @@ async function sendPushNotification(title, body, tab, overrideIcon, overridePlat
         var _fp = _allPlats.find(function(p) { return String(p.id) === String(platId); });
         if (_fp && _fp.imageUrl) workerIcon = _fp.imageUrl;
       }
-      // ESTRATÉGIA DE PAGINAÇÃO: chama o Worker em loop com offset
-      // Cada invocação processa no máximo 45 usuários para não ultrapassar o limite do Cloudflare
-      const basePayload = Object.assign({
+      // ONESIGNAL: Uma única chamada para enviar para TODOS os assinantes
+      // Sem loop, sem paginação, sem limite de subrequests
+      const payload = {
+        action: 'send_all',
         title: title,
         message: body,
         url: targetUrl,
-        image: imageUrl || workerIcon,
-        icon: workerIcon,
-        badge: 'https://acessoplatafomas.com.br/icons/notif-icon-mono.png'
-      }, platId ? { platId: platId } : {});
+        icon: workerIcon
+      };
+      if (platId) payload.platId = platId;
 
-      let totalRecipients = 0;
-      let currentOffset = 0;
-      let isDone = false;
-      let attempts = 0;
-      const MAX_ATTEMPTS = 50; // segurança para evitar loop infinito
+      const resp = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await resp.json();
 
-      while (!isDone && attempts < MAX_ATTEMPTS) {
-        attempts++;
-        const resp = await fetch(WORKER_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(Object.assign({}, basePayload, { offset: currentOffset }))
-        });
-        const data = await resp.json();
-        if (data.error) {
-          return { success: false, error: data.error };
-        }
-        totalRecipients += (data.recipients || 0);
-        isDone = data.done !== false; // se done=true ou não veio nextOffset, terminou
-        currentOffset = data.nextOffset || 0;
-        if (!data.nextOffset) isDone = true;
-      }
-
-      if (totalRecipients >= 0) {
-        return { success: true, recipients: totalRecipients };
+      if (data.success) {
+        return { success: true, recipients: data.sent || 0 };
       } else {
-        return { success: false, error: 'Falha no envio' };
+        return { success: false, error: data.error || 'Falha no envio' };
       }
     } catch(e) {
       // CORS bloqueou - notificação salva no Firebase para envio posterior
