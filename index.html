@@ -979,6 +979,55 @@
 .dl-install-time{font-size:10px;color:rgba(255,255,255,0.4);margin-top:1px}
 .dl-install-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:rgba(52,211,153,0.15);color:#34D399;border:1px solid rgba(52,211,153,0.3)}
 .dl-empty{text-align:center;color:rgba(255,255,255,0.25);font-size:12px;padding:20px 0}
+
+    /* ===== CARROSSEL DE BANNERS ===== */
+    .banner-carousel {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      background: #000;
+      touch-action: pan-y;
+    }
+    .banner-carousel-track {
+      display: flex;
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
+    }
+    .banner-carousel-slide {
+      min-width: 100%;
+      width: 100%;
+      flex-shrink: 0;
+    }
+    .banner-carousel-slide img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      max-height: 220px;
+    }
+    .banner-carousel-dots {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 10;
+    }
+    .banner-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.45);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .banner-dot.active {
+      background: #fff;
+      width: 22px;
+      border-radius: 4px;
+    }
+    /* ===== FIM CARROSSEL ===== */
 </style>
   <!-- Web Push Nativo (VAPID) - sem dependências externas -->
   <script>
@@ -1048,7 +1097,20 @@
   <div class="main" id="mainContent">
     <!-- HOME SCREEN -->
     <div class="screen active" id="screen-home">
-      <img class="banner-img" src="https://raw.githubusercontent.com/xavierdasilvamarcos2-pixel/acessovip/main/banner.jpg" alt="ACESSO VIP Banner" />
+      <div class="banner-carousel" id="bannerCarousel">
+        <div class="banner-carousel-track" id="bannerTrack">
+          <div class="banner-carousel-slide">
+            <img src="https://xavierdasilvamarcos2-pixel.github.io/acessovip/banners/banner1.png" alt="Todas as Plataformas em Um Só Aplicativo" loading="eager" />
+          </div>
+          <div class="banner-carousel-slide">
+            <img src="https://xavierdasilvamarcos2-pixel.github.io/acessovip/banners/banner2.png" alt="Sinais Ao Vivo em Tempo Real" loading="eager" />
+          </div>
+        </div>
+        <div class="banner-carousel-dots" id="bannerDots">
+          <div class="banner-dot active" onclick="carouselGoTo(0)"></div>
+          <div class="banner-dot" onclick="carouselGoTo(1)"></div>
+        </div>
+      </div>
       <!-- SINAL ATIVO BANNER -->
       <div class="sinal-ativo-banner" id="sinalAtivoBanner" onclick="window._irParaAbaHot ? window._irParaAbaHot() : document.querySelector('[data-tab=hot]').click()" style="cursor:pointer;">
         <div class="ao-vivo-badge">
@@ -5836,6 +5898,86 @@ document.addEventListener('click', function(e) {
   var tipo = btn.getAttribute('data-avalia');
   avaliarSinal(btn, tipo);
 });
+
+// ===== CARROSSEL DE BANNERS =====
+(function() {
+  var currentSlide = 0;
+  var totalSlides = 2;
+  var autoplayInterval = null;
+  var startX = 0;
+  var isDragging = false;
+
+  function updateCarousel(idx) {
+    var track = document.getElementById('bannerTrack');
+    var dots = document.querySelectorAll('.banner-dot');
+    if (!track) return;
+    currentSlide = (idx + totalSlides) % totalSlides;
+    track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+    dots.forEach(function(d, i) {
+      d.classList.toggle('active', i === currentSlide);
+    });
+  }
+
+  window.carouselGoTo = function(idx) {
+    updateCarousel(idx);
+    resetAutoplay();
+  };
+
+  function nextSlide() { updateCarousel(currentSlide + 1); }
+
+  function resetAutoplay() {
+    if (autoplayInterval) clearInterval(autoplayInterval);
+    autoplayInterval = setInterval(nextSlide, 5000);
+  }
+
+  function initCarousel() {
+    var carousel = document.getElementById('bannerCarousel');
+    if (!carousel) return;
+
+    // Swipe touch
+    carousel.addEventListener('touchstart', function(e) {
+      startX = e.touches[0].clientX;
+      isDragging = true;
+    }, { passive: true });
+
+    carousel.addEventListener('touchend', function(e) {
+      if (!isDragging) return;
+      var diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) updateCarousel(currentSlide + 1);
+        else updateCarousel(currentSlide - 1);
+        resetAutoplay();
+      }
+      isDragging = false;
+    }, { passive: true });
+
+    // Swipe mouse (desktop)
+    carousel.addEventListener('mousedown', function(e) {
+      startX = e.clientX;
+      isDragging = true;
+    });
+    carousel.addEventListener('mouseup', function(e) {
+      if (!isDragging) return;
+      var diff = startX - e.clientX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) updateCarousel(currentSlide + 1);
+        else updateCarousel(currentSlide - 1);
+        resetAutoplay();
+      }
+      isDragging = false;
+    });
+
+    resetAutoplay();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCarousel);
+  } else {
+    initCarousel();
+  }
+})();
+// ===== FIM CARROSSEL =====
+
 </script>
 
 </body>
