@@ -325,6 +325,46 @@
     .admin-section-back:active { opacity:0.7; }
     .admin-section-back-arrow { font-size:20px; }
 
+    /* ===== ANALYTICS ===== */
+    .analytics-kpi-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+    .analytics-kpi { border-radius:16px; padding:16px 12px; text-align:center; position:relative; overflow:hidden; }
+    .analytics-kpi-val { font-size:30px; font-weight:900; line-height:1; margin-bottom:4px; }
+    .analytics-kpi-lbl { font-size:11px; color:rgba(255,255,255,0.5); line-height:1.3; }
+    .analytics-kpi-icon { font-size:22px; margin-bottom:6px; }
+    .analytics-kpi.purple { background:linear-gradient(135deg,rgba(124,58,237,0.25),rgba(124,58,237,0.08)); border:1px solid rgba(124,58,237,0.4); }
+    .analytics-kpi.purple .analytics-kpi-val { color:#A78BFA; }
+    .analytics-kpi.green { background:linear-gradient(135deg,rgba(16,185,129,0.25),rgba(16,185,129,0.08)); border:1px solid rgba(16,185,129,0.4); }
+    .analytics-kpi.green .analytics-kpi-val { color:#34D399; }
+    .analytics-kpi.blue { background:linear-gradient(135deg,rgba(59,130,246,0.25),rgba(59,130,246,0.08)); border:1px solid rgba(59,130,246,0.4); }
+    .analytics-kpi.blue .analytics-kpi-val { color:#60A5FA; }
+    .analytics-kpi.orange { background:linear-gradient(135deg,rgba(245,158,11,0.25),rgba(245,158,11,0.08)); border:1px solid rgba(245,158,11,0.4); }
+    .analytics-kpi.orange .analytics-kpi-val { color:#FCD34D; }
+    .analytics-section-title { font-size:13px; font-weight:900; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:0.08em; margin:18px 0 10px; display:flex; align-items:center; gap:8px; }
+    .analytics-os-bar { margin-bottom:14px; }
+    .analytics-os-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+    .analytics-os-icon { font-size:20px; width:28px; text-align:center; }
+    .analytics-os-info { flex:1; }
+    .analytics-os-name { font-size:13px; font-weight:700; color:#fff; margin-bottom:3px; }
+    .analytics-os-track { height:8px; background:rgba(255,255,255,0.08); border-radius:10px; overflow:hidden; }
+    .analytics-os-fill { height:100%; border-radius:10px; transition:width 0.8s ease; }
+    .analytics-os-pct { font-size:12px; font-weight:900; min-width:38px; text-align:right; }
+    .analytics-chart-wrap { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:16px; padding:16px 12px; margin-bottom:14px; }
+    .analytics-chart-bars { display:flex; align-items:flex-end; gap:4px; height:80px; }
+    .analytics-chart-bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+    .analytics-chart-bar { width:100%; border-radius:6px 6px 0 0; min-height:4px; transition:height 0.6s ease; }
+    .analytics-chart-label { font-size:9px; color:rgba(255,255,255,0.35); text-align:center; white-space:nowrap; }
+    .analytics-chart-val { font-size:9px; color:rgba(255,255,255,0.5); text-align:center; }
+    .analytics-online-dot { display:inline-block; width:10px; height:10px; border-radius:50%; background:#22C55E; box-shadow:0 0 8px #22C55E; animation:pulse-dot 1.5s infinite; margin-right:6px; }
+    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.3)} }
+    .analytics-history-row { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid rgba(255,255,255,0.06); }
+    .analytics-history-row:last-child { border-bottom:none; }
+    .analytics-history-date { font-size:12px; color:rgba(255,255,255,0.5); }
+    .analytics-history-val { font-size:14px; font-weight:900; color:#A78BFA; }
+    .analytics-history-os { font-size:11px; color:rgba(255,255,255,0.35); margin-top:2px; }
+    .analytics-period-btns { display:flex; gap:8px; margin-bottom:14px; }
+    .analytics-period-btn { flex:1; padding:8px 4px; border-radius:10px; border:1.5px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.5); font-size:12px; font-weight:700; cursor:pointer; text-align:center; transition:all 0.2s; }
+    .analytics-period-btn.active { border-color:#7C3AED; background:rgba(124,58,237,0.25); color:#A78BFA; }
+
     /* CONTENT */
     .admin-content { overflow-y:auto; height:calc(100vh - 130px); }
     .admin-section { display:none; }
@@ -1892,7 +1932,13 @@
           <div class="admin-menu-card blue" onclick="adminGoTo('stats')">
             <div class="admin-menu-card-icon-wrap">&#128200;</div>
             <div class="admin-menu-card-title">Estatísticas</div>
-            <div class="admin-menu-card-sub">Acessos e dados</div>
+            <div class="admin-menu-card-sub">Instalações e push</div>
+          </div>
+          <!-- Analytics -->
+          <div class="admin-menu-card" style="background:linear-gradient(135deg,rgba(124,58,237,0.35),rgba(79,70,229,0.2));border:1px solid rgba(124,58,237,0.5)" onclick="adminGoTo('analytics')">
+            <div class="admin-menu-card-icon-wrap">&#128202;</div>
+            <div class="admin-menu-card-title">Analytics</div>
+            <div class="admin-menu-card-sub">Acessos e usuários online</div>
           </div>
           <!-- WhatsApp -->
           <div class="admin-menu-card teal" onclick="adminGoTo('config')">
@@ -2177,6 +2223,75 @@
         <div style="font-size:11px;color:rgba(255,255,255,0.3);text-align:center;margin-bottom:10px;">Instalações e assinantes são contados globalmente (todos os dispositivos)</div>        <button class="admin-btn-submit blue" id="refreshStatsBtn">&#128260; ATUALIZAR DADOS</button>
         </div><!-- /padding -->
       </div>
+      <!-- ANALYTICS TAB -->
+      <div class="admin-section" id="admin-tab-analytics">
+        <div class="admin-section-back" onclick="adminGoTo('home')">
+          <span class="admin-section-back-arrow">&#8592;</span> Menu Principal
+        </div>
+        <div style="padding:0 16px 20px">
+          <div class="admin-sec-hdr">
+            <div class="admin-sec-icon" style="background:linear-gradient(135deg,#7C3AED,#4F46E5)">&#128202;</div>
+            <div>
+              <div class="admin-sec-ttl">Analytics do App</div>
+              <div class="admin-sec-sub">Dados reais de acessos e usuários</div>
+            </div>
+          </div>
+
+          <!-- KPIs principais -->
+          <div class="analytics-kpi-grid" id="analyticsKpiGrid">
+            <div class="analytics-kpi purple">
+              <div class="analytics-kpi-icon">&#128202;</div>
+              <div class="analytics-kpi-val" id="analyticsKpiToday">...</div>
+              <div class="analytics-kpi-lbl">Acessos Hoje</div>
+            </div>
+            <div class="analytics-kpi green">
+              <div class="analytics-kpi-icon">&#128994;</div>
+              <div class="analytics-kpi-val" id="analyticsKpiOnline">...</div>
+              <div class="analytics-kpi-lbl">Online Agora<br><span style="font-size:9px;opacity:0.6">(5 min)</span></div>
+            </div>
+            <div class="analytics-kpi blue">
+              <div class="analytics-kpi-icon">&#128337;</div>
+              <div class="analytics-kpi-val" id="analyticsKpi7d">...</div>
+              <div class="analytics-kpi-lbl">Acessos 7 dias</div>
+            </div>
+            <div class="analytics-kpi orange">
+              <div class="analytics-kpi-icon">&#127775;</div>
+              <div class="analytics-kpi-val" id="analyticsKpiTotal">...</div>
+              <div class="analytics-kpi-lbl">Total Geral</div>
+            </div>
+          </div>
+
+          <!-- Dispositivos -->
+          <div class="analytics-section-title">&#128241; Dispositivos</div>
+          <div class="analytics-chart-wrap">
+            <div class="analytics-os-bar" id="analyticsOsBar">
+              <div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:10px">Carregando...</div>
+            </div>
+          </div>
+
+          <!-- Gráfico de barras -->
+          <div class="analytics-section-title">&#128200; Acessos por Dia</div>
+          <div class="analytics-period-btns">
+            <div class="analytics-period-btn active" onclick="analyticsSetPeriod(7,this)">7 dias</div>
+            <div class="analytics-period-btn" onclick="analyticsSetPeriod(15,this)">15 dias</div>
+            <div class="analytics-period-btn" onclick="analyticsSetPeriod(30,this)">30 dias</div>
+          </div>
+          <div class="analytics-chart-wrap">
+            <div class="analytics-chart-bars" id="analyticsChartBars">
+              <div style="width:100%;text-align:center;color:rgba(255,255,255,0.3);font-size:12px">Carregando...</div>
+            </div>
+          </div>
+
+          <!-- Histórico -->
+          <div class="analytics-section-title">&#128336; Histórico Detalhado</div>
+          <div class="analytics-chart-wrap" id="analyticsHistory" style="padding:0">
+            <div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:16px">Carregando...</div>
+          </div>
+
+          <button class="admin-btn-submit blue" style="margin-top:14px" onclick="loadAnalytics()">&#128260; ATUALIZAR ANALYTICS</button>
+        </div>
+      </div>
+
       <!-- CONFIG WHATSAPP TAB -->
       <div class="admin-section" id="admin-tab-config">
         <div class="admin-section-back" onclick="adminGoTo('home')">
@@ -3249,6 +3364,7 @@ function adminGoTo(tab) {
   if (tab === 'trash') loadTrash();
   if (tab === 'log') loadAuditLog();
   if (tab === 'platforms') renderAdminPlatforms();
+  if (tab === 'analytics') loadAnalytics();
 }
 
 // Manter compatibilidade com os data-admin-tab buttons (nav escondida)
@@ -3983,6 +4099,74 @@ document.getElementById('notifHeaderBtn').addEventListener('click', async () => 
 });
 
 /// ===== INIT =====
+// ===== ANALYTICS: RASTREAMENTO DE ACESSOS =====
+function detectOS() {
+  var ua = navigator.userAgent || '';
+  if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) return 'ios';
+  if (/android/i.test(ua)) return 'android';
+  if (/Windows/.test(ua)) return 'windows';
+  if (/Mac/.test(ua)) return 'mac';
+  return 'other';
+}
+
+function getTodayKey() {
+  var d = new Date();
+  var y = d.getFullYear();
+  var m = String(d.getMonth()+1).padStart(2,'0');
+  var day = String(d.getDate()).padStart(2,'0');
+  return y + '-' + m + '-' + day;
+}
+
+function trackDailyAccess() {
+  try {
+    var os = detectOS();
+    var today = getTodayKey();
+    var base = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+    var auth = '?auth=' + FIREBASE_API_KEY;
+
+    // 1. Incrementar acesso total do dia
+    fetch(base + '/analytics/daily/' + today + '/total.json' + auth)
+      .then(function(r){return r.json();})
+      .then(function(cur){
+        var next = (parseInt(cur)||0)+1;
+        fetch(base + '/analytics/daily/' + today + '/total.json' + auth, {
+          method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(next)
+        });
+      }).catch(function(){});
+
+    // 2. Incrementar acesso por OS do dia
+    fetch(base + '/analytics/daily/' + today + '/os/' + os + '.json' + auth)
+      .then(function(r){return r.json();})
+      .then(function(cur){
+        var next = (parseInt(cur)||0)+1;
+        fetch(base + '/analytics/daily/' + today + '/os/' + os + '.json' + auth, {
+          method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(next)
+        });
+      }).catch(function(){});
+
+    // 3. Registrar presença online (timestamp da última visita)
+    var visitorId = _ls.get('av_visitor_id');
+    if (!visitorId) {
+      visitorId = 'v' + Date.now() + Math.random().toString(36).substr(2,5);
+      _ls.set('av_visitor_id', visitorId);
+    }
+    var presenceData = { ts: Date.now(), os: os, day: today };
+    fetch(base + '/analytics/online/' + visitorId + '.json' + auth, {
+      method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(presenceData)
+    }).catch(function(){});
+
+    // 4. Incrementar total geral de acessos
+    fetch(base + '/analytics/total_accesses.json' + auth)
+      .then(function(r){return r.json();})
+      .then(function(cur){
+        var next = (parseInt(cur)||0)+1;
+        fetch(base + '/analytics/total_accesses.json' + auth, {
+          method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(next)
+        });
+      }).catch(function(){});
+  } catch(e) {}
+}
+
 function init() {
   // PASSO 1: Usar sempre PLATFORMS_DATA embutido no HTML (61 plataformas garantidas)
   // Nunca depende de Firebase ou localStorage para renderizar
@@ -4057,6 +4241,8 @@ function init() {
   setTimeout(updateFromFirebase, 500);
   checkWelcomeModal();
   trackEvent('app_open', { source: document.referrer || 'direct' });
+  // Rastrear acesso diário para Analytics
+  setTimeout(trackDailyAccess, 1000);
   // Track install count
   if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
     if (!_ls.get('av_install_counted')) {
@@ -5506,6 +5692,162 @@ function clearAuditLog() {
   _auditLogData = {};
   renderAuditLog();
   showToast('&#128203; Histórico limpo');
+}
+
+// ===== ANALYTICS =====
+var _analyticsPeriod = 7;
+var _analyticsData = null;
+
+function loadAnalytics() {
+  var base = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+  var auth = '?auth=' + FIREBASE_API_KEY;
+
+  // Carregar todos os dados de analytics
+  Promise.all([
+    fetch(base + '/analytics/daily.json' + auth).then(function(r){return r.json();}).catch(function(){return null;}),
+    fetch(base + '/analytics/online.json' + auth).then(function(r){return r.json();}).catch(function(){return null;}),
+    fetch(base + '/analytics/total_accesses.json' + auth).then(function(r){return r.json();}).catch(function(){return 0;})
+  ]).then(function(results) {
+    var daily = results[0] || {};
+    var online = results[1] || {};
+    var totalAccesses = parseInt(results[2]) || 0;
+    _analyticsData = { daily: daily, online: online, total: totalAccesses };
+    renderAnalytics();
+  });
+}
+
+function renderAnalytics() {
+  if (!_analyticsData) return;
+  var daily = _analyticsData.daily || {};
+  var online = _analyticsData.online || {};
+  var total = _analyticsData.total || 0;
+
+  // Calcular hoje e 7 dias
+  var today = getTodayKey();
+  var todayData = daily[today] || {};
+  var todayTotal = parseInt(todayData.total) || 0;
+
+  // Calcular online agora (visitantes com ts nos últimos 5 minutos)
+  var now = Date.now();
+  var fiveMin = 5 * 60 * 1000;
+  var onlineNow = 0;
+  Object.values(online).forEach(function(v) {
+    if (v && v.ts && (now - v.ts) < fiveMin) onlineNow++;
+  });
+
+  // Calcular acessos dos últimos 7 dias
+  var sum7d = 0;
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(); d.setDate(d.getDate() - i);
+    var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    sum7d += parseInt((daily[key] || {}).total) || 0;
+  }
+
+  // Atualizar KPIs
+  var kpiToday = document.getElementById('analyticsKpiToday');
+  var kpiOnline = document.getElementById('analyticsKpiOnline');
+  var kpi7d = document.getElementById('analyticsKpi7d');
+  var kpiTotal = document.getElementById('analyticsKpiTotal');
+  if (kpiToday) kpiToday.textContent = todayTotal || '0';
+  if (kpiOnline) kpiOnline.textContent = onlineNow || '0';
+  if (kpi7d) kpi7d.textContent = sum7d || '0';
+  if (kpiTotal) kpiTotal.textContent = total > 999 ? (total/1000).toFixed(1)+'k' : (total || '0');
+
+  // Calcular OS acumulado (todos os dias)
+  var osCount = { android: 0, ios: 0, windows: 0, mac: 0, other: 0 };
+  Object.values(daily).forEach(function(dayData) {
+    if (dayData && dayData.os) {
+      Object.keys(osCount).forEach(function(os) {
+        osCount[os] += parseInt((dayData.os || {})[os]) || 0;
+      });
+    }
+  });
+  var osTotal = Object.values(osCount).reduce(function(a,b){return a+b;}, 0) || 1;
+  var osConfig = [
+    { key:'android', icon:'&#129504;', label:'Android', color:'#34D399' },
+    { key:'ios', icon:'&#63743;', label:'iPhone (iOS)', color:'#60A5FA' },
+    { key:'windows', icon:'&#128187;', label:'Windows', color:'#A78BFA' },
+    { key:'mac', icon:'&#128187;', label:'Mac', color:'#FCD34D' },
+    { key:'other', icon:'&#127760;', label:'Outros', color:'#9CA3AF' }
+  ];
+  var osBar = document.getElementById('analyticsOsBar');
+  if (osBar) {
+    var osHtml = osConfig.filter(function(o){return osCount[o.key]>0;}).map(function(o) {
+      var pct = Math.round((osCount[o.key]/osTotal)*100);
+      return '<div class="analytics-os-row">' +
+        '<div class="analytics-os-icon">' + o.icon + '</div>' +
+        '<div class="analytics-os-info">' +
+          '<div class="analytics-os-name">' + o.label + ' &mdash; <strong>' + osCount[o.key] + '</strong> acessos</div>' +
+          '<div class="analytics-os-track"><div class="analytics-os-fill" style="width:' + pct + '%;background:' + o.color + '"></div></div>' +
+        '</div>' +
+        '<div class="analytics-os-pct" style="color:' + o.color + '">' + pct + '%</div>' +
+      '</div>';
+    }).join('');
+    osBar.innerHTML = osHtml || '<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:10px">Nenhum dado ainda. Os dados aparecerão após os primeiros acessos.</div>';
+  }
+
+  // Renderizar gráfico e histórico
+  renderAnalyticsChart(_analyticsPeriod);
+}
+
+function renderAnalyticsChart(days) {
+  if (!_analyticsData) return;
+  var daily = _analyticsData.daily || {};
+  var keys = [];
+  var vals = [];
+  for (var i = days-1; i >= 0; i--) {
+    var d = new Date(); d.setDate(d.getDate() - i);
+    var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    var label = String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
+    keys.push({ key: key, label: label, date: new Date(d) });
+    vals.push(parseInt((daily[key] || {}).total) || 0);
+  }
+  var maxVal = Math.max.apply(null, vals) || 1;
+
+  // Gráfico de barras
+  var chartEl = document.getElementById('analyticsChartBars');
+  if (chartEl) {
+    chartEl.innerHTML = keys.map(function(k, i) {
+      var h = Math.max(4, Math.round((vals[i]/maxVal)*72));
+      var isToday = k.key === getTodayKey();
+      var color = isToday ? '#A78BFA' : 'rgba(124,58,237,0.5)';
+      return '<div class="analytics-chart-bar-col">' +
+        '<div class="analytics-chart-val">' + (vals[i]||'') + '</div>' +
+        '<div class="analytics-chart-bar" style="height:' + h + 'px;background:' + color + (isToday?';box-shadow:0 0 8px rgba(167,139,250,0.5)':'') + '"></div>' +
+        '<div class="analytics-chart-label">' + k.label + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // Histórico detalhado
+  var histEl = document.getElementById('analyticsHistory');
+  if (histEl) {
+    var rows = keys.slice().reverse().map(function(k, i) {
+      var idx = keys.length - 1 - i;
+      var dayData = daily[k.key] || {};
+      var osData = dayData.os || {};
+      var osSummary = Object.entries(osData).filter(function(e){return e[1]>0;}).map(function(e) {
+        var icons = {android:'&#129504;',ios:'&#63743;',windows:'&#128187;',mac:'&#128187;',other:'&#127760;'};
+        return (icons[e[0]]||'') + ' ' + e[1];
+      }).join(' &nbsp; ');
+      var isToday = k.key === getTodayKey();
+      return '<div class="analytics-history-row">' +
+        '<div>' +
+          '<div class="analytics-history-date">' + (isToday ? '&#128994; Hoje &mdash; ' : '') + k.label + '</div>' +
+          (osSummary ? '<div class="analytics-history-os">' + osSummary + '</div>' : '') +
+        '</div>' +
+        '<div class="analytics-history-val">' + (vals[idx]||0) + ' acessos</div>' +
+      '</div>';
+    }).join('');
+    histEl.innerHTML = rows || '<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:16px">Nenhum dado ainda. Os dados aparecerão após os primeiros acessos.</div>';
+  }
+}
+
+function analyticsSetPeriod(days, btn) {
+  _analyticsPeriod = days;
+  document.querySelectorAll('.analytics-period-btn').forEach(function(b){b.classList.remove('active');});
+  if (btn) btn.classList.add('active');
+  renderAnalyticsChart(days);
 }
 
 // ===== AVALIAÇÃO DE SINAIS =====
