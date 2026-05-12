@@ -1289,27 +1289,241 @@
     .ranking-item.top1 { animation: rankingPulse 2.5s infinite; }
 
     /* Nome input modal */
-    /* ===== MODAL CADASTRO RANKING ===== */
+    /* ===== MODAL CADASTRO RANKING — PREMIUM ===== */
+
+    /* Keyframes */
+    @keyframes rnm-trophy-pulse {
+      0%,100% { transform: scale(1) rotate(-3deg); filter: drop-shadow(0 0 12px rgba(255,215,0,0.7)); }
+      50% { transform: scale(1.12) rotate(3deg); filter: drop-shadow(0 0 28px rgba(255,215,0,1)); }
+    }
+    @keyframes rnm-glow-pulse {
+      0%,100% { box-shadow: 0 0 40px rgba(124,58,237,0.3), 0 0 80px rgba(124,58,237,0.1), inset 0 1px 0 rgba(255,255,255,0.08); }
+      50% { box-shadow: 0 0 60px rgba(124,58,237,0.5), 0 0 120px rgba(124,58,237,0.2), inset 0 1px 0 rgba(255,255,255,0.12); }
+    }
+    @keyframes rnm-btn-glow {
+      0%,100% { box-shadow: 0 4px 20px rgba(124,58,237,0.5), 0 0 40px rgba(124,58,237,0.2); }
+      50% { box-shadow: 0 4px 30px rgba(124,58,237,0.8), 0 0 60px rgba(124,58,237,0.4); }
+    }
+    @keyframes rnm-prize-float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+    @keyframes rnm-badge-shine {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    @keyframes rnm-social-blink {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    @keyframes rnm-particles {
+      0% { transform: translateY(0) scale(1); opacity: 0.8; }
+      100% { transform: translateY(-40px) scale(0); opacity: 0; }
+    }
+    @keyframes rnm-input-focus-glow {
+      0% { box-shadow: 0 0 0 0 rgba(124,58,237,0); }
+      100% { box-shadow: 0 0 0 3px rgba(124,58,237,0.25); }
+    }
+
+    /* Overlay */
     .ranking-name-modal {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.92);
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(30,0,60,0.97) 0%, rgba(0,0,0,0.98) 100%);
       z-index: 10000; display: flex; align-items: center; justify-content: center;
-      padding: 20px; backdrop-filter: blur(4px);
+      padding: 16px; backdrop-filter: blur(8px);
+      overflow-y: auto;
     }
     .ranking-name-modal.hidden { display: none; }
+
+    /* Box principal */
     .ranking-name-box {
-      background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%);
-      border: 1px solid rgba(124,58,237,0.35);
-      border-radius: 20px; padding: 28px 22px; width: 100%; max-width: 360px;
-      text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      background: linear-gradient(160deg, #1a0a2e 0%, #0d0d1f 60%, #0a1628 100%);
+      border: 1px solid rgba(124,58,237,0.5);
+      border-radius: 24px;
+      padding: 0;
+      width: 100%; max-width: 380px;
+      text-align: center;
+      animation: rnm-glow-pulse 3s ease-in-out infinite;
+      overflow: hidden;
+      position: relative;
     }
-    .rnm-trophy { font-size: 44px; margin-bottom: 8px; display: block; }
-    .ranking-name-box h3 {
-      font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 6px;
+
+    /* Faixa decorativa no topo */
+    .rnm-top-bar {
+      background: linear-gradient(90deg, #4c1d95, #7C3AED, #9F67FF, #7C3AED, #4c1d95);
+      background-size: 200% 100%;
+      animation: rnm-badge-shine 3s linear infinite;
+      height: 3px; width: 100%;
     }
+
+    /* Conteúdo interno */
+    .rnm-inner { padding: 24px 22px 20px; }
+
+    /* Troféu */
+    .rnm-trophy-wrap {
+      position: relative; display: inline-block; margin-bottom: 4px;
+    }
+    .rnm-trophy {
+      font-size: 56px; display: block;
+      animation: rnm-trophy-pulse 2.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 16px rgba(255,215,0,0.8));
+    }
+    .rnm-trophy-ring {
+      position: absolute; inset: -8px;
+      border: 2px solid rgba(255,215,0,0.3);
+      border-radius: 50%; animation: rnm-trophy-pulse 2.5s ease-in-out infinite reverse;
+    }
+
+    /* Título */
+    .rnm-title {
+      font-size: 22px; font-weight: 900; color: #fff;
+      margin: 8px 0 4px; letter-spacing: -0.3px;
+      text-shadow: 0 0 20px rgba(124,58,237,0.6);
+    }
+    .rnm-subtitle {
+      font-size: 13px; font-weight: 700;
+      background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700);
+      background-size: 200% 100%;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: rnm-badge-shine 2s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    /* Cards de prêmio */
     .rnm-prizes {
-      display: flex; justify-content: center; gap: 10px;
-      margin: 12px 0 16px; flex-wrap: wrap;
+      display: flex; justify-content: center; gap: 8px;
+      margin: 0 0 16px; flex-wrap: nowrap;
     }
+    .rnm-prize-card {
+      flex: 1; border-radius: 14px; padding: 10px 6px;
+      text-align: center; position: relative; overflow: hidden;
+      animation: rnm-prize-float 3s ease-in-out infinite;
+    }
+    .rnm-prize-card:nth-child(2) { animation-delay: 0.4s; }
+    .rnm-prize-card:nth-child(3) { animation-delay: 0.8s; }
+    .rnm-prize-card.gold {
+      background: linear-gradient(160deg, #3d2800, #1a1000);
+      border: 1px solid rgba(255,215,0,0.5);
+      box-shadow: 0 0 16px rgba(255,215,0,0.2), inset 0 1px 0 rgba(255,215,0,0.15);
+    }
+    .rnm-prize-card.silver {
+      background: linear-gradient(160deg, #1e1e2e, #0d0d1a);
+      border: 1px solid rgba(192,192,192,0.4);
+      box-shadow: 0 0 12px rgba(192,192,192,0.1), inset 0 1px 0 rgba(192,192,192,0.1);
+    }
+    .rnm-prize-card.bronze {
+      background: linear-gradient(160deg, #2a1500, #120800);
+      border: 1px solid rgba(205,127,50,0.4);
+      box-shadow: 0 0 12px rgba(205,127,50,0.1), inset 0 1px 0 rgba(205,127,50,0.1);
+    }
+    .rnm-prize-medal { font-size: 24px; display: block; margin-bottom: 4px; }
+    .rnm-prize-place {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; opacity: 0.6; color: #fff; margin-bottom: 2px;
+    }
+    .rnm-prize-value {
+      font-size: 18px; font-weight: 900; line-height: 1;
+    }
+    .rnm-prize-card.gold .rnm-prize-value { color: #FFD700; text-shadow: 0 0 10px rgba(255,215,0,0.6); }
+    .rnm-prize-card.silver .rnm-prize-value { color: #E0E0E0; }
+    .rnm-prize-card.bronze .rnm-prize-value { color: #CD7F32; }
+    .rnm-prize-pix {
+      font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.4);
+      text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px;
+    }
+
+    /* Prova social */
+    .rnm-social-proof {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25);
+      border-radius: 20px; padding: 6px 14px; margin: 0 0 14px;
+      font-size: 11px; font-weight: 700; color: #10B981;
+    }
+    .rnm-social-dot {
+      width: 6px; height: 6px; background: #10B981; border-radius: 50%;
+      animation: rnm-social-blink 1.2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    /* Descrição */
+    .rnm-desc {
+      font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    /* Separador */
+    .rnm-divider {
+      height: 1px; background: linear-gradient(90deg, transparent, rgba(124,58,237,0.4), transparent);
+      margin: 0 0 14px;
+    }
+
+    /* Labels dos campos */
+    .rnm-field-label {
+      font-size: 10px; font-weight: 800; color: rgba(255,255,255,0.45);
+      text-transform: uppercase; letter-spacing: 1px;
+      text-align: left; margin-bottom: 6px; margin-top: 10px;
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    /* Inputs */
+    .ranking-name-input {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 13px 16px;
+      color: #fff; font-size: 15px; outline: none;
+      margin-bottom: 2px;
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+      -webkit-appearance: none;
+    }
+    .ranking-name-input::placeholder { color: rgba(255,255,255,0.25); }
+    .ranking-name-input:focus {
+      border-color: rgba(124,58,237,0.8);
+      background: rgba(124,58,237,0.08);
+      animation: rnm-input-focus-glow 0.3s ease forwards;
+    }
+
+    /* Botão principal */
+    .ranking-name-confirm {
+      width: 100%; padding: 15px; border-radius: 14px; border: none;
+      background: linear-gradient(135deg, #9F67FF 0%, #7C3AED 40%, #5B21B6 100%);
+      color: #fff; font-size: 16px; font-weight: 900; cursor: pointer;
+      margin-top: 16px; letter-spacing: 0.5px;
+      animation: rnm-btn-glow 2.5s ease-in-out infinite;
+      position: relative; overflow: hidden;
+      text-transform: uppercase;
+      transition: transform 0.15s;
+    }
+    .ranking-name-confirm:active { transform: scale(0.97); }
+    /* Shine no botão */
+    .ranking-name-confirm::after {
+      content: ''; position: absolute;
+      top: 0; left: -100%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      animation: rnm-badge-shine 2.5s ease-in-out infinite;
+    }
+
+    /* Privacidade */
+    .rnm-privacy {
+      font-size: 10px; color: rgba(255,255,255,0.25); margin-top: 12px;
+      line-height: 1.5; display: flex; align-items: flex-start; gap: 4px;
+      text-align: left;
+    }
+
+    /* Botão skip */
+    .rnm-skip {
+      font-size: 11px; margin-top: 10px;
+      cursor: pointer; background: none; border: none;
+      color: rgba(255,255,255,0.2); display: block;
+      width: 100%; text-align: center; padding: 4px;
+      text-decoration: underline; text-underline-offset: 2px;
+      transition: color 0.2s;
+    }
+    .rnm-skip:hover { color: rgba(255,255,255,0.4); }
+
+    /* Badges que ainda existem no ranking principal (compatibilidade) */
     .rnm-prize-badge {
       background: rgba(255,255,255,0.07); border-radius: 10px;
       padding: 6px 10px; font-size: 12px; font-weight: 700; color: #fff;
@@ -1318,38 +1532,7 @@
     .rnm-prize-badge.gold { border-color: rgba(255,215,0,0.4); color: #FFD700; }
     .rnm-prize-badge.silver { border-color: rgba(192,192,192,0.4); color: #C0C0C0; }
     .rnm-prize-badge.bronze { border-color: rgba(205,127,50,0.4); color: #CD7F32; }
-    .rnm-desc {
-      font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 18px;
-      line-height: 1.5;
-    }
-    .rnm-field-label {
-      font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5);
-      text-transform: uppercase; letter-spacing: 0.5px;
-      text-align: left; margin-bottom: 5px; margin-top: 12px;
-    }
-    .ranking-name-input {
-      width: 100%; background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.15); border-radius: 10px;
-      padding: 12px 14px; color: #fff; font-size: 14px; outline: none;
-      margin-bottom: 4px; transition: border-color 0.2s;
-    }
-    .ranking-name-input:focus { border-color: rgba(124,58,237,0.6); }
-    .ranking-name-confirm {
-      width: 100%; padding: 13px; border-radius: 12px; border: none;
-      background: linear-gradient(135deg, #7C3AED, #5B21B6);
-      color: #fff; font-size: 15px; font-weight: 800; cursor: pointer;
-      margin-top: 14px; letter-spacing: 0.3px;
-    }
-    .rnm-privacy {
-      font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 10px;
-      line-height: 1.4;
-    }
-    .rnm-skip {
-      font-size: 11px; margin-top: 8px;
-      cursor: pointer; text-decoration: underline; background: none;
-      border: none; color: rgba(255,255,255,0.3); display: block;
-      width: 100%; text-align: center; padding: 4px;
-    }
+
     /* ===== FIM RANKING SYSTEM ===== */
 </style>
   <!-- Web Push Nativo (VAPID) - sem dependências externas -->
@@ -2734,28 +2917,72 @@
 <!-- MODAL NOME RANKING -->
 <div class="ranking-name-modal hidden" id="rankingNameModal">
   <div class="ranking-name-box">
-    <span class="rnm-trophy">🏆</span>
-    <h3>Participe do Ranking!</h3>
-    <div class="rnm-prizes">
-      <div class="rnm-prize-badge gold">🥇 R$50 PIX</div>
-      <div class="rnm-prize-badge silver">🥈 R$20 PIX</div>
-      <div class="rnm-prize-badge bronze">🥉 R$10 PIX</div>
+    <!-- Faixa decorativa animada no topo -->
+    <div class="rnm-top-bar"></div>
+    <div class="rnm-inner">
+      <!-- Troféu animado com glow dourado -->
+      <div class="rnm-trophy-wrap">
+        <span class="rnm-trophy">🏆</span>
+        <div class="rnm-trophy-ring"></div>
+      </div>
+      <!-- Título forte -->
+      <div class="rnm-title">Ranking Semanal</div>
+      <div class="rnm-subtitle">🔥 Compartilhe e Ganhe PIX Toda Semana</div>
+      <!-- Cards de prêmio premium -->
+      <div class="rnm-prizes">
+        <div class="rnm-prize-card gold">
+          <span class="rnm-prize-medal">🥇</span>
+          <div class="rnm-prize-place">1º Lugar</div>
+          <div class="rnm-prize-value">R$50</div>
+          <div class="rnm-prize-pix">PIX</div>
+        </div>
+        <div class="rnm-prize-card silver">
+          <span class="rnm-prize-medal">🥈</span>
+          <div class="rnm-prize-place">2º Lugar</div>
+          <div class="rnm-prize-value">R$20</div>
+          <div class="rnm-prize-pix">PIX</div>
+        </div>
+        <div class="rnm-prize-card bronze">
+          <span class="rnm-prize-medal">🥉</span>
+          <div class="rnm-prize-place">3º Lugar</div>
+          <div class="rnm-prize-value">R$10</div>
+          <div class="rnm-prize-pix">PIX</div>
+        </div>
+      </div>
+      <!-- Prova social -->
+      <div class="rnm-social-proof">
+        <div class="rnm-social-dot"></div>
+        <span id="rnmSocialCount">247</span>&nbsp;pessoas participando agora
+      </div>
+      <!-- Descrição curta e direta -->
+      <div class="rnm-desc">
+        Compartilhe seu link e suba no ranking para ganhar PIX toda semana.
+      </div>
+      <div class="rnm-divider"></div>
+      <!-- Campo nome -->
+      <div class="rnm-field-label">
+        <span>👤</span> Nome ou apelido
+      </div>
+      <input class="ranking-name-input" type="text" id="rankingNameInput"
+        placeholder="Como quer aparecer no ranking" maxlength="30" autocomplete="name" />
+      <!-- Campo WhatsApp -->
+      <div class="rnm-field-label">
+        <span>📲</span> WhatsApp com DDD
+      </div>
+      <input class="ranking-name-input" type="tel" id="rankingPhoneInput"
+        placeholder="(11) 99999-9999" maxlength="20" autocomplete="tel" />
+      <!-- Botão principal neon -->
+      <button class="ranking-name-confirm" id="rankingNameConfirm">
+        🔥 QUERO GANHAR PIX
+      </button>
+      <!-- Privacidade -->
+      <div class="rnm-privacy">
+        <span>🔒</span>
+        <span>Seus dados são usados apenas para identificação e envio do prêmio. Nunca serão compartilhados.</span>
+      </div>
+      <!-- Skip -->
+      <button class="rnm-skip" id="rankingSkipBtn">Entrar sem cadastro (não receberá prêmio)</button>
     </div>
-    <div class="rnm-desc">
-      Compartilhe seu link e ganhe pontos automaticamente.<br>
-      Os 3 com mais pontos da semana ganham prêmios via PIX.<br>
-      <strong style="color:rgba(255,255,255,0.7)">Preencha seus dados para participar e receber o prêmio.</strong>
-    </div>
-    <div class="rnm-field-label">📛 Nome ou apelido</div>
-    <input class="ranking-name-input" type="text" id="rankingNameInput"
-      placeholder="Como quer aparecer no ranking" maxlength="30" autocomplete="name" />
-    <div class="rnm-field-label">📲 WhatsApp (com DDD)</div>
-    <input class="ranking-name-input" type="tel" id="rankingPhoneInput"
-      placeholder="(11) 99999-9999" maxlength="20" autocomplete="tel"
-      style="margin-top:0" />
-    <button class="ranking-name-confirm" id="rankingNameConfirm">🚀 Entrar no Ranking</button>
-    <div class="rnm-privacy">🔒 Seus dados são usados apenas para identificação e envio do prêmio. Não serão compartilhados.</div>
-    <button class="rnm-skip" id="rankingSkipBtn">Entrar sem cadastro (não receberá prêmio)</button>
   </div>
 </div>
 <!-- TOAST PONTOS -->
@@ -7003,6 +7230,21 @@ document.addEventListener('click', function(e) {
   }
 
   // ── Admin: carregar ranking ───────────────────────────────────────────────────
+  // Prova social: animar contador de participantes
+  (function() {
+    var base = 230 + Math.floor(Math.random() * 40); // 230-270
+    var el = document.getElementById('rnmSocialCount');
+    if (el) el.textContent = base;
+    // Incrementar levemente a cada 8-15 segundos
+    setInterval(function() {
+      if (Math.random() > 0.4) {
+        base += Math.floor(Math.random() * 3) + 1;
+        var el2 = document.getElementById('rnmSocialCount');
+        if (el2) el2.textContent = base;
+      }
+    }, 10000 + Math.random() * 5000);
+  })();
+
   // Função para editar perfil
   window._rankingEditProfile = function() {
     showNameModal(function() {
