@@ -3763,22 +3763,6 @@ async function sendPushNotification(title, body, tab, overrideIcon, overridePlat
       if (data.success) {
         return { success: true, recipients: data.sent || 0 };
 
-          // Tracking: notificações enviadas hoje
-          if (result && result.sent > 0) {
-            try {
-              var _today = getTodayKey();
-              var _base = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
-              var _auth = '?auth=' + FIREBASE_API_KEY;
-              fetch(_base + '/analytics/notifs/' + _today + '/today.json' + _auth)
-                .then(function(r){return r.json();})
-                .then(function(cur){
-                  fetch(_base + '/analytics/notifs/' + _today + '/today.json' + _auth, {
-                    method:'PUT', headers:{'Content-Type':'application/json'},
-                    body: JSON.stringify((parseInt(cur)||0) + result.sent)
-                  });
-                }).catch(function(){});
-            } catch(e) {}
-          }
 
       } else {
         return { success: false, error: data.error || 'Falha no envio' };
