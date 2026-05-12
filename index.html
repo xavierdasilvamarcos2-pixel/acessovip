@@ -2228,131 +2228,71 @@
         <div class="admin-section-back" onclick="adminGoTo('home')">
           <span class="admin-section-back-arrow">&#8592;</span> Menu Principal
         </div>
-        <div style="padding:0 16px 24px">
+        <div style="padding:0 16px 20px">
           <div class="admin-sec-hdr">
             <div class="admin-sec-icon" style="background:linear-gradient(135deg,#7C3AED,#4F46E5)">&#128202;</div>
             <div>
               <div class="admin-sec-ttl">Analytics do App</div>
-              <div class="admin-sec-sub">Dados reais — Firebase</div>
+              <div class="admin-sec-sub">Dados reais de acessos e usuários</div>
             </div>
           </div>
 
-          <!-- SEÇÃO 1: ACESSOS -->
-          <div class="an2-section">
-            <div class="an2-section-title">&#128200; Acessos</div>
-            <div class="an2-cards">
-              <div class="an2-card purple">
-                <div class="an2-card-icon">&#128200;</div>
-                <div class="an2-card-val" id="an2KpiToday">...</div>
-                <div class="an2-card-lbl">Acessos Hoje</div>
-              </div>
-              <div class="an2-card green">
-                <div class="an2-card-icon"><span class="an2-online-dot"></span></div>
-                <div class="an2-card-val" id="an2KpiOnline">...</div>
-                <div class="an2-card-lbl">Online Agora<br><span style="font-size:9px;opacity:0.6">(últimos 5 min)</span></div>
-              </div>
-              <div class="an2-card blue">
-                <div class="an2-card-icon">&#128337;</div>
-                <div class="an2-card-val" id="an2Kpi7d">...</div>
-                <div class="an2-card-lbl">Acessos 7 dias</div>
-              </div>
-              <div class="an2-card orange">
-                <div class="an2-card-icon">&#127775;</div>
-                <div class="an2-card-val" id="an2KpiTotal">...</div>
-                <div class="an2-card-lbl">Total Geral</div>
-              </div>
+          <!-- KPIs principais -->
+          <div class="analytics-kpi-grid" id="analyticsKpiGrid">
+            <div class="analytics-kpi purple">
+              <div class="analytics-kpi-icon">&#128202;</div>
+              <div class="analytics-kpi-val" id="analyticsKpiToday">...</div>
+              <div class="analytics-kpi-lbl">Acessos Hoje</div>
+            </div>
+            <div class="analytics-kpi green">
+              <div class="analytics-kpi-icon">&#128994;</div>
+              <div class="analytics-kpi-val" id="analyticsKpiOnline">...</div>
+              <div class="analytics-kpi-lbl">Online Agora<br><span style="font-size:9px;opacity:0.6">(5 min)</span></div>
+            </div>
+            <div class="analytics-kpi blue">
+              <div class="analytics-kpi-icon">&#128337;</div>
+              <div class="analytics-kpi-val" id="analyticsKpi7d">...</div>
+              <div class="analytics-kpi-lbl">Acessos 7 dias</div>
+            </div>
+            <div class="analytics-kpi orange">
+              <div class="analytics-kpi-icon">&#127775;</div>
+              <div class="analytics-kpi-val" id="analyticsKpiTotal">...</div>
+              <div class="analytics-kpi-lbl">Total Geral</div>
             </div>
           </div>
 
-          <!-- SEÇÃO 2: DOWNLOADS / INSTALAÇÕES -->
-          <div class="an2-section">
-            <div class="an2-section-title">&#128229; Downloads / Instalações</div>
-            <div class="an2-cards">
-              <div class="an2-card teal">
-                <div class="an2-card-icon">&#128229;</div>
-                <div class="an2-card-val" id="an2InstallsToday">...</div>
-                <div class="an2-card-lbl">Novos Hoje</div>
-              </div>
-              <div class="an2-card purple">
-                <div class="an2-card-icon">&#128241;</div>
-                <div class="an2-card-val" id="an2InstallsTotal">...</div>
-                <div class="an2-card-lbl">Total Instalações</div>
-              </div>
-              <div class="an2-card blue">
-                <div class="an2-card-icon">&#128337;</div>
-                <div class="an2-card-val" id="an2Installs7d">...</div>
-                <div class="an2-card-lbl">Últimos 7 dias</div>
-              </div>
-              <div class="an2-card orange">
-                <div class="an2-card-icon">&#128197;</div>
-                <div class="an2-card-val" id="an2Installs30d">...</div>
-                <div class="an2-card-lbl">Últimos 30 dias</div>
-              </div>
+          <!-- Dispositivos -->
+          <div class="analytics-section-title">&#128241; Dispositivos</div>
+          <div class="analytics-chart-wrap">
+            <div class="analytics-os-bar" id="analyticsOsBar">
+              <div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:10px">Carregando...</div>
             </div>
           </div>
 
-          <!-- SEÇÃO 3: USUÁRIOS / NOTIFICAÇÕES -->
-          <div class="an2-section">
-            <div class="an2-section-title">&#128276; Notificações Push</div>
-            <div class="analytics-chart-wrap" style="padding:0">
-              <div class="an2-notif-row">
-                <div class="an2-notif-label">&#128241; Dispositivos Ativos</div>
-                <div class="an2-notif-val" style="color:#34D399" id="an2NotifDevices">...</div>
-              </div>
-              <div class="an2-notif-row">
-                <div class="an2-notif-label">&#128229; Novos Hoje</div>
-                <div class="an2-notif-val" style="color:#2DD4BF" id="an2NotifNew">...</div>
-              </div>
-              <div class="an2-notif-row">
-                <div class="an2-notif-label">&#128228; Enviadas Hoje</div>
-                <div class="an2-notif-val" style="color:#60A5FA" id="an2NotifSentToday">...</div>
-              </div>
-              <div class="an2-notif-row">
-                <div class="an2-notif-label">&#128200; Total Enviadas</div>
-                <div class="an2-notif-val" style="color:#A78BFA" id="an2NotifSentTotal">...</div>
-              </div>
+          <!-- Gráfico de barras -->
+          <div class="analytics-section-title">&#128200; Acessos por Dia</div>
+          <div class="analytics-period-btns">
+            <div class="analytics-period-btn active" onclick="analyticsSetPeriod(7,this)">7 dias</div>
+            <div class="analytics-period-btn" onclick="analyticsSetPeriod(15,this)">15 dias</div>
+            <div class="analytics-period-btn" onclick="analyticsSetPeriod(30,this)">30 dias</div>
+          </div>
+          <div class="analytics-chart-wrap">
+            <div class="analytics-chart-bars" id="analyticsChartBars">
+              <div style="width:100%;text-align:center;color:rgba(255,255,255,0.3);font-size:12px">Carregando...</div>
             </div>
           </div>
 
-          <!-- SEÇÃO 4: DISPOSITIVOS / OS -->
-          <div class="an2-section">
-            <div class="an2-section-title">&#128241; Dispositivos por Sistema</div>
-            <div class="analytics-chart-wrap">
-              <div id="an2OsBar">
-                <div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:10px">Carregando...</div>
-              </div>
-            </div>
+          <!-- Histórico -->
+          <div class="analytics-section-title">&#128336; Histórico Detalhado</div>
+          <div class="analytics-chart-wrap" id="analyticsHistory" style="padding:0">
+            <div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:16px">Carregando...</div>
           </div>
 
-          <!-- SEÇÃO 5: GRÁFICO DE ACESSOS POR DIA -->
-          <div class="an2-section">
-            <div class="an2-section-title">&#128200; Acessos por Dia</div>
-            <div class="analytics-period-btns">
-              <div class="analytics-period-btn active" onclick="an2SetPeriod(7,this)">7 dias</div>
-              <div class="analytics-period-btn" onclick="an2SetPeriod(15,this)">15 dias</div>
-              <div class="analytics-period-btn" onclick="an2SetPeriod(30,this)">30 dias</div>
-            </div>
-            <div class="analytics-chart-wrap">
-              <div class="analytics-chart-bars" id="an2ChartBars">
-                <div style="width:100%;text-align:center;color:rgba(255,255,255,0.3);font-size:12px">Carregando...</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- SEÇÃO 6: HISTÓRICO DETALHADO -->
-          <div class="an2-section">
-            <div class="an2-section-title">&#128336; Histórico Detalhado</div>
-            <div class="analytics-chart-wrap" id="an2History" style="padding:0">
-              <div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:16px">Carregando...</div>
-            </div>
-          </div>
-
-          <button class="admin-btn-submit blue" style="margin-top:4px" onclick="loadAnalytics2()">&#128260; ATUALIZAR MÉTRICAS</button>
-          <div class="an2-refresh-ts" id="an2RefreshTs"></div>
+          <button class="admin-btn-submit blue" style="margin-top:14px" onclick="loadAnalytics()">&#128260; ATUALIZAR ANALYTICS</button>
         </div>
       </div>
 
-            <!-- CONFIG WHATSAPP TAB -->
+      <!-- CONFIG WHATSAPP TAB -->
       <div class="admin-section" id="admin-tab-config">
         <div class="admin-section-back" onclick="adminGoTo('home')">
           <span class="admin-section-back-arrow">&#8592;</span> Menu Principal
@@ -3099,21 +3039,7 @@ window.addEventListener('appinstalled', () => {
   _ls.set('av_installs', installCount);
   showToast('✅ App instalado com sucesso!', 3000);
   trackEvent('pwa_installed');
-  gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' 
-  // Tracking: nova instalação hoje
-  try {
-    var _today = getTodayKey();
-    var _base = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
-    var _auth = '?auth=' + FIREBASE_API_KEY;
-    fetch(_base + '/analytics/installs/' + _today + '/new.json' + _auth)
-      .then(function(r){return r.json();})
-      .then(function(cur){
-        fetch(_base + '/analytics/installs/' + _today + '/new.json' + _auth, {
-          method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify((parseInt(cur)||0)+1)
-        });
-      }).catch(function(){});
-  } catch(e) {}
-  });
+  gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' });
   // Incrementar contador global no Firebase (com proteção contra dupla contagem)
   if (!_ls.get('av_install_fb_counted')) {
     _ls.set('av_install_fb_counted', '1');
@@ -3762,8 +3688,6 @@ async function sendPushNotification(title, body, tab, overrideIcon, overridePlat
 
       if (data.success) {
         return { success: true, recipients: data.sent || 0 };
-
-
       } else {
         return { success: false, error: data.error || 'Falha no envio' };
       }
@@ -5771,169 +5695,119 @@ function clearAuditLog() {
 var _analyticsPeriod = 7;
 var _analyticsData = null;
 
-
-// ===== ANALYTICS v2 =====
-var _an2Data = null;
-var _an2Period = 7;
-
-function loadAnalytics2() {
+function loadAnalytics() {
   var base = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
   var auth = '?auth=' + FIREBASE_API_KEY;
 
+  // Carregar todos os dados de analytics
   Promise.all([
     fetch(base + '/analytics/daily.json' + auth).then(function(r){return r.json();}).catch(function(){return null;}),
     fetch(base + '/analytics/online.json' + auth).then(function(r){return r.json();}).catch(function(){return null;}),
-    fetch(base + '/analytics/total_accesses.json' + auth).then(function(r){return r.json();}).catch(function(){return 0;}),
-    fetch(base + '/stats.json' + auth).then(function(r){return r.json();}).catch(function(){return {};}),
-    fetch(base + '/analytics/installs.json' + auth).then(function(r){return r.json();}).catch(function(){return null;}),
-    fetch(base + '/analytics/notifs.json' + auth).then(function(r){return r.json();}).catch(function(){return null;}),
-    fetch(base + '/analytics/subscribers.json' + auth).then(function(r){return r.json();}).catch(function(){return null;}),
-    fetch(base + '/web_push_subscriptions.json' + auth + '&shallow=true').then(function(r){return r.json();}).catch(function(){return null;})
+    fetch(base + '/analytics/total_accesses.json' + auth).then(function(r){return r.json();}).catch(function(){return 0;})
   ]).then(function(results) {
-    _an2Data = {
-      daily:       results[0] || {},
-      online:      results[1] || {},
-      totalAccess: parseInt(results[2]) || 0,
-      stats:       results[3] || {},
-      installs:    results[4] || {},
-      notifs:      results[5] || {},
-      subscribers: results[6] || {},
-      pushTokens:  results[7] || {}
-    };
-    renderAnalytics2();
-    // Compatibilidade com código antigo
-    _analyticsData = { daily: _an2Data.daily, online: _an2Data.online, total: _an2Data.totalAccess };
+    var daily = results[0] || {};
+    var online = results[1] || {};
+    var totalAccesses = parseInt(results[2]) || 0;
+    _analyticsData = { daily: daily, online: online, total: totalAccesses };
+    renderAnalytics();
   });
 }
 
-// Alias para compatibilidade
-function loadAnalytics() { loadAnalytics2(); }
+function renderAnalytics() {
+  if (!_analyticsData) return;
+  var daily = _analyticsData.daily || {};
+  var online = _analyticsData.online || {};
+  var total = _analyticsData.total || 0;
 
-function renderAnalytics2() {
-  if (!_an2Data) return;
-  var daily       = _an2Data.daily;
-  var online      = _an2Data.online;
-  var totalAccess = _an2Data.totalAccess;
-  var stats       = _an2Data.stats;
-  var installs    = _an2Data.installs;
-  var notifs      = _an2Data.notifs;
-  var subscribers = _an2Data.subscribers;
-  var pushTokens  = _an2Data.pushTokens;
-
+  // Calcular hoje e 7 dias
   var today = getTodayKey();
-  var now   = Date.now();
-  var fiveMin = 5 * 60 * 1000;
-
-  // ── Acessos ──
-  var todayData  = (daily || {})[today] || {};
+  var todayData = daily[today] || {};
   var todayTotal = parseInt(todayData.total) || 0;
-  var onlineNow  = 0;
-  Object.values(online || {}).forEach(function(v) {
+
+  // Calcular online agora (visitantes com ts nos últimos 5 minutos)
+  var now = Date.now();
+  var fiveMin = 5 * 60 * 1000;
+  var onlineNow = 0;
+  Object.values(online).forEach(function(v) {
     if (v && v.ts && (now - v.ts) < fiveMin) onlineNow++;
   });
+
+  // Calcular acessos dos últimos 7 dias
   var sum7d = 0;
   for (var i = 0; i < 7; i++) {
     var d = new Date(); d.setDate(d.getDate() - i);
-    var k = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-    sum7d += parseInt(((daily||{})[k]||{}).total) || 0;
+    var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    sum7d += parseInt((daily[key] || {}).total) || 0;
   }
-  _set('an2KpiToday',  todayTotal);
-  _set('an2KpiOnline', onlineNow);
-  _set('an2Kpi7d',     sum7d);
-  _set('an2KpiTotal',  totalAccess > 999 ? (totalAccess/1000).toFixed(1)+'k' : totalAccess);
 
-  // ── Downloads / Instalações ──
-  var totalInstalls = parseInt((stats || {}).total_installs) || 0;
-  var installsToday = parseInt(((installs||{})[today]||{}).new) || 0;
-  var installs7d = 0, installs30d = 0;
-  for (var j = 0; j < 30; j++) {
-    var dd = new Date(); dd.setDate(dd.getDate() - j);
-    var kk = dd.getFullYear() + '-' + String(dd.getMonth()+1).padStart(2,'0') + '-' + String(dd.getDate()).padStart(2,'0');
-    var dayNew = parseInt(((installs||{})[kk]||{}).new) || 0;
-    if (j < 7)  installs7d  += dayNew;
-    installs30d += dayNew;
-  }
-  _set('an2InstallsToday', installsToday);
-  _set('an2InstallsTotal', totalInstalls > 999 ? (totalInstalls/1000).toFixed(1)+'k' : totalInstalls);
-  _set('an2Installs7d',    installs7d);
-  _set('an2Installs30d',   installs30d);
+  // Atualizar KPIs
+  var kpiToday = document.getElementById('analyticsKpiToday');
+  var kpiOnline = document.getElementById('analyticsKpiOnline');
+  var kpi7d = document.getElementById('analyticsKpi7d');
+  var kpiTotal = document.getElementById('analyticsKpiTotal');
+  if (kpiToday) kpiToday.textContent = todayTotal || '0';
+  if (kpiOnline) kpiOnline.textContent = onlineNow || '0';
+  if (kpi7d) kpi7d.textContent = sum7d || '0';
+  if (kpiTotal) kpiTotal.textContent = total > 999 ? (total/1000).toFixed(1)+'k' : (total || '0');
 
-  // ── Notificações Push ──
-  var activeDevices = Object.keys(pushTokens || {}).length;
-  var totalNotifsSent = parseInt((stats || {}).total_notifs_sent) || 0;
-  var notifsToday = parseInt(((notifs||{})[today]||{}).today) || 0;
-  var newSubsToday = parseInt(((subscribers||{})[today]||{}).new) || 0;
-  _set('an2NotifDevices',   activeDevices);
-  _set('an2NotifNew',       newSubsToday);
-  _set('an2NotifSentToday', notifsToday);
-  _set('an2NotifSentTotal', totalNotifsSent);
-
-  // ── OS / Dispositivos ──
-  var osCount = { android:0, ios:0, windows:0, mac:0, other:0 };
-  Object.values(daily || {}).forEach(function(dayData) {
+  // Calcular OS acumulado (todos os dias)
+  var osCount = { android: 0, ios: 0, windows: 0, mac: 0, other: 0 };
+  Object.values(daily).forEach(function(dayData) {
     if (dayData && dayData.os) {
       Object.keys(osCount).forEach(function(os) {
-        osCount[os] += parseInt((dayData.os||{})[os]) || 0;
+        osCount[os] += parseInt((dayData.os || {})[os]) || 0;
       });
     }
   });
-  var osTotal = Object.values(osCount).reduce(function(a,b){return a+b;},0) || 1;
+  var osTotal = Object.values(osCount).reduce(function(a,b){return a+b;}, 0) || 1;
   var osConfig = [
-    { key:'android', icon:'&#129504;', label:'Android',      color:'#34D399' },
-    { key:'ios',     icon:'&#63743;',  label:'iPhone (iOS)', color:'#60A5FA' },
-    { key:'windows', icon:'&#128187;', label:'Windows',      color:'#A78BFA' },
-    { key:'mac',     icon:'&#128187;', label:'Mac',          color:'#FCD34D' },
-    { key:'other',   icon:'&#127760;', label:'Outros',       color:'#9CA3AF' }
+    { key:'android', icon:'&#129504;', label:'Android', color:'#34D399' },
+    { key:'ios', icon:'&#63743;', label:'iPhone (iOS)', color:'#60A5FA' },
+    { key:'windows', icon:'&#128187;', label:'Windows', color:'#A78BFA' },
+    { key:'mac', icon:'&#128187;', label:'Mac', color:'#FCD34D' },
+    { key:'other', icon:'&#127760;', label:'Outros', color:'#9CA3AF' }
   ];
-  var osBar = document.getElementById('an2OsBar');
+  var osBar = document.getElementById('analyticsOsBar');
   if (osBar) {
     var osHtml = osConfig.filter(function(o){return osCount[o.key]>0;}).map(function(o) {
       var pct = Math.round((osCount[o.key]/osTotal)*100);
-      return '<div class="an2-os-full">' +
-        '<div class="an2-os-full-icon">' + o.icon + '</div>' +
-        '<div class="an2-os-full-info">' +
-          '<div class="an2-os-full-name">' + o.label + ' &mdash; <strong>' + osCount[o.key].toLocaleString('pt-BR') + '</strong> acessos (' + pct + '%)</div>' +
-          '<div class="an2-os-full-track"><div class="an2-os-full-fill" style="width:' + pct + '%;background:' + o.color + '"></div></div>' +
+      return '<div class="analytics-os-row">' +
+        '<div class="analytics-os-icon">' + o.icon + '</div>' +
+        '<div class="analytics-os-info">' +
+          '<div class="analytics-os-name">' + o.label + ' &mdash; <strong>' + osCount[o.key] + '</strong> acessos</div>' +
+          '<div class="analytics-os-track"><div class="analytics-os-fill" style="width:' + pct + '%;background:' + o.color + '"></div></div>' +
         '</div>' +
-        '<div class="an2-os-full-pct" style="color:' + o.color + '">' + pct + '%</div>' +
+        '<div class="analytics-os-pct" style="color:' + o.color + '">' + pct + '%</div>' +
       '</div>';
     }).join('');
-    osBar.innerHTML = osHtml || '<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:10px">Sem dados</div>';
+    osBar.innerHTML = osHtml || '<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:10px">Nenhum dado ainda. Os dados aparecerão após os primeiros acessos.</div>';
   }
 
-  // ── Gráfico e histórico ──
-  an2RenderChart(_an2Period);
-
-  // ── Timestamp ──
-  var ts = document.getElementById('an2RefreshTs');
-  if (ts) ts.textContent = 'Atualizado em ' + new Date().toLocaleTimeString('pt-BR');
+  // Renderizar gráfico e histórico
+  renderAnalyticsChart(_analyticsPeriod);
 }
 
-function _set(id, val) {
-  var el = document.getElementById(id);
-  if (el) el.textContent = (val === undefined || val === null || val === '') ? '0' : val;
-}
-
-function an2RenderChart(days) {
-  if (!_an2Data) return;
-  var daily = _an2Data.daily || {};
-  var keys = [], vals = [];
+function renderAnalyticsChart(days) {
+  if (!_analyticsData) return;
+  var daily = _analyticsData.daily || {};
+  var keys = [];
+  var vals = [];
   for (var i = days-1; i >= 0; i--) {
     var d = new Date(); d.setDate(d.getDate() - i);
-    var key   = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
     var label = String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
-    keys.push({ key:key, label:label });
-    vals.push(parseInt((daily[key]||{}).total) || 0);
+    keys.push({ key: key, label: label, date: new Date(d) });
+    vals.push(parseInt((daily[key] || {}).total) || 0);
   }
   var maxVal = Math.max.apply(null, vals) || 1;
-  var today  = getTodayKey();
 
-  var chartEl = document.getElementById('an2ChartBars');
+  // Gráfico de barras
+  var chartEl = document.getElementById('analyticsChartBars');
   if (chartEl) {
     chartEl.innerHTML = keys.map(function(k, i) {
-      var h     = Math.max(4, Math.round((vals[i]/maxVal)*72));
-      var isToday = k.key === today;
-      var color = isToday ? '#A78BFA' : 'rgba(124,58,237,0.45)';
+      var h = Math.max(4, Math.round((vals[i]/maxVal)*72));
+      var isToday = k.key === getTodayKey();
+      var color = isToday ? '#A78BFA' : 'rgba(124,58,237,0.5)';
       return '<div class="analytics-chart-bar-col">' +
         '<div class="analytics-chart-val">' + (vals[i]||'') + '</div>' +
         '<div class="analytics-chart-bar" style="height:' + h + 'px;background:' + color + (isToday?';box-shadow:0 0 8px rgba(167,139,250,0.5)':'') + '"></div>' +
@@ -5942,47 +5816,36 @@ function an2RenderChart(days) {
     }).join('');
   }
 
-  var histEl = document.getElementById('an2History');
+  // Histórico detalhado
+  var histEl = document.getElementById('analyticsHistory');
   if (histEl) {
     var rows = keys.slice().reverse().map(function(k, i) {
-      var idx     = keys.length - 1 - i;
-      var dayData = (daily[k.key]||{});
-      var osData  = dayData.os || {};
-      var icons   = {android:'&#129504;',ios:'&#63743;',windows:'&#128187;',mac:'&#128187;',other:'&#127760;'};
-      var osSummary = Object.entries(osData).filter(function(e){return e[1]>0;}).map(function(e){
+      var idx = keys.length - 1 - i;
+      var dayData = daily[k.key] || {};
+      var osData = dayData.os || {};
+      var osSummary = Object.entries(osData).filter(function(e){return e[1]>0;}).map(function(e) {
+        var icons = {android:'&#129504;',ios:'&#63743;',windows:'&#128187;',mac:'&#128187;',other:'&#127760;'};
         return (icons[e[0]]||'') + ' ' + e[1];
       }).join(' &nbsp; ');
-      var isToday = k.key === today;
-      return '<div class="an2-hist-row">' +
+      var isToday = k.key === getTodayKey();
+      return '<div class="analytics-history-row">' +
         '<div>' +
-          '<div class="an2-hist-date">' + (isToday ? '&#128994; Hoje &mdash; ' : '') + k.label + '</div>' +
-          (osSummary ? '<div class="an2-hist-os">' + osSummary + '</div>' : '') +
+          '<div class="analytics-history-date">' + (isToday ? '&#128994; Hoje &mdash; ' : '') + k.label + '</div>' +
+          (osSummary ? '<div class="analytics-history-os">' + osSummary + '</div>' : '') +
         '</div>' +
-        '<div class="an2-hist-val">' + (vals[idx]||0) + ' acessos</div>' +
+        '<div class="analytics-history-val">' + (vals[idx]||0) + ' acessos</div>' +
       '</div>';
     }).join('');
-    histEl.innerHTML = rows || '<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:16px">Nenhum dado disponível</div>';
+    histEl.innerHTML = rows || '<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px;padding:16px">Nenhum dado ainda. Os dados aparecerão após os primeiros acessos.</div>';
   }
 }
 
-function an2SetPeriod(days, btn) {
-  _an2Period = days;
+function analyticsSetPeriod(days, btn) {
+  _analyticsPeriod = days;
   document.querySelectorAll('.analytics-period-btn').forEach(function(b){b.classList.remove('active');});
   if (btn) btn.classList.add('active');
-  an2RenderChart(days);
+  renderAnalyticsChart(days);
 }
-
-// ── Carregar analytics quando a aba for aberta ──
-(function() {
-  var origAdminGoTo = window.adminGoTo;
-  if (typeof origAdminGoTo === 'function') {
-    window.adminGoTo = function(tab) {
-      origAdminGoTo(tab);
-      if (tab === 'analytics') { setTimeout(loadAnalytics2, 100); }
-    };
-  }
-})();
-
 
 // ===== AVALIAÇÃO DE SINAIS =====
 function avaliarSinal(btn, tipo) {
