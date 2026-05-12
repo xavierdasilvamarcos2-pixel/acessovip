@@ -950,7 +950,7 @@
   <!-- Web Push Nativo (VAPID) - sem dependências externas -->
   <script>
     // Chave pública VAPID para Web Push nativo
-    window.VAPID_PUBLIC_KEY = 'BCHNrTTKpl2kwTOZhWDnolzEUmk9GUvp2fOjPiyJsultDj3hVRuKrdfnKMOpaB8x3x4cvKBWfh_GL1Px2wU2bpk';
+    window.VAPID_PUBLIC_KEY = 'BBasZFgTpcOQS5G_6pzQiO8-xGKsXUFz8CLzHvivA-qOG3T2RDIATCvbxruFR7ehARv3Htc5h9uXvquQyhZk2NA';
     window.WORKER_URL_BASE = 'https://acessovip-notif.xavierdasilvamarcos2.workers.dev';
     
     // Converter base64url para Uint8Array (necessário para applicationServerKey)
@@ -2664,7 +2664,7 @@ var _adminCurrentUser = { name: '', role: '', label: '', icon: '' };
 })();
 // Web Push nativo (VAPID) - sem OneSignal
 const WORKER_URL = 'https://acessovip-notif.xavierdasilvamarcos2.workers.dev';
-const VAPID_PUBLIC_KEY = 'BCHNrTTKpl2kwTOZhWDnolzEUmk9GUvp2fOjPiyJsultDj3hVRuKrdfnKMOpaB8x3x4cvKBWfh_GL1Px2wU2bpk';
+const VAPID_PUBLIC_KEY = 'BBasZFgTpcOQS5G_6pzQiO8-xGKsXUFz8CLzHvivA-qOG3T2RDIATCvbxruFR7ehARv3Htc5h9uXvquQyhZk2NA';
 const GA_ID = 'G-XXXXXXXXXX'; // Substituir pelo ID real do Google Analytics
 
 // ===== PLATFORMS DATA (embedded from DB) =====
@@ -3794,7 +3794,7 @@ document.getElementById('sendNotifBtn').addEventListener('click', async () => {
     const result = await sendPushNotification(title, body, tab);
     if (result.success) {
       const count = result.recipients || 0;
-      const countFmt = count > 0 ? count.toLocaleString('pt-BR') : '?';
+      const countFmt = count.toLocaleString('pt-BR');
       resultEl.textContent = '';
       if (deliveryBox) { deliveryBox.style.display = 'block'; if (deliveryNum) deliveryNum.textContent = countFmt; }
       showToast('✅ Notificação enviada para ' + countFmt + ' dispositivos!');
@@ -3833,7 +3833,7 @@ document.getElementById('testNotifBtn').addEventListener('click', async () => {
     );
     if (result.success) {
       const count = result.recipients || 0;
-      const countFmt = count > 0 ? count.toLocaleString('pt-BR') : '?';
+      const countFmt = count.toLocaleString('pt-BR');
       resultEl.textContent = '';
       if (deliveryBox) { deliveryBox.style.display = 'block'; if (deliveryNum) deliveryNum.textContent = countFmt; }
       showToast('🧪 Notificação de teste enviada para ' + countFmt + ' dispositivos!');
