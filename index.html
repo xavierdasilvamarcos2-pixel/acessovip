@@ -1208,6 +1208,169 @@
       color: #10B981; border: 1px solid rgba(16,185,129,0.3);
       cursor: default;
     }
+    /* ── Admin Ranking Manager ── */
+    .ar-stat-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 12px 8px;
+      text-align: center;
+    }
+    .ar-stat-num {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ar-stat-lbl {
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 3px;
+    }
+    .ar-section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 10px;
+    }
+    .ar-search-input {
+      flex: 1;
+      min-width: 0;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 9px 12px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+      width: 100%;
+    }
+    .ar-search-input::placeholder { color: rgba(255,255,255,0.3); }
+    .ar-search-input:focus { border-color: rgba(124,58,237,0.5); }
+    .ar-filter-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      color: rgba(255,255,255,0.6);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .ar-filter-btn.active {
+      background: rgba(124,58,237,0.25);
+      border-color: rgba(124,58,237,0.5);
+      color: #A78BFA;
+    }
+    .ar-participant-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .ar-participant-card:active { background: rgba(124,58,237,0.1); }
+    .ar-participant-card.top1 { border-color: rgba(255,215,0,0.35); background: rgba(255,215,0,0.04); }
+    .ar-participant-card.top2 { border-color: rgba(192,192,192,0.3); background: rgba(192,192,192,0.03); }
+    .ar-participant-card.top3 { border-color: rgba(205,127,50,0.3); background: rgba(205,127,50,0.03); }
+    .ar-pos-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .ar-pos-badge.gold { background: rgba(255,215,0,0.2); color: #FFD700; border: 1px solid rgba(255,215,0,0.4); }
+    .ar-pos-badge.silver { background: rgba(192,192,192,0.15); color: #C0C0C0; border: 1px solid rgba(192,192,192,0.3); }
+    .ar-pos-badge.bronze { background: rgba(205,127,50,0.15); color: #CD7F32; border: 1px solid rgba(205,127,50,0.3); }
+    .ar-pos-badge.other { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1); }
+    .ar-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.1);
+    }
+    .ar-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .ar-participant-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ar-participant-meta {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ar-pts-badge {
+      background: rgba(245,158,11,0.15);
+      border: 1px solid rgba(245,158,11,0.3);
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #F59E0B;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .ar-pago-btn {
+      background: linear-gradient(135deg,#059669,#047857);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 12px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .ar-pago-btn.paid {
+      background: rgba(16,185,129,0.12);
+      border: 1px solid rgba(16,185,129,0.3);
+      color: #10B981;
+      cursor: default;
+    }
+    .ar-edit-pts-btn {
+      background: rgba(124,58,237,0.2);
+      border: 1px solid rgba(124,58,237,0.4);
+      border-radius: 8px;
+      color: #A78BFA;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 12px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 6px;
+    }
+    
     .admin-btn-finalizar {
       width: 100%; background: linear-gradient(135deg,#7C3AED,#5B21B6);
       color: #fff; border: none; border-radius: 10px;
@@ -3312,63 +3475,106 @@
           <span class="admin-section-back-arrow">&#8592;</span> Menu Principal
         </div>
         <div style="padding:0 16px 16px">
+          <!-- Header -->
           <div class="admin-sec-hdr">
             <div class="admin-sec-icon" style="background:linear-gradient(135deg,#78350f,#92400e)">🏆</div>
             <div>
-              <div class="admin-sec-ttl">Ranking de Indicações</div>
-              <div class="admin-sec-sub">Controle completo do sistema de pontuação semanal</div>
+              <div class="admin-sec-ttl">Gerenciar Ranking</div>
+              <div class="admin-sec-sub">Semana: <strong style="color:#F59E0B" id="adminRankWeek">--</strong></div>
             </div>
           </div>
 
-          <!-- Semana atual + botão reset -->
-          <div style="display:flex;align-items:center;justify-content:space-between;margin:12px 0 8px">
-            <div style="font-size:13px;color:rgba(255,255,255,0.6)">Semana: <strong style="color:#F59E0B" id="adminRankWeek">--</strong></div>
-            <button onclick="adminRankingReset()" style="background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);color:#f87171;font-size:12px;font-weight:700;border-radius:8px;padding:6px 12px;cursor:pointer">
-              🔄 Resetar Semana
-            </button>
-          </div>
-
-          <!-- Stats rápidas -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
-            <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:12px;text-align:center">
-              <div style="font-size:22px;font-weight:900;color:#F59E0B" id="adminRankTotalUsers">0</div>
-              <div style="font-size:11px;color:rgba(255,255,255,0.4)">Participantes</div>
+          <!-- Dashboard 4 cards -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 16px">
+            <div class="ar-stat-card" style="border-color:rgba(245,158,11,0.3)">
+              <div class="ar-stat-num" style="color:#F59E0B" id="adminRankTotalUsers">0</div>
+              <div class="ar-stat-lbl">👥 Participantes</div>
             </div>
-            <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:12px;text-align:center">
-              <div style="font-size:22px;font-weight:900;color:#10B981" id="adminRankTotalClicks">0</div>
-              <div style="font-size:11px;color:rgba(255,255,255,0.4)">Cliques totais</div>
+            <div class="ar-stat-card" style="border-color:rgba(16,185,129,0.3)">
+              <div class="ar-stat-num" style="color:#10B981" id="adminRankTotalClicks">0</div>
+              <div class="ar-stat-lbl">📤 Compartilhamentos</div>
+            </div>
+            <div class="ar-stat-card" style="border-color:rgba(124,58,237,0.3)">
+              <div class="ar-stat-num" style="color:#A78BFA" id="adminRankTopUser">—</div>
+              <div class="ar-stat-lbl">🔥 Líder da semana</div>
+            </div>
+            <div class="ar-stat-card" style="border-color:rgba(239,68,68,0.3)">
+              <div class="ar-stat-num" style="color:#F87171" id="adminRankPaidCount">0</div>
+              <div class="ar-stat-lbl">💰 Pagamentos feitos</div>
             </div>
           </div>
 
           <!-- Controles da semana -->
-          <div style="display:flex;gap:8px;margin:12px 0 8px">
-            <button class="admin-btn-finalizar" onclick="window.adminFinalizarSemana && window.adminFinalizarSemana()">
-              🏆 Finalizar Semana e Definir Vencedores
+          <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+            <button class="admin-btn-finalizar" style="flex:1;min-width:140px" onclick="window.adminFinalizarSemana && window.adminFinalizarSemana()">
+              🏆 Finalizar Semana
+            </button>
+            <button class="admin-btn-reset" style="flex:1;min-width:140px;margin:0" onclick="window.adminRankingReset && window.adminRankingReset()">
+              🔄 Nova Semana
             </button>
           </div>
-          <button class="admin-btn-reset" onclick="window.adminRankingReset && window.adminRankingReset()">
-            🔄 Resetar Pontos (Nova Semana)
-          </button>
+
           <!-- Vencedores / Pagamentos -->
-          <div style="font-size:12px;font-weight:700;color:#10B981;text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px">
-            🏆 Vencedores — Controle de Pagamento
-          </div>
+          <div class="ar-section-title" style="color:#10B981">🏆 Vencedores — Controle de Pagamento</div>
           <div id="adminWinnersControl">
             <div style="text-align:center;padding:16px;color:rgba(255,255,255,0.3);font-size:13px">Nenhum vencedor definido ainda</div>
           </div>
-          <!-- Ranking completo -->
-          <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px">
-            Ranking Completo
+
+          <!-- Filtros + Busca -->
+          <div class="ar-section-title" style="margin-top:20px">👥 Participantes Cadastrados</div>
+          <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+            <input id="arSearchInput" type="text" placeholder="🔍 Pesquisar participante..." class="ar-search-input" oninput="arFilterList()">
           </div>
+          <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+            <button class="ar-filter-btn active" data-ar-filter="pts" onclick="arSetFilter(this,'pts')">📊 Por Pontos</button>
+            <button class="ar-filter-btn" data-ar-filter="refs" onclick="arSetFilter(this,'refs')">📤 Por Indicações</button>
+            <button class="ar-filter-btn" data-ar-filter="top3" onclick="arSetFilter(this,'top3')">🏅 Top 3</button>
+            <button class="ar-filter-btn" data-ar-filter="all" onclick="arSetFilter(this,'all')">👥 Todos</button>
+          </div>
+
+          <!-- Lista de participantes -->
           <div id="adminRankingList">
             <div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">⏳ Carregando...</div>
           </div>
+
           <!-- Histórico de vencedores -->
-          <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px">
-            Histórico de Vencedores
-          </div>
+          <div class="ar-section-title" style="margin-top:20px">📅 Histórico de Vencedores</div>
           <div id="adminRankHistory">
             <div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">Nenhum histórico ainda</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de perfil do participante -->
+      <div id="arProfileModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);overflow-y:auto">
+        <div style="max-width:420px;margin:40px auto 20px;padding:0 16px">
+          <div style="background:#1a1a2e;border:1px solid rgba(124,58,237,0.3);border-radius:20px;overflow:hidden">
+            <!-- Header do modal -->
+            <div style="background:linear-gradient(135deg,#7C3AED,#5B21B6);padding:20px;text-align:center;position:relative">
+              <button onclick="document.getElementById('arProfileModal').style.display='none'" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.15);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px">✕</button>
+              <div id="arProfileAvatar" style="width:72px;height:72px;border-radius:50%;border:3px solid rgba(255,255,255,0.4);margin:0 auto 10px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:#fff;background:linear-gradient(135deg,#7C3AED,#5B21B6)"></div>
+              <div id="arProfileName" style="font-size:18px;font-weight:800;color:#fff"></div>
+              <div id="arProfilePosition" style="font-size:13px;color:rgba(255,255,255,0.7);margin-top:4px"></div>
+            </div>
+            <!-- Dados do perfil -->
+            <div style="padding:16px">
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
+                <div class="ar-stat-card" style="border-color:rgba(245,158,11,0.3)">
+                  <div class="ar-stat-num" style="color:#F59E0B;font-size:20px" id="arProfilePts">0</div>
+                  <div class="ar-stat-lbl">Pontos</div>
+                </div>
+                <div class="ar-stat-card" style="border-color:rgba(16,185,129,0.3)">
+                  <div class="ar-stat-num" style="color:#10B981;font-size:20px" id="arProfileRefs">0</div>
+                  <div class="ar-stat-lbl">Indicações</div>
+                </div>
+                <div class="ar-stat-card" style="border-color:rgba(124,58,237,0.3)">
+                  <div class="ar-stat-num" style="color:#A78BFA;font-size:20px" id="arProfileClicks">0</div>
+                  <div class="ar-stat-lbl">Cliques</div>
+                </div>
+              </div>
+              <div id="arProfileDetails" style="font-size:13px;color:rgba(255,255,255,0.7)"></div>
+              <div id="arProfileActions" style="margin-top:14px"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -7980,81 +8186,227 @@ document.addEventListener('click', function(e) {
   // Atualizar meu rank card (compatibilidade)
   function updateMyRankCard() { updateMyProfileCard(); }
 
+  // ── Admin Ranking Manager: estado global ──
+  var arParticipants = [];
+  var arCurrentFilter = 'pts';
+  var arSearchTerm = '';
+
+  function arSetFilter(btn, filter) {
+    arCurrentFilter = filter;
+    document.querySelectorAll('.ar-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+    arFilterList();
+  }
+
+  function arFilterList() {
+    var searchEl = document.getElementById('arSearchInput');
+    arSearchTerm = searchEl ? searchEl.value.toLowerCase() : '';
+    var list = arParticipants.slice();
+
+    // Filtro de busca
+    if (arSearchTerm) {
+      list = list.filter(function(u) {
+        return (u.name||'').toLowerCase().includes(arSearchTerm)
+          || (u.phone||'').includes(arSearchTerm)
+          || (u.uid||'').toLowerCase().includes(arSearchTerm);
+      });
+    }
+
+    // Filtro de categoria
+    if (arCurrentFilter === 'top3') {
+      list = list.slice(0, 3);
+    } else if (arCurrentFilter === 'refs') {
+      list.sort(function(a,b){ return b.refs - a.refs; });
+    } else {
+      list.sort(function(a,b){ return b.pts - a.pts; });
+    }
+
+    arRenderList(list);
+  }
+
+  function arRenderList(list) {
+    var container = document.getElementById('adminRankingList');
+    if (!container) return;
+    if (list.length === 0) {
+      container.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">Nenhum participante encontrado</div>';
+      return;
+    }
+    var html = '';
+    list.forEach(function(u, i) {
+      var pos = arParticipants.indexOf(u) + 1;
+      if (pos === 0) pos = i + 1;
+      var medal = pos === 1 ? '🥇' : pos === 2 ? '🥈' : pos === 3 ? '🥉' : pos + 'º';
+      var topClass = pos === 1 ? ' top1' : pos === 2 ? ' top2' : pos === 3 ? ' top3' : '';
+      var posBadgeClass = pos === 1 ? 'gold' : pos === 2 ? 'silver' : pos === 3 ? 'bronze' : 'other';
+      var avatarContent = u.avatar
+        ? '<img src="' + u.avatar + '" style="width:100%;height:100%;object-fit:cover">'
+        : escapeHtml((u.name||'?')[0].toUpperCase());
+      var avatarBg = u.avatar ? '' : 'background:linear-gradient(135deg,#7C3AED,#5B21B6)';
+      var phone = u.phone ? u.phone : '—';
+      var dateStr = u.joinedAt ? u.joinedAt : '—';
+      html += '<div class="ar-participant-card' + topClass + '" data-ar-uid="' + u.uid + '" onclick="window.arOpenProfile(this.getAttribute(\'data-ar-uid\'))">';
+      html += '<div class="ar-pos-badge ' + posBadgeClass + '">' + medal + '</div>';
+      html += '<div class="ar-avatar" style="' + avatarBg + '">' + avatarContent + '</div>';
+      html += '<div style="flex:1;min-width:0">';
+      html += '<div class="ar-participant-name">' + escapeHtml(u.name||u.uid.slice(0,8)) + '</div>';
+      html += '<div class="ar-participant-meta">📱 ' + escapeHtml(phone) + ' · 📤 ' + (u.refs||0) + ' ind.</div>';
+      html += '<div class="ar-participant-meta" style="font-size:10px;opacity:0.6">📅 ' + escapeHtml(dateStr) + '</div>';
+      html += '</div>';
+      html += '<div class="ar-pts-badge">' + (u.pts||0) + ' pts</div>';
+      html += '</div>';
+    });
+    container.innerHTML = html;
+  }
+
+  window.arOpenProfile = function(uid) {
+    var u = arParticipants.find(function(p){ return p.uid === uid; });
+    if (!u) return;
+    var modal = document.getElementById('arProfileModal');
+    if (!modal) return;
+
+    var pos = arParticipants.indexOf(u) + 1;
+    var medal = pos === 1 ? '🥇 1º lugar' : pos === 2 ? '🥈 2º lugar' : pos === 3 ? '🥉 3º lugar' : pos + 'º lugar';
+
+    var avatarEl = document.getElementById('arProfileAvatar');
+    if (avatarEl) {
+      if (u.avatar) {
+        avatarEl.innerHTML = '<img src="' + u.avatar + '" style="width:100%;height:100%;object-fit:cover">';
+      } else {
+        avatarEl.textContent = (u.name||'?')[0].toUpperCase();
+      }
+    }
+    var nameEl = document.getElementById('arProfileName');
+    if (nameEl) nameEl.textContent = u.name || u.uid.slice(0,8);
+    var posEl = document.getElementById('arProfilePosition');
+    if (posEl) posEl.textContent = medal;
+    var ptsEl = document.getElementById('arProfilePts');
+    if (ptsEl) ptsEl.textContent = u.pts || 0;
+    var refsEl = document.getElementById('arProfileRefs');
+    if (refsEl) refsEl.textContent = u.refs || 0;
+    var clicksEl = document.getElementById('arProfileClicks');
+    if (clicksEl) clicksEl.textContent = u.clicks || 0;
+
+    var detailsEl = document.getElementById('arProfileDetails');
+    if (detailsEl) {
+      var link = window.location.origin + window.location.pathname + '?ref=' + u.uid;
+      detailsEl.innerHTML =
+        '<div style="margin-bottom:8px"><strong style="color:rgba(255,255,255,0.5)">📱 WhatsApp:</strong> ' +
+        (u.phone ? '<a href="https://wa.me/55' + u.phone.replace(/\D/g,'') + '" style="color:#25D366;text-decoration:none" target="_blank">' + escapeHtml(u.phone) + ' ↗</a>' : '—') +
+        '</div>' +
+        '<div style="margin-bottom:8px"><strong style="color:rgba(255,255,255,0.5)">🔗 Link:</strong> <span style="font-size:11px;word-break:break-all;color:#A78BFA">' + link + '</span></div>' +
+        '<div style="margin-bottom:8px"><strong style="color:rgba(255,255,255,0.5)">📅 Cadastro:</strong> ' + escapeHtml(u.joinedAt||'—') + '</div>' +
+        '<div><strong style="color:rgba(255,255,255,0.5)">🆔 ID:</strong> <span style="font-size:11px;color:rgba(255,255,255,0.4)">' + u.uid + '</span></div>';
+    }
+
+    var actionsEl = document.getElementById('arProfileActions');
+    if (actionsEl) {
+      actionsEl.innerHTML =
+        '<button class="ar-edit-pts-btn" data-ar-edit-uid="' + u.uid + '" data-ar-edit-name="' + escapeHtml(u.name||'') + '">✏️ Editar Pontos</button>';
+    }
+
+    modal.style.display = 'block';
+  };
+
+  window.arEditPts = function(uid, name) {
+    var current = (arParticipants.find(function(p){ return p.uid === uid; })||{}).pts || 0;
+    var newPts = prompt('Editar pontos de ' + name + ' (atual: ' + current + '):', current);
+
+
+
+    if (newPts === null) return;
+    var pts = parseInt(newPts, 10);
+    if (isNaN(pts) || pts < 0) { alert('Valor inválido'); return; }
+    var week = getWeekKey();
+    fbSet('/ranking/users/' + uid + '/pts', pts, function(err) {
+      if (err) { alert('Erro ao salvar'); return; }
+      var u = arParticipants.find(function(p){ return p.uid === uid; });
+      if (u) u.pts = pts;
+      arParticipants.sort(function(a,b){ return b.pts - a.pts; });
+      arFilterList();
+      document.getElementById('arProfileModal').style.display = 'none';
+      alert('Pontos atualizados!');
+    });
+  };
+  // Event delegation para botão Editar Pontos no modal de perfil
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-ar-edit-uid]');
+    if (btn) {
+      var uid = btn.getAttribute('data-ar-edit-uid');
+      var name = btn.getAttribute('data-ar-edit-name') || uid.slice(0,8);
+      window.arEditPts(uid, name);
+    }
+  });
+
+
   window.adminLoadRanking = function() {
     var week = getWeekKey();
     var weekEl = document.getElementById('adminRankWeek');
     if (weekEl) weekEl.textContent = week;
     adminLoadWinnersControl();
-
     renderWinnersSection(week);
+
+    var container = document.getElementById('adminRankingList');
+    if (container) container.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">⏳ Carregando...</div>';
+
     fbGet('/ranking/users', function(err, data) {
-      var totalUsers = 0, totalClicks = 0;
-      var list = [];
-      if (data) {
+      arParticipants = [];
+      var totalClicks = 0;
+      var paidCount = 0;
+
+      if (data && typeof data === 'object') {
         Object.keys(data).forEach(function(uid) {
           var u = data[uid];
-          totalUsers++;
-          if (u.week === week) {
-            list.push({ uid: uid, name: u.name || uid.slice(0,8), pts: u.pts || 0, refs: u.refs || 0, fp: u.fp || '', phone: u.phone || '' });
-          }
+          if (!u || typeof u !== 'object') return;
+          var participant = {
+            uid: uid,
+            name: u.name || uid.slice(0,8),
+            phone: u.phone || '',
+            pts: u.pts || 0,
+            refs: u.refs || 0,
+            clicks: u.clicks || 0,
+            avatar: u.avatar || '',
+            joinedAt: u.joinedAt || '',
+            week: u.week || '',
+            paid: u.paid || false,
+            paidAt: u.paidAt || ''
+          };
+          arParticipants.push(participant);
+          totalClicks += participant.refs;
+          if (participant.paid) paidCount++;
         });
-        totalClicks = list.reduce(function(s, u) { return s + u.refs; }, 0);
       }
+
+      // Ordenar por pontos
+      arParticipants.sort(function(a,b){ return b.pts - a.pts; });
+
+      // Dashboard
       var tuEl = document.getElementById('adminRankTotalUsers');
       var tcEl = document.getElementById('adminRankTotalClicks');
-      if (tuEl) tuEl.textContent = totalUsers;
+      var topEl = document.getElementById('adminRankTopUser');
+      var paidEl = document.getElementById('adminRankPaidCount');
+      if (tuEl) tuEl.textContent = arParticipants.length;
       if (tcEl) tcEl.textContent = totalClicks;
+      if (topEl) topEl.textContent = arParticipants.length > 0 ? (arParticipants[0].name||'—').slice(0,12) : '—';
+      if (paidEl) paidEl.textContent = paidCount;
 
-      list.sort(function(a,b){ return b.pts - a.pts; });
-      var container = document.getElementById('adminRankingList');
-      if (!container) return;
-      if (list.length === 0) {
-        container.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">Nenhum participante esta semana</div>';
-        return;
-      }
-      var html = '';
-      list.forEach(function(u, i) {
-        var isMe = (u.uid === uid);
-        var pos = i + 1;
-        var medal = pos === 1 ? '🥇' : pos === 2 ? '🥈' : pos === 3 ? '🥉' : pos + 'º';
-        var topClass = pos === 1 ? ' top1' : pos === 2 ? ' top2' : pos === 3 ? ' top3' : '';
-        var mineClass = isMe ? ' mine' : '';
-        var posBadgeClass = pos === 1 ? 'gold' : pos === 2 ? 'silver' : pos === 3 ? 'bronze' : 'other';
-        var avatarHtml = u.avatar
-          ? '<img src="' + u.avatar + '">'
-          : (u.name||'?')[0].toUpperCase();
-        var avatarBg = u.avatar ? '' : 'background:linear-gradient(135deg,#7C3AED,#5B21B6)';
-        var borderColor = pos === 1 ? 'border-color:#FFD700' : pos === 2 ? 'border-color:#C0C0C0' : pos === 3 ? 'border-color:#CD7F32' : '';
-        html += '<div class="rank-list-item' + topClass + mineClass + '">';
-        html += '<div class="rank-pos-badge ' + posBadgeClass + '">' + medal + '</div>';
-        html += '<div class="rank-list-avatar" style="' + avatarBg + ';border:2px solid rgba(255,255,255,0.15);' + borderColor + '">' + avatarHtml + '</div>';
-        html += '<div style="flex:1;min-width:0">';
-        html += '<div class="rank-list-name">' + escapeHtml(u.name||'') + (isMe ? ' <span style=\'font-size:10px;color:#7C3AED;font-weight:700\'>(você)</span>' : '') + '</div>';
-        html += '<div class="rank-list-meta">' + (u.refs||0) + ' indicações</div>';
-        html += '</div>';
-        html += '<div style="text-align:right">';
-        html += '<div class="rank-list-pts">' + (u.pts||0) + '</div>';
-        html += '<div class="rank-list-pts-label">pts</div>';
-        html += '</div>';
-        html += '</div>';
-      });
-      container.innerHTML = html;
+      // Renderizar lista com filtro atual
+      arFilterList();
     });
 
     // Histórico
     loadHistory(function(history) {
       var histEl = document.getElementById('adminRankHistory');
       if (!histEl) return;
-      if (history.length === 0) {
+      if (!history || history.length === 0) {
         histEl.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">Nenhum histórico ainda</div>';
         return;
       }
       var html = '';
       history.forEach(function(h) {
         html += '<div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px 12px;margin-bottom:6px">';
-        html += '<div style="font-size:11px;color:rgba(255,255,255,0.4);min-width:80px">' + h.week + '</div>';
-        html += '<div style="flex:1;font-size:13px;color:#fff;font-weight:600">🥇 ' + escapeHtml(h.name) + '</div>';
-        html += '<div style="font-size:13px;color:#F59E0B;font-weight:700">' + h.pts + ' pts</div>';
+        html += '<div style="font-size:11px;color:rgba(255,255,255,0.4);min-width:80px">' + escapeHtml(h.week||'') + '</div>';
+        html += '<div style="flex:1;font-size:13px;color:#fff;font-weight:600">🥇 ' + escapeHtml(h.name||'') + '</div>';
+        html += '<div style="font-size:13px;color:#F59E0B;font-weight:700">' + (h.pts||0) + ' pts</div>';
         html += '</div>';
       });
       histEl.innerHTML = html;
