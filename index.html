@@ -1659,6 +1659,13 @@
 
     /* Loading ranking */
     .ranking-loading {
+    // Auto-refresh a cada 30 segundos quando a aba está ativa
+    if (window._rankingRefreshTimer) clearInterval(window._rankingRefreshTimer);
+    window._rankingRefreshTimer = setInterval(function() {
+      var screen = document.getElementById('screen-ranking');
+      if (screen && screen.classList.contains('active')) renderRankingScreen();
+      else clearInterval(window._rankingRefreshTimer);
+    }, 30000);
       text-align: center; padding: 40px 16px; color: rgba(255,255,255,0.4);
       font-size: 14px;
     }
@@ -7445,7 +7452,7 @@ document.addEventListener('click', function(e) {
   function addPoints(uid, pts, reason, cb) {
     var week = getWeekKey();
     var path = '/ranking/users/' + uid;
-    fbGet(path + '.json', function(err, data) {
+    fbGet(path, function(err, data) {
       var current = data || { pts: 0, refs: 0, week: week, name: getUserName() || uid.slice(0,8), fp: getDeviceFingerprint() };
       // Reset se semana mudou
       if (current.week !== week) {
@@ -7519,7 +7526,7 @@ document.addEventListener('click', function(e) {
     if (!name) return; // Sem nome ainda, não sincronizar
     var myWeek = getMyWeek();
     var path = '/ranking/users/' + uid;
-    fbGet(path + '.json', function(err, data) {
+    fbGet(path, function(err, data) {
       var current = data || {};
       // Reset se semana mudou
       if (current.week && current.week !== week) {
@@ -7551,15 +7558,32 @@ document.addEventListener('click', function(e) {
   // ── Carregar ranking ─────────────────────────────────────────────────────────
   function loadRanking(cb) {
     var week = getWeekKey();
-    fbGet('/ranking/users.json', function(err, data) {
-      if (!data) { cb([]); return; }
+    var done = false;
+    // Timeout de segurança: 8 segundos
+    var timer = setTimeout(function() {
+      if (!done) { done = true; cb([]); }
+    }, 8000);
+    fbGet('/ranking/users', function(err, data) {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      if (err || !data) { cb([]); return; }
       var list = [];
-      Object.keys(data).forEach(function(uid) {
-        var u = data[uid];
-        if (u.week === week && u.pts > 0) {
-          list.push({ uid: uid, name: u.name || uid.slice(0,8), pts: u.pts || 0, refs: u.refs || 0 });
-        }
-      });
+      try {
+        Object.keys(data).forEach(function(uid) {
+          var u = data[uid];
+          if (!u || typeof u !== 'object') return;
+          if (u.week === week && (u.pts > 0 || u.name)) {
+            list.push({
+              uid: uid,
+              name: u.name || uid.slice(0,8),
+              pts: u.pts || 0,
+              refs: u.refs || 0,
+              avatar: u.avatar || ''
+            });
+          }
+        });
+      } catch(e) {}
       list.sort(function(a, b) { return b.pts - a.pts; });
       cb(list);
     });
@@ -7567,7 +7591,7 @@ document.addEventListener('click', function(e) {
 
   // ── Carregar histórico ───────────────────────────────────────────────────────
   function loadHistory(cb) {
-    fbGet('/ranking/history.json', function(err, data) {
+    fbGet('/ranking/history', function(err, data) {
       if (!data) { cb([]); return; }
       var weeks = Object.keys(data).sort().reverse().slice(0, 5);
       var result = [];
@@ -7616,7 +7640,11 @@ document.addEventListener('click', function(e) {
       // Renderizar lista
       if (!container) return;
       if (list.length === 0) {
-        container.innerHTML = '<div class="ranking-empty">🌟 Seja o primeiro a indicar amigos!</div>';
+        container.innerHTML = '<div class="ranking-empty" style="text-align:center;padding:32px 16px">' +
+          '<div style="font-size:48px;margin-bottom:12px">🌟</div>' +
+          '<div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:8px">Seja o primeiro!</div>' +
+          '<div style="font-size:13px;color:rgba(255,255,255,0.5)">Compartilhe seu link e apareça no ranking</div>' +
+          '</div>';
         return;
       }
       // Renderizar pódio Top 3
@@ -7946,7 +7974,7 @@ document.addEventListener('click', function(e) {
     adminLoadWinnersControl();
 
     renderWinnersSection(week);
-    fbGet('/ranking/users.json', function(err, data) {
+    fbGet('/ranking/users', function(err, data) {
       var totalUsers = 0, totalClicks = 0;
       var list = [];
       if (data) {
@@ -8035,7 +8063,7 @@ document.addEventListener('click', function(e) {
   window.adminRankingReset = function() {
     if (!confirm('Tem certeza que quer resetar o ranking desta semana?\n\nOs vencedores serão salvos no histórico.')) return;
     var week = getWeekKey();
-    fbGet('/ranking/users.json', function(err, data) {
+    fbGet('/ranking/users', function(err, data) {
       if (!data) { alert('Nenhum dado para resetar'); return; }
       // Salvar top 3 no histórico
       var list = [];
@@ -8065,7 +8093,7 @@ document.addEventListener('click', function(e) {
   window.adminFinalizarSemana = function() {
     if (!confirm('Finalizar a semana e definir os top 3 como vencedores?')) return;
     var week = getWeekKey();
-    fbGet('/ranking/users.json', function(err, data) {
+    fbGet('/ranking/users', function(err, data) {
       if (!data) { alert('Nenhum participante encontrado.'); return; }
       var list = [];
       Object.keys(data).forEach(function(uid) {
