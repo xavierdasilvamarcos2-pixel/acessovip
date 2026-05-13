@@ -3105,6 +3105,7 @@
       <button class="admin-nav-btn" data-admin-tab="trash">Lixeira</button>
       <button class="admin-nav-btn" data-admin-tab="log">Histórico</button>
       <button class="admin-nav-btn" data-admin-tab="ranking">🏆 Ranking</button>
+      <button class="admin-nav-btn" data-admin-tab="metrics">📊 Métricas</button>
     </div>
     <!-- Content -->
     <div class="admin-content">
@@ -3170,6 +3171,12 @@
             <div class="admin-menu-card-icon-wrap">&#127942;</div>
             <div class="admin-menu-card-title">Ranking</div>
             <div class="admin-menu-card-sub">Gerenciar indicações</div>
+          </div>
+          <!-- Métricas de Cliques -->
+          <div class="admin-menu-card" style="background:linear-gradient(135deg,rgba(16,185,129,0.35),rgba(5,150,105,0.2));border:1px solid rgba(16,185,129,0.5)" onclick="adminGoTo('metrics')">
+            <div class="admin-menu-card-icon-wrap">&#128293;</div>
+            <div class="admin-menu-card-title">Métricas</div>
+            <div class="admin-menu-card-sub">Cliques nas plataformas</div>
           </div>
         </div>
       </div>
@@ -3650,6 +3657,76 @@
 
 
       <!-- RANKING ADMIN TAB -->
+      <!-- MÉTRICAS DE CLIQUES DAS PLATAFORMAS -->
+      <div class="admin-section" id="admin-tab-metrics">
+        <div class="admin-section-back" onclick="adminGoTo('home')">
+          <span class="admin-section-back-arrow">&#8592;</span> Menu Principal
+        </div>
+        <div style="padding:0 16px 24px">
+          <div class="admin-sec-hdr">
+            <div class="admin-sec-icon" style="background:linear-gradient(135deg,#10B981,#059669)">&#128293;</div>
+            <div>
+              <div class="admin-sec-ttl">Métricas de Cliques</div>
+              <div class="admin-sec-sub">Plataformas mais acessadas</div>
+            </div>
+          </div>
+          
+          <!-- Filtro de período -->
+          <div style="display:flex;gap:8px;margin-bottom:16px">
+            <button id="metricsPeriodAll" onclick="loadPlatformMetrics('all')" style="flex:1;padding:9px 4px;border-radius:10px;border:1.5px solid rgba(16,185,129,0.6);background:rgba(16,185,129,0.3);color:#fff;font-size:12px;font-weight:700;cursor:pointer;">Total</button>
+            <button id="metricsPeriod30" onclick="loadPlatformMetrics('30')" style="flex:1;padding:9px 4px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.6);font-size:12px;font-weight:700;cursor:pointer;">30 dias</button>
+            <button id="metricsPeriod7" onclick="loadPlatformMetrics('7')" style="flex:1;padding:9px 4px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.6);font-size:12px;font-weight:700;cursor:pointer;">7 dias</button>
+            <button id="metricsPeriodToday" onclick="loadPlatformMetrics('today')" style="flex:1;padding:9px 4px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.6);font-size:12px;font-weight:700;cursor:pointer;">Hoje</button>
+          </div>
+          
+          <!-- KPIs -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+            <div style="background:linear-gradient(135deg,rgba(16,185,129,0.25),rgba(16,185,129,0.1));border:1px solid rgba(16,185,129,0.4);border-radius:14px;padding:14px 12px;text-align:center;">
+              <div style="font-size:26px;font-weight:900;color:#34D399;" id="metricsTotal">...</div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;">📊 Total de Cliques</div>
+            </div>
+            <div style="background:linear-gradient(135deg,rgba(245,158,11,0.25),rgba(245,158,11,0.1));border:1px solid rgba(245,158,11,0.4);border-radius:14px;padding:14px 12px;text-align:center;">
+              <div style="font-size:26px;font-weight:900;color:#FCD34D;" id="metricsUnique">...</div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;">🔗 Plataformas c/ cliques</div>
+            </div>
+          </div>
+          
+          <!-- Plataforma #1 destaque -->
+          <div id="metricsTopCard" style="background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(239,68,68,0.1));border:1px solid rgba(245,158,11,0.4);border-radius:14px;padding:14px 16px;margin-bottom:16px;display:none">
+            <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">🏆 Mais Clicada</div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="font-size:32px">🥇</div>
+              <div style="flex:1">
+                <div style="font-size:18px;font-weight:900;color:#FCD34D;" id="metricsTopName">-</div>
+                <div style="font-size:13px;color:rgba(255,255,255,0.6);" id="metricsTopCount">0 cliques</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Ranking de plataformas -->
+          <div style="font-size:13px;font-weight:800;color:rgba(255,255,255,0.7);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">📈 Ranking de Cliques</div>
+          <div id="metricsRankingList" style="display:flex;flex-direction:column;gap:8px">
+            <div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">Carregando métricas...</div>
+          </div>
+          
+          <!-- Gráfico de barras dos top 10 -->
+          <div style="font-size:13px;font-weight:800;color:rgba(255,255,255,0.7);margin:18px 0 10px;text-transform:uppercase;letter-spacing:0.5px;">📊 Gráfico Top 10</div>
+          <div id="metricsChart" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 12px;min-height:60px">
+            <div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px">Carregando...</div>
+          </div>
+          
+          <!-- Botão atualizar -->
+          <button onclick="loadPlatformMetrics(_metricsCurrentPeriod)" style="width:100%;margin-top:16px;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#10B981,#059669);color:#fff;font-size:14px;font-weight:800;cursor:pointer;">
+            🔄 ATUALIZAR MÉTRICAS
+          </button>
+          
+          <!-- Botão limpar dados (admin) -->
+          <button onclick="clearPlatformMetrics()" style="width:100%;margin-top:8px;padding:12px;border-radius:12px;border:1.5px solid rgba(239,68,68,0.4);background:transparent;color:rgba(239,68,68,0.7);font-size:13px;font-weight:700;cursor:pointer;">
+            🗑️ Limpar Dados de Métricas
+          </button>
+        </div>
+      </div>
+      
       <div class="admin-section" id="admin-tab-ranking">
         <div class="admin-section-back" onclick="adminGoTo('home')">
           <span class="admin-section-back-arrow">&#8592;</span> Menu Principal
@@ -4317,6 +4394,60 @@ function trackEvent(name, params = {}) {
   if (typeof gtag !== 'undefined') {
     gtag('event', name, params);
   }
+  // Registrar clique de plataforma no Firebase
+  if (name === 'platform_click' && params.platform_name) {
+    _trackPlatformClick(params.platform_name, params.platform_id);
+  }
+}
+
+// Registrar clique de plataforma no Firebase (debounced por 500ms por plataforma)
+var _platClickDebounce = {};
+function _trackPlatformClick(platName, platId) {
+  var key = String(platId || platName).replace(/[^a-zA-Z0-9_-]/g, '_');
+  if (!key) return;
+  // Debounce: evitar múltiplos cliques em 500ms
+  if (_platClickDebounce[key]) return;
+  _platClickDebounce[key] = true;
+  setTimeout(function() { delete _platClickDebounce[key]; }, 500);
+  
+  var fbBase = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+  var fbAuth = '?auth=' + FIREBASE_API_KEY;
+  var today = (function() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  })();
+  
+  // Incrementar contador total da plataforma
+  var totalPath = fbBase + '/platform_clicks/total/' + key + '.json' + fbAuth;
+  fetch(totalPath)
+    .then(function(r) { return r.json(); })
+    .then(function(cur) {
+      var data = cur && typeof cur === 'object' ? cur : { name: platName, id: platId, total: 0 };
+      data.name = platName;
+      data.id = platId || key;
+      data.total = (parseInt(data.total) || 0) + 1;
+      data.last_click = Date.now();
+      return fetch(totalPath, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+    })
+    .catch(function() {});
+  
+  // Incrementar contador diário
+  var dailyPath = fbBase + '/platform_clicks/daily/' + today + '/' + key + '.json' + fbAuth;
+  fetch(dailyPath)
+    .then(function(r) { return r.json(); })
+    .then(function(cur) {
+      var count = (parseInt(cur) || 0) + 1;
+      return fetch(dailyPath, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(count)
+      });
+    })
+    .catch(function() {});
 }
 
 // ===== PLATFORM CARD RENDERER =====
@@ -5069,6 +5200,7 @@ function adminGoTo(tab) {
   if (tab === 'platforms') renderAdminPlatforms();
   if (tab === 'analytics') loadAnalytics();
   if (tab === 'ranking') { window.adminLoadRanking && window.adminLoadRanking(); }
+  if (tab === 'metrics') loadPlatformMetrics(_metricsCurrentPeriod || 'all');
 }
 
 // Manter compatibilidade com os data-admin-tab buttons (nav escondida)
@@ -7086,6 +7218,177 @@ if (_adminWrapNav) {
     });
   })();
   
+
+// ===== MÉTRICAS DE CLIQUES DAS PLATAFORMAS =====
+var _metricsCurrentPeriod = 'all';
+
+function loadPlatformMetrics(period) {
+  period = period || 'all';
+  _metricsCurrentPeriod = period;
+  
+  // Atualizar visual dos botões de período
+  ['All','30','7','Today'].forEach(function(p) {
+    var btn = document.getElementById('metricsPeriod' + p);
+    if (!btn) return;
+    var isActive = (p.toLowerCase() === period || (p === 'All' && period === 'all'));
+    btn.style.background = isActive ? 'rgba(16,185,129,0.3)' : 'rgba(255,255,255,0.05)';
+    btn.style.borderColor = isActive ? 'rgba(16,185,129,0.6)' : 'rgba(255,255,255,0.1)';
+    btn.style.color = isActive ? '#fff' : 'rgba(255,255,255,0.6)';
+  });
+  
+  var listEl = document.getElementById('metricsRankingList');
+  var chartEl = document.getElementById('metricsChart');
+  var totalEl = document.getElementById('metricsTotal');
+  var uniqueEl = document.getElementById('metricsUnique');
+  if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">Carregando...</div>';
+  if (chartEl) chartEl.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px">Carregando...</div>';
+  
+  var fbBase = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+  var fbAuth = '?auth=' + FIREBASE_API_KEY;
+  
+  if (period === 'all') {
+    // Buscar totais acumulados
+    fetch(fbBase + '/platform_clicks/total.json' + fbAuth)
+      .then(function(r) { return r.json(); })
+      .then(function(data) { _renderMetrics(data, 'total'); })
+      .catch(function() {
+        if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">Sem dados ainda. Os cliques aparecerão aqui conforme os usuários acessam as plataformas.</div>';
+      });
+  } else {
+    // Buscar dados diários e agregar
+    var days = period === 'today' ? 1 : parseInt(period);
+    var promises = [];
+    for (var i = 0; i < days; i++) {
+      var d = new Date();
+      d.setDate(d.getDate() - i);
+      var dateKey = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      promises.push(
+        fetch(fbBase + '/platform_clicks/daily/' + dateKey + '.json' + fbAuth)
+          .then(function(r) { return r.json(); })
+          .catch(function() { return null; })
+      );
+    }
+    Promise.all(promises).then(function(results) {
+      // Agregar cliques por plataforma
+      var aggregated = {};
+      results.forEach(function(dayData) {
+        if (!dayData || typeof dayData !== 'object') return;
+        Object.keys(dayData).forEach(function(key) {
+          aggregated[key] = (aggregated[key] || 0) + (parseInt(dayData[key]) || 0);
+        });
+      });
+      // Converter para formato de total
+      var totalData = {};
+      Object.keys(aggregated).forEach(function(key) {
+        // Tentar encontrar o nome real da plataforma
+        var platName = key.replace(/_/g, ' ');
+        var platObj = platforms.find(function(p) { return String(p.id) === key || p.name.replace(/[^a-zA-Z0-9_-]/g, '_') === key; });
+        if (platObj) platName = platObj.name;
+        totalData[key] = { name: platName, total: aggregated[key] };
+      });
+      _renderMetrics(totalData, 'daily');
+    });
+  }
+}
+
+function _renderMetrics(data, source) {
+  var listEl = document.getElementById('metricsRankingList');
+  var chartEl = document.getElementById('metricsChart');
+  var totalEl = document.getElementById('metricsTotal');
+  var uniqueEl = document.getElementById('metricsUnique');
+  var topCard = document.getElementById('metricsTopCard');
+  var topName = document.getElementById('metricsTopName');
+  var topCount = document.getElementById('metricsTopCount');
+  
+  if (!data || typeof data !== 'object' || Object.keys(data).length === 0) {
+    if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">Sem dados ainda. Os cliques aparecerão aqui conforme os usuários acessam as plataformas.</div>';
+    if (chartEl) chartEl.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:12px">Sem dados</div>';
+    if (totalEl) totalEl.textContent = '0';
+    if (uniqueEl) uniqueEl.textContent = '0';
+    return;
+  }
+  
+  // Converter para array e ordenar por cliques
+  var items = Object.keys(data).map(function(key) {
+    var item = data[key];
+    if (typeof item === 'number') {
+      return { key: key, name: key.replace(/_/g, ' '), total: item };
+    }
+    return { key: key, name: item.name || key.replace(/_/g, ' '), total: parseInt(item.total) || 0 };
+  }).filter(function(i) { return i.total > 0; });
+  
+  items.sort(function(a, b) { return b.total - a.total; });
+  
+  // Totais
+  var totalClicks = items.reduce(function(sum, i) { return sum + i.total; }, 0);
+  if (totalEl) totalEl.textContent = totalClicks.toLocaleString('pt-BR');
+  if (uniqueEl) uniqueEl.textContent = items.length;
+  
+  // Top plataforma
+  if (items.length > 0 && topCard) {
+    topCard.style.display = 'block';
+    if (topName) topName.textContent = items[0].name;
+    if (topCount) topCount.textContent = items[0].total.toLocaleString('pt-BR') + ' cliques';
+  }
+  
+  // Ranking list
+  if (listEl) {
+    var medals = ['🥇','🥈','🥉'];
+    var colors = ['#FCD34D','#9CA3AF','#CD7C2F'];
+    listEl.innerHTML = items.map(function(item, idx) {
+      var pct = items[0].total > 0 ? Math.round((item.total / items[0].total) * 100) : 0;
+      var medal = idx < 3 ? medals[idx] : (idx + 1) + 'º';
+      var nameColor = idx < 3 ? colors[idx] : '#fff';
+      return '<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:10px 12px;">' +
+        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">' +
+          '<span style="font-size:' + (idx < 3 ? '20' : '13') + 'px;min-width:24px;text-align:center;font-weight:900;color:' + (idx >= 3 ? 'rgba(255,255,255,0.4)' : 'inherit') + '">' + medal + '</span>' +
+          '<div style="flex:1">' +
+            '<div style="font-size:13px;font-weight:800;color:' + nameColor + '">' + item.name + '</div>' +
+          '</div>' +
+          '<div style="font-size:14px;font-weight:900;color:#34D399">' + item.total.toLocaleString('pt-BR') + '</div>' +
+        '</div>' +
+        '<div style="background:rgba(255,255,255,0.06);border-radius:6px;height:6px;overflow:hidden">' +
+          '<div style="height:100%;width:' + pct + '%;background:linear-gradient(90deg,#10B981,#34D399);border-radius:6px;transition:width 0.5s ease"></div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+  
+  // Gráfico de barras (top 10)
+  if (chartEl) {
+    var top10 = items.slice(0, 10);
+    var maxVal = top10.length > 0 ? top10[0].total : 1;
+    var barColors = ['#10B981','#34D399','#6EE7B7','#A7F3D0','#059669','#047857','#065F46','#064E3B','#10B981','#34D399'];
+    chartEl.innerHTML = '<div style="display:flex;flex-direction:column;gap:6px">' +
+      top10.map(function(item, idx) {
+        var pct = Math.max(8, Math.round((item.total / maxVal) * 100));
+        return '<div style="display:flex;align-items:center;gap:8px">' +
+          '<div style="font-size:10px;color:rgba(255,255,255,0.5);min-width:60px;max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right">' + item.name + '</div>' +
+          '<div style="flex:1;background:rgba(255,255,255,0.05);border-radius:4px;height:18px;overflow:hidden">' +
+            '<div style="height:100%;width:' + pct + '%;background:' + barColors[idx % barColors.length] + ';border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:4px;transition:width 0.5s ease">' +
+              '<span style="font-size:9px;font-weight:800;color:rgba(0,0,0,0.7)">' + (pct > 20 ? item.total : '') + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div style="font-size:10px;color:rgba(255,255,255,0.6);min-width:36px;text-align:right">' + item.total + '</div>' +
+        '</div>';
+      }).join('') +
+    '</div>';
+  }
+}
+
+function clearPlatformMetrics() {
+  if (!confirm('⚠️ Limpar TODOS os dados de métricas de cliques? Esta ação não pode ser desfeita.')) return;
+  var fbBase = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+  var fbAuth = '?auth=' + FIREBASE_API_KEY;
+  fetch(fbBase + '/platform_clicks.json' + fbAuth, {
+    method: 'DELETE'
+  }).then(function() {
+    showToast('✅ Dados de métricas limpos!');
+    loadPlatformMetrics('all');
+  }).catch(function() {
+    showToast('❌ Erro ao limpar dados');
+  });
+}
 
 // ===== BLOQUEIO SELETIVO + POP-UP DE INSTALAÇÃO =====
 (function() {
