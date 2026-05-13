@@ -920,6 +920,14 @@
     .sinal-card-avaliar-btn:hover, .sinal-card-avaliar-btn.ativo-ok { background: rgba(34,197,94,0.2); color: #22C55E; border-color: #22C55E; }
     .sinal-card-avaliar-btn.ativo-nao { background: rgba(239,68,68,0.2); color: #EF4444; border-color: #EF4444; }
 
+    /* ===== MODAL NOTIFICAÇÕES PÓS-INSTALAÇÃO ===== */
+    @keyframes slideUp {
+      from { opacity:0; transform:translateY(40px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    #notifRequestModal { display:none; }
+    #notifRequestModal.open { display:flex; }
+
     /* ===== MODAL EXCLUSÃO PERMANENTE (direto da lista) ===== */
     #permDeleteOverlay { position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px); }
     #permDeleteOverlay.hidden { display:none!important; }
@@ -4064,6 +4072,42 @@
   </div>
 </div>
 
+<!-- MODAL PEDIDO DE NOTIFICAÇÕES PÓS-INSTALAÇÃO -->
+<div class="modal-overlay" id="notifRequestModal" style="z-index:99990;">
+  <div class="modal-sheet" style="background:linear-gradient(160deg,#0f0f1a,#1a1035,#0f0f1a);border:1.5px solid rgba(124,58,237,0.4);padding-bottom:max(36px,env(safe-area-inset-bottom));animation:slideUp 0.35s cubic-bezier(0.32,0.72,0,1);">
+    <div class="modal-handle"></div>
+    <div style="text-align:center;margin-bottom:18px">
+      <div style="font-size:52px;margin-bottom:10px">🔔</div>
+      <div style="font-size:20px;font-weight:900;color:#fff;margin-bottom:8px">Ative as Notificações</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.5">Fique por dentro de tudo em tempo real</div>
+    </div>
+    <div style="background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.25);border-radius:14px;padding:14px 16px;margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span style="font-size:20px">📊</span>
+        <div style="font-size:13px;color:rgba(255,255,255,0.8);font-weight:600">Sinais ao vivo em tempo real</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span style="font-size:20px">🔥</span>
+        <div style="font-size:13px;color:rgba(255,255,255,0.8);font-weight:600">Plataformas em alta do momento</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span style="font-size:20px">🏆</span>
+        <div style="font-size:13px;color:rgba(255,255,255,0.8);font-weight:600">Alertas do ranking semanal com PIX</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:20px">🚀</span>
+        <div style="font-size:13px;color:rgba(255,255,255,0.8);font-weight:600">Novos lançamentos exclusivos</div>
+      </div>
+    </div>
+    <button id="notifRequestActivateBtn" style="width:100%;padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff;font-size:16px;font-weight:900;cursor:pointer;margin-bottom:10px;box-shadow:0 4px 20px rgba(124,58,237,0.4);">
+      🔔 ATIVAR NOTIFICAÇÕES
+    </button>
+    <button onclick="fecharNotifModal()" style="width:100%;padding:12px;border-radius:14px;border:1.5px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.4);font-size:13px;font-weight:600;cursor:pointer;">
+      Agora não
+    </button>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -4450,10 +4494,13 @@ function renderShare() {
 // ===== TAB NAVIGATION =====
 // Função global de verificação de instalação
 function _appInstalado() {
-  // Critério real: app rodando em modo standalone (PWA instalado)
-  return window.matchMedia('(display-mode: standalone)').matches
+  // Critério: modo standalone OU flag salva após instalação/aceitação do prompt
+  var standalone = window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true
     || document.referrer.includes('android-app://');
+  var flagSalva = localStorage.getItem('av_installed') === '1';
+  var paramPwa = window.location.search.indexOf('pwa=1') !== -1;
+  return standalone || flagSalva || paramPwa;
 }
 // Função global de bloqueio (usada pelo sinalAtivoBanner e outros)
 window._irParaAbaHot = function() {
@@ -4650,7 +4697,11 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
           window.deferredPrompt = null;
           if (choice.outcome === 'accepted') {
             trackEvent('pwa_install_accepted');
-            showToast('Instalando... Abrindo o app!', 3000);
+            // Salvar flag imediatamente ao aceitar instalação
+            localStorage.setItem('av_installed', '1');
+            // Remover bloqueio imediatamente
+            if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
+            showToast('✅ Instalando... Abrindo o app!', 3000);
           } else {
             trackEvent('pwa_install_dismissed');
           }
@@ -4689,12 +4740,14 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     hidePwaBanner();
     installCount++;
     _ls.set('av_installs', installCount);
-    showToast('App instalado! Abrindo...', 3000);
+    showToast('✅ App instalado! Abrindo...', 3000);
     trackEvent('pwa_installed');
     gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' });
+    // Remover bloqueio imediatamente (sem esperar standalone)
+    if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
     // Reabrir em modo standalone após instalação
     setTimeout(function() {
-      try { window.location.href = 'https://acessoplatafomas.com.br/?pwa=1'; } catch(e2) {}
+      try { window.location.href = 'https://acessoplatafomas.com.br/?pwa=1&notif=1'; } catch(e2) {}
     }, 1500);
     // Contagem no Firebase
     if (!_ls.get('av_install_fb_counted')) {
@@ -4765,6 +4818,27 @@ async function requestNotificationPermission() {
 }
 
 document.getElementById('notifHeaderBtn').addEventListener('click', requestNotificationPermission);
+
+// Botão ATIVAR NOTIFICAÇÕES no modal pós-instalação
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.id === 'notifRequestActivateBtn') {
+    var btn = e.target;
+    btn.disabled = true;
+    btn.innerHTML = '⏳ Aguardando...';
+    requestNotificationPermission().then(function(granted) {
+      fecharNotifModal();
+      if (granted) {
+        showToast('🔔 Notificações ativadas com sucesso!', 3000);
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = '🔔 ATIVAR NOTIFICAÇÕES';
+      }
+    }).catch(function() {
+      btn.disabled = false;
+      btn.innerHTML = '🔔 ATIVAR NOTIFICAÇÕES';
+    });
+  }
+});
 document.getElementById('notifBanner').addEventListener('click', (e) => {
   if (e.target.id !== 'notifBannerClose') requestNotificationPermission();
 });
@@ -5773,9 +5847,18 @@ if ('serviceWorker' in navigator) {
 
 // ===== WELCOME MODAL =====
 function checkWelcomeModal() {
-  // Modal desativado - não bloqueia o app no Instagram
-  // Atualiza ícone de notificação no header
   updateNotifBtn();
+  // Se está instalado e notificações não foram ativadas: mostrar pedido
+  var jaInstalado = window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true
+    || document.referrer.includes('android-app://')
+    || localStorage.getItem('av_installed') === '1'
+    || window.location.search.indexOf('pwa=1') !== -1;
+  if (!jaInstalado) return; // Não instalado: não pedir notificações
+  var notifPerm = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
+  if (notifPerm === 'granted') return; // Já ativou: não mostrar
+  // Mostrar pedido após 2 segundos (deixar o app carregar primeiro)
+  setTimeout(mostrarPedidoNotificacoes, 2000);
 }
 
 function updateNotifBtn() {
@@ -7008,11 +7091,13 @@ if (_adminWrapNav) {
 (function() {
   var STORAGE_KEY = 'av_popup_install_done';
   
-  // Verificar se já instalou (critério real: modo standalone)
+  // Verificar se já instalou (standalone OU flag salva OU param ?pwa=1)
   function jaInstalou() {
     return window.matchMedia('(display-mode: standalone)').matches
       || window.navigator.standalone === true
-      || document.referrer.includes('android-app://');
+      || document.referrer.includes('android-app://')
+      || localStorage.getItem('av_installed') === '1'
+      || window.location.search.indexOf('pwa=1') !== -1;
   }
   
   // Aplicar efeito visual de bloqueio nas áreas
@@ -7080,6 +7165,8 @@ if (_adminWrapNav) {
           localStorage.setItem('av_installed', '1');
           localStorage.setItem(STORAGE_KEY, '1');
           removerBloqueioVisual();
+          // Mostrar pedido de notificações após desbloqueio
+          setTimeout(mostrarPedidoNotificacoes, 1500);
         }
       });
     } else {
@@ -7119,6 +7206,15 @@ if (_adminWrapNav) {
     document.addEventListener('click', function(e) {
       if (e.target.id === 'installBlockPopup') fecharPopup();
     });
+  } else {
+    // App instalado: garantir que bloqueio visual está removido
+    removerBloqueioVisual();
+    // Se veio de instalação (?notif=1): mostrar pedido de notificações
+    if (window.location.search.indexOf('notif=1') !== -1) {
+      setTimeout(function() {
+        if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
+      }, 1500);
+    }
   }
   
 })();
