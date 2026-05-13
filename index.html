@@ -410,6 +410,8 @@
     .admin-btn-up { background:rgba(59,130,246,0.15); color:#60A5FA; border:1px solid rgba(59,130,246,0.25); }
     .admin-btn-down { background:rgba(124,58,237,0.15); color:#A78BFA; border:1px solid rgba(124,58,237,0.25); }
     .admin-btn-del { background:rgba(239,68,68,0.18); color:#EF4444; border:1px solid rgba(239,68,68,0.4); font-weight:700; }
+#logoUploadArea:hover { border-color:rgba(99,102,241,0.7); background:rgba(99,102,241,0.1); }
+#logoUploadArea.has-image { border-color:rgba(16,185,129,0.5); background:rgba(16,185,129,0.05); }
     .admin-hot-input { width:100%; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:7px 10px; color:#fff; font-size:12px; outline:none; box-sizing:border-box; margin-top:4px; }
     .admin-action-btn { border:none; border-radius:10px; padding:10px 6px; font-size:11px; font-weight:800; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:3px; transition:all 0.15s; }
     .admin-action-btn:active { transform:scale(0.95); }
@@ -3071,9 +3073,41 @@
           </div>
         </div>
         <div class="admin-form">
-          <div class="admin-form-row">
-            <label class="admin-form-label">&#128247; URL da Logo</label>
-            <input class="admin-form-input" id="addLogoUrl" type="url" placeholder="https://exemplo.com/logo.png" />
+          <!-- LOGO: Toggle entre URL e Upload -->
+          <div class="admin-form-row" id="addLogoRow">
+            <label class="admin-form-label">&#128247; Logo da Plataforma</label>
+            <!-- Seletor de modo -->
+            <div style="display:flex;gap:8px;margin-bottom:10px;">
+              <button type="button" id="logoModeUrl" onclick="setLogoMode('url')"
+                style="flex:1;padding:9px 12px;border-radius:10px;border:1.5px solid rgba(16,185,129,0.6);background:rgba(16,185,129,0.15);color:#10B981;font-size:12px;font-weight:700;cursor:pointer;">
+                &#128279; Usar Link
+              </button>
+              <button type="button" id="logoModeUpload" onclick="setLogoMode('upload')"
+                style="flex:1;padding:9px 12px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5);font-size:12px;font-weight:700;cursor:pointer;">
+                &#128247; Enviar Foto
+              </button>
+            </div>
+            <!-- Modo URL -->
+            <div id="logoUrlMode">
+              <input class="admin-form-input" id="addLogoUrl" type="url" placeholder="https://exemplo.com/logo.png" />
+            </div>
+            <!-- Modo Upload -->
+            <div id="logoUploadMode" style="display:none;">
+              <div id="logoUploadArea" onclick="document.getElementById('logoFileInput').click()"
+                style="border:2px dashed rgba(99,102,241,0.4);border-radius:12px;padding:20px;text-align:center;cursor:pointer;background:rgba(99,102,241,0.05);transition:all 0.2s;">
+                <div id="logoUploadPreview" style="display:none;margin-bottom:10px;">
+                  <img id="logoPreviewImg" style="width:72px;height:72px;border-radius:10px;object-fit:contain;background:#222;border:1px solid rgba(255,255,255,0.1);" />
+                </div>
+                <div id="logoUploadPlaceholder">
+                  <div style="font-size:28px;margin-bottom:6px;">&#128247;</div>
+                  <div style="font-size:13px;color:rgba(255,255,255,0.6);">Toque para selecionar logo</div>
+                  <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;">PNG, JPG ou WebP · Max 2MB</div>
+                </div>
+              </div>
+              <input type="file" id="logoFileInput" accept="image/png,image/jpeg,image/webp,image/gif"
+                style="display:none;" onchange="handleLogoUpload(this)" />
+              <div id="logoUploadStatus" style="font-size:12px;color:#10B981;margin-top:6px;text-align:center;display:none;"></div>
+            </div>
           </div>
           <div class="admin-form-row">
             <label class="admin-form-label">&#127991;&#65039; Nome da Plataforma</label>
@@ -4879,8 +4913,92 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
   }
 });
 
+
+// ===== UPLOAD DE LOGO DE PLATAFORMA =====
+window._logoMode = 'url';
+window._logoBase64 = '';
+
+function setLogoMode(mode) {
+  window._logoMode = mode;
+  var urlBtn = document.getElementById('logoModeUrl');
+  var uploadBtn = document.getElementById('logoModeUpload');
+  var urlDiv = document.getElementById('logoUrlMode');
+  var uploadDiv = document.getElementById('logoUploadMode');
+  if (!urlBtn || !uploadBtn) return;
+  if (mode === 'url') {
+    urlBtn.style.borderColor = 'rgba(16,185,129,0.6)';
+    urlBtn.style.background = 'rgba(16,185,129,0.15)';
+    urlBtn.style.color = '#10B981';
+    uploadBtn.style.borderColor = 'rgba(255,255,255,0.15)';
+    uploadBtn.style.background = 'rgba(255,255,255,0.05)';
+    uploadBtn.style.color = 'rgba(255,255,255,0.5)';
+    if (urlDiv) urlDiv.style.display = '';
+    if (uploadDiv) uploadDiv.style.display = 'none';
+  } else {
+    uploadBtn.style.borderColor = 'rgba(99,102,241,0.6)';
+    uploadBtn.style.background = 'rgba(99,102,241,0.15)';
+    uploadBtn.style.color = '#818CF8';
+    urlBtn.style.borderColor = 'rgba(255,255,255,0.15)';
+    urlBtn.style.background = 'rgba(255,255,255,0.05)';
+    urlBtn.style.color = 'rgba(255,255,255,0.5)';
+    if (urlDiv) urlDiv.style.display = 'none';
+    if (uploadDiv) uploadDiv.style.display = '';
+  }
+}
+
+function handleLogoUpload(input) {
+  var file = input.files && input.files[0];
+  if (!file) return;
+  // Validar tamanho (max 2MB)
+  if (file.size > 2 * 1024 * 1024) {
+    showToast('❌ Imagem muito grande! Máximo 2MB.');
+    return;
+  }
+  var statusEl = document.getElementById('logoUploadStatus');
+  if (statusEl) { statusEl.style.display = 'block'; statusEl.textContent = '⏳ Processando imagem...'; }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var dataUrl = e.target.result;
+    // Redimensionar para max 200x200 mantendo proporção
+    var img = new Image();
+    img.onload = function() {
+      var canvas = document.createElement('canvas');
+      var maxSize = 200;
+      var w = img.width, h = img.height;
+      if (w > maxSize || h > maxSize) {
+        if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
+        else { w = Math.round(w * maxSize / h); h = maxSize; }
+      }
+      canvas.width = w; canvas.height = h;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      var compressed = canvas.toDataURL('image/jpeg', 0.82);
+      window._logoBase64 = compressed;
+      // Mostrar preview
+      var previewImg = document.getElementById('logoPreviewImg');
+      var previewDiv = document.getElementById('logoUploadPreview');
+      var placeholder = document.getElementById('logoUploadPlaceholder');
+      var area = document.getElementById('logoUploadArea');
+      if (previewImg) previewImg.src = compressed;
+      if (previewDiv) previewDiv.style.display = 'block';
+      if (placeholder) placeholder.style.display = 'none';
+      if (area) area.classList.add('has-image');
+      if (statusEl) { statusEl.textContent = '✅ Logo pronta! (' + w + 'x' + h + 'px)'; }
+    };
+    img.src = dataUrl;
+  };
+  reader.readAsDataURL(file);
+}
+
 document.getElementById('addPlatformBtn').addEventListener('click', () => {
-  const logoUrl = document.getElementById('addLogoUrl').value.trim();
+  // Determinar a URL da logo (link ou base64 do upload)
+  var logoMode = window._logoMode || 'url';
+  var logoUrl = '';
+  if (logoMode === 'url') {
+    logoUrl = document.getElementById('addLogoUrl').value.trim();
+  } else {
+    logoUrl = window._logoBase64 || '';
+  }
   const name = document.getElementById('addName').value.trim();
   const url = document.getElementById('addUrl').value.trim();
   const isLaunch = document.getElementById('addIsLaunch').checked;
@@ -4889,11 +5007,16 @@ document.getElementById('addPlatformBtn').addEventListener('click', () => {
   platforms.unshift(newP);
   saveState(); renderHome(); renderAdminPlatforms();
   addAuditLog('add', name, newP.id);
+  // Limpar campos
   document.getElementById('addLogoUrl').value = '';
   document.getElementById('addName').value = '';
   document.getElementById('addUrl').value = '';
   document.getElementById('addIsLaunch').checked = true;
-  showToast(`✅ ${name} adicionada!`);
+  // Resetar modo de logo
+  window._logoBase64 = '';
+  window._logoMode = 'url';
+  setLogoMode('url');
+  showToast('✅ ' + name + ' adicionada!');
   trackEvent('platform_added', { name });
 });
 
