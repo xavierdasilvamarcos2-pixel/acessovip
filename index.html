@@ -783,9 +783,7 @@
       0%, 100% { transform: translateX(-50%) scale(1); }
       50% { transform: translateX(-50%) scale(1.04); }
     }
-    .bolha-install {
-      background: linear-gradient(135deg, #f97316, #ea580c);
-    }
+    .bolha-install { display: none !important; }
     .bolha-notif {
       background: linear-gradient(135deg, #7C3AED, #5B21B6);
     }
@@ -4562,8 +4560,6 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     _ls.set('av_installed', '1');
     _ls.set('av_install_counted', '1');
     hidePwaBanner();
-    // Liberar bloqueio visual das áreas restritas
-    if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
     installCount++;
     _ls.set('av_installs', installCount);
     showToast('App instalado! Abrindo...', 3000);
@@ -6785,15 +6781,8 @@ if (_adminWrapNav) {
   <!-- Overlay legado (oculto) -->
   <div id="tabLockOverlay" class="tab-lock-overlay hidden"></div>
 
-  <!-- BOLHA FLUTUANTE - INSTALAR APP -->
-  <div class="bolha-flutuante bolha-install" id="bolhaInstall">
-    <span class="bolha-icon">📲</span>
-    <div class="bolha-texto">
-      <div class="bolha-titulo">Instale para receber os melhores sinais com IA</div>
-      <div class="bolha-sub">Grátis • Rápido • Sem cadastro</div>
-    </div>
-    <button class="bolha-fechar" id="bolhaInstallFechar">✕</button>
-  </div>
+  <!-- BOLHA FLUTUANTE - INSTALAR APP (removida - substituída pelo banner premium) -->
+  <div class="bolha-flutuante bolha-install" id="bolhaInstall" style="display:none!important"></div>
 
   <!-- BOLHA FLUTUANTE - ATIVAR NOTIFICAÇÕES -->
   <div class="bolha-flutuante bolha-notif" id="bolhaNotif">
@@ -6814,13 +6803,8 @@ if (_adminWrapNav) {
     var jaFechouNotif = sessionStorage.getItem('bolha_notif_fechou');
     var notifJaAtiva = (typeof Notification !== 'undefined' && Notification.permission === 'granted');
 
-    // BOLHA INSTALAR
-    if (!isStandalone && !jaFechouInstall) {
-      setTimeout(function() {
-        var bolha = document.getElementById('bolhaInstall');
-        if (bolha) bolha.classList.add('visivel');
-      }, 3000);
-    }
+    // BOLHA INSTALAR (desativada - substituída pelo banner premium)
+    // if (!isStandalone && !jaFechouInstall) { ... }
 
     // BOLHA NOTIFICAÇÃO
     if (!notifJaAtiva && !jaFechouNotif) {
@@ -6853,29 +6837,7 @@ if (_adminWrapNav) {
         });
       }
 
-      // Clique na bolha instalar
-      var bolhaInstall = document.getElementById('bolhaInstall');
-      if (bolhaInstall) {
-        bolhaInstall.addEventListener('click', function(e) {
-          if (e.target.id === 'bolhaInstallFechar') return;
-          bolhaInstall.classList.remove('visivel');
-          sessionStorage.setItem('bolha_install_fechou', '1');
-          if (window.deferredPrompt) {
-            window.deferredPrompt.prompt();
-            window.deferredPrompt.userChoice.then(function() {
-              window.deferredPrompt = null;
-            });
-          } else {
-            // Fallback: mostrar modal iOS ou instruções
-            var iosModal = document.getElementById('iosInstallModal');
-            if (iosModal) iosModal.style.display = 'flex';
-            else {
-              var installGuide = document.getElementById('installGuideModal');
-              if (installGuide) installGuide.classList.add('open');
-            }
-          }
-        });
-      }
+      // Clique na bolha instalar (desativada - substituída pelo banner premium)
 
       // Clique na bolha notificação
       var bolhaNotif = document.getElementById('bolhaNotif');
