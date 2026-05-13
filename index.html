@@ -997,6 +997,7 @@
       min-width: 100%;
       width: 100%;
       flex-shrink: 0;
+      position: relative;
     }
     .banner-carousel-slide img {
       width: 100%;
@@ -1004,6 +1005,45 @@
       display: block;
       object-fit: cover;
       max-height: 220px;
+    }
+    /* Botao overlay no banner do ranking */
+    @keyframes banner-btn-glow {
+      0%,100% { box-shadow: 0 0 12px rgba(124,58,237,0.6), 0 0 24px rgba(124,58,237,0.3); }
+      50% { box-shadow: 0 0 20px rgba(124,58,237,0.9), 0 0 40px rgba(124,58,237,0.5); }
+    }
+    @keyframes banner-btn-shine {
+      0% { left: -80%; }
+      100% { left: 120%; }
+    }
+    .banner-ranking-overlay {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+    }
+    .banner-ranking-btn {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      background: linear-gradient(135deg, #7C3AED, #5B21B6);
+      color: #fff; font-size: 14px; font-weight: 900;
+      border: none; border-radius: 30px;
+      padding: 11px 28px;
+      cursor: pointer; white-space: nowrap;
+      letter-spacing: 0.5px;
+      animation: banner-btn-glow 2s ease-in-out infinite;
+      position: relative; overflow: hidden;
+    }
+    .banner-ranking-btn::after {
+      content: '';
+      position: absolute; top: 0; left: -80%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      transform: skewX(-20deg);
+      animation: banner-btn-shine 2.5s ease-in-out infinite;
+    }
+    .banner-ranking-btn:active {
+      transform: scale(0.96);
+      opacity: 0.9;
     }
     .banner-carousel-dots {
       position: absolute;
@@ -1806,10 +1846,20 @@
           <div class="banner-carousel-slide">
             <img src="https://xavierdasilvamarcos2-pixel.github.io/acessovip/banners/banner2.png" alt="Sinais Ao Vivo em Tempo Real" loading="eager" />
           </div>
+          <div class="banner-carousel-slide">
+            <img src="https://xavierdasilvamarcos2-pixel.github.io/acessovip/banner-ranking.png" alt="Ranking Semanal - Compartilhe e Ganhe PIX" loading="lazy" />
+            <div class="banner-ranking-overlay">
+              <button class="banner-ranking-btn"
+                onclick="(function(){ var t = document.querySelector('[data-tab=ranking]'); if(t) t.click(); })()">
+                🏆 ENTRAR NO RANKING
+              </button>
+            </div>
+          </div>
         </div>
         <div class="banner-carousel-dots" id="bannerDots">
           <div class="banner-dot active" onclick="carouselGoTo(0)"></div>
           <div class="banner-dot" onclick="carouselGoTo(1)"></div>
+          <div class="banner-dot" onclick="carouselGoTo(2)"></div>
         </div>
       </div>
       <!-- SINAL ATIVO BANNER -->
@@ -6903,7 +6953,7 @@ document.addEventListener('click', function(e) {
 // ===== CARROSSEL DE BANNERS =====
 (function() {
   var currentSlide = 0;
-  var totalSlides = 2;
+  var totalSlides = 3;
   var autoplayInterval = null;
   var startX = 0;
   var isDragging = false;
