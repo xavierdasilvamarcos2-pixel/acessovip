@@ -1045,41 +1045,7 @@
       transform: scale(0.96);
       opacity: 0.9;
     }
-    /* Botao overlay no banner de sinais ao vivo */
-    @keyframes banner-sinais-glow {
-      0%,100% { box-shadow: 0 0 12px rgba(16,185,129,0.6), 0 0 24px rgba(16,185,129,0.3); }
-      50% { box-shadow: 0 0 22px rgba(16,185,129,0.9), 0 0 44px rgba(16,185,129,0.5); }
-    }
-    .banner-sinais-overlay {
-      position: absolute;
-      bottom: 14px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-    }
-    .banner-sinais-btn {
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-      background: linear-gradient(135deg, #059669, #047857);
-      color: #fff; font-size: 14px; font-weight: 900;
-      border: none; border-radius: 30px;
-      padding: 11px 28px;
-      cursor: pointer; white-space: nowrap;
-      letter-spacing: 0.5px;
-      animation: banner-sinais-glow 2s ease-in-out infinite;
-      position: relative; overflow: hidden;
-    }
-    .banner-sinais-btn::after {
-      content: '';
-      position: absolute; top: 0; left: -80%;
-      width: 60%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-      transform: skewX(-20deg);
-      animation: banner-btn-shine 2.5s ease-in-out infinite;
-    }
-    .banner-sinais-btn:active {
-      transform: scale(0.96);
-      opacity: 0.9;
-    }
+
     .banner-carousel-dots {
       position: absolute;
       bottom: 8px;
@@ -1880,12 +1846,6 @@
           </div>
           <div class="banner-carousel-slide">
             <img src="https://xavierdasilvamarcos2-pixel.github.io/acessovip/banners/banner2.png" alt="Sinais Ao Vivo em Tempo Real" loading="eager" />
-            <div class="banner-sinais-overlay">
-              <button class="banner-sinais-btn"
-                onclick="(function(){ var t = document.querySelector('[data-tab=hot]'); if(t) t.click(); })()">
-                🔥 VER SINAIS AO VIVO
-              </button>
-            </div>
           </div>
           <div class="banner-carousel-slide">
             <img src="https://xavierdasilvamarcos2-pixel.github.io/acessovip/banner-ranking.png" alt="Ranking Semanal - Compartilhe e Ganhe PIX" loading="lazy" />
