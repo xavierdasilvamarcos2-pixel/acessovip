@@ -920,6 +920,110 @@
     .sinal-card-avaliar-btn:hover, .sinal-card-avaliar-btn.ativo-ok { background: rgba(34,197,94,0.2); color: #22C55E; border-color: #22C55E; }
     .sinal-card-avaliar-btn.ativo-nao { background: rgba(239,68,68,0.2); color: #EF4444; border-color: #EF4444; }
 
+    /* ===== MODAL EXCLUSÃO PERMANENTE (direto da lista) ===== */
+    #permDeleteOverlay { position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px); }
+    #permDeleteOverlay.hidden { display:none!important; }
+    #permDeleteBox {
+      background:linear-gradient(160deg,#1a0a0a,#2d0f0f,#1a0a0a);
+      border:2px solid rgba(239,68,68,0.6);
+      border-radius:22px;
+      padding:28px 22px 22px;
+      max-width:340px;
+      width:100%;
+      text-align:center;
+      box-shadow:0 0 60px rgba(239,68,68,0.25),0 20px 60px rgba(0,0,0,0.7);
+      animation:perm-del-entrada 0.3s cubic-bezier(0.32,0.72,0,1);
+    }
+    @keyframes perm-del-entrada {
+      from { opacity:0; transform:scale(0.88) translateY(20px); }
+      to   { opacity:1; transform:scale(1) translateY(0); }
+    }
+    #permDeleteBox .pdel-icon { font-size:52px;margin-bottom:10px;display:block; }
+    #permDeleteBox .pdel-badge {
+      display:inline-block;
+      background:rgba(239,68,68,0.2);
+      border:1px solid rgba(239,68,68,0.5);
+      border-radius:8px;
+      padding:3px 10px;
+      font-size:10px;
+      font-weight:900;
+      color:#F87171;
+      letter-spacing:1px;
+      margin-bottom:12px;
+    }
+    #permDeleteBox .pdel-title { font-size:18px;font-weight:900;color:#fff;margin-bottom:6px; }
+    #permDeleteBox .pdel-platname {
+      font-size:16px;
+      font-weight:800;
+      color:#F87171;
+      margin-bottom:14px;
+      word-break:break-word;
+      background:rgba(239,68,68,0.1);
+      border:1px solid rgba(239,68,68,0.25);
+      border-radius:10px;
+      padding:8px 12px;
+    }
+    #permDeleteBox .pdel-list {
+      text-align:left;
+      background:rgba(0,0,0,0.3);
+      border-radius:12px;
+      padding:12px 14px;
+      margin-bottom:16px;
+      font-size:12px;
+      color:rgba(255,255,255,0.6);
+      line-height:1.8;
+    }
+    #permDeleteBox .pdel-list strong { color:#F87171; }
+    #permDeleteBox .pdel-step {
+      font-size:11px;
+      color:#F59E0B;
+      font-weight:700;
+      margin-bottom:14px;
+      background:rgba(245,158,11,0.1);
+      border:1px solid rgba(245,158,11,0.3);
+      border-radius:8px;
+      padding:7px 12px;
+    }
+    .pdel-btn-row { display:flex;gap:10px;margin-bottom:8px; }
+    .pdel-btn-cancel {
+      flex:1;
+      padding:13px;
+      border-radius:12px;
+      border:1.5px solid rgba(255,255,255,0.2);
+      background:rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.7);
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .pdel-btn-confirm {
+      flex:1;
+      padding:13px;
+      border-radius:12px;
+      border:none;
+      background:linear-gradient(135deg,#DC2626,#7F1D1D);
+      color:#fff;
+      font-size:13px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 4px 20px rgba(220,38,38,0.4);
+    }
+    .pdel-btn-confirm:disabled { opacity:0.35;cursor:not-allowed;box-shadow:none; }
+    .pdel-countdown { font-size:12px;color:rgba(255,255,255,0.4);min-height:18px; }
+    /* Botão de exclusão permanente no card */
+    .admin-btn-perm-del {
+      background:rgba(127,29,29,0.35);
+      border:1.5px solid rgba(239,68,68,0.4);
+      color:#F87171;
+      font-size:11px;
+      font-weight:800;
+      padding:6px 8px;
+      border-radius:8px;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .admin-btn-perm-del:active { opacity:0.7; }
+
     /* ===== MODAL DE CONFIRMAÇÃO DUPLA ===== */
     #deleteConfirmOverlay { position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px); }
     #deleteConfirmBox { background:linear-gradient(135deg,#1a1a2e,#16213e);border:1.5px solid rgba(239,68,68,0.5);border-radius:20px;padding:28px 22px;max-width:340px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.6); }
@@ -3769,6 +3873,29 @@
 <!-- Input câmera oculto -->
 <input type="file" id="avatarCameraInput" accept="image/*" capture="user" style="display:none" />
 <!-- MODAL DE CONFIRMAÇÃO DUPLA AO DELETAR -->
+<!-- MODAL EXCLUSÃO PERMANENTE DIRETA (da lista de plataformas) -->
+<div id="permDeleteOverlay" class="hidden">
+  <div id="permDeleteBox">
+    <span class="pdel-icon">&#x1F6AB;</span>
+    <div class="pdel-badge">&#x26A0;&#xFE0F; A&#xC7;&#xC3;O IRREVERS&#xCD;VEL</div>
+    <div class="pdel-title">Excluir Permanentemente?</div>
+    <div class="pdel-platname" id="pdelPlatName">Plataforma</div>
+    <div class="pdel-list">
+      Esta a&#xe7;&#xe3;o ir&#xe1; remover:<br>
+      <strong>&#x2716; Plataforma da tela principal</strong><br>
+      <strong>&#x2716; Logo e dados relacionados</strong><br>
+      <strong>&#x2716; Hist&#xf3;rico e configura&#xe7;&#xf5;es</strong><br>
+      <strong>&#x2716; N&#xe3;o poder&#xe1; ser restaurada</strong>
+    </div>
+    <div class="pdel-step" id="pdelStep">&#x2460; Clique em "Excluir" para confirmar</div>
+    <div class="pdel-btn-row">
+      <button class="pdel-btn-cancel" onclick="closePermDeleteConfirm()">&#x2716; Cancelar</button>
+      <button class="pdel-btn-confirm" id="pdelConfirmBtn" onclick="permDeleteNextStep()">&#x1F5D1;&#xFE0F; Excluir Permanentemente</button>
+    </div>
+    <div class="pdel-countdown" id="pdelCountdown"></div>
+  </div>
+</div>
+
 <div id="deleteConfirmOverlay" style="display:none;">
   <div id="deleteConfirmBox">
     <div class="dcb-icon">&#128465;&#65039;</div>
@@ -4922,7 +5049,10 @@ function renderAdminPlatforms(filter = '') {
         <button class="admin-btn admin-btn-launch ${p.isLaunch ? 'active' : ''}" data-toggle-launch="${p.id}">${p.isLaunch ? '✅ Lançamento' : '🚀 Lançamento'}</button>
         <button class="admin-btn admin-btn-up" data-move-up="${p.id}" style="font-size:14px">⬆️</button>
         <button class="admin-btn admin-btn-down" data-move-down="${p.id}" style="font-size:14px">⬇️</button>
-        <button class="admin-btn admin-btn-del" data-delete="${p.id}" style="font-size:12px;padding:6px 10px;min-width:70px">🗑️ Excluir</button>
+        <button class="admin-btn admin-btn-del" data-delete="${p.id}" style="font-size:12px;padding:6px 10px;min-width:70px">🗑️ Lixeira</button>
+      </div>
+      <div style="margin-top:6px">
+        <button class="admin-btn-perm-del" data-perm-delete="${p.id}">&#x1F6AB; Excluir Permanentemente</button>
       </div>
     </div>`).join('');
 }
@@ -5028,6 +5158,11 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
   if (del) {
     const p = platforms.find(x => x.id == del);
     if (p) openDeleteConfirm(del, p.name);
+  }
+  const permDel = e.target.closest('[data-perm-delete]')?.dataset.permDelete;
+  if (permDel) {
+    const p = platforms.find(x => x.id == permDel);
+    if (p) openPermDeleteConfirm(permDel, p.name, 'active');
   }
 });
 
@@ -6989,6 +7124,98 @@ if (_adminWrapNav) {
 })();
 
 // ===== CONFIRMAÇÃO DUPLA AO DELETAR =====
+// ===== EXCLUSÃO PERMANENTE DIRETA (da lista de plataformas) =====
+var _pdelPlatId = null;
+var _pdelPlatName = '';
+var _pdelSource = 'active'; // 'active' = lista principal, 'trash' = lixeira
+var _pdelStep = 0;
+var _pdelTimer = null;
+
+function openPermDeleteConfirm(platId, platName, source) {
+  // Verificar permissão: apenas admin
+  if (_adminCurrentUser.role !== 'admin') {
+    showToast('🔒 Apenas o Administrador pode excluir permanentemente');
+    return;
+  }
+  _pdelPlatId = platId;
+  _pdelPlatName = platName;
+  _pdelSource = source || 'active';
+  _pdelStep = 0;
+  document.getElementById('pdelPlatName').textContent = platName;
+  document.getElementById('pdelStep').innerHTML = '① Clique em "Excluir" para confirmar';
+  var btn = document.getElementById('pdelConfirmBtn');
+  btn.textContent = '🗑️ Excluir Permanentemente';
+  btn.style.background = 'linear-gradient(135deg,#DC2626,#7F1D1D)';
+  btn.disabled = false;
+  document.getElementById('pdelCountdown').textContent = '';
+  document.getElementById('permDeleteOverlay').classList.remove('hidden');
+}
+
+function closePermDeleteConfirm() {
+  document.getElementById('permDeleteOverlay').classList.add('hidden');
+  if (_pdelTimer) { clearInterval(_pdelTimer); _pdelTimer = null; }
+  _pdelPlatId = null;
+  _pdelStep = 0;
+}
+
+function permDeleteNextStep() {
+  if (_pdelStep === 0) {
+    // Primeiro clique: pede segunda confirmação com contagem regressiva
+    _pdelStep = 1;
+    document.getElementById('pdelStep').innerHTML = '② <strong style="color:#EF4444">TEM CERTEZA ABSOLUTA?</strong> Esta ação é IRREVERSÍVEL!';
+    var btn = document.getElementById('pdelConfirmBtn');
+    btn.textContent = '⚠️ SIM, EXCLUIR PARA SEMPRE';
+    btn.style.background = 'linear-gradient(135deg,#991B1B,#450a0a)';
+    btn.disabled = true;
+    var secs = 3;
+    document.getElementById('pdelCountdown').textContent = 'Aguarde ' + secs + 's...';
+    _pdelTimer = setInterval(function() {
+      secs--;
+      if (secs <= 0) {
+        clearInterval(_pdelTimer); _pdelTimer = null;
+        btn.disabled = false;
+        document.getElementById('pdelCountdown').textContent = '';
+      } else {
+        document.getElementById('pdelCountdown').textContent = 'Aguarde ' + secs + 's...';
+      }
+    }, 1000);
+  } else if (_pdelStep === 1) {
+    // Segundo clique: executar exclusão permanente
+    var platId = _pdelPlatId;
+    var platName = _pdelPlatName;
+    var source = _pdelSource;
+    closePermDeleteConfirm();
+
+    if (source === 'active') {
+      // Remover da lista principal
+      platforms = platforms.filter(function(x) { return x.id != platId; });
+      saveState();
+      renderAdminPlatforms();
+      renderHome();
+      renderHot && renderHot();
+    }
+    // Remover da lixeira do Firebase (se existir)
+    var trashKey = 'trash_' + platId;
+    if (window._fbREST) {
+      window._fbREST.set('/platforms_trash/' + trashKey, null).catch(function(){});
+      // Remover também do nó principal de plataformas no Firebase
+      window._fbREST.set('/platforms/' + platId, null).catch(function(){});
+    }
+    // Remover do _trashData local se estiver lá
+    if (_trashData && _trashData[trashKey]) {
+      delete _trashData[trashKey];
+      renderTrash && renderTrash();
+    }
+    addAuditLog('perm_delete', platName, platId);
+    showToast('🚫 ' + platName + ' excluída permanentemente');
+  }
+}
+
+// Fechar ao clicar no overlay
+document.getElementById('permDeleteOverlay').addEventListener('click', function(e) {
+  if (e.target === document.getElementById('permDeleteOverlay')) closePermDeleteConfirm();
+});
+
 var _dcbPlatId = null;
 var _dcbStep = 0;
 var _dcbTimer = null;
@@ -7135,22 +7362,11 @@ function restoreFromTrash(platId) {
 }
 
 function permanentDelete(platId) {
-  // Apenas admin pode excluir permanentemente
-  if (_adminCurrentUser.role !== 'admin') {
-    showToast('&#128274; Apenas o Administrador pode excluir permanentemente');
-    return;
-  }
-  if (!confirm('EXCLUIR PERMANENTEMENTE? Esta ação NÃO pode ser desfeita!')) return;
+  // Usar o novo modal premium de exclusão permanente
   var trashKey = 'trash_' + platId;
   var p = _trashData[trashKey];
   var pName = p ? p.name : 'Plataforma';
-  if (window._fbREST) {
-    window._fbREST.set('/platforms_trash/' + trashKey, null).catch(function(){});
-  }
-  delete _trashData[trashKey];
-  renderTrash();
-  addAuditLog('perm_delete', pName, platId);
-  showToast('&#128465;&#65039; ' + pName + ' excluída permanentemente');
+  openPermDeleteConfirm(platId, pName, 'trash');
 }
 
 // ===== LOG DE ALTERAÇÕES (AUDIT LOG) =====
