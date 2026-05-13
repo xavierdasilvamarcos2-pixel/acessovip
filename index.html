@@ -409,7 +409,7 @@
     .admin-btn-launch.active { background:rgba(16,185,129,0.35); color:#fff; }
     .admin-btn-up { background:rgba(59,130,246,0.15); color:#60A5FA; border:1px solid rgba(59,130,246,0.25); }
     .admin-btn-down { background:rgba(124,58,237,0.15); color:#A78BFA; border:1px solid rgba(124,58,237,0.25); }
-    .admin-btn-del { background:rgba(239,68,68,0.15); color:#EF4444; border:1px solid rgba(239,68,68,0.25); }
+    .admin-btn-del { background:rgba(239,68,68,0.18); color:#EF4444; border:1px solid rgba(239,68,68,0.4); font-weight:700; }
     .admin-hot-input { width:100%; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:7px 10px; color:#fff; font-size:12px; outline:none; box-sizing:border-box; margin-top:4px; }
     .admin-action-btn { border:none; border-radius:10px; padding:10px 6px; font-size:11px; font-weight:800; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:3px; transition:all 0.15s; }
     .admin-action-btn:active { transform:scale(0.95); }
@@ -3709,9 +3709,9 @@
 <div id="deleteConfirmOverlay" style="display:none;">
   <div id="deleteConfirmBox">
     <div class="dcb-icon">&#128465;&#65039;</div>
-    <div class="dcb-title">Mover para Lixeira?</div>
+    <div class="dcb-title">🗑️ Excluir Plataforma?</div>
     <div class="dcb-name" id="dcbPlatName"></div>
-    <div class="dcb-warn">A plataforma será movida para a lixeira e <strong>não aparecerá mais no app</strong>. Você poderá restaurá-la depois na aba Lixeira.</div>
+    <div class="dcb-warn">⚠️ A plataforma <strong id="dcbPlatNameWarn"></strong> será removida do app e movida para a Lixeira. Você poderá restaurá-la ou excluir definitivamente depois.</div>
     <div class="dcb-step" id="dcbStep">&#9312; Primeiro clique: confirmar intenção</div>
     <div class="dcb-btn-row">
       <button class="dcb-btn-cancel" onclick="closeDeleteConfirm()">&#10005; Cancelar</button>
@@ -4765,12 +4765,12 @@ function renderAdminPlatforms(filter = '') {
           <input class="admin-hot-input" id="hotrtp3-${p.id}" value="${(p.games && p.games[2] && p.games[2].rtp) || ''}" placeholder="RTP %" type="number" min="0" max="100" step="0.01" style="text-align:center" onblur="saveGamesForPlatform(${p.id})" />
         </div>
       </div>
-      <div class="admin-card-actions" style="grid-template-columns:1fr 1fr 36px 36px 36px">
+      <div class="admin-card-actions" style="grid-template-columns:1fr 1fr 36px 36px auto">
         <button class="admin-btn admin-btn-high ${p.isHigh ? 'active' : ''}" data-toggle-high="${p.id}">${p.isHigh ? '🔥 Em Alta' : '📊 Em Alta'}</button>
         <button class="admin-btn admin-btn-launch ${p.isLaunch ? 'active' : ''}" data-toggle-launch="${p.id}">${p.isLaunch ? '✅ Lançamento' : '🚀 Lançamento'}</button>
         <button class="admin-btn admin-btn-up" data-move-up="${p.id}" style="font-size:14px">⬆️</button>
         <button class="admin-btn admin-btn-down" data-move-down="${p.id}" style="font-size:14px">⬇️</button>
-        <button class="admin-btn admin-btn-del" data-delete="${p.id}" style="font-size:14px">🗑️</button>
+        <button class="admin-btn admin-btn-del" data-delete="${p.id}" style="font-size:12px;padding:6px 10px;min-width:70px">🗑️ Excluir</button>
       </div>
     </div>`).join('');
 }
@@ -6791,8 +6791,10 @@ function openDeleteConfirm(platId, platName) {
   _dcbPlatId = platId;
   _dcbStep = 0;
   document.getElementById('dcbPlatName').textContent = platName;
-  document.getElementById('dcbStep').innerHTML = '&#9312; Clique em "Mover para Lixeira" para confirmar';
-  document.getElementById('dcbConfirmBtn').textContent = '&#128465; Mover para Lixeira';
+  var warn = document.getElementById('dcbPlatNameWarn');
+  if (warn) warn.textContent = '"' + platName + '"';
+  document.getElementById('dcbStep').innerHTML = '&#9312; Clique em "Excluir" para confirmar';
+  document.getElementById('dcbConfirmBtn').textContent = '&#128465; Excluir Plataforma';
   document.getElementById('dcbConfirmBtn').disabled = false;
   document.getElementById('dcbCountdown').textContent = '';
   document.getElementById('deleteConfirmOverlay').style.display = 'flex';
@@ -6809,8 +6811,8 @@ function dcbNextStep() {
   if (_dcbStep === 0) {
     // Primeiro clique: pede segunda confirmação com contagem regressiva
     _dcbStep = 1;
-    document.getElementById('dcbStep').innerHTML = '&#9313; <strong style="color:#EF4444">TEM CERTEZA?</strong> Clique novamente para confirmar';
-    document.getElementById('dcbConfirmBtn').textContent = '&#9888;&#65039; SIM, MOVER PARA LIXEIRA';
+    document.getElementById('dcbStep').innerHTML = '&#9313; <strong style="color:#EF4444">TEM CERTEZA?</strong> Confirme para excluir definitivamente do app';
+    document.getElementById('dcbConfirmBtn').textContent = '&#9888;&#65039; SIM, EXCLUIR PLATAFORMA';
     document.getElementById('dcbConfirmBtn').style.background = 'linear-gradient(135deg,#DC2626,#991B1B)';
     // Habilitar após 2 segundos (evita clique acidental)
     document.getElementById('dcbConfirmBtn').disabled = true;
