@@ -124,31 +124,55 @@
     .bonus-title { font-size: 20px; font-weight: 900; color: var(--text); }
     .bonus-sub { font-size: 16px; font-weight: 800; color: var(--text); margin-top: 4px; line-height: 1.4; }
 
-    /* Install Banner */
-    .install-banner { display: none !important; }
-    .install-banner.hidden { display: none !important; }
+    /* ===== PWA INSTALL BANNER PREMIUM ===== */
+    @keyframes pwa-slide-up { from { opacity:0; transform:translateY(40px) scale(0.97); } to { opacity:1; transform:translateY(0) scale(1); } }
+    @keyframes pwa-glow-pulse { 0%,100% { box-shadow: 0 0 20px rgba(124,58,237,0.5), 0 0 40px rgba(124,58,237,0.2), 0 8px 32px rgba(0,0,0,0.6); } 50% { box-shadow: 0 0 30px rgba(124,58,237,0.8), 0 0 60px rgba(124,58,237,0.35), 0 8px 32px rgba(0,0,0,0.6); } }
+    @keyframes pwa-shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+    @keyframes pwa-bounce-arrow { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
     @keyframes pulse-install { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+    #pwaBannerOverlay { position:fixed; bottom:0; left:0; right:0; z-index:9998; padding:0 0 max(16px,env(safe-area-inset-bottom)); display:none; }
+    #pwaBannerOverlay.pwa-visible { display:block; animation: pwa-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+    #pwaBannerCard { margin:0 12px; border-radius:20px; background:linear-gradient(145deg,#0f0a1e,#1a0f35,#0d1a2e); border:1px solid rgba(124,58,237,0.5); padding:18px 16px 16px; position:relative; overflow:hidden; animation:pwa-glow-pulse 2.5s ease-in-out infinite; }
+    #pwaBannerCard::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(124,58,237,0.08) 0%,rgba(59,130,246,0.06) 50%,rgba(124,58,237,0.08) 100%); pointer-events:none; }
+    #pwaBannerCard::after { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(167,139,250,0.8),transparent); }
+    .pwa-banner-close { position:absolute; top:10px; right:12px; width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.1); border:none; color:rgba(255,255,255,0.6); font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:2; transition:background 0.2s; }
+    .pwa-banner-close:active { background:rgba(255,255,255,0.2); }
+    .pwa-banner-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+    .pwa-banner-logo { width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg,#7C3AED,#3B82F6); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; box-shadow:0 4px 12px rgba(124,58,237,0.5); }
+    .pwa-banner-title-wrap { flex:1; }
+    .pwa-banner-title { font-size:15px; font-weight:900; color:#fff; line-height:1.2; letter-spacing:0.3px; }
+    .pwa-banner-subtitle { font-size:11px; color:rgba(167,139,250,0.9); margin-top:2px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+    .pwa-banner-features { display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:14px; }
+    .pwa-banner-feat { display:flex; align-items:center; gap:6px; font-size:11.5px; color:rgba(255,255,255,0.85); background:rgba(255,255,255,0.05); border-radius:8px; padding:5px 8px; border:1px solid rgba(255,255,255,0.07); }
+    .pwa-banner-feat-icon { font-size:13px; flex-shrink:0; }
+    #pwaBannerInstallBtn { width:100%; padding:14px; border-radius:14px; border:none; font-size:15px; font-weight:900; cursor:pointer; letter-spacing:0.5px; position:relative; overflow:hidden; background:linear-gradient(135deg,#7C3AED 0%,#5B21B6 50%,#3B82F6 100%); color:#fff; box-shadow:0 4px 20px rgba(124,58,237,0.6); transition:transform 0.15s,box-shadow 0.15s; }
+    #pwaBannerInstallBtn::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.15) 50%,transparent 100%); background-size:200% auto; animation:pwa-shimmer 2s linear infinite; }
+    #pwaBannerInstallBtn:active { transform:scale(0.97); box-shadow:0 2px 12px rgba(124,58,237,0.4); }
+    .pwa-banner-arrow { text-align:center; font-size:18px; margin-top:8px; animation:pwa-bounce-arrow 1.5s ease-in-out infinite; color:rgba(167,139,250,0.7); }
+    /* Esconder banners antigos */
+    .install-banner { display:none !important; }
+    .install-banner.hidden { display:none !important; }
     .install-banner-text { flex: 1; }
     .install-banner-title { font-size: 14px; font-weight: 900; color: #fff; }
     .install-banner-sub { font-size: 11px; color: rgba(255,255,255,0.85); margin-top: 2px; }
     .install-banner-icon { font-size: 28px; }
     .install-banner-arrow { font-size: 20px; }
 
-    /* iOS Install Banner */
-    .install-ios-banner { margin: 0 16px 12px; border-radius: var(--radius); background: linear-gradient(135deg, #1c1c2e, #2d2d44); padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.4); animation: pulse-install 2s ease-in-out infinite; border: 1px solid rgba(255,255,255,0.12); }
+    /* iOS Install Banner (oculto - substituído pelo banner premium) */
+    .install-ios-banner { display:none !important; }
     .install-ios-banner.hidden { display: none; }
-    /* iOS Install Modal */
-    .ios-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-    .ios-modal.open { opacity: 1; pointer-events: all; }
-    .ios-modal-box { background: #1a1a2e; border-radius: 20px 20px 0 0; padding: 24px 20px 36px; width: 100%; max-width: 480px; border-top: 3px solid #7C3AED; }
-    .ios-modal-title { font-size: 18px; font-weight: 900; color: #fff; text-align: center; margin-bottom: 6px; }
-    .ios-modal-sub { font-size: 13px; color: rgba(255,255,255,0.6); text-align: center; margin-bottom: 20px; }
-    .ios-step { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 12px 14px; }
-    .ios-step-num { background: #7C3AED; color: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; flex-shrink: 0; }
-    .ios-step-icon { font-size: 26px; flex-shrink: 0; }
-    .ios-step-text { font-size: 13px; color: #fff; line-height: 1.5; }
-    .ios-step-text strong { color: #a78bfa; }
-    .ios-modal-close { width: 100%; padding: 14px; border-radius: var(--radius); border: none; font-size: 15px; font-weight: 900; cursor: pointer; background: rgba(255,255,255,0.1); color: #fff; margin-top: 10px; }
+    /* iOS Install Modal Premium */
+    #iosInstallModal { position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:9999; display:flex; align-items:flex-end; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.3s; }
+    #iosInstallModal.open { opacity:1; pointer-events:all; }
+    .ios-modal-box { background:linear-gradient(145deg,#0f0a1e,#1a0f35); border-radius:24px 24px 0 0; padding:24px 20px max(36px,env(safe-area-inset-bottom)); width:100%; max-width:480px; border-top:2px solid rgba(124,58,237,0.7); box-shadow:0 -8px 40px rgba(124,58,237,0.3); }
+    .ios-modal-title { font-size:19px; font-weight:900; color:#fff; text-align:center; margin-bottom:4px; }
+    .ios-modal-sub { font-size:13px; color:rgba(167,139,250,0.9); text-align:center; margin-bottom:20px; }
+    .ios-step { display:flex; align-items:center; gap:14px; margin-bottom:10px; background:rgba(255,255,255,0.05); border-radius:14px; padding:12px 14px; border:1px solid rgba(255,255,255,0.07); }
+    .ios-step-num { background:linear-gradient(135deg,#7C3AED,#5B21B6); color:#fff; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:900; flex-shrink:0; box-shadow:0 2px 8px rgba(124,58,237,0.5); }
+    .ios-step-icon { font-size:26px; flex-shrink:0; }
+    .ios-step-text { font-size:13px; color:#fff; line-height:1.5; }
+    .ios-step-text strong { color:#a78bfa; }
+    .ios-modal-close { width:100%; padding:14px; border-radius:14px; border:none; font-size:15px; font-weight:900; cursor:pointer; background:linear-gradient(135deg,#7C3AED,#5B21B6); color:#fff; margin-top:14px; box-shadow:0 4px 16px rgba(124,58,237,0.5); }
 
 
     /* ===== SINAL ATIVO BANNER ===== */
@@ -2202,44 +2226,53 @@
         <button class="notif-banner-close" id="notifBannerClose">✕</button>
       </div>
       <!-- Install PWA Banner - substituído por bolha flutuante -->
-      <div class="install-banner hidden" id="installBanner" style="display:none!important">
-        <span class="install-banner-icon">📲</span>
-        <div class="install-banner-text">
-          <div class="install-banner-title">INSTALAR O APP GRÁTIS</div>
-          <div class="install-banner-sub">👆 Adicione à tela inicial do celular!</div>
+      <!-- Banners antigos mantidos para compatibilidade (ocultos) -->
+      <div class="install-banner hidden" id="installBanner" style="display:none!important"></div>
+      <div class="install-ios-banner hidden" id="installIosBanner" style="display:none!important"></div>
+      <!-- ===== NOVO BANNER PWA PREMIUM ===== -->
+      <div id="pwaBannerOverlay">
+        <div id="pwaBannerCard">
+          <button class="pwa-banner-close" id="pwaBannerClose" aria-label="Fechar">&#x2715;</button>
+          <div class="pwa-banner-header">
+            <div class="pwa-banner-logo">&#x1F680;</div>
+            <div class="pwa-banner-title-wrap">
+              <div class="pwa-banner-title">Instale o Aplicativo Oficial</div>
+              <div class="pwa-banner-subtitle">&#x26A1; Acesso r&#225;pido &amp; notifica&#231;&#245;es</div>
+            </div>
+          </div>
+          <div class="pwa-banner-features">
+            <div class="pwa-banner-feat"><span class="pwa-banner-feat-icon">&#x1F4CA;</span>Sinais ao vivo</div>
+            <div class="pwa-banner-feat"><span class="pwa-banner-feat-icon">&#x1F525;</span>Plataformas em alta</div>
+            <div class="pwa-banner-feat"><span class="pwa-banner-feat-icon">&#x1F514;</span>Notifica&#231;&#245;es</div>
+            <div class="pwa-banner-feat"><span class="pwa-banner-feat-icon">&#x1F3C6;</span>Ranking com PIX</div>
+            <div class="pwa-banner-feat"><span class="pwa-banner-feat-icon">&#x26A1;</span>Acesso instant&#226;neo</div>
+            <div class="pwa-banner-feat"><span class="pwa-banner-feat-icon">&#x1F3AF;</span>Ferramentas VIP</div>
+          </div>
+          <button id="pwaBannerInstallBtn">&#x1F4F2; INSTALAR AGORA &#x2014; &#xC9; GR&#xC1;TIS</button>
+          <div class="pwa-banner-arrow">&#x25BC;</div>
         </div>
-        <span class="install-banner-arrow">⬇️</span>
       </div>
-      <!-- Install iOS Banner - substituído por bolha flutuante -->
-      <div class="install-ios-banner hidden" id="installIosBanner" style="display:none!important">
-        <span class="install-banner-icon">🍎</span>
-        <div class="install-banner-text">
-          <div class="install-banner-title">INSTALAR NO iPHONE</div>
-          <div class="install-banner-sub">👆 Veja como adicionar à tela inicial!</div>
-        </div>
-        <span class="install-banner-arrow">⬇️</span>
-      </div>
-      <!-- iOS Install Guide Modal -->
-      <div class="ios-modal" id="iosInstallModal">
+      <!-- ===== MODAL iOS PREMIUM ===== -->
+      <div id="iosInstallModal">
         <div class="ios-modal-box">
-          <div class="ios-modal-title">📲 Instalar no iPhone</div>
-          <div class="ios-modal-sub">Siga os passos abaixo para adicionar o app à sua tela inicial</div>
+          <div class="ios-modal-title">&#x1F34E; Instalar no iPhone</div>
+          <div class="ios-modal-sub">Siga os passos abaixo no Safari</div>
           <div class="ios-step">
             <div class="ios-step-num">1</div>
-            <div class="ios-step-icon">⬆️</div>
-            <div class="ios-step-text">Toque no ícone de <strong>Compartilhar</strong> (quadrado com seta ↑) na barra inferior do Safari</div>
+            <div class="ios-step-icon">&#x2B06;&#xFE0F;</div>
+            <div class="ios-step-text">Toque no &#237;cone de <strong>Compartilhar</strong> (quadrado com seta &#x2191;) na barra inferior do Safari</div>
           </div>
           <div class="ios-step">
             <div class="ios-step-num">2</div>
-            <div class="ios-step-icon">➕</div>
-            <div class="ios-step-text">Role para baixo e toque em <strong>"Adicionar à Tela de Início"</strong></div>
+            <div class="ios-step-icon">&#x2795;</div>
+            <div class="ios-step-text">Role para baixo e toque em <strong>"Adicionar &#xe0; Tela de In&#237;cio"</strong></div>
           </div>
           <div class="ios-step">
             <div class="ios-step-num">3</div>
-            <div class="ios-step-icon">✅</div>
+            <div class="ios-step-icon">&#x2705;</div>
             <div class="ios-step-text">Toque em <strong>"Adicionar"</strong> no canto superior direito. Pronto!</div>
           </div>
-          <button class="ios-modal-close" id="iosModalClose">Entendi!</button>
+          <button class="ios-modal-close" id="iosModalClose">Entendi! &#x2713;</button>
         </div>
       </div>
       <!-- VIP Group Button -->
@@ -4390,104 +4423,166 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
 });
 
 // ===== PWA INSTALL =====
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  if (!isInstalled) document.getElementById('installBanner').classList.remove('hidden');
-});
+// ===== PWA INSTALL BANNER PREMIUM =====
+(function() {
+  var _pwaDeferred = null;
+  var _pwaBannerShown = false;
+  var _pwaDismissed = sessionStorage.getItem('pwa_banner_dismissed') === '1';
 
-window.addEventListener('appinstalled', () => {
-  isInstalled = true;
-  _ls.set('av_installed', '1');
-  _ls.set('av_install_counted', '1'); // Marcar para evitar dupla contagem no standalone check
-  document.getElementById('installBanner').classList.add('hidden');
-  installCount++;
-  _ls.set('av_installs', installCount);
-  showToast('✅ App instalado com sucesso!', 3000);
-  trackEvent('pwa_installed');
-  gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' });
-  // Incrementar contador global no Firebase (com proteção contra dupla contagem)
-  if (!_ls.get('av_install_fb_counted')) {
-    _ls.set('av_install_fb_counted', '1');
-    var installOs = /iphone|ipad|ipod/i.test(navigator.userAgent) ? 'ios'
-                  : /android/i.test(navigator.userAgent) ? 'android' : 'other';
-    var installDay = new Date();
-    var installDayKey = installDay.getFullYear() + '-' + String(installDay.getMonth()+1).padStart(2,'0') + '-' + String(installDay.getDate()).padStart(2,'0');
-    var fbBase = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
-    var fbAuth = '?auth=' + FIREBASE_API_KEY;
-    fetch(fbBase + '/stats/total_installs.json' + fbAuth)
-      .then(r => r.json()).then(cur => {
-        var next = (parseInt(cur) || 0) + 1;
-        fetch(fbBase + '/stats/total_installs.json' + fbAuth, {
-          method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
-        });
-      }).catch(()=>{});
-    fetch(fbBase + '/analytics/installs_daily/' + installDayKey + '/' + installOs + '.json' + fbAuth)
-      .then(r => r.json()).then(cur => {
-        var next = (parseInt(cur) || 0) + 1;
-        fetch(fbBase + '/analytics/installs_daily/' + installDayKey + '/' + installOs + '.json' + fbAuth, {
-          method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
-        });
-      }).catch(()=>{});
-    var logKey = Date.now() + '_' + Math.random().toString(36).substr(2,6);
-    fetch(fbBase + '/install_log/' + logKey + '.json' + fbAuth, {
-      method: 'PUT', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ os: installOs, ts: Date.now(), day: installDayKey })
-    }).catch(()=>{});
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  var isAndroid = /android/i.test(navigator.userAgent);
+  var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  var isInStandalone = window.navigator.standalone === true
+    || window.matchMedia('(display-mode: standalone)').matches
+    || document.referrer.includes('android-app://');
+
+  // Compatibilidade: manter deferredPrompt global para outros scripts
+  window.deferredPrompt = null;
+
+  function showPwaBanner() {
+    if (_pwaDismissed || isInStandalone || _pwaBannerShown) return;
+    var overlay = document.getElementById('pwaBannerOverlay');
+    if (!overlay) return;
+    _pwaBannerShown = true;
+    overlay.classList.add('pwa-visible');
+    trackEvent('pwa_banner_shown', { platform: isIOS ? 'ios' : isAndroid ? 'android' : 'other' });
   }
-});
 
-document.getElementById('installBanner').addEventListener('click', async () => {
-  if (deferredPrompt) {
-    // Chrome: instala direto
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    if (outcome === 'accepted') {
-      trackEvent('pwa_install_accepted');
-      document.getElementById('installBanner').classList.add('hidden');
+  function hidePwaBanner() {
+    var overlay = document.getElementById('pwaBannerOverlay');
+    if (overlay) overlay.classList.remove('pwa-visible');
+  }
+
+  // Mostrar banner após 4s se não instalado
+  if (!isInStandalone && !_pwaDismissed) {
+    setTimeout(function() {
+      if (!isInStandalone && !sessionStorage.getItem('pwa_banner_dismissed')) {
+        showPwaBanner();
+      }
+    }, 4000);
+  }
+
+  // Capturar evento de instalação Android/Chrome
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    _pwaDeferred = e;
+    window.deferredPrompt = e;
+    // Mostrar banner imediatamente se ainda não apareceu
+    if (!isInStandalone && !_pwaDismissed) {
+      showPwaBanner();
     }
-  } else {
-    // Instagram/outros: usa intent:// para abrir no Chrome sem tela preta
-    const appUrl = 'https://acessoplatafomas.com.br/';
-    const intentUrl = 'intent://' + appUrl.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;end';
-    const a = document.createElement('a');
-    a.href = intentUrl;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    trackEvent('pwa_install_chrome_redirect');
+  });
+
+  // Botão fechar (X)
+  document.addEventListener('click', function(e) {
+    if (e.target && e.target.id === 'pwaBannerClose') {
+      hidePwaBanner();
+      sessionStorage.setItem('pwa_banner_dismissed', '1');
+      _pwaDismissed = true;
+      trackEvent('pwa_banner_dismissed');
+    }
+  });
+
+  // Botão INSTALAR
+  document.addEventListener('click', function(e) {
+    if (e.target && e.target.id === 'pwaBannerInstallBtn') {
+      if (isIOS || (isSafari && !isAndroid)) {
+        // iOS/Safari: abrir modal com instruções
+        var modal = document.getElementById('iosInstallModal');
+        if (modal) { modal.style.display = 'flex'; modal.classList.add('open'); }
+        trackEvent('ios_install_guide_open');
+      } else if (_pwaDeferred) {
+        // Android/Chrome: instalar nativo
+        hidePwaBanner();
+        _pwaDeferred.prompt();
+        _pwaDeferred.userChoice.then(function(choice) {
+          _pwaDeferred = null;
+          window.deferredPrompt = null;
+          if (choice.outcome === 'accepted') {
+            trackEvent('pwa_install_accepted');
+            showToast('Instalando... Abrindo o app!', 3000);
+          } else {
+            trackEvent('pwa_install_dismissed');
+          }
+        });
+      } else {
+        // Fallback: redirecionar para Chrome via intent
+        var appUrl = 'https://acessoplatafomas.com.br/';
+        var intentUrl = 'intent://' + appUrl.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;end';
+        try {
+          var a = document.createElement('a');
+          a.href = intentUrl;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          trackEvent('pwa_install_chrome_redirect');
+        } catch(err) {
+          showToast('Abra no Chrome para instalar o app!', 3000);
+        }
+      }
+    }
+  });
+
+  // Modal iOS: fechar ao clicar no botão ou fora
+  document.addEventListener('click', function(e) {
+    if (e.target && (e.target.id === 'iosModalClose' || e.target.id === 'iosInstallModal')) {
+      var modal = document.getElementById('iosInstallModal');
+      if (modal) { modal.classList.remove('open'); modal.style.display = ''; }
+    }
+  });
+
+  // Após instalação: confirmar e abrir app
+  window.addEventListener('appinstalled', function() {
+    isInstalled = true;
+    _ls.set('av_installed', '1');
+    _ls.set('av_install_counted', '1');
+    hidePwaBanner();
+    installCount++;
+    _ls.set('av_installs', installCount);
+    showToast('App instalado! Abrindo...', 3000);
+    trackEvent('pwa_installed');
+    gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' });
+    // Reabrir em modo standalone após instalação
+    setTimeout(function() {
+      try { window.location.href = 'https://acessoplatafomas.com.br/?pwa=1'; } catch(e2) {}
+    }, 1500);
+    // Contagem no Firebase
+    if (!_ls.get('av_install_fb_counted')) {
+      _ls.set('av_install_fb_counted', '1');
+      var installOs = isIOS ? 'ios' : isAndroid ? 'android' : 'other';
+      var installDay = new Date();
+      var installDayKey = installDay.getFullYear() + '-' + String(installDay.getMonth()+1).padStart(2,'0') + '-' + String(installDay.getDate()).padStart(2,'0');
+      var fbBase = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+      var fbAuth = '?auth=' + FIREBASE_API_KEY;
+      fetch(fbBase + '/stats/total_installs.json' + fbAuth)
+        .then(function(r) { return r.json(); }).then(function(cur) {
+          var next = (parseInt(cur) || 0) + 1;
+          fetch(fbBase + '/stats/total_installs.json' + fbAuth, {
+            method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
+          });
+        }).catch(function(){});
+      fetch(fbBase + '/analytics/installs_daily/' + installDayKey + '/' + installOs + '.json' + fbAuth)
+        .then(function(r) { return r.json(); }).then(function(cur) {
+          var next = (parseInt(cur) || 0) + 1;
+          fetch(fbBase + '/analytics/installs_daily/' + installDayKey + '/' + installOs + '.json' + fbAuth, {
+            method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
+          });
+        }).catch(function(){});
+      var logKey = Date.now() + '_' + Math.random().toString(36).substr(2,6);
+      fetch(fbBase + '/install_log/' + logKey + '.json' + fbAuth, {
+        method: 'PUT', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ os: installOs, ts: Date.now(), day: installDayKey })
+      }).catch(function(){});
+    }
+  });
+
+  // Ocultar se já instalado
+  if (isInStandalone) {
+    hidePwaBanner();
+    isInstalled = true;
+    _ls.set('av_installed', '1');
   }
-});
-document.getElementById('installGuideClose').addEventListener('click', () => {
-  document.getElementById('installGuideModal').classList.remove('open');
-});;
-
-// ===== iOS INSTALL BUTTON =====
-const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-const isStandalone = window.navigator.standalone === true;
-if (isIOS && !isStandalone && !isInstalled) {
-  // iPhone: mostra banner iOS com etapas, garante que banner Android fica oculto
-  document.getElementById('installIosBanner').classList.remove('hidden');
-  document.getElementById('installBanner').classList.add('hidden');
-}
-document.getElementById('installIosBanner').addEventListener('click', () => {
-  document.getElementById('iosInstallModal').classList.add('open');
-  trackEvent('ios_install_guide_open');
-});
-document.getElementById('iosModalClose').addEventListener('click', () => {
-  document.getElementById('iosInstallModal').classList.remove('open');
-});
-document.getElementById('iosInstallModal').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('iosInstallModal')) document.getElementById('iosInstallModal').classList.remove('open');
-});
-
-// Hide install banner if already installed
-if (isInstalled || window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-  document.getElementById('installBanner').classList.add('hidden');
-  isInstalled = true;
-  _ls.set('av_installed', '1');
-}
+})();
 
 // ===== NOTIFICATIONS =====
 async function requestNotificationPermission() {
