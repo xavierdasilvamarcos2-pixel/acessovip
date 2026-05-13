@@ -2193,8 +2193,7 @@
           <div class="banner-carousel-slide">
             <img src="https://xavierdasilvamarcos2-pixel.github.io/acessovip/banners/banner2.png" alt="Sinais Ao Vivo em Tempo Real" loading="eager" />
             <div class="banner-sinais-overlay">
-              <button class="banner-sinais-btn"
-                onclick="(function(){ var t = document.querySelector('[data-tab=hot]'); if(t) t.click(); })()">
+              <button class="banner-sinais-btn" data-action="ir-sinais">
                 🔥 VER SINAIS AO VIVO
               </button>
             </div>
@@ -2202,8 +2201,7 @@
           <div class="banner-carousel-slide">
             <img src="https://xavierdasilvamarcos2-pixel.github.io/acessovip/banner-ranking.png" alt="Ranking Semanal - Compartilhe e Ganhe PIX" loading="lazy" />
             <div class="banner-ranking-overlay">
-              <button class="banner-ranking-btn"
-                onclick="(function(){ var t = document.querySelector('[data-tab=ranking]'); if(t) t.click(); })()">
+              <button class="banner-ranking-btn" data-action="ir-ranking">
                 🏆 ENTRAR NO RANKING
               </button>
             </div>
@@ -4084,7 +4082,9 @@ let favorites = JSON.parse(_ls.get('av_favorites') || '[]');
 let installCount = parseInt(_ls.get('av_installs') || '0');
 let pushTokens = parseInt(_ls.get('av_tokens') || '0');
 let deferredPrompt = null;
-let isInstalled = _ls.get('av_installed') === '1';
+let isInstalled = window.matchMedia('(display-mode: standalone)').matches
+  || window.navigator.standalone === true
+  || document.referrer.includes('android-app://');
 let notifPermission = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
 let adminLoggedIn = false;
 let adminHighFilterMode = 'all'; // 'all' | 'high' | 'normal'
@@ -4325,10 +4325,10 @@ function renderShare() {
 // ===== TAB NAVIGATION =====
 // Função global de verificação de instalação
 function _appInstalado() {
-  return localStorage.getItem('av_installed') === '1'
-    || localStorage.getItem('av_popup_install_done') === '1'
-    || window.matchMedia('(display-mode: standalone)').matches
-    || window.navigator.standalone === true;
+  // Critério real: app rodando em modo standalone (PWA instalado)
+  return window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true
+    || document.referrer.includes('android-app://');
 }
 // Função global de bloqueio (usada pelo sinalAtivoBanner e outros)
 window._irParaAbaHot = function() {
@@ -4340,6 +4340,31 @@ window._irParaAbaHot = function() {
   var tabHot = document.querySelector('[data-tab="hot"]');
   if (tabHot) tabHot.click();
 };
+// Handler para botões do carrossel com data-action
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  var action = btn.getAttribute('data-action');
+  if (action === 'ir-sinais') {
+    e.preventDefault(); e.stopPropagation();
+    if (!_appInstalado()) {
+      var popup = document.getElementById('installBlockPopup');
+      if (popup) popup.classList.remove('hidden');
+      return;
+    }
+    var t = document.querySelector('[data-tab="hot"]');
+    if (t) t.click();
+  } else if (action === 'ir-ranking') {
+    e.preventDefault(); e.stopPropagation();
+    if (!_appInstalado()) {
+      var popup = document.getElementById('installBlockPopup');
+      if (popup) popup.classList.remove('hidden');
+      return;
+    }
+    var t = document.querySelector('[data-tab="ranking"]');
+    if (t) t.click();
+  }
+});
 const tabs = document.querySelectorAll('.tab-item');
 tabs.forEach(tab => {
   tab.addEventListener('click', () => {
@@ -4537,6 +4562,8 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     _ls.set('av_installed', '1');
     _ls.set('av_install_counted', '1');
     hidePwaBanner();
+    // Liberar bloqueio visual das áreas restritas
+    if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
     installCount++;
     _ls.set('av_installs', installCount);
     showToast('App instalado! Abrindo...', 3000);
@@ -6748,11 +6775,11 @@ if (_adminWrapNav) {
   <!-- POP-UP DE INSTALAÇÃO (central, aparece ao clicar em área bloqueada) -->
   <div id="installBlockPopup" class="hidden">
     <div class="install-popup-box">
-      <button class="install-popup-x" id="installPopupClose" aria-label="Fechar">✕</button>
-      <span class="install-popup-icon">📲</span>
-      <div class="install-popup-title">Instale o aplicativo oficial</div>
-      <div class="install-popup-sub">Para acessar sinais ao vivo, estratégias e grupo VIP, é necessário instalar o aplicativo.</div>
-      <button class="install-popup-btn" id="installPopupBtn">👉 INSTALAR AGORA</button>
+      <button class="install-popup-x" id="installPopupClose" aria-label="Fechar">&#x2715;</button>
+      <span class="install-popup-icon">&#x1F512;</span>
+      <div class="install-popup-title">Instale para liberar o acesso</div>
+      <div class="install-popup-sub">Esta &#xe1;rea est&#xe1; dispon&#xed;vel somente no aplicativo instalado. Instale agora &#x2014; &#xe9; gr&#xe1;tis e leva menos de 30 segundos!</div>
+      <button class="install-popup-btn" id="installPopupBtn">&#x1F4F2; INSTALAR AGORA &#x2014; &#xC9; GR&#xC1;TIS</button>
     </div>
   </div>
   <!-- Overlay legado (oculto) -->
@@ -6884,12 +6911,11 @@ if (_adminWrapNav) {
 (function() {
   var STORAGE_KEY = 'av_popup_install_done';
   
-  // Verificar se já instalou
+  // Verificar se já instalou (critério real: modo standalone)
   function jaInstalou() {
-    return localStorage.getItem('av_installed') === '1'
-      || localStorage.getItem(STORAGE_KEY) === '1'
-      || window.matchMedia('(display-mode: standalone)').matches
-      || window.navigator.standalone === true;
+    return window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true
+      || document.referrer.includes('android-app://');
   }
   
   // Aplicar efeito visual de bloqueio nas áreas
