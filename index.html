@@ -7618,7 +7618,17 @@ document.addEventListener('click', function(e) {
 
     // Link de convite
     var linkEl = document.getElementById('rankingLinkText');
-    if (linkEl) linkEl.textContent = getShareLink();
+    var shareLink = getShareLink();
+    if (linkEl) {
+      if (shareLink && shareLink.includes('?ref=')) {
+        linkEl.textContent = shareLink;
+      } else {
+        // Gerar link com UID mesmo sem nome cadastrado
+        var uid2 = getOrCreateUserId();
+        var baseUrl = window.location.origin + window.location.pathname;
+        linkEl.textContent = baseUrl + '?ref=' + uid2;
+      }
+    }
     // Atualizar card "Meu Perfil"
     updateMyProfileCard();
 
@@ -7887,13 +7897,16 @@ document.addEventListener('click', function(e) {
     document.querySelectorAll('.tab-item').forEach(function(tab) {
       tab.addEventListener('click', function() {
         if (tab.dataset.tab === 'ranking') {
-          // Verificar se tem cadastro completo (nome + phone)
+          // Sempre renderizar o ranking imediatamente
+          renderRankingScreen();
+          // Modal de cadastro aparece em paralelo (não bloqueia o ranking)
           if (!getUserName() || !getUserPhone()) {
             setTimeout(function() {
-              showNameModal(function() { renderRankingScreen(); });
-            }, 100);
-          } else {
-            renderRankingScreen();
+              showNameModal(function() {
+                // Após cadastro, re-renderizar para atualizar o perfil
+                renderRankingScreen();
+              });
+            }, 500);
           }
         }
       });
