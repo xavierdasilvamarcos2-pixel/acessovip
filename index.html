@@ -8148,6 +8148,16 @@ document.addEventListener('click', function(e) {
       });
     });
   };
+  // Event delegation para botões de pagamento (data-week + data-uid)
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.admin-pago-btn[data-week]');
+    if (btn) {
+      var week = btn.getAttribute('data-week');
+      var uid = btn.getAttribute('data-uid');
+      if (week && uid) window.adminMarcarPago(week, uid);
+    }
+  });
+
 
   // ── Carregar controle de vencedores no admin ─────────────────────
   function adminLoadWinnersControl() {
@@ -8167,7 +8177,7 @@ document.addEventListener('click', function(e) {
         var paidClass = w.paid ? ' paid' : '';
         var btnHtml = w.paid
           ? '<span class="admin-pago-btn paid">✅ PIX PAGO ' + (w.paidAt || '') + '</span>'
-          : '<button class="admin-pago-btn" onclick="window.adminMarcarPago('' + week + '','' + w.uid + '')">Marcar Pago</button>';
+          : '<button class="admin-pago-btn" data-week="' + week + '" data-uid="' + w.uid + '">Marcar Pago</button>';
         var avatarHtml = w.avatar
           ? '<img src="' + w.avatar + '" style="width:36px;height:36px;border-radius:50%;object-fit:cover">'
           : '<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#5B21B6);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff">' + (w.name||'?')[0].toUpperCase() + '</div>';
