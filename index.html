@@ -3645,7 +3645,11 @@
       <input class="ranking-name-input" type="tel" id="rankingPhoneInput"
         placeholder="(11) 99999-9999" maxlength="20" autocomplete="tel" />
       <!-- Botão principal neon -->
-      <button class="ranking-name-confirm" id="rankingNameConfirm">
+      <!-- Mensagem de erro validação -->
+      <div id="rnmErrorMsg" style="display:none;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:13px;color:#fca5a5;text-align:center">
+        ⚠️ Preencha seu nome/apelido e WhatsApp para participar do ranking e receber o prêmio caso ganhe.
+      </div>
+      <button class="ranking-name-confirm" id="rankingNameConfirm" disabled style="opacity:0.5;cursor:not-allowed">
         🔥 QUERO GANHAR PIX
       </button>
       <!-- Privacidade -->
@@ -3653,8 +3657,7 @@
         <span>🔒</span>
         <span>Seus dados são usados apenas para identificação e envio do prêmio. Nunca serão compartilhados.</span>
       </div>
-      <!-- Skip -->
-      <button class="rnm-skip" id="rankingSkipBtn">Entrar sem cadastro (não receberá prêmio)</button>
+      <!-- Skip removido: cadastro obrigatório -->
     </div>
   </div>
 </div>
@@ -7990,14 +7993,28 @@ document.addEventListener('click', function(e) {
     var nameInput = document.getElementById('rankingNameInput');
     var phoneInput = document.getElementById('rankingPhoneInput');
     var btn = document.getElementById('rankingNameConfirm');
-    var skipBtn = document.getElementById('rankingSkipBtn');
+    var errMsg = document.getElementById('rnmErrorMsg');
     if (!modal || !nameInput || !btn) { if (onConfirm) onConfirm(); return; }
     // Preencher campos com dados já salvos (se houver)
     if (getUserName()) nameInput.value = getUserName();
     if (getUserPhone() && phoneInput) phoneInput.value = getUserPhone();
     modal.classList.remove('hidden');
     nameInput.focus();
-    // Máscara de telefone simples
+
+    // Validar e habilitar/desabilitar botão em tempo real
+    function validateFields() {
+      var name = nameInput.value.trim();
+      var phone = phoneInput ? phoneInput.value.replace(/\D/g,'') : '';
+      var valid = name.length >= 2 && phone.length >= 10;
+      btn.disabled = !valid;
+      btn.style.opacity = valid ? '1' : '0.5';
+      btn.style.cursor = valid ? 'pointer' : 'not-allowed';
+      if (errMsg) errMsg.style.display = 'none';
+      if (name.length >= 2) nameInput.style.borderColor = '';
+      if (phone.length >= 10 && phoneInput) phoneInput.style.borderColor = '';
+    }
+
+    // Máscara de telefone
     if (phoneInput) {
       phoneInput.addEventListener('input', function() {
         var v = phoneInput.value.replace(/\D/g, '');
@@ -8006,41 +8023,45 @@ document.addEventListener('click', function(e) {
         } else {
           phoneInput.value = v.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3').replace(/-$/, '');
         }
+        validateFields();
       });
     }
+    nameInput.addEventListener('input', validateFields);
+    validateFields();
+
     function doConfirm() {
       var name = nameInput.value.trim();
-      if (!name) {
+      var phone = phoneInput ? phoneInput.value.trim() : '';
+      var phoneDigits = phone.replace(/\D/g,'');
+      if (!name || name.length < 2) {
         nameInput.style.borderColor = '#ef4444';
         nameInput.focus();
+        if (errMsg) { errMsg.textContent = '⚠️ Preencha seu nome ou apelido para participar.'; errMsg.style.display = 'block'; }
         return;
       }
-      var phone = phoneInput ? phoneInput.value.trim() : '';
-      if (!phone || phone.replace(/\D/g,'').length < 10) {
+      if (!phone || phoneDigits.length < 10) {
         if (phoneInput) { phoneInput.style.borderColor = '#ef4444'; phoneInput.focus(); }
+        if (errMsg) { errMsg.textContent = '⚠️ Preencha seu WhatsApp com DDD para participar e receber o prêmio.'; errMsg.style.display = 'block'; }
+        return;
+      }
+      if (/^(\d)\1{9,}$/.test(phoneDigits)) {
+        if (phoneInput) { phoneInput.style.borderColor = '#ef4444'; phoneInput.focus(); }
+        if (errMsg) { errMsg.textContent = '⚠️ Número de WhatsApp inválido. Por favor, insira um número real.'; errMsg.style.display = 'block'; }
         return;
       }
       setUserName(name);
-      if (phone) setUserPhone(phone);
+      setUserPhone(phone);
       modal.classList.add('hidden');
       syncMyProfile();
       if (onConfirm) onConfirm();
     }
-    function doSkip() {
-      // Entrar sem cadastro completo — só pede o nome
-      var name = nameInput.value.trim() || ('User' + getOrCreateUserId().slice(0,6));
-      setUserName(name);
-      modal.classList.add('hidden');
-      syncMyProfile();
-      if (onConfirm) onConfirm();
-    }
+
     btn.onclick = doConfirm;
-    if (skipBtn) skipBtn.onclick = doSkip;
     nameInput.onkeydown = function(e) { if (e.key === 'Enter' && phoneInput) phoneInput.focus(); };
     if (phoneInput) phoneInput.onkeydown = function(e) { if (e.key === 'Enter') doConfirm(); };
   }
 
-  // ── Inicialização ────────────────────────────────────────────────────────────
+    // ── Inicialização ────────────────────────────────────────────────────────────
   function init() {
     var uid = getOrCreateUserId();
     var referrerId = getReferrerId();
