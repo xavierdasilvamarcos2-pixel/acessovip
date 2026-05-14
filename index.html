@@ -4896,7 +4896,7 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
             + '<div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;margin-bottom:20px">'
             + 'Para instalar, toque nos <strong>3 pontos ⋮</strong> do Chrome (canto superior direito)<br>e selecione<br><strong>"Instalar app"</strong> ou<br><strong>"Adicionar à tela inicial"</strong>'
             + '</div>'
-            + '<button onclick="this.closest('div[style]').remove()" style="background:linear-gradient(135deg,#7C3AED,#3B82F6);border:none;color:#fff;padding:12px 32px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;width:100%">Entendido</button>'
+            + '<button onclick="this.closest(\'div[style]\').remove()" style="background:linear-gradient(135deg,#7C3AED,#3B82F6);border:none;color:#fff;padding:12px 32px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;width:100%">Entendido</button>'
             + '</div>';
           document.body.appendChild(msg);
           trackEvent('pwa_install_manual_instructions');
