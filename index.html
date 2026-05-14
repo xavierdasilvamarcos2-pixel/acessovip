@@ -10358,13 +10358,37 @@ document.addEventListener('click', function(e) {
     }, 1500);
   };
   
-  // Função global: iniciar animação de instalação
-  window.storeIniciarInstalacao = function() {
-    var modal = document.getElementById('storeInstallModal');
-    if (modal) modal.classList.add('open');
-    
-    // Animação de progresso
-    var pct = 0;
+  // Função auxiliar: rodar animação de progresso (apenas visual)
+  function storeRunProgressAnim(onComplete) {
+    var circle = document.getElementById('storeProgressCircle');
+    var pctEl = document.getElementById('storeModalPct');
+    var barEl = document.getElementById('storeProgressBar');
+    var subEl = document.getElementById('storeModalSub');
+    var txtEl = document.getElementById('storeProgressTxt');
+    var circumference = 220;
+    var steps = [
+      { pct: 20, sub: 'Verificando compatibilidade...', txt: 'Verificando dispositivo...' },
+      { pct: 40, sub: 'Baixando recursos...', txt: 'Baixando aplicativo...' },
+      { pct: 60, sub: 'Instalando componentes...', txt: 'Instalando aplicativo...' },
+      { pct: 80, sub: 'Configurando...', txt: 'Configurando permissões...' },
+      { pct: 95, sub: 'Quase pronto!', txt: 'Finalizando instalação...' }
+    ];
+    var stepIdx = 0;
+    function nextStep() {
+      if (stepIdx >= steps.length) { if (onComplete) onComplete(); return; }
+      var step = steps[stepIdx++];
+      if (pctEl) pctEl.textContent = step.pct + '%';
+      if (barEl) barEl.style.width = step.pct + '%';
+      if (subEl) subEl.textContent = step.sub;
+      if (txtEl) txtEl.textContent = step.txt;
+      if (circle) circle.style.strokeDashoffset = circumference - (step.pct / 100) * circumference;
+      setTimeout(nextStep, 600);
+    }
+    setTimeout(nextStep, 200);
+  }
+
+  // Função auxiliar: mostrar estado "instalado com sucesso"
+  function storeShowSuccess() {
     var circle = document.getElementById('storeProgressCircle');
     var pctEl = document.getElementById('storeModalPct');
     var barEl = document.getElementById('storeProgressBar');
@@ -10372,63 +10396,81 @@ document.addEventListener('click', function(e) {
     var txtEl = document.getElementById('storeProgressTxt');
     var openBtn = document.getElementById('storeModalOpenBtn');
     var circumference = 220;
-    
-    var steps = [
-      { pct: 15, sub: 'Verificando compatibilidade...', txt: 'Verificando dispositivo...' },
-      { pct: 35, sub: 'Baixando recursos...', txt: 'Baixando aplicativo...' },
-      { pct: 55, sub: 'Instalando componentes...', txt: 'Instalando aplicativo...' },
-      { pct: 75, sub: 'Configurando...', txt: 'Configurando permissões...' },
-      { pct: 90, sub: 'Quase pronto!', txt: 'Finalizando instalação...' },
-      { pct: 100, sub: 'Instalação concluída!', txt: 'Pronto! Toque em Abrir.' }
-    ];
-    
-    var stepIdx = 0;
-    function nextStep() {
-      if (stepIdx >= steps.length) return;
-      var step = steps[stepIdx++];
-      pct = step.pct;
-      if (pctEl) pctEl.textContent = pct + '%';
-      if (barEl) barEl.style.width = pct + '%';
-      if (subEl) subEl.textContent = step.sub;
-      if (txtEl) txtEl.textContent = step.txt;
-      if (circle) {
-        var offset = circumference - (pct / 100) * circumference;
-        circle.style.strokeDashoffset = offset;
-      }
-      if (pct === 100) {
-        // Mostrar botão abrir + acionar instalação real
-        setTimeout(function() {
-          if (openBtn) openBtn.style.display = 'block';
-          // Acionar prompt de instalação real (se disponível)
-          if (window.deferredPrompt || window._pwaDeferred) {
-            var prompt = window.deferredPrompt || window._pwaDeferred;
-            prompt.prompt();
-            prompt.userChoice.then(function(choice) {
-              window.deferredPrompt = null;
-              window._pwaDeferred = null;
-              if (choice.outcome === 'accepted') {
-                localStorage.setItem('av_installed', '1');
-                if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
-                if (typeof trackEvent === 'function') trackEvent('pwa_install_accepted');
-              }
-            });
-          } else if (isIOS || (isSafari && !isAndroid)) {
-            // iOS: fechar modal de progresso e abrir instruções iOS
-            var modal2 = document.getElementById('storeInstallModal');
-            if (modal2) modal2.classList.remove('open');
-            var iosModal = document.getElementById('iosInstallModal');
-            if (iosModal) { iosModal.style.display = 'flex'; iosModal.classList.add('open'); }
-          }
-        }, 400);
-        return;
-      }
-      // Próximo passo em intervalo variável
-      var delay = stepIdx === 1 ? 600 : stepIdx === 5 ? 800 : 700;
-      setTimeout(nextStep, delay);
+    if (pctEl) pctEl.textContent = '100%';
+    if (barEl) barEl.style.width = '100%';
+    if (subEl) subEl.textContent = '✅ Instalação concluída!';
+    if (txtEl) txtEl.textContent = 'Pronto! Toque em Abrir para acessar.';
+    if (circle) circle.style.strokeDashoffset = '0';
+    if (openBtn) openBtn.style.display = 'block';
+  }
+
+  // Função global: iniciar instalação real imediatamente ao clicar
+  window.storeIniciarInstalacao = function() {
+    // iOS/Safari: mostrar instruções imediatamente (sem animação falsa)
+    if (isIOS || (isSafari && !isAndroid)) {
+      var iosModal = document.getElementById('iosInstallModal');
+      if (iosModal) { iosModal.style.display = 'flex'; iosModal.classList.add('open'); }
+      if (typeof trackEvent === 'function') trackEvent('ios_install_guide_open');
+      return;
     }
-    
-    // Iniciar animação
-    setTimeout(nextStep, 300);
+
+    // Android/Chrome com prompt disponível: acionar IMEDIATAMENTE
+    var promptEvt = window.deferredPrompt || window._pwaDeferred;
+    if (promptEvt) {
+      // Mostrar modal de progresso como feedback visual
+      var modal = document.getElementById('storeInstallModal');
+      if (modal) modal.classList.add('open');
+      // Rodar animação visual em paralelo
+      storeRunProgressAnim(null);
+      // Acionar prompt nativo IMEDIATAMENTE
+      promptEvt.prompt();
+      promptEvt.userChoice.then(function(choice) {
+        window.deferredPrompt = null;
+        window._pwaDeferred = null;
+        if (choice.outcome === 'accepted') {
+          // Usuário aceitou: mostrar 100% e botão abrir
+          localStorage.setItem('av_installed', '1');
+          if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
+          if (typeof trackEvent === 'function') trackEvent('pwa_install_accepted');
+          storeShowSuccess();
+        } else {
+          // Usuário recusou: fechar modal e voltar à tela store
+          if (modal) modal.classList.remove('open');
+          if (typeof trackEvent === 'function') trackEvent('pwa_install_dismissed');
+        }
+      });
+      return;
+    }
+
+    // Fallback: sem prompt disponível (navegador não suporta ou já foi usado)
+    // Tentar abrir via intent no Chrome Android
+    var appUrl = 'https://acessoplatafomas.com.br/';
+    var intentUrl = 'intent://' + appUrl.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;action=android.intent.action.VIEW;end';
+    try {
+      window.location.href = intentUrl;
+      // Fallback após 1.5s se o intent não funcionar
+      setTimeout(function() {
+        // Mostrar modal com instrução manual
+        var modal = document.getElementById('storeInstallModal');
+        if (modal) modal.classList.add('open');
+        var subEl = document.getElementById('storeModalSub');
+        var txtEl = document.getElementById('storeProgressTxt');
+        var pctEl = document.getElementById('storeModalPct');
+        var barEl = document.getElementById('storeProgressBar');
+        var openBtn = document.getElementById('storeModalOpenBtn');
+        if (subEl) subEl.textContent = 'Abra no Chrome para instalar';
+        if (txtEl) txtEl.textContent = 'Toque nos 3 pontos (⋮) → "Adicionar à tela inicial"';
+        if (pctEl) pctEl.textContent = '📲';
+        if (barEl) barEl.style.width = '100%';
+        if (openBtn) { openBtn.textContent = '✓ Entendi'; openBtn.style.display = 'block'; }
+      }, 1500);
+    } catch(err) {
+      var modal = document.getElementById('storeInstallModal');
+      if (modal) modal.classList.add('open');
+      var subEl = document.getElementById('storeModalSub');
+      if (subEl) subEl.textContent = 'Abra no Chrome e toque em "Adicionar à tela inicial"';
+    }
+    if (typeof trackEvent === 'function') trackEvent('pwa_install_fallback');
   };
   
 })();
