@@ -2,7 +2,7 @@
   "name": "ACESSO VIP",
   "short_name": "ACESSO VIP",
   "description": "Plataformas exclusivas com bônus de registro em um só lugar",
-  "start_url": "/",
+  "start_url": "/?v=72",
   "scope": "/",
   "display": "standalone",
   "background_color": "#0f0f1a",
