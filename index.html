@@ -3063,6 +3063,7 @@
         ⬇️ INSTALAR — É GRÁTIS
       </button>
       <div class="store-footer-sub">Grátis • Sem cadastro • Acesso imediato</div>
+      <div class="store-already-btn" onclick="storeFechar()">Já tenho o aplicativo instalado</div>
     </div>
   </div>
 </div>
@@ -10283,16 +10284,17 @@ document.addEventListener('click', function(e) {
   var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
   var isAndroid = /android/i.test(navigator.userAgent);
   var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  var isInStandalone = window.navigator.standalone === true
+  // Critério ESTRITO: só ocultar se realmente estiver em modo standalone (app instalado rodando)
+  // NÃO usar localStorage aqui - pode estar salvo de antes sem o app estar instalado
+  var isReallyInstalled = window.navigator.standalone === true
     || window.matchMedia('(display-mode: standalone)').matches
     || document.referrer.includes('android-app://')
-    || localStorage.getItem('av_installed') === '1'
     || window.location.search.indexOf('pwa=1') !== -1;
   
   var storeEl = document.getElementById('storeScreen');
   
-  // Se já instalado: ocultar imediatamente
-  if (isInStandalone) {
+  // Se realmente está rodando como app instalado: ocultar tela store
+  if (isReallyInstalled) {
     if (storeEl) storeEl.classList.add('hidden');
     return;
   }
