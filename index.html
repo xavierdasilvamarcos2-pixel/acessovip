@@ -9010,7 +9010,7 @@ document.addEventListener('click', function(e) {
   }
 
     // ── Inicialização ────────────────────────────────────────────────────────────
-  function init() {
+  function initReferral() {
     var uid = getOrCreateUserId();
     var referrerId = getReferrerId();
     var week = getWeekKey();
@@ -9564,9 +9564,9 @@ document.addEventListener('click', function(e) {
 
   // Inicializar quando DOM estiver pronto
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', initReferral);
   } else {
-    init();
+    initReferral();
   }
 
   // Expor para uso externo
