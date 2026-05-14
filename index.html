@@ -6165,23 +6165,34 @@ function init() {
   // Nunca depende de Firebase ou localStorage para renderizar
   platforms = [...PLATFORMS_DATA];
   
-  // Tenta pegar dados mais recentes do localStorage (se tiver)
-  // REGRA: localStorage só é usado se tiver pelo menos tantas plataformas quanto PLATFORMS_DATA
-  // Isso garante que cache antigo (com menos plataformas) não sobrescreva o PLATFORMS_DATA atualizado
+  // VERSÃO DO CACHE: v72 — qualquer versão diferente limpa o localStorage
+  // Isso garante que dispositivos com cache antigo (58 plataformas) sejam atualizados
+  var CACHE_VERSION = 'v72';
   try {
-    const saved = _ls.get('av_platforms');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed) && parsed.length >= PLATFORMS_DATA.length) {
-        platforms = parsed;
-        console.log('[Cache] ' + parsed.length + ' plataformas do cache local.');
-      } else if (Array.isArray(parsed) && parsed.length > 0) {
-        // Cache antigo com menos plataformas — limpar e usar PLATFORMS_DATA
-        console.log('[Cache] Cache antigo ignorado: ' + parsed.length + ' < ' + PLATFORMS_DATA.length + '. Limpando...');
-        try { _ls.remove('av_platforms'); } catch(e2) {}
+    var cacheVer = _ls.get('av_cache_version');
+    if (cacheVer !== CACHE_VERSION) {
+      // Cache de versão diferente — limpar tudo e usar PLATFORMS_DATA
+      _ls.remove('av_platforms');
+      _ls.remove('av_platforms_ts');
+      _ls.set('av_cache_version', CACHE_VERSION);
+      console.log('[Cache] Cache antigo limpo (' + (cacheVer || 'sem versão') + ' → ' + CACHE_VERSION + ')');
+    } else {
+      var saved = _ls.get('av_platforms');
+      if (saved) {
+        var parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length >= PLATFORMS_DATA.length) {
+          platforms = parsed;
+          console.log('[Cache] ' + parsed.length + ' plataformas do cache local (' + CACHE_VERSION + ').');
+        } else {
+          _ls.remove('av_platforms');
+          _ls.remove('av_platforms_ts');
+          console.log('[Cache] Cache com ' + (parsed ? parsed.length : 0) + ' plataformas ignorado — usando PLATFORMS_DATA (' + PLATFORMS_DATA.length + ')');
+        }
       }
     }
-  } catch(e) {}
+  } catch(e) {
+    try { _ls.remove('av_platforms'); } catch(e2) {}
+  }
   
   // Renderiza IMEDIATAMENTE - sempre tem dados (PLATFORMS_DATA)
   renderHome();
@@ -6229,6 +6240,7 @@ function init() {
           var now = Date.now();
           try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
           try { _ls.set('av_platforms_ts', String(now)); } catch(e) {}
+          try { _ls.set('av_cache_version', 'v72'); } catch(e) {}
           renderHome();
           renderHot();
           console.log('[Firebase] ' + platforms.length + ' plataformas carregadas do servidor.');
@@ -6248,7 +6260,10 @@ function init() {
       });
   }
   // Aguarda 500ms para não atrasar a renderização inicial
-  setTimeout(updateFromFirebase, 100); // Carregar Firebase mais rápido
+  // Carregar Firebase imediatamente (sem delay) — Firebase é a fonte de verdade
+  updateFromFirebase();
+  // Segunda tentativa após 2s (para conexões lentas ou app recém-instalado)
+  setTimeout(updateFromFirebase, 2000);
   checkWelcomeModal();
   trackEvent('app_open', { source: document.referrer || 'direct' });
   // Rastrear acesso diário para Analytics
