@@ -4327,6 +4327,14 @@ let platforms = [...PLATFORMS_DATA];
 let favorites = JSON.parse(_ls.get('av_favorites') || '[]');
 let installCount = parseInt(_ls.get('av_installs') || '0');
 let pushTokens = parseInt(_ls.get('av_tokens') || '0');
+// ===== LISTENER GLOBAL beforeinstallprompt (captura o evento o mais cedo possível) =====
+window._pwaPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  window._pwaPrompt = e;
+  window.deferredPrompt = e;
+});
+// =====
 let deferredPrompt = null;
 let isInstalled = window.matchMedia('(display-mode: standalone)').matches
   || window.navigator.standalone === true
@@ -4839,6 +4847,7 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     e.preventDefault();
     _pwaDeferred = e;
     window.deferredPrompt = e;
+    window._pwaPrompt = e;
     // Mostrar banner imediatamente se ainda não apareceu
     if (!isInStandalone && !_pwaDismissed) {
       showPwaBanner();
@@ -4863,37 +4872,39 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
         var modal = document.getElementById('iosInstallModal');
         if (modal) { modal.style.display = 'flex'; modal.classList.add('open'); }
         trackEvent('ios_install_guide_open');
-      } else if (_pwaDeferred) {
-        // Android/Chrome: instalar nativo
-        hidePwaBanner();
-        _pwaDeferred.prompt();
-        _pwaDeferred.userChoice.then(function(choice) {
-          _pwaDeferred = null;
-          window.deferredPrompt = null;
-          if (choice.outcome === 'accepted') {
-            trackEvent('pwa_install_accepted');
-            // Salvar flag imediatamente ao aceitar instalação
-            localStorage.setItem('av_installed', '1');
-            // Remover bloqueio imediatamente
-            if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
-            showToast('✅ Instalando... Abrindo o app!', 3000);
-          } else {
-            trackEvent('pwa_install_dismissed');
-          }
-        });
       } else {
-        // Fallback: redirecionar para Chrome via intent
-        var appUrl = 'https://acessoplatafomas.com.br/';
-        var intentUrl = 'intent://' + appUrl.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;end';
-        try {
-          var a = document.createElement('a');
-          a.href = intentUrl;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          trackEvent('pwa_install_chrome_redirect');
-        } catch(err) {
-          showToast('Abra no Chrome para instalar o app!', 3000);
+        // Android/Chrome: instalar nativo — usar qualquer prompt disponível
+        var _prompt = window._pwaPrompt || window.deferredPrompt || _pwaDeferred;
+        if (_prompt) {
+          hidePwaBanner();
+          _prompt.prompt();
+          _prompt.userChoice.then(function(choice) {
+            _pwaDeferred = null;
+            window.deferredPrompt = null;
+            window._pwaPrompt = null;
+            if (choice.outcome === 'accepted') {
+              trackEvent('pwa_install_accepted');
+              localStorage.setItem('av_installed', '1');
+              if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
+              showToast('✅ Instalando... Abrindo o app!', 3000);
+            } else {
+              trackEvent('pwa_install_dismissed');
+            }
+          });
+        } else {
+          // Fallback: instruções manuais claras para Android/Chrome
+          var msg = document.createElement('div');
+          msg.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+          msg.innerHTML = '<div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border:1px solid rgba(124,58,237,0.5);border-radius:20px;padding:28px 24px;max-width:340px;width:100%;text-align:center;color:#fff;">'
+            + '<div style="font-size:36px;margin-bottom:12px">📲</div>'
+            + '<div style="font-size:18px;font-weight:900;margin-bottom:8px">Instalar o App</div>'
+            + '<div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;margin-bottom:20px">'
+            + 'Para instalar, toque nos <strong>3 pontos ⋮</strong> do Chrome (canto superior direito)<br>e selecione<br><strong>"Instalar app"</strong> ou<br><strong>"Adicionar à tela inicial"</strong>'
+            + '</div>'
+            + '<button onclick="this.closest('div[style]').remove()" style="background:linear-gradient(135deg,#7C3AED,#3B82F6);border:none;color:#fff;padding:12px 32px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;width:100%">Entendido</button>'
+            + '</div>';
+          document.body.appendChild(msg);
+          trackEvent('pwa_install_manual_instructions');
         }
       }
     }
@@ -7279,6 +7290,7 @@ if (_adminWrapNav) {
     window.addEventListener('beforeinstallprompt', function(e) {
       e.preventDefault();
       window.deferredPrompt = e;
+      window._pwaPrompt = e;
     });
   })();
   
@@ -7524,10 +7536,12 @@ function clearPlatformMetrics() {
   // Acionar instalação PWA
   function acionarInstalacao() {
     fecharPopup();
-    if (window.deferredPrompt) {
-      window.deferredPrompt.prompt();
-      window.deferredPrompt.userChoice.then(function(choice) {
+    var _prompt = window._pwaPrompt || window.deferredPrompt;
+    if (_prompt) {
+      _prompt.prompt();
+      _prompt.userChoice.then(function(choice) {
         window.deferredPrompt = null;
+        window._pwaPrompt = null;
         if (choice.outcome === 'accepted') {
           localStorage.setItem('av_installed', '1');
           localStorage.setItem(STORAGE_KEY, '1');
