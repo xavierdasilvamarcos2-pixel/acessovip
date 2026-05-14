@@ -1,24 +1,33 @@
 // Service Worker - Acesso VIP PWA
-// Versão: v17 - Ícone com URL absoluta + fallback para data.image
-const CACHE_NAME = 'acesso-vip-v17';
+// Versão: v18 - Força atualização imediata + notifica clientes para recarregar
+const CACHE_NAME = 'acesso-vip-v18';
 // NÃO incluir index.html nem / no cache - sempre buscar do servidor
 const STATIC_ASSETS = ['/manifest.json'];
-
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS).catch(() => {}))
   );
+  // Força ativação imediata sem esperar fechar abas antigas
   self.skipWaiting();
 });
-
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(keys.map((k) => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    ).then(() => {
+      // Toma controle imediato de todas as abas/janelas abertas
+      return self.clients.claim();
+    }).then(() => {
+      // Notifica todos os clientes para recarregar a página
+      return self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    }).then((clients) => {
+      clients.forEach((client) => {
+        // Envia mensagem para o app recarregar e pegar o novo HTML
+        client.postMessage({ type: 'SW_UPDATED', version: 'v18' });
+      });
+    })
   );
 });
-
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   
@@ -44,7 +53,6 @@ self.addEventListener('fetch', (event) => {
     }).catch(() => caches.match(event.request))
   );
 });
-
 // ============================================================
 // Web Push - Receber e exibir notificações
 // ============================================================
@@ -78,7 +86,6 @@ self.addEventListener('push', (event) => {
   }
   event.waitUntil(self.registration.showNotification(title, options));
 });
-
 // ============================================================
 // Clique na notificação - abrir a URL correta
 // ============================================================
