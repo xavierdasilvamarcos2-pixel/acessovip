@@ -2226,7 +2226,613 @@
     .rnm-prize-badge.bronze { border-color: rgba(205,127,50,0.4); color: #CD7F32; }
 
     /* ===== FIM RANKING SYSTEM ===== */
-</style>
+
+    /* ===== TELA STORE - PLAY STORE PREMIUM ===== */
+    #storeScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #0a0a0f;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-overflow-scrolling: touch;
+    }
+    #storeScreen.hidden { display: none !important; }
+    
+    /* Partículas de fundo */
+    .store-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .store-particle {
+      position: absolute;
+      border-radius: 50%;
+      animation: store-float linear infinite;
+      opacity: 0;
+    }
+    @keyframes store-float {
+      0% { transform: translateY(110vh) scale(0); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.3; }
+      100% { transform: translateY(-20vh) scale(1.2); opacity: 0; }
+    }
+    
+    /* Conteúdo principal */
+    .store-content {
+      position: relative;
+      z-index: 1;
+      padding: 0 0 120px;
+      max-width: 480px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    /* Header estilo Play Store */
+    .store-header {
+      padding: 20px 16px 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .store-header-back {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.7);
+      font-size: 20px;
+      cursor: pointer;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      border: none;
+      flex-shrink: 0;
+    }
+    .store-header-search {
+      flex: 1;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      padding: 8px 16px;
+      color: rgba(255,255,255,0.4);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    /* App info section */
+    .store-app-section {
+      padding: 20px 16px 0;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .store-app-icon {
+      width: 96px;
+      height: 96px;
+      border-radius: 22px;
+      flex-shrink: 0;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08);
+      position: relative;
+    }
+    .store-app-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .store-app-icon-fallback {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a0a3e, #0d1a3a, #1a0a3e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+    }
+    .store-app-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .store-app-name {
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.2;
+      letter-spacing: -0.3px;
+    }
+    .store-app-dev {
+      font-size: 13px;
+      color: #4ade80;
+      margin-top: 3px;
+      font-weight: 600;
+    }
+    .store-app-verified {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: #4ade80;
+      margin-top: 4px;
+      background: rgba(74,222,128,0.1);
+      border: 1px solid rgba(74,222,128,0.25);
+      border-radius: 20px;
+      padding: 2px 8px;
+    }
+    
+    /* Botão INSTALAR principal */
+    #storeInstallBtn {
+      margin-top: 12px;
+      width: 100%;
+      padding: 13px 20px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #16a34a, #22c55e, #16a34a);
+      background-size: 200% auto;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(34,197,94,0.5);
+      animation: store-btn-pulse 2s ease-in-out infinite;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    #storeInstallBtn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+      background-size: 200% auto;
+      animation: store-shimmer 2.5s linear infinite;
+    }
+    #storeInstallBtn:active {
+      transform: scale(0.97);
+      box-shadow: 0 2px 10px rgba(34,197,94,0.3);
+    }
+    @keyframes store-btn-pulse {
+      0%, 100% { box-shadow: 0 4px 20px rgba(34,197,94,0.5); }
+      50% { box-shadow: 0 4px 30px rgba(34,197,94,0.8), 0 0 0 4px rgba(34,197,94,0.15); }
+    }
+    @keyframes store-shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    
+    /* Stats badges */
+    .store-stats {
+      display: flex;
+      margin: 16px 16px 0;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .store-stat {
+      flex: 1;
+      padding: 12px 8px;
+      text-align: center;
+      position: relative;
+    }
+    .store-stat + .store-stat::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 20%;
+      height: 60%;
+      width: 1px;
+      background: rgba(255,255,255,0.1);
+    }
+    .store-stat-val {
+      font-size: 18px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+    }
+    .store-stat-val .stars { color: #fbbf24; font-size: 14px; }
+    .store-stat-lbl {
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    
+    /* Banner promocional */
+    .store-promo-banner {
+      margin: 14px 16px 0;
+      background: linear-gradient(135deg, rgba(22,163,74,0.25), rgba(16,185,129,0.15));
+      border: 1px solid rgba(34,197,94,0.35);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .store-promo-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .store-promo-text {
+      flex: 1;
+    }
+    .store-promo-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #4ade80;
+    }
+    .store-promo-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 2px;
+    }
+    
+    /* Screenshots */
+    .store-screenshots-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.9);
+      padding: 18px 16px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .store-screenshots-title span { font-size: 12px; color: rgba(255,255,255,0.4); font-weight: 500; }
+    .store-screenshots-scroll {
+      display: flex;
+      gap: 10px;
+      padding: 0 16px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .store-screenshots-scroll::-webkit-scrollbar { display: none; }
+    .store-screenshot {
+      flex-shrink: 0;
+      width: 140px;
+      height: 240px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: linear-gradient(135deg, #1a0a3e, #0d1a3a);
+      position: relative;
+    }
+    .store-screenshot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .store-screenshot-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+    }
+    .store-screenshot-placeholder .ss-icon { font-size: 32px; }
+    
+    /* Sobre o app */
+    .store-about {
+      margin: 18px 16px 0;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .store-about-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .store-about-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .store-about-item:last-child { border-bottom: none; }
+    .store-about-emoji { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .store-about-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.5;
+    }
+    .store-about-text strong { color: #fff; font-weight: 700; }
+    
+    /* Informações adicionais */
+    .store-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 14px 16px 0;
+    }
+    .store-info-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .store-info-label {
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .store-info-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+    }
+    
+    /* Avaliações */
+    .store-reviews {
+      margin: 14px 16px 0;
+    }
+    .store-reviews-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 12px;
+    }
+    .store-rating-big {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .store-rating-num {
+      font-size: 52px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+    }
+    .store-rating-right { flex: 1; }
+    .store-rating-stars { font-size: 20px; color: #fbbf24; letter-spacing: 2px; }
+    .store-rating-count { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; }
+    .store-rating-bars { margin-top: 8px; }
+    .store-rating-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+    .store-rating-bar-lbl { font-size: 10px; color: rgba(255,255,255,0.4); min-width: 8px; }
+    .store-rating-bar-track {
+      flex: 1;
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .store-rating-bar-fill {
+      height: 100%;
+      background: #fbbf24;
+      border-radius: 2px;
+    }
+    
+    /* Botão fixo no rodapé */
+    .store-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100000;
+      padding: 12px 16px max(16px, env(safe-area-inset-bottom));
+      background: linear-gradient(to top, #0a0a0f 60%, transparent);
+    }
+    .store-footer-inner {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    #storeInstallBtnBottom {
+      width: 100%;
+      padding: 16px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      color: #fff;
+      font-size: 17px;
+      font-weight: 900;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(34,197,94,0.6);
+      animation: store-btn-pulse 2s ease-in-out infinite;
+      transition: transform 0.15s;
+    }
+    #storeInstallBtnBottom::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+      background-size: 200% auto;
+      animation: store-shimmer 2.5s linear infinite;
+    }
+    #storeInstallBtnBottom:active { transform: scale(0.98); }
+    .store-footer-sub {
+      text-align: center;
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      margin-top: 6px;
+    }
+    
+    /* Modal de instalação (progresso) */
+    #storeInstallModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100001;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    #storeInstallModal.open { display: flex; }
+    .store-install-modal-box {
+      background: #fff;
+      border-radius: 24px;
+      padding: 28px 24px;
+      max-width: 320px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .store-modal-spinner {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 16px;
+      position: relative;
+    }
+    .store-modal-spinner svg {
+      width: 80px;
+      height: 80px;
+      transform: rotate(-90deg);
+    }
+    .store-modal-spinner .track {
+      fill: none;
+      stroke: #f0f0f0;
+      stroke-width: 6;
+    }
+    .store-modal-spinner .progress {
+      fill: none;
+      stroke: #22c55e;
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 220;
+      stroke-dashoffset: 220;
+      transition: stroke-dashoffset 0.3s ease;
+    }
+    .store-modal-pct {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 900;
+      color: #1a1a1a;
+    }
+    .store-modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #1a1a1a;
+      margin-bottom: 6px;
+    }
+    .store-modal-sub {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 16px;
+    }
+    .store-modal-badges {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .store-modal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .store-modal-badge.speed {
+      background: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      color: #555;
+    }
+    .store-modal-badge.active {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #16a34a;
+    }
+    .store-modal-progress-bar {
+      background: #f0f0f0;
+      border-radius: 8px;
+      height: 8px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .store-modal-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #16a34a, #22c55e);
+      border-radius: 8px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .store-modal-progress-txt {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 16px;
+    }
+    #storeModalOpenBtn {
+      display: none;
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    
+    /* Botão "Já tenho o app" */
+    .store-already-btn {
+      display: block;
+      text-align: center;
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      padding: 12px;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .store-already-btn:active { opacity: 0.7; }
+    
+    /* Neon glow effect no topo */
+    .store-neon-top {
+      position: fixed;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 200px;
+      background: radial-gradient(ellipse, rgba(34,197,94,0.15) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    </style>
   <!-- Web Push Nativo (VAPID) - sem dependências externas -->
   <script>
     // Chave pública VAPID para Web Push nativo
@@ -2273,6 +2879,219 @@
   </script>
 </head>
 <body>
+
+<!-- ===== TELA DE INSTALAÇÃO ESTILO PLAY STORE ===== -->
+<div id="storeScreen">
+  <!-- Neon glow -->
+  <div class="store-neon-top"></div>
+  <!-- Partículas animadas -->
+  <div class="store-bg" id="storeBg"></div>
+  
+  <div class="store-content">
+    <!-- Header estilo Play Store -->
+    <div class="store-header">
+      <button class="store-header-back" onclick="storeFechar()">&#8592;</button>
+      <div class="store-header-search">
+        <span>🔍</span>
+        <span>Pesquisar apps e jogos</span>
+      </div>
+    </div>
+    
+    <!-- App Info -->
+    <div class="store-app-section">
+      <div class="store-app-icon">
+        <img src="/icons/icon-192.png" alt="ACESSO VIP" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+        <div class="store-app-icon-fallback" style="display:none">🏆</div>
+      </div>
+      <div class="store-app-info">
+        <div class="store-app-name">ACESSO VIP</div>
+        <div class="store-app-dev">acessoplatafomas.com.br</div>
+        <div class="store-app-verified">✅ Verificado</div>
+        <button id="storeInstallBtn" onclick="storeIniciarInstalacao()">
+          ⬇️ INSTALAR
+        </button>
+      </div>
+    </div>
+    
+    <!-- Stats -->
+    <div class="store-stats">
+      <div class="store-stat">
+        <div class="store-stat-val">4.9 <span class="stars">★</span></div>
+        <div class="store-stat-lbl">68.421 avaliações</div>
+      </div>
+      <div class="store-stat">
+        <div class="store-stat-val">500K+</div>
+        <div class="store-stat-lbl">Downloads</div>
+      </div>
+      <div class="store-stat">
+        <div class="store-stat-val">18+</div>
+        <div class="store-stat-lbl">Classificação</div>
+      </div>
+    </div>
+    
+    <!-- Banner promocional -->
+    <div class="store-promo-banner">
+      <div class="store-promo-icon">⚡</div>
+      <div class="store-promo-text">
+        <div class="store-promo-title">Instalação Rápida</div>
+        <div class="store-promo-sub">Instale em menos de 15 segundos — é grátis</div>
+      </div>
+    </div>
+    
+    <!-- Screenshots -->
+    <div class="store-screenshots-title">
+      Capturas de tela <span>Deslize para ver mais →</span>
+    </div>
+    <div class="store-screenshots-scroll">
+      <div class="store-screenshot">
+        <img src="/banners/banner1.png" alt="Screenshot 1" onerror="this.parentElement.innerHTML='<div class=store-screenshot-placeholder><div class=ss-icon>📊</div><div>Sinais ao Vivo</div></div>'" />
+      </div>
+      <div class="store-screenshot">
+        <img src="/banners/banner2.png" alt="Screenshot 2" onerror="this.parentElement.innerHTML='<div class=store-screenshot-placeholder><div class=ss-icon>🏆</div><div>Ranking Semanal</div></div>'" />
+      </div>
+      <div class="store-screenshot">
+        <div class="store-screenshot-placeholder">
+          <div class="ss-icon">🔥</div>
+          <div>Plataformas em Alta</div>
+        </div>
+      </div>
+      <div class="store-screenshot">
+        <div class="store-screenshot-placeholder">
+          <div class="ss-icon">💰</div>
+          <div>Ranking com PIX</div>
+        </div>
+      </div>
+      <div class="store-screenshot">
+        <div class="store-screenshot-placeholder">
+          <div class="ss-icon">🔔</div>
+          <div>Notificações VIP</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sobre o app -->
+    <div class="store-about">
+      <div class="store-about-title">ℹ️ Sobre este aplicativo</div>
+      <div class="store-about-item">
+        <div class="store-about-emoji">📊</div>
+        <div class="store-about-text"><strong>Sinais ao vivo em tempo real</strong> — Receba alertas das melhores plataformas com IA integrada 24/7</div>
+      </div>
+      <div class="store-about-item">
+        <div class="store-about-emoji">🔥</div>
+        <div class="store-about-text"><strong>Plataformas em alta</strong> — Todas as plataformas exclusivas em um só lugar, atualizadas diariamente</div>
+      </div>
+      <div class="store-about-item">
+        <div class="store-about-emoji">🏆</div>
+        <div class="store-about-text"><strong>Ranking semanal com PIX</strong> — Compartilhe seu link, suba no ranking e ganhe prêmios em dinheiro toda semana</div>
+      </div>
+      <div class="store-about-item">
+        <div class="store-about-emoji">🔔</div>
+        <div class="store-about-text"><strong>Notificações automáticas</strong> — Seja o primeiro a saber quando uma plataforma está pagando</div>
+      </div>
+      <div class="store-about-item">
+        <div class="store-about-emoji">💎</div>
+        <div class="store-about-text"><strong>Acesso VIP exclusivo</strong> — Grupo no WhatsApp com estratégias e sinais em primeira mão</div>
+      </div>
+      <div class="store-about-item">
+        <div class="store-about-emoji">🛡️</div>
+        <div class="store-about-text"><strong>Suporte 24h</strong> — Equipe disponível todos os dias para ajudar você</div>
+      </div>
+    </div>
+    
+    <!-- Info grid -->
+    <div class="store-info-grid">
+      <div class="store-info-card">
+        <div class="store-info-label">Tamanho</div>
+        <div class="store-info-value">~2 MB</div>
+      </div>
+      <div class="store-info-card">
+        <div class="store-info-label">Atualizado</div>
+        <div class="store-info-value">Hoje</div>
+      </div>
+      <div class="store-info-card">
+        <div class="store-info-label">Downloads</div>
+        <div class="store-info-value">500K+</div>
+      </div>
+      <div class="store-info-card">
+        <div class="store-info-label">Versão</div>
+        <div class="store-info-value">2.0</div>
+      </div>
+    </div>
+    
+    <!-- Avaliações -->
+    <div class="store-reviews">
+      <div class="store-reviews-title">⭐ Avaliações e opiniões</div>
+      <div class="store-rating-big">
+        <div class="store-rating-num">4.9</div>
+        <div class="store-rating-right">
+          <div class="store-rating-stars">★★★★★</div>
+          <div class="store-rating-count">68.421 avaliações</div>
+          <div class="store-rating-bars">
+            <div class="store-rating-bar-row">
+              <div class="store-rating-bar-lbl">5</div>
+              <div class="store-rating-bar-track"><div class="store-rating-bar-fill" style="width:88%"></div></div>
+            </div>
+            <div class="store-rating-bar-row">
+              <div class="store-rating-bar-lbl">4</div>
+              <div class="store-rating-bar-track"><div class="store-rating-bar-fill" style="width:8%"></div></div>
+            </div>
+            <div class="store-rating-bar-row">
+              <div class="store-rating-bar-lbl">3</div>
+              <div class="store-rating-bar-track"><div class="store-rating-bar-fill" style="width:2%"></div></div>
+            </div>
+            <div class="store-rating-bar-row">
+              <div class="store-rating-bar-lbl">2</div>
+              <div class="store-rating-bar-track"><div class="store-rating-bar-fill" style="width:1%"></div></div>
+            </div>
+            <div class="store-rating-bar-row">
+              <div class="store-rating-bar-lbl">1</div>
+              <div class="store-rating-bar-track"><div class="store-rating-bar-fill" style="width:1%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Espaço para o footer fixo -->
+    <div style="height: 20px;"></div>
+  </div>
+  
+  <!-- Footer fixo com botão instalar -->
+  <div class="store-footer">
+    <div class="store-footer-inner">
+      <button id="storeInstallBtnBottom" onclick="storeIniciarInstalacao()">
+        ⬇️ INSTALAR — É GRÁTIS
+      </button>
+      <div class="store-footer-sub">Grátis • Sem cadastro • Acesso imediato</div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de progresso de instalação -->
+<div id="storeInstallModal">
+  <div class="store-install-modal-box">
+    <div class="store-modal-spinner">
+      <svg viewBox="0 0 80 80">
+        <circle class="track" cx="40" cy="40" r="35"/>
+        <circle class="progress" id="storeProgressCircle" cx="40" cy="40" r="35"/>
+      </svg>
+      <div class="store-modal-pct" id="storeModalPct">0%</div>
+    </div>
+    <div class="store-modal-title">Instalação Rápida</div>
+    <div class="store-modal-sub" id="storeModalSub">Preparando instalação...</div>
+    <div class="store-modal-badges">
+      <div class="store-modal-badge speed">⚡ 6x mais rápido</div>
+      <div class="store-modal-badge active">✅ Ativado</div>
+    </div>
+    <div class="store-modal-progress-bar">
+      <div class="store-modal-progress-fill" id="storeProgressBar"></div>
+    </div>
+    <div class="store-modal-progress-txt" id="storeProgressTxt">Instalando aplicativo...</div>
+    <button id="storeModalOpenBtn" onclick="storeAbrirApp()">🚀 ABRIR APLICATIVO</button>
+  </div>
+</div>
+
+
 <div id="app">
   <!-- FAIXA VERMELHA DE INSTALAÇÃO -->
   <div id="faixaInstall" onclick="window._acionarInstalacaoGlobal && window._acionarInstalacaoGlobal()">
@@ -9455,6 +10274,162 @@ document.addEventListener('click', function(e) {
 
 // ===== FIM CARROSSEL =====
 
+</script>
+
+
+<script>
+// ===== TELA STORE - PLAY STORE PREMIUM =====
+(function() {
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  var isAndroid = /android/i.test(navigator.userAgent);
+  var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  var isInStandalone = window.navigator.standalone === true
+    || window.matchMedia('(display-mode: standalone)').matches
+    || document.referrer.includes('android-app://')
+    || localStorage.getItem('av_installed') === '1'
+    || window.location.search.indexOf('pwa=1') !== -1;
+  
+  var storeEl = document.getElementById('storeScreen');
+  
+  // Se já instalado: ocultar imediatamente
+  if (isInStandalone) {
+    if (storeEl) storeEl.classList.add('hidden');
+    return;
+  }
+  
+  // Criar partículas animadas
+  var bg = document.getElementById('storeBg');
+  if (bg) {
+    var colors = ['#22c55e','#4ade80','#fbbf24','#f59e0b','#a78bfa','#60a5fa'];
+    for (var i = 0; i < 18; i++) {
+      var p = document.createElement('div');
+      p.className = 'store-particle';
+      var size = Math.random() * 8 + 3;
+      p.style.cssText = [
+        'width:' + size + 'px',
+        'height:' + size + 'px',
+        'left:' + (Math.random() * 100) + '%',
+        'background:' + colors[Math.floor(Math.random() * colors.length)],
+        'animation-duration:' + (Math.random() * 8 + 6) + 's',
+        'animation-delay:' + (Math.random() * 6) + 's',
+        'filter:blur(' + (Math.random() * 2) + 'px)'
+      ].join(';');
+      bg.appendChild(p);
+    }
+  }
+  
+  // Capturar evento de instalação
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    window.deferredPrompt = e;
+    window._pwaDeferred = e;
+  });
+  
+  // Após instalação: abrir app
+  window.addEventListener('appinstalled', function() {
+    localStorage.setItem('av_installed', '1');
+    if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
+    storeAbrirApp();
+  });
+  
+  // Função global: fechar store e entrar no app
+  window.storeFechar = function() {
+    if (storeEl) {
+      storeEl.style.animation = 'none';
+      storeEl.style.opacity = '0';
+      storeEl.style.transform = 'translateY(-20px)';
+      storeEl.style.transition = 'opacity 0.3s, transform 0.3s';
+      setTimeout(function() {
+        storeEl.classList.add('hidden');
+      }, 300);
+    }
+  };
+  
+  // Função global: abrir app após instalar
+  window.storeAbrirApp = function() {
+    var modal = document.getElementById('storeInstallModal');
+    if (modal) modal.classList.remove('open');
+    storeFechar();
+    // Mostrar pedido de notificações após 1.5s
+    setTimeout(function() {
+      if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
+    }, 1500);
+  };
+  
+  // Função global: iniciar animação de instalação
+  window.storeIniciarInstalacao = function() {
+    var modal = document.getElementById('storeInstallModal');
+    if (modal) modal.classList.add('open');
+    
+    // Animação de progresso
+    var pct = 0;
+    var circle = document.getElementById('storeProgressCircle');
+    var pctEl = document.getElementById('storeModalPct');
+    var barEl = document.getElementById('storeProgressBar');
+    var subEl = document.getElementById('storeModalSub');
+    var txtEl = document.getElementById('storeProgressTxt');
+    var openBtn = document.getElementById('storeModalOpenBtn');
+    var circumference = 220;
+    
+    var steps = [
+      { pct: 15, sub: 'Verificando compatibilidade...', txt: 'Verificando dispositivo...' },
+      { pct: 35, sub: 'Baixando recursos...', txt: 'Baixando aplicativo...' },
+      { pct: 55, sub: 'Instalando componentes...', txt: 'Instalando aplicativo...' },
+      { pct: 75, sub: 'Configurando...', txt: 'Configurando permissões...' },
+      { pct: 90, sub: 'Quase pronto!', txt: 'Finalizando instalação...' },
+      { pct: 100, sub: 'Instalação concluída!', txt: 'Pronto! Toque em Abrir.' }
+    ];
+    
+    var stepIdx = 0;
+    function nextStep() {
+      if (stepIdx >= steps.length) return;
+      var step = steps[stepIdx++];
+      pct = step.pct;
+      if (pctEl) pctEl.textContent = pct + '%';
+      if (barEl) barEl.style.width = pct + '%';
+      if (subEl) subEl.textContent = step.sub;
+      if (txtEl) txtEl.textContent = step.txt;
+      if (circle) {
+        var offset = circumference - (pct / 100) * circumference;
+        circle.style.strokeDashoffset = offset;
+      }
+      if (pct === 100) {
+        // Mostrar botão abrir + acionar instalação real
+        setTimeout(function() {
+          if (openBtn) openBtn.style.display = 'block';
+          // Acionar prompt de instalação real (se disponível)
+          if (window.deferredPrompt || window._pwaDeferred) {
+            var prompt = window.deferredPrompt || window._pwaDeferred;
+            prompt.prompt();
+            prompt.userChoice.then(function(choice) {
+              window.deferredPrompt = null;
+              window._pwaDeferred = null;
+              if (choice.outcome === 'accepted') {
+                localStorage.setItem('av_installed', '1');
+                if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
+                if (typeof trackEvent === 'function') trackEvent('pwa_install_accepted');
+              }
+            });
+          } else if (isIOS || (isSafari && !isAndroid)) {
+            // iOS: fechar modal de progresso e abrir instruções iOS
+            var modal2 = document.getElementById('storeInstallModal');
+            if (modal2) modal2.classList.remove('open');
+            var iosModal = document.getElementById('iosInstallModal');
+            if (iosModal) { iosModal.style.display = 'flex'; iosModal.classList.add('open'); }
+          }
+        }, 400);
+        return;
+      }
+      // Próximo passo em intervalo variável
+      var delay = stepIdx === 1 ? 600 : stepIdx === 5 ? 800 : 700;
+      setTimeout(nextStep, delay);
+    }
+    
+    // Iniciar animação
+    setTimeout(nextStep, 300);
+  };
+  
+})();
 </script>
 
 </body>
