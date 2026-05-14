@@ -5966,26 +5966,40 @@ document.getElementById('refreshStatsBtn').addEventListener('click', loadAdminSt
 // Nota: O OneSignal registra o OneSignalSDKWorker.js automaticamente via SDK
 // O sw.js antigo foi substituido pelo OneSignalSDKWorker.js que inclui o código do PWA
 if ('serviceWorker' in navigator) {
-  // Desregistrar TODOS os SWs antigos e registrar o novo sw.js v11
+  // Desregistrar SWs antigos e registrar/atualizar o sw.js
   navigator.serviceWorker.getRegistrations().then(registrations => {
-    var hasNewSW = registrations.some(reg => reg.active && reg.active.scriptURL && reg.active.scriptURL.includes('sw.js'));
-    registrations.forEach(reg => {
-      // Desregistrar qualquer SW que NÃO seja o sw.js atual
-      if (reg.active && reg.active.scriptURL && !reg.active.scriptURL.endsWith('/sw.js')) {
-        reg.unregister().then(() => console.log('Old SW unregistered:', reg.active.scriptURL));
+    // Desregistrar qualquer SW que NÃO seja o sw.js
+    var promises = registrations
+      .filter(reg => reg.active && reg.active.scriptURL && !reg.active.scriptURL.endsWith('/sw.js'))
+      .map(reg => reg.unregister());
+    return Promise.all(promises);
+  }).then(() => {
+    // SEMPRE registrar/atualizar o sw.js (sem verificar se já existe)
+    return navigator.serviceWorker.register('/sw.js', { scope: '/', updateViaCache: 'none' });
+  }).then(reg => {
+    console.log('[SW] Registrado:', reg.scope);
+    // Forçar atualização imediata se houver nova versão esperando
+    if (reg.waiting) {
+      reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+    }
+    // Verificar se há atualização disponível
+    reg.update().then(() => {
+      if (reg.waiting) {
+        reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+      }
+    }).catch(() => {});
+    // Listener para quando nova versão for instalada
+    reg.addEventListener('updatefound', () => {
+      var newWorker = reg.installing;
+      if (newWorker) {
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            newWorker.postMessage({ type: 'SKIP_WAITING' });
+          }
+        });
       }
     });
-    // Registrar o sw.js v11 se ainda não estiver registrado
-    if (!hasNewSW) {
-      navigator.serviceWorker.register('/sw.js', { scope: '/' })
-        .then(reg => {
-          console.log('SW v11 registered:', reg.scope);
-          // Forçar ativação imediata
-          if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-        })
-        .catch(err => console.log('SW register error:', err));
-    }
-  });
+  }).catch(err => console.log('[SW] Erro:', err));
 
   // Verificar atualização do Service Worker ao abrir o app
   navigator.serviceWorker.getRegistration().then(function(reg) {
