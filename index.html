@@ -5148,6 +5148,29 @@ let favorites = JSON.parse(_ls.get('av_favorites') || '[]');
 let installCount = parseInt(_ls.get('av_installs') || '0');
 let pushTokens = parseInt(_ls.get('av_tokens') || '0');
 let deferredPrompt = null;
+
+// ===== CAPTURA GLOBAL DO PROMPT DE INSTALAÇÃO PWA =====
+// Este é o ÚNICO listener oficial - os outros são redundantes e foram removidos
+window.__pwaPromptReady = false;
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  deferredPrompt = e;
+  window.deferredPrompt = e;
+  window._pwaDeferred = e;
+  window.__pwaPromptReady = true;
+  console.log('[PWA] beforeinstallprompt capturado ✅');
+}, { once: false });
+
+window.addEventListener('appinstalled', function() {
+  deferredPrompt = null;
+  window.deferredPrompt = null;
+  window._pwaDeferred = null;
+  window.__pwaPromptReady = false;
+  localStorage.setItem('av_installed', '1');
+  console.log('[PWA] App instalado com sucesso ✅');
+  if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
+  if (typeof storeAbrirApp === 'function') storeAbrirApp();
+});
 let isInstalled = window.matchMedia('(display-mode: standalone)').matches
   || window.navigator.standalone === true
   || document.referrer.includes('android-app://');
@@ -5610,16 +5633,13 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     }, 4000);
   }
 
-  // Capturar evento de instalação Android/Chrome
-  window.addEventListener('beforeinstallprompt', function(e) {
-    e.preventDefault();
-    _pwaDeferred = e;
-    window.deferredPrompt = e;
-    // Mostrar banner imediatamente se ainda não apareceu
-    if (!isInStandalone && !_pwaDismissed) {
+  // Listener de instalação: gerenciado globalmente no topo do script
+  // Verificar se o prompt já foi capturado e mostrar banner
+  if (!isInStandalone && !_pwaDismissed) {
+    if (window.__pwaPromptReady || window.deferredPrompt) {
       showPwaBanner();
     }
-  });
+  }
 
   // Botão fechar (X)
   document.addEventListener('click', function(e) {
@@ -8031,11 +8051,7 @@ if (_adminWrapNav) {
       if (bolha) bolha.classList.remove('visivel');
     });
 
-    // Capturar evento de instalação PWA
-    window.addEventListener('beforeinstallprompt', function(e) {
-      e.preventDefault();
-      window.deferredPrompt = e;
-    });
+    // Listener de instalação: gerenciado globalmente no topo do script
   })();
   
 
@@ -10320,19 +10336,7 @@ document.addEventListener('click', function(e) {
     }
   }
   
-  // Capturar evento de instalação
-  window.addEventListener('beforeinstallprompt', function(e) {
-    e.preventDefault();
-    window.deferredPrompt = e;
-    window._pwaDeferred = e;
-  });
-  
-  // Após instalação: abrir app
-  window.addEventListener('appinstalled', function() {
-    localStorage.setItem('av_installed', '1');
-    if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
-    storeAbrirApp();
-  });
+  // Listeners gerenciados globalmente no topo do script principal
   
   // Função global: fechar store e entrar no app
   window.storeFechar = function() {
@@ -10415,7 +10419,7 @@ document.addEventListener('click', function(e) {
     }
 
     // Android/Chrome com prompt disponível: acionar IMEDIATAMENTE
-    var promptEvt = window.deferredPrompt || window._pwaDeferred;
+    var promptEvt = window.deferredPrompt || window._pwaDeferred || (typeof deferredPrompt !== 'undefined' ? deferredPrompt : null);
     if (promptEvt) {
       // Mostrar modal de progresso como feedback visual
       var modal = document.getElementById('storeInstallModal');
@@ -10442,33 +10446,48 @@ document.addEventListener('click', function(e) {
       return;
     }
 
-    // Fallback: sem prompt disponível (navegador não suporta ou já foi usado)
-    // Tentar abrir via intent no Chrome Android
-    var appUrl = 'https://acessoplatafomas.com.br/';
-    var intentUrl = 'intent://' + appUrl.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;action=android.intent.action.VIEW;end';
-    try {
-      window.location.href = intentUrl;
-      // Fallback após 1.5s se o intent não funcionar
-      setTimeout(function() {
-        // Mostrar modal com instrução manual
-        var modal = document.getElementById('storeInstallModal');
-        if (modal) modal.classList.add('open');
-        var subEl = document.getElementById('storeModalSub');
-        var txtEl = document.getElementById('storeProgressTxt');
-        var pctEl = document.getElementById('storeModalPct');
-        var barEl = document.getElementById('storeProgressBar');
-        var openBtn = document.getElementById('storeModalOpenBtn');
-        if (subEl) subEl.textContent = 'Abra no Chrome para instalar';
-        if (txtEl) txtEl.textContent = 'Toque nos 3 pontos (⋮) → "Adicionar à tela inicial"';
-        if (pctEl) pctEl.textContent = '📲';
-        if (barEl) barEl.style.width = '100%';
-        if (openBtn) { openBtn.textContent = '✓ Entendi'; openBtn.style.display = 'block'; }
-      }, 1500);
-    } catch(err) {
-      var modal = document.getElementById('storeInstallModal');
-      if (modal) modal.classList.add('open');
-      var subEl = document.getElementById('storeModalSub');
-      if (subEl) subEl.textContent = 'Abra no Chrome e toque em "Adicionar à tela inicial"';
+    // Fallback: prompt não disponível ainda
+    // Pode acontecer se: navegador não suporta PWA, já foi instalado, ou o evento ainda não disparou
+    var modal = document.getElementById('storeInstallModal');
+    if (modal) modal.classList.add('open');
+    var subEl = document.getElementById('storeModalSub');
+    var txtEl = document.getElementById('storeProgressTxt');
+    var pctEl = document.getElementById('storeModalPct');
+    var barEl = document.getElementById('storeProgressBar');
+    var openBtn = document.getElementById('storeModalOpenBtn');
+    var circleWrap = document.querySelector('.store-modal-circle');
+    
+    // Verificar se está no Chrome Android (que suporta PWA)
+    var isChrome = /chrome/i.test(navigator.userAgent) && /android/i.test(navigator.userAgent);
+    
+    if (isChrome) {
+      // Chrome Android mas prompt não capturado: instruções manuais
+      if (pctEl) pctEl.textContent = '📲';
+      if (subEl) subEl.textContent = 'Adicione à tela inicial';
+      if (txtEl) txtEl.textContent = 'Toque nos 3 pontos ⋮ no canto superior direito do Chrome e selecione "Adicionar à tela inicial"';
+      if (barEl) barEl.style.width = '100%';
+      if (circleWrap) circleWrap.style.display = 'none';
+      if (openBtn) {
+        openBtn.textContent = '✓ Entendi';
+        openBtn.style.display = 'block';
+        openBtn.onclick = function() {
+          if (modal) modal.classList.remove('open');
+        };
+      }
+    } else {
+      // Outro navegador: instruções genéricas
+      if (pctEl) pctEl.textContent = '📲';
+      if (subEl) subEl.textContent = 'Abra no Chrome para instalar';
+      if (txtEl) txtEl.textContent = 'Para instalar o app, abra este site no Google Chrome no seu Android';
+      if (barEl) barEl.style.width = '100%';
+      if (circleWrap) circleWrap.style.display = 'none';
+      if (openBtn) {
+        openBtn.textContent = '✓ Entendi';
+        openBtn.style.display = 'block';
+        openBtn.onclick = function() {
+          if (modal) modal.classList.remove('open');
+        };
+      }
     }
     if (typeof trackEvent === 'function') trackEvent('pwa_install_fallback');
   };
