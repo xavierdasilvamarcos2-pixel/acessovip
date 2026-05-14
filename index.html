@@ -4370,24 +4370,68 @@ function saveState() {
   try { _ls.set('av_favorites', JSON.stringify(favorites)); } catch(e) {}
   try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
   try { _ls.set('av_platforms_ts', String(now)); } catch(e) {}
-  // Salvar no Firebase via SDK (se disponível) ou REST API
-  var payload = { data: platforms, ts: now };
-  if (window._fbReady && window._fbDb) {
-    try {
-      window._fbSet(window._fbRef(window._fbDb, 'platforms'), platforms);
-      window._fbSet(window._fbRef(window._fbDb, 'platforms_ts'), now);
-    } catch(e) {
-      // Fallback para REST
-      if (window._fbREST) {
-        window._fbREST.set('/platforms', platforms).catch(function(){});
-        window._fbREST.set('/platforms_ts', now).catch(function(){});
+  
+  // PROTEÇÃO: Função interna que realmente salva no Firebase
+  function _doSaveToFirebase(platformsToSave) {
+    if (window._fbReady && window._fbDb) {
+      try {
+        window._fbSet(window._fbRef(window._fbDb, 'platforms'), platformsToSave);
+        window._fbSet(window._fbRef(window._fbDb, 'platforms_ts'), now);
+      } catch(e) {
+        if (window._fbREST) {
+          window._fbREST.set('/platforms', platformsToSave).catch(function(){});
+          window._fbREST.set('/platforms_ts', now).catch(function(){});
+        }
       }
+    } else if (window._fbREST) {
+      window._fbREST.set('/platforms', platformsToSave).catch(function(e) { console.log('REST save error:', e); });
+      window._fbREST.set('/platforms_ts', now).catch(function(){});
     }
-  } else if (window._fbREST) {
-    // SDK não disponível, usar REST
-    window._fbREST.set('/platforms', platforms).catch(function(e) { console.log('REST save error:', e); });
-    window._fbREST.set('/platforms_ts', now).catch(function(){});
   }
+  
+  // PROTEÇÃO: Verificar contagem no Firebase antes de salvar
+  // Nunca sobrescrever o Firebase com dados que tenham MENOS plataformas
+  fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/platforms.json?shallow=true')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var fbCount = 0;
+      if (data && Array.isArray(data)) fbCount = data.filter(function(x) { return x && x.url; }).length;
+      else if (data && typeof data === 'object' && !Array.isArray(data)) fbCount = Object.keys(data).filter(function(k) { return data[k] !== null; }).length;
+      
+      if (platforms.length >= fbCount) {
+        // Temos igual ou mais plataformas - seguro salvar
+        _doSaveToFirebase(platforms);
+      } else {
+        // PROTEÇÃO: Firebase tem mais plataformas - mesclar antes de salvar
+        console.log('[Proteção saveState] local=' + platforms.length + ' < Firebase=' + fbCount + ' - mesclando');
+        fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/platforms.json')
+          .then(function(r2) { return r2.json(); })
+          .then(function(fbData) {
+            var fbList = [];
+            if (Array.isArray(fbData)) fbList = fbData.filter(function(x) { return x && x.url; });
+            else if (fbData && typeof fbData === 'object') fbList = Object.values(fbData).filter(function(x) { return x && x.url; });
+            if (fbList.length > 0) {
+              // Mesclar: Firebase como base + mudanças locais por cima
+              var merged = [...fbList];
+              platforms.forEach(function(local) {
+                var idx = merged.findIndex(function(fb) { return fb.id === local.id; });
+                if (idx >= 0) merged[idx] = local;
+                else merged.push(local);
+              });
+              platforms = merged;
+              try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e2) {}
+              _doSaveToFirebase(platforms);
+              console.log('[Proteção saveState] Mesclado: ' + platforms.length + ' plataformas salvas');
+            } else {
+              _doSaveToFirebase(platforms);
+            }
+          }).catch(function() { _doSaveToFirebase(platforms); });
+      }
+    })
+    .catch(function() {
+      // Sem acesso ao Firebase - salvar normalmente
+      _doSaveToFirebase(platforms);
+    });
 }
 
 function trackEvent(name, params = {}) {
@@ -6112,12 +6156,18 @@ function init() {
   platforms = [...PLATFORMS_DATA];
   
   // Tenta pegar dados mais recentes do localStorage (se tiver)
+  // PROTEÇÃO: localStorage só é usado se tiver MAIS plataformas que o PLATFORMS_DATA
+  // Isso evita que cache antigo sobrescreva plataformas novas cadastradas
   try {
     const saved = _ls.get('av_platforms');
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed) && parsed.length >= PLATFORMS_DATA.length) {
         platforms = parsed;
+      } else if (Array.isArray(parsed) && parsed.length > 0 && parsed.length < PLATFORMS_DATA.length) {
+        // localStorage tem menos plataformas - ignorar e usar PLATFORMS_DATA
+        console.log('[Proteção] localStorage ignorado: ' + parsed.length + ' < PLATFORMS_DATA: ' + PLATFORMS_DATA.length);
+        _ls.remove('av_platforms'); // Limpar cache desatualizado
       }
     }
   } catch(e) {}
@@ -6161,14 +6211,28 @@ function init() {
           if (arr.length > 0) newList = arr;
         }
         if (newList && newList.length > 0) {
-          // Sempre usar os dados do Firebase (fonte de verdade)
-          platforms = newList;
-          var now = Date.now();
-          try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
-          try { _ls.set('av_platforms_ts', String(now)); } catch(e) {}
-          renderHome();
-          renderHot();
-          console.log('Firebase: ' + platforms.length + ' plataformas carregadas.');
+          // PROTEÇÃO: Só atualizar se Firebase tiver MAIS ou IGUAL plataformas
+          // (evita que dados corrompidos do Firebase apaguem plataformas)
+          if (newList.length >= platforms.length || newList.length >= PLATFORMS_DATA.length) {
+            platforms = newList;
+            var now = Date.now();
+            try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
+            try { _ls.set('av_platforms_ts', String(now)); } catch(e) {}
+            renderHome();
+            renderHot();
+            console.log('[Firebase] ' + platforms.length + ' plataformas carregadas.');
+            
+            // BACKUP AUTOMÁTICO: Salvar cópia no nó /platforms_backup com timestamp
+            // Isso garante que sempre há um backup recente disponível
+            var backupKey = 'backup_' + new Date().toISOString().slice(0,10); // ex: backup_2026-05-13
+            fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/platforms_backup/' + backupKey + '.json?auth=' + FIREBASE_API_KEY, {
+              method: 'PUT',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ platforms: platforms, ts: now, count: platforms.length })
+            }).catch(function() {}); // Silencioso - backup é secundário
+          } else {
+            console.log('[Proteção] Firebase ignorado: ' + newList.length + ' < local: ' + platforms.length);
+          }
         }
       })
       .catch(function(e) {
