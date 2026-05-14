@@ -4769,13 +4769,13 @@ function renderShare() {
 // ===== TAB NAVIGATION =====
 // Função global de verificação de instalação
 function _appInstalado() {
-  // Critério: modo standalone OU flag salva após instalação/aceitação do prompt
+  // Critério ESTRITO: apenas modo standalone real
+  // NÃO usar av_installed do localStorage - pode estar salvo sem app instalado
   var standalone = window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true
     || document.referrer.includes('android-app://');
-  var flagSalva = localStorage.getItem('av_installed') === '1';
   var paramPwa = window.location.search.indexOf('pwa=1') !== -1;
-  return standalone || flagSalva || paramPwa;
+  return standalone || paramPwa;
 }
 // Função global de bloqueio (usada pelo sinalAtivoBanner e outros)
 window._irParaAbaHot = function() {
@@ -4894,6 +4894,51 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
   if (e.target === document.getElementById('sorteioModal')) document.getElementById('sorteioModal').classList.remove('open');
 });
 
+// Função global: mostrar instruções manuais de instalação PWA
+function mostrarInstrucoesInstalacao() {
+  var el = document.getElementById('pwaManualInstallModal');
+  if (el) { el.style.display = 'flex'; return; }
+  el = document.createElement('div');
+  el.id = 'pwaManualInstallModal';
+  el.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.85);display:flex;align-items:flex-end;justify-content:center;padding:0 0 20px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);';
+  var box = document.createElement('div');
+  box.style.cssText = 'background:#1a1a2e;border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;border-top:3px solid #7C3AED;';
+  // Header
+  var hdr = document.createElement('div');
+  hdr.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;';
+  var ttl = document.createElement('span');
+  ttl.style.cssText = 'font-size:18px;font-weight:800;color:#fff;';
+  ttl.textContent = '\u{1F4F2} Como Instalar o App';
+  var cls = document.createElement('button');
+  cls.style.cssText = 'background:rgba(255,255,255,0.1);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;';
+  cls.textContent = '\u2715';
+  cls.onclick = function() { el.remove(); };
+  hdr.appendChild(ttl); hdr.appendChild(cls);
+  // Passos
+  var steps = document.createElement('div');
+  steps.style.cssText = 'background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.4);border-radius:12px;padding:16px;margin-bottom:12px;';
+  var stepsTitle = document.createElement('p');
+  stepsTitle.style.cssText = 'color:#a78bfa;font-size:13px;font-weight:700;margin:0 0 12px;';
+  stepsTitle.textContent = '\u{1F916} ANDROID \u2014 Google Chrome';
+  var s1 = document.createElement('div'); s1.style.cssText = 'color:#e2e8f0;font-size:14px;line-height:2;';
+  s1.innerHTML = '<div>1\uFE0F\u20E3 Toque nos <strong>3 pontinhos \u22EE</strong> no canto superior direito do Chrome</div>' +
+    '<div>2\uFE0F\u20E3 Toque em <strong>"Adicionar \u00E0 tela inicial"</strong> ou <strong>"Instalar app"</strong></div>' +
+    '<div>3\uFE0F\u20E3 Toque em <strong>"Adicionar"</strong> para confirmar</div>';
+  steps.appendChild(stepsTitle); steps.appendChild(s1);
+  // Dica
+  var tip = document.createElement('div');
+  tip.style.cssText = 'background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:12px;padding:12px;margin-bottom:20px;';
+  tip.innerHTML = '<p style="color:#6ee7b7;font-size:12px;margin:0;">\u{1F4A1} <strong>Dica:</strong> Se n\u00E3o aparecer a op\u00E7\u00E3o, aguarde alguns segundos e tente novamente.</p>';
+  // Botão OK
+  var okBtn = document.createElement('button');
+  okBtn.style.cssText = 'width:100%;padding:14px;background:linear-gradient(135deg,#7C3AED,#3B82F6);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;';
+  okBtn.textContent = '\u2705 Entendi';
+  okBtn.onclick = function() { el.remove(); };
+  box.appendChild(hdr); box.appendChild(steps); box.appendChild(tip); box.appendChild(okBtn);
+  el.appendChild(box);
+  document.body.appendChild(el);
+  el.addEventListener('click', function(ev) { if (ev.target === el) el.remove(); });
+}
 // ===== PWA INSTALL =====
 // ===== PWA INSTALL BANNER PREMIUM =====
 (function() {
@@ -4910,6 +4955,12 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
 
   // Compatibilidade: manter deferredPrompt global para outros scripts
   window.deferredPrompt = null;
+  // Limpar flag av_installed se não estiver em modo standalone real
+  // Isso garante que o bloqueio funcione corretamente para novos usuários
+  if (!isInStandalone) {
+    // Não limpar aqui - apenas garantir que o prompt seja capturado
+    // O av_installed só é confiável quando standalone=true
+  }
 
   function showPwaBanner() {
     if (_pwaDismissed || isInStandalone || _pwaBannerShown) return;
@@ -4982,19 +5033,9 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
           }
         });
       } else {
-        // Fallback: redirecionar para Chrome via intent
-        var appUrl = 'https://acessoplatafomas.com.br/';
-        var intentUrl = 'intent://' + appUrl.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;end';
-        try {
-          var a = document.createElement('a');
-          a.href = intentUrl;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          trackEvent('pwa_install_chrome_redirect');
-        } catch(err) {
-          showToast('Abra no Chrome para instalar o app!', 3000);
-        }
+        // Fallback: mostrar instruções manuais de instalação
+        mostrarInstrucoesInstalacao();
+        trackEvent('pwa_install_manual_instructions');
       }
     }
   });
@@ -6128,7 +6169,6 @@ function checkWelcomeModal() {
   var jaInstalado = window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true
     || document.referrer.includes('android-app://')
-    || localStorage.getItem('av_installed') === '1'
     || window.location.search.indexOf('pwa=1') !== -1;
   if (!jaInstalado) return; // Não instalado: não pedir notificações
   var notifPerm = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
@@ -7600,26 +7640,29 @@ function clearPlatformMetrics() {
   // Acionar instalação PWA
   function acionarInstalacao() {
     fecharPopup();
-    if (window.deferredPrompt) {
-      window.deferredPrompt.prompt();
-      window.deferredPrompt.userChoice.then(function(choice) {
+    // Tentar usar o prompt nativo (beforeinstallprompt)
+    var promptEvt = window.deferredPrompt || window._pwaDeferred;
+    if (promptEvt) {
+      promptEvt.prompt();
+      promptEvt.userChoice.then(function(choice) {
         window.deferredPrompt = null;
+        window._pwaDeferred = null;
         if (choice.outcome === 'accepted') {
           localStorage.setItem('av_installed', '1');
           localStorage.setItem(STORAGE_KEY, '1');
           removerBloqueioVisual();
-          // Mostrar pedido de notificações após desbloqueio
           setTimeout(mostrarPedidoNotificacoes, 1500);
         }
       });
     } else {
-      // iOS ou sem prompt: mostrar guia
-      var iosModal = document.getElementById('iosInstallModal');
-      if (iosModal) { iosModal.style.display = 'flex'; iosModal.classList.add('open'); }
-      else {
-        var guideModal = document.getElementById('installGuideModal');
-        if (guideModal) guideModal.classList.add('open');
+      // iOS: mostrar instruções específicas
+      var isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (isIOSDevice) {
+        var iosModal = document.getElementById('iosInstallModal');
+        if (iosModal) { iosModal.style.display = 'flex'; iosModal.classList.add('open'); return; }
       }
+      // Android/Chrome sem prompt: mostrar instruções manuais
+      mostrarInstrucoesInstalacao();
     }
   }
   
