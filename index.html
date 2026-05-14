@@ -2226,148 +2226,7 @@
     .rnm-prize-badge.bronze { border-color: rgba(205,127,50,0.4); color: #CD7F32; }
 
     /* ===== FIM RANKING SYSTEM ===== */
-
-
-    .store-install-modal-box {
-      background: #fff;
-      border-radius: 24px;
-      padding: 28px 24px;
-      max-width: 320px;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    }
-    .store-modal-spinner {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 16px;
-      position: relative;
-    }
-    .store-modal-spinner svg {
-      width: 80px;
-      height: 80px;
-      transform: rotate(-90deg);
-    }
-    .store-modal-spinner .track {
-      fill: none;
-      stroke: #f0f0f0;
-      stroke-width: 6;
-    }
-    .store-modal-spinner .progress {
-      fill: none;
-      stroke: #22c55e;
-      stroke-width: 6;
-      stroke-linecap: round;
-      stroke-dasharray: 220;
-      stroke-dashoffset: 220;
-      transition: stroke-dashoffset 0.3s ease;
-    }
-    .store-modal-pct {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: 900;
-      color: #1a1a1a;
-    }
-    .store-modal-title {
-      font-size: 18px;
-      font-weight: 800;
-      color: #1a1a1a;
-      margin-bottom: 6px;
-    }
-    .store-modal-sub {
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 16px;
-    }
-    .store-modal-badges {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-    .store-modal-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-weight: 600;
-    }
-    .store-modal-badge.speed {
-      background: #f5f5f5;
-      border: 1px solid #e0e0e0;
-      color: #555;
-    }
-    .store-modal-badge.active {
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      color: #16a34a;
-    }
-    .store-modal-progress-bar {
-      background: #f0f0f0;
-      border-radius: 8px;
-      height: 8px;
-      overflow: hidden;
-      margin-bottom: 8px;
-    }
-    .store-modal-progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #16a34a, #22c55e);
-      border-radius: 8px;
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-    .store-modal-progress-txt {
-      font-size: 12px;
-      color: #888;
-      margin-bottom: 16px;
-    }
-    #storeModalOpenBtn {
-      display: none;
-      width: 100%;
-      padding: 14px;
-      border-radius: 12px;
-      border: none;
-      background: linear-gradient(135deg, #16a34a, #22c55e);
-      color: #fff;
-      font-size: 16px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    
-    /* Botão "Já tenho o app" */
-    .store-already-btn {
-      display: block;
-      text-align: center;
-      font-size: 13px;
-      color: rgba(255,255,255,0.4);
-      padding: 12px;
-      cursor: pointer;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-    .store-already-btn:active { opacity: 0.7; }
-    
-    /* Neon glow effect no topo */
-    .store-neon-top {
-      position: fixed;
-      top: -100px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 300px;
-      height: 200px;
-      background: radial-gradient(ellipse, rgba(34,197,94,0.15) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    </style>
+</style>
   <!-- Web Push Nativo (VAPID) - sem dependências externas -->
   <script>
     // Chave pública VAPID para Web Push nativo
@@ -2414,8 +2273,6 @@
   </script>
 </head>
 <body>
-
-
 <div id="app">
   <!-- FAIXA VERMELHA DE INSTALAÇÃO -->
   <div id="faixaInstall" onclick="window._acionarInstalacaoGlobal && window._acionarInstalacaoGlobal()">
@@ -4457,7 +4314,7 @@ const VAPID_PUBLIC_KEY = 'BCHNrTTKpl2kwTOZhWDnolzEUmk9GUvp2fOjPiyJsultDj3hVRuKrd
 const GA_ID = 'G-XXXXXXXXXX'; // Substituir pelo ID real do Google Analytics
 
 // ===== PLATFORMS DATA (embedded from DB) =====
-const PLATFORMS_DATA = [{"hot_game":"","id":1778677537795,"imageUrl":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGiEcFxgfGRQUHScdHyIjJSUlFhwpLCgkKyEkJST/2wBDAQYGBgkICREJCREkGBQYJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCT/wAARCADIAMgDASIAAhEBAxEB/8QAHAAAAQQDAQAAAAAAAAAAAAAAAAIDBAcBBQYI/8QASxAAAQIEAwQFBgwFAQYHAAAAAQIDAAQFEQYSIQcTMUEiUWFxgQgYVXSR0hQVIzJCYqGio7HCwyQzUnLBFjZDkrLR4SZEc4KU8PH/xAAbAQACAgMBAAAAAAAAAAAAAAAABQEEAgMGB//EAD0RAAEDAgMFAwkHAwUBAAAAAAEAAgMEEQUSIQYTMUFRcYGhFBYiUmGRscHRFSMlMlPh8CRC8TM1YmOikv/aAAwDAQACEQMRAD8A8qQQRKplMnKxPsyEhLuTEy+oIbbQLkkxDnBoLnGwCkAk2CjAFRAAJJ4ARZeDdg2JMTNtzU/ajya7EKfQS6odYRp9tosnB2zTDuyyk/H+KHpd+opAVnWLpZP9LafpK7fZaOWxltorFdWuVoxVTJLUZk/znB2n6PcPbHJTY3U1zzFhgs0cXnh3DmndPhbWgOqOPT6rq07NtluA20msvNTMwBf+NezrV3Np5eELRtV2eUPoUqj6J5y8mhu/ibRR6y4+4px1anFqN1KUbkntMZDJ6o0HARLrVzPee2w9yZsAZ/psA7leXnBUEaCk1O3cj3oPOCoXomp/h+9FHhnug3J6hGPmxh/qn3lbt5Krw84Kheian+H70HnBUL0TU/ue9FIbk9UG5iPNjDvVPvKM8qu/zgqF6Jqf3PejPnBUL0VU/ue9FH7iM7iDzYw/1T7ypzyq7/OBoXoqp/c96DzgaF6Kqf3PeikNyYNwYPNjD/VPvKM8iu/zgaF6Kqf3Peg84Gheiqn9z3opHcGDcGDzZw71T7yjPIru84Gheiqn9z3oPOBoXoqp/c96KR3Bg3Bg82cO9U+8qc8iu7zgKEdPiqp+xHvQhe1PZ7XPk6rRwQrnMSaHLeIvFKbiMFgwDZqhGrMwPsJWJc88dVdC9m2y3HjajRnmpaYIv/BPZFp7S2rl4RWmMtg2JMMtuTUhasSaLkqYQQ6kdZRr9l40KA4w4lxpam1pN0qSbEHsMWDg7bNWKEtErWCqpSXDMr+c2Ow/S7j7YzEGJUPpUsu8b6ruPcf8KnLSQS/mblPUKkSCkkEEEcQYxHpbGWzTDu1KlfH+GHpdioqGbOgWS8f6XE/RV2+28ec6nTJyjz70hPy7kvMsKKHG1ixBh/hWMQ17SGjK9vFp4j9khq6N9OfS1B4FRYIIIbKosgFRAAuToAI9KbNMHU7ZZhR3E9fyoqLzWdWYaspPzWk/WOl/Zyittg2DUYmxb8Pmmt5J0oJeUFDoqdJ6A9oJ8I6LbPjFVdrpo8qv+Cp6sqrHRx3mfDh7Y5DG5n1tSMMiNmjV59nId6e4XThrfKHceX1XL4yxjUMa1VU3NqKGEmzEuD0Wk/5PWY0yGrwNNxJSi0M42MhYI4xYBN44y43KQlrshYRCwLRmxiC5WhGAk5B1QZRCrRnLEXWWUJOWDJC8sKiLqcoTYT2Rndwu0FoLqcqRkjOSFwWvEXU5UjIOqM5RCsvZGbQXRlCbyxkohwX6oILqMqayQZBDsEF0ZVHU0IZcZidbuhCkZhGQetT4gVMwfi+oYKqqZuUUVsKNn5cnoup/weoxZm0zBtO2pYVaxPQcqqiw1nTlGryRxaV9Ya29nOKedatyjvNjeL1UKuijzKz8CqCsqbnRt3kfHh7IUYrSvYRiFLpIz/0OYPd/OCqPia5pik4FUeQUkgixGhBgiy9vODUYZxb8PlWt3J1UKeSEjRLoPTHtIPjBHVUNYyrp2VEfBw/yO5clPCYpDG7iFZezZDeBNjTtaKEiYmEOTdyPnKV0WwezRPtMUqVLfdW64oqWtRUpR4kniYu7akj4j2W0ulI6ItLsHtyoufyik2U3jk8CO9E1WeL3n3DgusZHla2PoE+2mwh0JJjDadOEOAWhySr7G2CSExm1xGbRm0Y3WYCwBBaFARmwiLrKySBrGbQqC0CmyTljOWFZYzliEJIEFuyF2gt1wXUpEFoXaA2SCSQANSTygUHTVJymDLCEqffTmaQEIPBTgNyOvLofbaFmWnEahQJHEKZNvsNx7Yzy24kBaN/fVrSR3fMhGWDLEgyE80ltUxJutB1sutKt0XEA2JSedv8Ar1GGrRiQQtjHh4uEjLGLQ5aMWiLrOyYcRcRFzLYcS62opWhQUlQ4gjgYnqERHk6xsYeSqzs5q39pTbeO9jTVZCEmYl0NzdwPmqT0XAOzVXsEEP7Mm/jvZfVKUvpC0wwOzMi4/OCEODYnDh2+pJTYNebdhSPEqR8z2yMHJK2/i2GqcOA+GfoVFIsReXlBpthqm+u/oVFHsCMtmD+Ht7T8U4OsikoGkLywIGkKhyVdAWALRmAAmFBPXEKUm0KyxkCFZYLqUnLBaF2tBaIupskgXjOWFpF4zliLqbJGWM2hWXrgyRF0WSbRhEwGZyUaDZccddACAm9xccdeHt4Q4Exu8GUuUm665NzuV1LMtkbaVwSSsXV7DbxizSsD35T0NlSr3PbFdg5i/Yuqp0lT6XKCbVS9FrLagpIWslQIzkXICQQDpblxvHXUZmUTJSqXJIzJCVLXMBLaUG50TYpKibDkBorjfhpMSSE9ISAqeH5Nt6bl+kltIuMvMpTzI6o2uzVrFy30qr76TT20XQQ2BmWT121sAfsjU6ie43fa+o4XHb2qlJUMLC5oNgRzt3LmNpTdQmlUqeblmWJaUP8AEPNheVpJWkBSjYWAFtfs0iv6nKNyswkNvIebcabeStHDpJCiPAkjwj17Oy8nXKPN0yZKCxNsrl13OhzJI9seZqhs9q8lMPNrbbl5dlxTLHwhwJUtKVECw1MZOYynp2xl1yOa1YdXieqe0EDThf8AntXI2vBljsVYLk6UFGrzri1pb3hak0ZiE2+cSeXDlHJKSnMcpNr6XjS1wc0OHAp6HAkgck0pNohvJ4xOWLJiI+NTGxhWmcaK5dgovhyojiPhn6EwQ5sCTfDlR9c/QmCPLsdd/Xy9vyC1MIyhL8odFsM03139tUUUwIvvyjEWwxTNP/Pftqih2BrHabKm+Gt7T8VpjN3KSgacI31Mocu8yw9NLfcW/fdS8ui616248tQeRjStjSLQ2Rm2LaH6u6P+eHE8whikmIvlaTbrYXsl+0VTPDDEynflL3hpNr2BB4JFM2YV6dSFS+G2pVB4KnVnN4gn/EbxnY1iJSek/RWewMg/oi6oI83l22rnH7tjWjsv8SlP2Ix+s0r3n2uKoqe2M4ibSVJZpM1bk2MhP2COEr+FZ2ivbqcknpJ48Er1Qv8AtV/++EesI19doklXqe7JzrCXUKHPiD1g8jFmi22mzgVcYLeo0I+RW1lBNTenRzOBHJxzNPssfiF5epdCZfDG8ZmpyZfuW5SWTqQDbU2J5HQCOzpuyvEc2ApuiSMig8DMnMrxBv8AlEnBVJdoW1BqmuOFwMZ0tqPNBFwfti9YebQ7ROw50bKVodnaHZjc8b200S6lFTipkkqpXNAcRlabAW7OKp1vY1iBSflKtTWvqtsXH5CIU/sZxEhBUhylzluWTIo/Z/mLvgjlxtriN7kNI6ZVcbgNM3VhcD1DjdeVMQYVnqG6Gp6QdknD82+ra+4/9z4RoSkgkEaiPXdYo8nXJFyTnWEPNrFrKH/20ef38FzUvi93D9PpiqnOrUPgwUdMh1zK4DTrJsLGOywHG2YtePLlkGtuRHUdOxbxis+Ei1STLGdAf7geh6g9eK4TIeNo7zZ5h6eSXp+YksspMslpuYWjMpJzA5kp5jSx4aHQxYlL8nXErze9nK3IU5a/nNy7WYjvIsIVUtg+MaSy69Sa8xPKKbKbUC2pYAta5vy7Y6ptC9ut9UvxDaKrq4HQsgLA7ne5A9g9HXvXMTrc7S9/unsqJdRzBKs4ypFyoDUkDnppaNnhbEU5UX5aRZROOszDlvhHwRTbCDYnVSrXva2gPGOVkqpMUCeckapKPSU3LlSlpWBoRyseIPKx8Y6zD9G2gbQ2UTVJQ3TKYlXycy8cpWeF08z3gW7Y007Kl4fHKLHkbrGsxamZGyOlcZHka6ag+3kNeWvuXUVmZRTpdCgSpQORJvyueHeY4DF0xNTy0VAMrdQhsNryjNuiCdSByII1647NzYHjBxGdeLmVujXKUrI9scjiijY3wAw4KtLNzUq4ChE6z0g2eVyOHiPGJFFNE8PABA5Li8MirsOq/K3D82jiehtfhf3rlZuo1CgyomHZlLnw5otJl3UdMs2NiTxyXJt16xxZTEqbefmZhb0w4px1R1Uo3vDOWKTgA4kCy9zpReJpzZr6363TKk6RDfTx0jYKGnCIUwI2MOqJxorp8n1F8N1L139CYIf8nlF8NVPS/wDG/tpgjyjaB/4hL2/IJfnsl+Ugm2F6X69+2qKClxrHoPylBbCtL9e/bVHn+XGojt9kzfDG9p+Kmm11UtCdIsrZScuLKF/6Tg/54rhsaRYuy1QGK6D/AGOD/mhtW60k4/4O+BSzaf8A06c/9rfmvREcRtRxNPYZpbczIbreuOpa+VSSEghRJsCNdI7eNLiTDtIxE02xVkqW2hYcCErKbkAjl3mPHcLlgiqmSVLczAdRxuisZI+FzYTZxGhWn2Y4snMV0d96daQh1hzdlTdwlel9L3jsVrCElR4AXiJSabIUmRRKU2XaYlkcEtjn1nrPaY0GOJnE8rILXQ5NiZNjdRX0mx1hFrKPj4GN07Yq6ucKUCNjjoCQAO/+dAtcRkp6Yb85nAakDiuMYmG39tDW7IO7QEKt1hGsW9HnrZqpZx/IqeW8uZWpwvl35xXre8ehYe7ZU3k0tPBe+WMC/YSlez0+/jllta7yfALj9peIJvDlEM5JFvfZ0ITvASkXOpsCOQhOy/E8/iiiuzE+2gONOlvOgEJXoDe3jG9r9EpNdYRLVZrfNBQWEZ1JuRe3AjrMTKdJydPlG5aQYZYl0CyW2khKR4DnCkVdEMLNOY7zE3Dug05+/SyYGCoNYJQ/7u1rdSpJISCSbARVEziNqlbbqLMoUAlIblXuq7hUNe4LSfCOyxlN1+SpzjtHkWptYv0VLsUjry26XdceMefJidmXZh6ZmHVCc329ccWLKSsE+yOr2Cw12+dWFwsBawOuvUcu9I9p8QETWRAG9wb200XtGaxLS5J1LcxNstKVw3i0pv3AmNi06h5AcbUFJULgiPEKGHKs+/UKhMuzCrF12YcWVKJ5anrNhaPTuwUz6tm8iueU4rM45uC4STugqw48r3t2Wj1VrwTZLKLFBVSmMNtZajb/AIKlqthtyuMspTOyCd4XEjVTf0knrFteyx6zD+wHEDUxs8bZec6UjMOMnrtoofYqOj2sT7EjgOtl8ixkXk2PMqQUpHiVCPJMtOVBFNXT2515qSeWHHWULIDigLC9uPdATZaa2dlJUia3EG69tSVXkqiVJlphtxSeISoG3shdRp8vVJN2UmmUOtOpKVIWLggx5Y2TS89TtotBl6e66l18qVNNA9ENWJOYdwvrztHrAkAEnQCBrswuFeoawVcZeBbkvGG0TCKcK4qnKU1fcaOy5UdQg8AT2ajwjkMvtHGLa2+zbM1j5lDRBU1JpDluRK1qH2ERU06dxP8A1XLA98Lq6AEF44hMNmcXdT1zsOcbxm+X2Hjbs+aQoaWiFMCNitNxECYHGFkZ1Xos49FXj5Oqb4Yqfrv7aYIe8nFN8L1T179tMEeRbRO/Epu35BI5HWcQk+Up/srS/Xv21RQMuLkRf/lJi+FqV6/+2qKCl06iO+2S/wBsb2n4qzSclMQnSO/2aHLiqgdpWPtVHCNpsI7rZ1pijD396/zMOKrWnmH/AAd8Cl21I+4gP/Y35r0ZFbbaZuYk6NLLlpl+XUqYSkqZcKCRlVpcERZMNvSzEyAHmW3QOS0gx45hlY2jqmVD25g03t1WNZAZ4XRNNiRx6LhNjc7Vp+gzDlRdfeZS7ll3XiSpYtrqdSAY78i4seEYSlKEhKUhKRoABYCMLcS2kqUQBBiVY2sqn1DGZQ48ByUUcBghbE52YjmVXdVoLNO2n0WpMJCRNlxDgH9SU3B8QfuxY0VxVsQMVDaZQqYwoKVLLcceI4JUpFkp77Ak94ix4YY0ZjDS7/jk8MzreHgq9AIxJNu+GbxsLqudtU29KUGXUw+8wpc02kqaWUkjK4badwiXsfdq7+HXHamuYW2p3+HW+SVKRbjc6kXvHcraQ589CVW6xeFAW4RH2xH9l/Z+69K983Ts0+aPIHeW+VZza1sv8+iCARY6iKS2vYdlJGtytQQwpTc4otvNN6FahYgjtP8AiLsWtLaSpRAAjWYUrMnUtofxegNuuSsot9ZIB3aiUhIvyNr+0dcMNit99psEfAg37LfW3etOOQRz0pjebEkW7VXmAtidZxI5Lu1uVXRaG2refBjcPP8AeDqL9Z8BHoN9+Qw5S0IG6lZSVaCUAkJQ2hItqeAAAjYXHXCHWWn0FDraHEnilQuI9va0NFgkNLRspwcupPEniV5Z2ubVEY3m00mmP2o7Swtx+x/iVjhYf0Dl1nWOew9RJ6vTSZPDdMmKnNJtmeUizTPaeQ71Hwj0FtslpSRwBVFsyrDS1NBIUlsA6rSI6jZ/LsyuCqIllptoKkmVqCEgXJQLk25xi5mY6pXPhhqKj71+lr6DwXO7K9lbeBGXajUH0zdbm02edHzWkk3yJ6+Gp5w9tJ2n0vBVOVvXA7OOpO4lUnpvHr7E34mO8jXzlBpE2pT0zS5F9zLbO4wlSrd5EZ2twThsAij3cOi8WzlTma3UpmqVB8PTs0suOECwHUB2AWA7BHO1R0Ov3SeenhFk7W2pdvaFPMS7DTLTbTacjSAlIOUE6Dviulyg+HlIPQSb2P5RTqnZYyl2zVKHYxlkd6Qvb2n+a9yfUnoxAmBxjaLSbRrplOphJGdV7HOPRV5+Tj/sxVPXv20wRnycxbDNU9e/bTBHkO0X+5TdvyC56X85TflIG+F6X69+2qKGlxwi9vKKN8MUz179tUUXLjhHoGymmGN7T8VdpBaynITG0pNXmqXNyszKrSh6WUVNqULjXkY1zYuIcAEPQ6x1FxzHUK1iGHR10Bhk05gjiCOBHYrSkNtdSYSEz1MQ4RxUy4Ug+Bv+cbRG3STt8pTJ8H6uQ/mRFNrffZTdu6/qmECsWNlt2PbpFU7M4NP6W7se0hedVce0FC4ttvG8iADf5q4n9ubRBDFKm1HlnWhP5Xjm61tTxDWG1MyqWqc2rQuIJW7bsUdB4C/bHB/HKOSB7YQusH6ISPti1TbNYTTuztjBI6m/he3glUtVjs/oBjh2Nt42W2k5yapM43UJSZLU02oq3q+kSTxve9/GO6p+2iryyAmdp7T1vptLKb+BvFSOzbswq1yo8h/2iXL/AA1prNe/Ug6mLOIUeHVhAqWB1uf7jVXcPwHHIIjJAbHjlvx+I+audvbnLW+Upk2D9UpP/SEvbcmSn5Glzaj9ZSU/leKc+NHEaONAHt0jPxt9Qe2FjdksHJuG/wDorCSr2gYcroj/APN/grArO1av1VtTUo21T0K0LgJW5bsJ0HsvGgoGJq1hWoOz9Jm0omX05HFvJDhVrc8e6ObXVXD80JHheI6n3n1ggqUocLcodUlLRUDS2naG9nH3/uqrMLxuvlD5ARbrpbu+gVqN7ccdN2u9TnP7pc/4UIlN7fsaI+fK0hfc04P3IqpS55tCVEk35AXIhPwycHEK/wCCLgrYj/ct78Cx5hta/ePmrHxVtfxDi6iPUidkJBtp4pu41nzCxB5qPVCqbtnxnSpNiTYNNWzLtpabDjBJypFhchQ6orb4wmRxSf8AhhKqjME8cvhGXlUfrKucGxzPcs14cQrca8oHGKPnyNJX3IcH7kSm/KKxKkWdo8ir+1xaf8mKaE7OcbKI/tjPxjMjin7sAq4/WW04Tjzf7PFq6LEFcmMT4hnK1MsJl1zJT8klRITZIHE932xy8zc1BNuOcfnDxqroGoTfuiPLnfziDxN7mNFVOwxkAq9s1g1dHiQqKlluOvtK2SxpGtmUxtVjSNbNcTCaI6r1Wceirv8AJ3OXDNT9d/bTBDfk+G2G6l67+hMEeTbQt/EZe35Bc9K30ymPKGVfDNM9d/bVFHy3KLr8oNV8NU3139CopKXPCPQNlx+HN7T8Vdp9Ctm2dIcEMtq0hYVDkhNmlOgxkhKxZSQodohoKhQVGKyuj4LLn/dJjIlJcf7pMGeFbwQXKjK3ot5hrDLlbfyoW1LS6QVLdX0UpA4nwjo3aHhiSyoaden1cFqUFNgdxvr7BHMitIk5IyiWumpCLOZyMo4kW4G56+qGG6qpSglNyTwA1hvHQgMBIuV4zj20eI1FQ9sEhYwEgZTbhzNuZ9y65NLw66UoFOcWpZypQHVEqPUBzPYIVNYYw9JObudoUxJrKcwTMBxokcLgKAuLxY2wyXl5TDNZxMuVMzOyyltISE3WEpbCyE9RJVbwES9nOIXNpWMnaxWpGVZepsraRZRcgZl9JRJOqk9EXAFs3DhG5tG23t7FRifiMkbM9ZIHO4am1lV7uFsOyq20zNDmJZTn8v4QlxvP/bmAv4RJl8LUp8MiWw/UnQ9/K3bLxDml+ibWOmvdFwyNWqONcI4kbxhQxSmZYuBtS0qTlCUk5gVcVIIBzjQ305xsZeozlFYwFTGbBubQGJgFNyUplVK8OkkRl5Ew/wCArLGV983lsmU+0g8bKi1YdpSJZ6aVQqgmXYWW3nih0IaUDYpUq1kkHjfhECZpuH1osiXdaP8AUl0k/bHoqVqT9XrWMaPN5FyMohlttGUaBxnMu/XcmPJr1TLa1N5vmm3sjB9C3kFVrajE6ctdFVyHjxceRT1SpvwE523N6wo2C7WIPUREDMIfFU3jT7ajcFtSrdwv/iIQcBFwYVVdNunacCvUNk8YmxCkPlP52GxPXoe3qns0YKoazxjOIq2XU3TpV2wnQcLQ3ngziJsi6UtWka6aPGJi3NNI18yrjG2MaqvOfRV2+T+oDDlS9c/QmCGdgK//AA5UvXP0JgjyvH2/iEvb8gkjxdxUfygV3wzTSOHwwa/+xUUnLLi49qLvx7sqpNVR0gRLvnszIsftMUnLuW5x6BsyzLQ5Dxa4g+9bI3i4K26F6cYc3kQkOgjjC952w4LUyEilbyM7yIm97Yzve2IyKd4pe87YzvO2Ie97RBve2DIp3iW7NKezJSbvNaKRzKeSh1jl4Q/QsQGj1eUn1S7cymXeQ4plz5rgSoEpPYbWPYY1k4z8IyuIWW3kfNWk2I8YZTP1RojMphZHNcugk95y6w/pquJ0Ya/QrzbFdnZ2zufA3M0m/ZfkrvpPlBzlNxVO1WRokozT51CEuSKDlGZIsFhQ+lyOnC3VeHMS7ZKpiKuU2r0qXFHep6HEtlC8+fOUlQUCLEdEaRTkvimqs2CkSZA6pNr3Int41mkjpMNHulmvdiyJqf1kolwzFsuVrNO0fRWjirarinGFLVTZ6YlJaVWkpcRKNFG9/uKlKNuwWjYVTbtU3p2kziaNINrpRWppJcWoKzNlGvDkTFR/64fIsWEf/Gb92GHcYPOD+Qjxl2/dg31P1WhmGYxmJLDrbmOSshHlAV2nTlammqdTS5V3EreKkrOTK0lsBPS4WTfXmTFTv1BTjql/1EmFP4jnnL5GpYd8s2f0xBeqtVeNs7DY625ZtJ9oSDEeUQDgVbbg+ISW3jPHqpjk4qXZKVH5Z8ZUo5hPNR6urtvE9LlkgX4CNHJyqkrLrylKWTclZupR7Y2G+hJXSiZ928Au/wBn8PNBAQ78zjcqbve2De9sQt9Bvu2KWRPt6pm97YN7ELfdsG+7YMiN4pa3dIgTDmhhS3tOMQn3e2NkbNVXnk0V6bAV2w3UieHwz9CYIibLnviPZXVqss5QBMPjtyosPtEEef1mETV9bO+EXAdbwSqaoZERm5qPsxcbx9sVeohWkzMshyUsTqlaek2T2ap9hikunLvLZdSULQopUk8QRxEb7YBjRGF8YfF827u5KrBLCio9FLoPQJ8SR4x0e23BaqBXzWpVH8DUVZlWGjbvMePEeMdbAPIcTlpH/ll9NvbzH86KvRzbyFp5jQrh23rw7vY17TsSEuXEO3MTSOS4Ujewb2Gc0GaMcq2Zk9vTBvYZzQZoMqMye3sZ30MZoM0RlRmT++g30MZoM0GVGZP76DfQxmgzQZUZk/voN9DGaDNBlRmT++jG+hnNBmgyozJ7fGDewzmgzQZUZk9vYN7DOaMKXaJyozJbj3bEa633UNNJK3FqCUpHEk8BCXXYsLYlgxVfr4rU0j+BpysybjRx36I8OPsjTV1LKSB08nADx5DvVWR5cbBdZtOcbwFsVaooWBMzKG5TQ6qWrpOHu0V7RBFY7f8AGiMUYw+L5R3eSVJCmElJ6KnSemR4gDwgjLZmjfBRh8v55CXHv/ZcziMwkmNuA0VYAlJBBsRqDHpvZjjOm7V8JO4VxDlXUmGsisx6TyR811P1hpf2848xxKpdUnKNPsVCnzDkvNMKC23EGxSRFvGcJbiEIaDle3Vp6H6LXSVRgffkeK73GuC6lgerKk5xBWwo3YmEjoup/wAHrEaRt6LwwZtOw3tYpH+nsVMy8vUlAJyLOVLx/qbV9FXZ7LxyWNdiFZoC1zVFC6pI6nKkfLNjtT9Ido9kIqPFyx/kmIjJKOvB3tB4fzuXRRvDhnjNwuCDsK3kQ3A7LuKbdQptaTZSVCxB7RAHoe5OYW0TKbnEGcRD30G9iMiy3wUzOOyDOOyIe9g3sGRG+CmZx2QZx2RD3sG9gyI3wUzOOyDOOyIe9g3sGRG+CmZx2QZx2RD3sG9gyI3wUzOOyDOOyIe9g3sGRG+CmZxGN5ETfRgvQZEb4KUXYacehpsOzDiWmm1OLUbJSkXJPYIsjBWxCs19aJqtBdLkdDlUPlnB2J+iO0+yK1XVwUbN5O4AeJ7AsDIXaNXLYKwZUscVZMnJoKGEG78wodFpP+T1CLV2nYzpuyjCTWFcPZUVJ9rInKekyk/OdV9Y629vKDGe07Deyekf6ewqzLzFSSCnIg5ksn+pxX0ldnttHm2p1ScrM+/UKhMOTM0+orccWblRMKaSkmxiZtTUtywN1a08XHqfYl1ZWiIGOM3ceJ6KMSVEkm5OpMEYgjt0gRBBBAhZBKSCCQRwIiz8F7f8TYYbalKhasySLJCZhZDqU9Qc1+0GCCKlZQU9Yzd1DA4e35HiFtimfEczDZWanaZspx+0kVthqVmCLXnWci09zieXjC0bJdnFd+UpNa0Vyl51DlvA3ggjgcYoThI/o5XgdL3HusnlHVOn0eAnPN0w+dRV6pbvb92DzdKB6Xqn4fuwQRynnDiP6p8Pome6Z0R5ulA9L1T8P3YPN0oHpeqfh+7BBB5w4j+qfD6I3TOiPN0oHpeqfh+7B5ulA9L1T8P3YIIPOHEf1T4fRG6Z0R5ulA9L1T8P3YPN0oHpeqfh+7BBB5w4j+qfD6I3TOiPN0oHpeqfh+7B5ulA9L1T8P3YIIPOHEf1T4fRG6Z0R5ulA9L1T8P3YPN0oHpeqfh+7BBB5w4j+qfD6I3TOiPN0w+NTV6pbvb92G17JdnNC+Uq1a0TymJ1Dd/AWggi1R4tXVMgjfM6x6WHyWuUNY24CQraXsowA0oURhqamQLXkmc61d7iuXjFZY02/wCJsTtuylPtRpJd0lMusl1SeouafYBBBHouHbOUcZFRIC955uN/2XP1FfM+7QbD2KsCSokkkk8SYxBBHSpeiCCCBC//2Q==","isHigh":false,"isLaunch":false,"name":"Bb22","position":-1,"url":"https://bb2205.com/?pid=3216445319"},{"hot_game":"","id":1778677831856,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/1688066/LOGO.png","isHigh":false,"isLaunch":false,"name":"1uu","position":-1,"url":"https://1uuu42.vip/?pid=4973482819"},{"hot_game":"","id":1778677933607,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/7720279/2.png","isHigh":false,"isLaunch":false,"name":"84d","position":-1,"url":"https://84d3.com/?pid=4001749461"},{"hot_game":"","id":1778678019615,"imageUrl":"https://upload-us.f-1-g-h.com/s1/1767176987859/logo.jpg","isHigh":false,"isLaunch":false,"name":"6292","position":-1,"url":"https://6292a2.com/?pid=912814644"},{"hot_game":"","id":1778678083990,"imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/7114287/APPLOGO.png","isHigh":false,"isLaunch":false,"name":"13e","position":-1,"url":"https://13ex07.com/?pid=3275883109"},{"hot_game":"","id":1778678151933,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/9296909/APP.png","isHigh":false,"isLaunch":false,"name":"3uuu","position":-1,"url":"https://3uuu77.vip/?pid=4787882620"},{"hot_game":"","id":1778678239252,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/1823786/55UU-Icon.png","isHigh":false,"isLaunch":false,"name":"55uu","position":-1,"url":"https://55uu2.com/?pid=4496276657"},{"hot_game":"","id":1778678324851,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/1699699/123456789.png","isHigh":false,"isLaunch":false,"name":"fxx","position":-1,"url":"https://fxx2.cc/?pid=4933712768"},{"hot_game":"","id":1778678375795,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/7113392/EE44-ICON.png","isHigh":false,"isLaunch":false,"name":"ee44","position":-1,"url":"https://ee4406.com/?pid=4937951484"},{"hot_game":"","id":1778678453242,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/9930159/111.png","isHigh":false,"isLaunch":false,"name":"ww33","position":-1,"url":"https://ww3304.com/?pid=4985444993"},{"hot_game":"","id":1778678507362,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/5235420/icon-COM4.png","isHigh":false,"isLaunch":false,"name":"27ff","position":-1,"url":"https://27ff7.com/?pid=4529358856"},{"hot_game":"","id":1778678633056,"imageUrl":"https://45rrx.com/uploads/img_69fd268f9ac9b6.12754816.png","isHigh":false,"isLaunch":false,"name":"44rr","position":-1,"url":"https://45rrx.com/?pid=520621348"},{"hot_game":"","id":1778678882966,"imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/2501508/logo2.png","isHigh":false,"isLaunch":false,"name":"56m","position":-1,"url":"https://56m002.com/?pid=3151454428"},{"hot_game":"","id":1778678982229,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/8551815/logo.png","isHigh":false,"isLaunch":false,"name":"81d","position":-1,"url":"https://81dwn.com/?pid=4572145899"},{"hot_game":"","id":1,"imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/2431520/EE112.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"EE11","position":0,"url":"https://ee11f.com/?pid=3127759524"},{"hot_game":"","id":30001,"imageUrl":"https://upload-us.f-1-g-h.com/s2/app-icon/7176422/6615.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"6615","position":0,"url":"https://66e99y.com/?pid=1845365740"},{"hot_game":"","id":120001,"imageUrl":"","isHigh":false,"isLaunch":false,"isNew":false,"name":"65H","position":0,"url":"https://65h1.com/?ai=10&ic=2ynUaFade8&ch=12&ph=9bs"},{"id":150001,"name":"SPIN77","url":"https://spn977.com/?code=af4R4JJd","imageUrl":"https://dz68qzgzvzly6.cloudfront.net/spin77/uploads/setting/file/icon.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150002,"name":"6231","url":"https://5sgame.pro/?pid=3849329030","imageUrl":"https://upload-us.f-1-g-h.com/s4/1755557992297/logo480.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"hot_game":"","id":150003,"imageUrl":"https://upload-us.f-1-g-h.com/s4/1757334528977/996.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"96F","position":0,"url":"https://96f1.com/?pid=3660993884"},{"hot_game":"","id":150004,"imageUrl":"https://ofs.cloudofs.com/images/poster/747y1761158749631877.jpg","isHigh":false,"isLaunch":false,"isNew":false,"name":"99RR","position":0,"url":"https://99rr885.com/?a=e6qo9c0g"},{"hot_game":"","id":150005,"imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/5821251/tuicon.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"QQ555","position":0,"url":"https://qq5557.com/?pid=3975570585"},{"hot_game":"","id":150006,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/6879138/logo1.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"9EEE","position":0,"url":"https://9eee23.vip/?pid=4605515437"},{"hot_game":"","id":150007,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/6757082/APP1.gif","isHigh":false,"isLaunch":false,"isNew":false,"name":"58678","position":0,"url":"https://58678c.win/?pid=4692313200"},{"hot_game":"","id":150008,"imageUrl":"https://upload-us.f-1-g-h.com/s2/app-icon/6148951/XX.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"7gggg","position":0,"url":"https://7ggg111.vip/?pid=1275939217"},{"hot_game":"","id":150009,"imageUrl":"https://upload-us.f-1-g-h.com/s2/app-icon/7673876/logo.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"83H","position":0,"url":"https://83hz6.com/?pid=1258279813"},{"hot_game":"","id":150010,"imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/7955700/777br.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"777br","position":0,"url":"https://88777br.com/?pid=3186032814"},{"hot_game":"","id":150011,"imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/4384167/LOGO.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"59r","position":0,"url":"https://59r35.com/?pid=3963693619"},{"hot_game":"","id":150012,"imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/3731546/1.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"5ggg","position":0,"url":"https://5gg779.vip/?pid=3221742011"},{"hot_game":"","id":150013,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/6791717/logo-.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"63b","position":0,"url":"https://63b85.com/?pid=4741818567"},{"hot_game":"","id":150014,"imageUrl":"https://oss.topofs.net/images/poster/pdc61762084961560313.jpg","isHigh":false,"isLaunch":false,"isNew":false,"name":"rree","position":0,"url":"https://rree.fun/?a=8hsx4svu"},{"hot_game":"","id":150015,"imageUrl":"https://oss.cloudofs.com/images/avatar/y5q71758096230840056.jpg","isHigh":false,"isLaunch":false,"isNew":false,"name":"ppff","position":0,"url":"https://ppff88.com/?a=06psgsoz"},{"hot_game":"","id":150016,"imageUrl":"https://oss.cloudofs.com/images/logo/logo30009lAzj_320.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"KA777","position":0,"url":"https://ka777a6.com/?a=0ci2sd9e"},{"hot_game":"","id":150017,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/8709779/1.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"68G","position":0,"url":"https://68g15.com/?pid=4442489828"},{"hot_game":"","id":150018,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/6475857/76pp.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"11tt","position":0,"url":"https://11tt7.com/?pid=3783700305"},{"hot_game":"","id":150019,"imageUrl":"https://upload-us.f-1-g-h.com/s3/app-icon/4433026/logo3.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"75w","position":0,"url":"https://75wzm.com/?pid=2659674483"},{"hot_game":"","id":150020,"imageUrl":"https://upload-us.f-1-g-h.com/s3/app-icon/3731525/ICON.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"22cc","position":0,"url":"https://yF2vbx.com/?pid=2496666202"},{"hot_game":"","id":150021,"imageUrl":"https://upload-us.f-1-g-h.com/s3/app-icon/7686135/11111.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"95y","position":0,"url":"https://95ye9.com/?pid=2490203175"},{"hot_game":"","id":150022,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/1803215/iconArtboard-1-copy-3.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"rr66","position":0,"url":"https://rr6603.com/?pid=4123220040"},{"hot_game":"","id":150023,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4379055/icon.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"kk44","position":0,"url":"https://kk4401.com/?pid=4796535625"},{"hot_game":"","id":150024,"imageUrl":"https://oss.cloudofs.com/images/avatar/5lwt1760512882671636.jpg","isHigh":false,"isLaunch":false,"isNew":false,"name":"abc","position":0,"url":"https://abc999.gold/?a=1oaevrfp"},{"hot_game":"","id":150025,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/1614740/1.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"59c","position":0,"url":"https://59c03.cc/?pid=4330509791"},{"hot_game":"","id":150026,"imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/9770253/image_2025-08-26_15-40-32.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"2uuu","position":0,"url":"https://2UUU86.vip/?pid=3117560984"},{"highAt":1778756065183,"hot_game":"","id":150027,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/2576874/8EEE.COM-applogo2.png","isHigh":true,"isLaunch":false,"isNew":false,"name":"8eee","position":0,"url":"https://8eee33.vip/?pid=4852839003"},{"hot_game":"","id":150028,"imageUrl":"https://oss.goodoss.net/images/avatar/o1ub1748862079417678.jpg","isHigh":false,"isLaunch":false,"isNew":false,"name":"D11","position":0,"url":"https://d11vips.com/?a=584bncwe"},{"hot_game":"","id":150029,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4077356/33NN111.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"33nn","position":0,"url":"https://33nn06.com/?pid=4783457761"},{"hot_game":"","id":150030,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/1451512/45dLOGO.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"45d","position":0,"url":"https://45doi.com/?pid=4806028440"},{"hot_game":"","id":150031,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/5196855/logo.jpg","isHigh":false,"isLaunch":false,"isNew":false,"name":"72d","position":0,"url":"https://72d1z.com/?pid=4663073155"},{"hot_game":"","id":150032,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/5313825/512.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"1rr","position":0,"url":"https://1rr66.vip/?pid=4209607125"},{"hot_game":"","id":150033,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4651676/Rectangle.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"72e","position":0,"url":"https://72e88.com/?pid=4276199883"},{"hot_game":"","id":150034,"imageUrl":"https://upload-us.f-1-g-h.com/s3/app-icon/5210475/LG.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"5ppp","position":0,"url":"https://5ppp11.vip/?pid=2286867683"},{"hot_game":"","id":150035,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4023464/logo.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"73h","position":0,"url":"https://73h2y.com/?pid=4456093778"},{"hot_game":"","id":150036,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4895635/APPLOGO.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"26t","position":0,"url":"https://26tx04.com/?pid=4422743651"},{"hot_game":"","id":150037,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/1361816/11.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"68d","position":0,"url":"https://68d44.com/?pid=4130118728"},{"hot_game":"","id":150038,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/9918106/aaa.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"93d","position":0,"url":"https://93d01.com/?pid=4735860756"},{"hot_game":"","id":150039,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4552161/44ww-icon-512x512.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"44ww","position":0,"url":"https://44ww07.com/?pid=4426246794"},{"hot_game":"","id":150040,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4729049/1pp.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"85t","position":0,"url":"https://85t02.cc/?pid=4201798367"},{"hot_game":"","id":150041,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/2576572/552X-yuanjiao.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"552x","position":0,"url":"https://552x002.com/?pid=4903785126"},{"hot_game":"","id":150042,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/9933402/final.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"xx11","position":0,"url":"https://xx11-5.com/?pid=4536553993"},{"id":150043,"name":"sp1","url":"https://sp1.games?code=f474df7s","imageUrl":"https://dz68qzgzvzly6.cloudfront.net/sp1/uploads/setting/file/icon.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"hot_game":"","id":150044,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/3896314/838X1.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"838x","position":0,"url":"https://838x3.com/?pid=4170166547"},{"hot_game":"","id":150045,"imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/2301791/B1.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"q8q","position":0,"url":"https://q8q11.vip/?pid=3811254972"},{"hot_game":"","id":150046,"imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/5416567/7JJJ-Logo-Icon1.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"7jjjj","position":0,"url":"https://7jjj06.com/?pid=3284108173"},{"hot_game":"","id":150047,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/5682213/logo1.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"61t","position":0,"url":"https://61t3z.com/?pid=4207343585"},{"hot_game":"","id":150048,"imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/3420958/LG.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"5ttt","position":0,"url":"https://5ttt55.vip/?pid=4077582316"},{"hot_game":"","id":150049,"imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/8703338/C.png","isHigh":false,"isLaunch":false,"isNew":false,"name":"63v","position":0,"url":"https://63v05.com/?pid=3984650262"},{"hot_game":"","id":150050,"imageUrl":"https://upload-us.f-1-g-h.com/s3/app-icon/4839541/15q.PNG","isHigh":false,"isLaunch":false,"isNew":false,"name":"15q","position":0,"url":"https://15qx03.com/?pid=2515286760"},{"hot_game":"","id":150051,"imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/3409648/1.png","isHigh":false,"isLaunch":false,"isNew":true,"name":"25t","position":0,"url":"https://25f02.com/?pid=3261998855"},{"id":270002,"name":"5yyy11","url":"https://5yyy11.vip/?pid=4016851750","imageUrl":"","isHigh":true,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":270003,"name":"5yyy11","url":"https://5yyy11.vip/?pid=4016851750","imageUrl":"","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"hot_game":"","id":90001,"imageUrl":"https://static.9f2games.com/images/cba4f961da3ccb88d2f57a57b6e499d0.webp","isHigh":false,"isLaunch":false,"isNew":false,"name":"YG4","position":1,"url":"https://vip.yg4.net/?param=2-R6C9M0JT"},{"id":120002,"name":"5151","url":"https://51pg20.com/?code=Rfad4473","imageUrl":"https://d2x8e21b8kcyud.cloudfront.net/5151/uploads/setting/file/icon.png","isHigh":false,"isLaunch":false,"hot_game":"","position":1,"isNew":false}];
+const PLATFORMS_DATA = [{"id":1,"name":"EE11","url":"https://ee11f.com/?pid=3127759524","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/2431520/EE112.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":30001,"name":"6615","url":"https://66e99y.com/?pid=1845365740","imageUrl":"https://upload-us.f-1-g-h.com/s2/app-icon/7176422/6615.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":120001,"name":"65H","url":"https://65h1.com/?ai=10&ic=2ynUaFade8&ch=12&ph=9bs","imageUrl":"","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150001,"name":"SPIN77","url":"https://spn977.com/?code=af4R4JJd","imageUrl":"https://dz68qzgzvzly6.cloudfront.net/spin77/uploads/setting/file/icon.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150002,"name":"6231","url":"https://5sgame.pro/?pid=3849329030","imageUrl":"https://upload-us.f-1-g-h.com/s4/1755557992297/logo480.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150003,"name":"96F","url":"https://96f1.com/?pid=3660993884","imageUrl":"https://upload-us.f-1-g-h.com/s4/1757334528977/996.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150004,"name":"99RR","url":"https://99rr885.com/?a=e6qo9c0g","imageUrl":"https://ofs.cloudofs.com/images/poster/747y1761158749631877.jpg","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150005,"name":"QQ555","url":"https://qq5557.com/?pid=3975570585","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/5821251/tuicon.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150006,"name":"9EEE","url":"https://9eee23.vip/?pid=4605515437","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/6879138/logo1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150007,"name":"58678","url":"https://58678c.win/?pid=4692313200","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/6757082/APP1.gif","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150008,"name":"7gggg","url":"https://7ggg111.vip/?pid=1275939217","imageUrl":"https://upload-us.f-1-g-h.com/s2/app-icon/6148951/XX.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150009,"name":"83H","url":"https://83hz6.com/?pid=1258279813","imageUrl":"https://upload-us.f-1-g-h.com/s2/app-icon/7673876/logo.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150010,"name":"777br","url":"https://88777br.com/?pid=3186032814","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/7955700/777br.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150011,"name":"59r","url":"https://59r35.com/?pid=3963693619","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/4384167/LOGO.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150012,"name":"5ggg","url":"https://5gg779.vip/?pid=3221742011","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/3731546/1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150013,"name":"63b","url":"https://63b85.com/?pid=4741818567","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/6791717/logo-.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150014,"name":"rree","url":"https://rree.fun/?a=8hsx4svu","imageUrl":"https://oss.topofs.net/images/poster/pdc61762084961560313.jpg","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150015,"name":"ppff","url":"https://ppff88.com/?a=06psgsoz","imageUrl":"https://oss.cloudofs.com/images/avatar/y5q71758096230840056.jpg","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150016,"name":"KA777","url":"https://ka777a6.com/?a=0ci2sd9e","imageUrl":"https://oss.cloudofs.com/images/logo/logo30009lAzj_320.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150017,"name":"68G","url":"https://68g15.com/?pid=4442489828","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/8709779/1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150018,"name":"11tt","url":"https://11tt7.com/?pid=3783700305","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/6475857/76pp.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150019,"name":"75w","url":"https://75wzm.com/?pid=2659674483","imageUrl":"https://upload-us.f-1-g-h.com/s3/app-icon/4433026/logo3.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150020,"name":"22cc","url":"https://yF2vbx.com/?pid=2496666202","imageUrl":"https://upload-us.f-1-g-h.com/s3/app-icon/3731525/ICON.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150021,"name":"95y","url":"https://95ye9.com/?pid=2490203175","imageUrl":"https://upload-us.f-1-g-h.com/s3/app-icon/7686135/11111.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150022,"name":"rr66","url":"https://rr6603.com/?pid=4123220040","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/1803215/iconArtboard-1-copy-3.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150023,"name":"kk44","url":"https://kk4401.com/?pid=4796535625","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4379055/icon.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150024,"name":"abc","url":"https://abc999.gold/?a=1oaevrfp","imageUrl":"https://oss.cloudofs.com/images/avatar/5lwt1760512882671636.jpg","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150025,"name":"59c","url":"https://59c03.cc/?pid=4330509791","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/1614740/1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150026,"name":"2uuu","url":"https://2UUU86.vip/?pid=3117560984","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/9770253/image_2025-08-26_15-40-32.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150027,"name":"8eee","url":"https://8eee33.vip/?pid=4852839003","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/2576874/8EEE.COM-applogo2.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150028,"name":"D11","url":"https://d11vips.com/?a=584bncwe","imageUrl":"https://oss.goodoss.net/images/avatar/o1ub1748862079417678.jpg","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150029,"name":"33nn","url":"https://33nn06.com/?pid=4783457761","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4077356/33NN111.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150030,"name":"45d","url":"https://45doi.com/?pid=4806028440","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/1451512/45dLOGO.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150031,"name":"72d","url":"https://72d1z.com/?pid=4663073155","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/5196855/logo.jpg","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150032,"name":"1rr","url":"https://1rr66.vip/?pid=4209607125","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/5313825/512.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150033,"name":"72e","url":"https://72e88.com/?pid=4276199883","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4651676/Rectangle.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150034,"name":"5ppp","url":"https://5ppp11.vip/?pid=2286867683","imageUrl":"https://upload-us.f-1-g-h.com/s3/app-icon/5210475/LG.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150035,"name":"73h","url":"https://73h2y.com/?pid=4456093778","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4023464/logo.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150036,"name":"26t","url":"https://26tx04.com/?pid=4422743651","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4895635/APPLOGO.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150037,"name":"68d","url":"https://68d44.com/?pid=4130118728","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/1361816/11.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150038,"name":"93d","url":"https://93d01.com/?pid=4735860756","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/9918106/aaa.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150039,"name":"44ww","url":"https://44ww07.com/?pid=4426246794","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4552161/44ww-icon-512x512.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150040,"name":"85t","url":"https://85t02.cc/?pid=4201798367","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/4729049/1pp.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150041,"name":"552x","url":"https://552x002.com/?pid=4903785126","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/2576572/552X-yuanjiao.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150042,"name":"xx11","url":"https://xx11-5.com/?pid=4536553993","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/9933402/final.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150043,"name":"sp1","url":"https://sp1.games?code=f474df7s","imageUrl":"https://dz68qzgzvzly6.cloudfront.net/sp1/uploads/setting/file/icon.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150044,"name":"838x","url":"https://838x3.com/?pid=4170166547","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/3896314/838X1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150045,"name":"q8q","url":"https://q8q11.vip/?pid=3811254972","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/2301791/B1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150046,"name":"7jjjj","url":"https://7jjj06.com/?pid=3284108173","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/5416567/7JJJ-Logo-Icon1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150047,"name":"61t","url":"https://61t3z.com/?pid=4207343585","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/5682213/logo1.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150048,"name":"5ttt","url":"https://5ttt55.vip/?pid=4077582316","imageUrl":"https://upload-us.i-j-2-k.com/s5/app-icon/3420958/LG.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150049,"name":"63v","url":"https://63v05.com/?pid=3984650262","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/8703338/C.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150050,"name":"15q","url":"https://15qx03.com/?pid=2515286760","imageUrl":"https://upload-us.f-1-g-h.com/s3/app-icon/4839541/15q.PNG","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":150051,"name":"25t","url":"https://25f02.com/?pid=3261998855","imageUrl":"https://upload-us.f-1-g-h.com/s4/app-icon/3409648/1.png","isHigh":false,"isLaunch":true,"hot_game":"","position":0,"isNew":true},{"id":180001,"name":"Teste","url":"https://teste.com","imageUrl":"","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":180002,"name":"TestePlataforma","url":"https://teste.com","imageUrl":"","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":180003,"name":"ComImagem","url":"https://site.com","imageUrl":"https://site.com/logo.png","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":270002,"name":"5yyy11","url":"https://5yyy11.vip/?pid=4016851750","imageUrl":"","isHigh":true,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":270003,"name":"5yyy11","url":"https://5yyy11.vip/?pid=4016851750","imageUrl":"","isHigh":false,"isLaunch":false,"hot_game":"","position":0,"isNew":false},{"id":90001,"name":"YG4","url":"https://vip.yg4.net/?param=2-R6C9M0JT","imageUrl":"https://static.9f2games.com/images/cba4f961da3ccb88d2f57a57b6e499d0.webp","isHigh":false,"isLaunch":false,"hot_game":"","position":1,"isNew":false},{"id":120002,"name":"5151","url":"https://51pg20.com/?code=Rfad4473","imageUrl":"https://d2x8e21b8kcyud.cloudfront.net/5151/uploads/setting/file/icon.png","isHigh":false,"isLaunch":false,"hot_game":"","position":1,"isNew":false}];
 
 // ===== SAFE STORAGE =====
 const _ls = {
@@ -4467,56 +4324,10 @@ const _ls = {
 
 // ===== STATE =====
 let platforms = [...PLATFORMS_DATA];
-
-// ===== SINCRONIZAÇÃO FIREBASE → PLATAFORMAS =====
-// Carrega plataformas do Firebase em tempo real para garantir que
-// plataformas novas apareçam sem precisar atualizar o HTML
-(function() {
-  function syncPlatformsFromFirebase() {
-    if (!window._fbREST) return;
-    window._fbREST.get('/platforms').then(function(data) {
-      if (!data || !Array.isArray(data) || data.length === 0) return;
-      // Filtrar plataformas válidas
-      var fbList = data.filter(function(p) { return p && p.url && p.url.length > 5; });
-      if (fbList.length === 0) return;
-      // Verificar se há diferença (novas plataformas)
-      var fbIds = fbList.map(function(p) { return String(p.id); }).sort().join(',');
-      var localIds = platforms.map(function(p) { return String(p.id); }).sort().join(',');
-      if (fbIds === localIds) return; // Já sincronizado
-      // Atualizar o array de plataformas
-      var hadMore = fbList.length > platforms.length;
-      platforms = fbList;
-      // Re-renderizar telas afetadas
-      if (typeof renderHomeScreen === 'function') renderHomeScreen();
-      if (typeof renderHotScreen === 'function') renderHotScreen();
-      if (typeof renderFavoritesScreen === 'function') renderFavoritesScreen();
-      if (hadMore) {
-        console.log('[Sync] ' + fbList.length + ' plataformas carregadas do Firebase');
-      }
-    }).catch(function(e) {
-      console.log('[Sync] Erro ao carregar plataformas:', e);
-    });
-  }
-  // Sincronizar imediatamente ao carregar
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      setTimeout(syncPlatformsFromFirebase, 500);
-    });
-  } else {
-    setTimeout(syncPlatformsFromFirebase, 500);
-  }
-  // Sincronizar a cada 30 segundos (para pegar atualizações em tempo real)
-  setInterval(syncPlatformsFromFirebase, 30000);
-  // Expor função para uso externo (ex: após salvar no admin)
-  window._syncPlatformsFromFirebase = syncPlatformsFromFirebase;
-})();
-// ===== FIM SINCRONIZAÇÃO FIREBASE =====
-
 let favorites = JSON.parse(_ls.get('av_favorites') || '[]');
 let installCount = parseInt(_ls.get('av_installs') || '0');
 let pushTokens = parseInt(_ls.get('av_tokens') || '0');
 let deferredPrompt = null;
-
 let isInstalled = window.matchMedia('(display-mode: standalone)').matches
   || window.navigator.standalone === true
   || document.referrer.includes('android-app://');
@@ -4814,13 +4625,13 @@ function renderShare() {
 // ===== TAB NAVIGATION =====
 // Função global de verificação de instalação
 function _appInstalado() {
-  // Critério ESTRITO: apenas modo standalone real
-  // NÃO usar av_installed do localStorage - pode estar salvo sem app instalado
+  // Critério: modo standalone OU flag salva após instalação/aceitação do prompt
   var standalone = window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true
     || document.referrer.includes('android-app://');
+  var flagSalva = localStorage.getItem('av_installed') === '1';
   var paramPwa = window.location.search.indexOf('pwa=1') !== -1;
-  return standalone || paramPwa;
+  return standalone || flagSalva || paramPwa;
 }
 // Função global de bloqueio (usada pelo sinalAtivoBanner e outros)
 window._irParaAbaHot = function() {
@@ -4939,210 +4750,22 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
   if (e.target === document.getElementById('sorteioModal')) document.getElementById('sorteioModal').classList.remove('open');
 });
 
-// Função global: mostrar instruções manuais de instalação PWA
-function mostrarInstrucoesInstalacao() {
-  var el = document.getElementById('pwaManualInstallModal');
-  if (el) { el.style.display = 'flex'; return; }
-  el = document.createElement('div');
-  el.id = 'pwaManualInstallModal';
-  el.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.85);display:flex;align-items:flex-end;justify-content:center;padding:0 0 20px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);';
-  var box = document.createElement('div');
-  box.style.cssText = 'background:#1a1a2e;border-radius:20px 20px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;border-top:3px solid #7C3AED;';
-  // Header
-  var hdr = document.createElement('div');
-  hdr.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;';
-  var ttl = document.createElement('span');
-  ttl.style.cssText = 'font-size:18px;font-weight:800;color:#fff;';
-  ttl.textContent = '\u{1F4F2} Como Instalar o App';
-  var cls = document.createElement('button');
-  cls.style.cssText = 'background:rgba(255,255,255,0.1);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;';
-  cls.textContent = '\u2715';
-  cls.onclick = function() { el.remove(); };
-  hdr.appendChild(ttl); hdr.appendChild(cls);
-  // Passos
-  var steps = document.createElement('div');
-  steps.style.cssText = 'background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.4);border-radius:12px;padding:16px;margin-bottom:12px;';
-  var stepsTitle = document.createElement('p');
-  stepsTitle.style.cssText = 'color:#a78bfa;font-size:13px;font-weight:700;margin:0 0 12px;';
-  stepsTitle.textContent = '\u{1F916} ANDROID \u2014 Google Chrome';
-  var s1 = document.createElement('div'); s1.style.cssText = 'color:#e2e8f0;font-size:14px;line-height:2;';
-  s1.innerHTML = '<div>1\uFE0F\u20E3 Toque nos <strong>3 pontinhos \u22EE</strong> no canto superior direito do Chrome</div>' +
-    '<div>2\uFE0F\u20E3 Toque em <strong>"Adicionar \u00E0 tela inicial"</strong> ou <strong>"Instalar app"</strong></div>' +
-    '<div>3\uFE0F\u20E3 Toque em <strong>"Adicionar"</strong> para confirmar</div>';
-  steps.appendChild(stepsTitle); steps.appendChild(s1);
-  // Dica
-  var tip = document.createElement('div');
-  tip.style.cssText = 'background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:12px;padding:12px;margin-bottom:20px;';
-  tip.innerHTML = '<p style="color:#6ee7b7;font-size:12px;margin:0;">\u{1F4A1} <strong>Dica:</strong> Se n\u00E3o aparecer a op\u00E7\u00E3o, aguarde alguns segundos e tente novamente.</p>';
-  // Botão OK
-  var okBtn = document.createElement('button');
-  okBtn.style.cssText = 'width:100%;padding:14px;background:linear-gradient(135deg,#7C3AED,#3B82F6);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;';
-  okBtn.textContent = '\u2705 Entendi';
-  okBtn.onclick = function() { el.remove(); };
-  box.appendChild(hdr); box.appendChild(steps); box.appendChild(tip); box.appendChild(okBtn);
-  el.appendChild(box);
-  document.body.appendChild(el);
-  el.addEventListener('click', function(ev) { if (ev.target === el) el.remove(); });
-}
-// ===== PWA INSTALL SYSTEM (UNIFICADO) =====
-// Variável global única para o prompt de instalação
-// Declarada ANTES de qualquer listener para garantir captura
-window._pwaInstallPrompt = null;
-window._pwaInstalled = false;
+// ===== PWA INSTALL =====
+// ===== PWA INSTALL BANNER PREMIUM =====
+(function() {
+  var _pwaDeferred = null;
+  var _pwaBannerShown = false;
+  var _pwaDismissed = sessionStorage.getItem('pwa_banner_dismissed') === '1';
 
-// Listener capturado o mais cedo possível (antes de qualquer IIFE)
-window.addEventListener('beforeinstallprompt', function(e) {
-  e.preventDefault();
-  window._pwaInstallPrompt = e;
-  window.deferredPrompt = e; // compatibilidade com código legado
-  // Mostrar banner se ainda não instalado e não dispensado
-  if (!window._pwaInstalled && !sessionStorage.getItem('pwa_banner_dismissed')) {
-    var overlay = document.getElementById('pwaBannerOverlay');
-    if (overlay && !overlay.classList.contains('pwa-visible')) {
-      overlay.classList.add('pwa-visible');
-    }
-  }
-});
-
-// Listener de instalação confirmada
-window.addEventListener('appinstalled', function() {
-  window._pwaInstalled = true;
-  window._pwaInstallPrompt = null;
-  window.deferredPrompt = null;
-  localStorage.setItem('av_installed', '1');
-  localStorage.setItem('av_install_counted', '1');
-  // Fechar banner e popup
-  var overlay = document.getElementById('pwaBannerOverlay');
-  if (overlay) overlay.classList.remove('pwa-visible');
-  var popup = document.getElementById('installBlockPopup');
-  if (popup) popup.classList.add('hidden');
-  // Feedback visual
-  if (typeof showToast === 'function') showToast('✅ Aplicativo instalado! Abrindo...', 3000);
-  if (typeof trackEvent === 'function') trackEvent('pwa_installed');
-  // Remover bloqueio imediatamente
-  if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
-  // Contagem Firebase
-  if (!localStorage.getItem('av_install_fb_counted')) {
-    localStorage.setItem('av_install_fb_counted', '1');
-    var isIOS2 = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    var isAndroid2 = /android/i.test(navigator.userAgent);
-    var installOs = isIOS2 ? 'ios' : isAndroid2 ? 'android' : 'other';
-    var d = new Date();
-    var dayKey = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-    var fbBase = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
-    var fbAuth = '?auth=' + (typeof FIREBASE_API_KEY !== 'undefined' ? FIREBASE_API_KEY : '');
-    fetch(fbBase + '/stats/total_installs.json' + fbAuth)
-      .then(function(r) { return r.json(); }).then(function(cur) {
-        fetch(fbBase + '/stats/total_installs.json' + fbAuth, {
-          method: 'PUT', headers: {'Content-Type':'application/json'},
-          body: JSON.stringify((parseInt(cur) || 0) + 1)
-        });
-      }).catch(function(){});
-    fetch(fbBase + '/analytics/installs_daily/' + dayKey + '/' + installOs + '.json' + fbAuth)
-      .then(function(r) { return r.json(); }).then(function(cur) {
-        fetch(fbBase + '/analytics/installs_daily/' + dayKey + '/' + installOs + '.json' + fbAuth, {
-          method: 'PUT', headers: {'Content-Type':'application/json'},
-          body: JSON.stringify((parseInt(cur) || 0) + 1)
-        });
-      }).catch(function(){});
-  }
-  if (typeof gtag === 'function') gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' });
-  // Reabrir em modo standalone após 1.5s
-  setTimeout(function() {
-    try { window.location.href = window.location.origin + '/?pwa=1&notif=1'; } catch(e2) {}
-  }, 1500);
-});
-
-// ===== FUNÇÃO GLOBAL DE INSTALAÇÃO (1 clique) =====
-window._triggerInstall = function() {
   var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
   var isAndroid = /android/i.test(navigator.userAgent);
   var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-  if (isIOS || (isSafari && !isAndroid)) {
-    // iOS/Safari: mostrar instruções específicas
-    var iosModal = document.getElementById('iosInstallModal');
-    if (iosModal) { iosModal.style.display = 'flex'; iosModal.classList.add('open'); }
-    if (typeof trackEvent === 'function') trackEvent('ios_install_guide_open');
-    return;
-  }
-
-  if (window._pwaInstallPrompt) {
-    // Prompt disponível: acionar instalação nativa imediatamente
-    var promptRef = window._pwaInstallPrompt;
-    window._pwaInstallPrompt = null;
-    window.deferredPrompt = null;
-    promptRef.prompt();
-    promptRef.userChoice.then(function(choice) {
-      if (choice.outcome === 'accepted') {
-        if (typeof trackEvent === 'function') trackEvent('pwa_install_accepted');
-        localStorage.setItem('av_installed', '1');
-        if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
-        if (typeof showToast === 'function') showToast('✅ Instalando... Aguarde!', 3000);
-        // appinstalled vai cuidar do resto
-      } else {
-        if (typeof trackEvent === 'function') trackEvent('pwa_install_dismissed');
-        // Restaurar prompt para próxima tentativa
-        window._pwaInstallPrompt = promptRef;
-        window.deferredPrompt = promptRef;
-      }
-    }).catch(function() {
-      window._pwaInstallPrompt = promptRef;
-      window.deferredPrompt = promptRef;
-    });
-  } else {
-    // Prompt não disponível: mostrar instruções manuais claras
-    if (typeof mostrarInstrucoesInstalacao === 'function') {
-      mostrarInstrucoesInstalacao();
-    } else {
-      // Fallback inline
-      _showManualInstallModal();
-    }
-    if (typeof trackEvent === 'function') trackEvent('pwa_install_manual_instructions');
-  }
-};
-
-// Modal de instruções manuais (fallback)
-function _showManualInstallModal() {
-  var existing = document.getElementById('_pwaManualModal');
-  if (existing) { existing.style.display = 'flex'; return; }
-  var modal = document.createElement('div');
-  modal.id = '_pwaManualModal';
-  modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.88);display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(8px);';
-  modal.innerHTML = '<div style="background:#1a1a2e;border-radius:20px 20px 0 0;padding:24px 20px 36px;width:100%;max-width:480px;border-top:3px solid #7C3AED;">' +
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">' +
-    '<span style="font-size:17px;font-weight:800;color:#fff;">📲 Como Instalar o App</span>' +
-    '<button id="_pwaManualClose" style="background:rgba(255,255,255,0.1);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>' +
-    '</div>' +
-    '<div style="background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.35);border-radius:14px;padding:16px;margin-bottom:14px;">' +
-    '<p style="color:#a78bfa;font-size:12px;font-weight:700;margin:0 0 12px;text-transform:uppercase;letter-spacing:0.5px;">🤖 Android — Google Chrome</p>' +
-    '<div style="color:#e2e8f0;font-size:14px;line-height:1.9;">' +
-    '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;"><span style="background:#7C3AED;color:#fff;border-radius:50%;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;">1</span><span>Toque nos <strong>3 pontinhos ⋮</strong> no canto superior direito do Chrome</span></div>' +
-    '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;"><span style="background:#7C3AED;color:#fff;border-radius:50%;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;">2</span><span>Toque em <strong>"Instalar app"</strong> ou <strong>"Adicionar à tela inicial"</strong></span></div>' +
-    '<div style="display:flex;gap:10px;align-items:flex-start;"><span style="background:#7C3AED;color:#fff;border-radius:50%;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;">3</span><span>Toque em <strong>"Adicionar"</strong> para confirmar ✅</span></div>' +
-    '</div></div>' +
-    '<div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:10px;padding:12px;margin-bottom:18px;">' +
-    '<p style="color:#6ee7b7;font-size:12px;margin:0;">💡 <strong>Dica:</strong> Se não aparecer a opção "Instalar app", feche e reabra o Chrome e tente novamente.</p>' +
-    '</div>' +
-    '<button id="_pwaManualOk" style="width:100%;padding:15px;background:linear-gradient(135deg,#7C3AED,#3B82F6);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:0.3px;">✅ Entendido</button>' +
-    '</div>';
-  document.body.appendChild(modal);
-  modal.addEventListener('click', function(ev) {
-    if (ev.target === modal || ev.target.id === '_pwaManualClose' || ev.target.id === '_pwaManualOk') {
-      modal.style.display = 'none';
-    }
-  });
-}
-
-// ===== PWA INSTALL BANNER PREMIUM =====
-(function() {
-  var _pwaBannerShown = false;
-  var _pwaDismissed = sessionStorage.getItem('pwa_banner_dismissed') === '1';
-  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-  var isAndroid = /android/i.test(navigator.userAgent);
   var isInStandalone = window.navigator.standalone === true
     || window.matchMedia('(display-mode: standalone)').matches
     || document.referrer.includes('android-app://');
+
+  // Compatibilidade: manter deferredPrompt global para outros scripts
+  window.deferredPrompt = null;
 
   function showPwaBanner() {
     if (_pwaDismissed || isInStandalone || _pwaBannerShown) return;
@@ -5150,7 +4773,7 @@ function _showManualInstallModal() {
     if (!overlay) return;
     _pwaBannerShown = true;
     overlay.classList.add('pwa-visible');
-    if (typeof trackEvent === 'function') trackEvent('pwa_banner_shown', { platform: isIOS ? 'ios' : isAndroid ? 'android' : 'other' });
+    trackEvent('pwa_banner_shown', { platform: isIOS ? 'ios' : isAndroid ? 'android' : 'other' });
   }
 
   function hidePwaBanner() {
@@ -5167,32 +4790,2434 @@ function _showManualInstallModal() {
     }, 4000);
   }
 
+  // Capturar evento de instalação Android/Chrome
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    _pwaDeferred = e;
+    window.deferredPrompt = e;
+    // Mostrar banner imediatamente se ainda não apareceu
+    if (!isInStandalone && !_pwaDismissed) {
+      showPwaBanner();
+    }
+  });
+
   // Botão fechar (X)
   document.addEventListener('click', function(e) {
     if (e.target && e.target.id === 'pwaBannerClose') {
       hidePwaBanner();
       sessionStorage.setItem('pwa_banner_dismissed', '1');
       _pwaDismissed = true;
-      if (typeof trackEvent === 'function') trackEvent('pwa_banner_dismissed');
+      trackEvent('pwa_banner_dismissed');
     }
   });
 
-  // Botão INSTALAR no banner → usar função global unificada
+  // Botão INSTALAR
   document.addEventListener('click', function(e) {
     if (e.target && e.target.id === 'pwaBannerInstallBtn') {
-      hidePwaBanner();
-      window._triggerInstall();
+      if (isIOS || (isSafari && !isAndroid)) {
+        // iOS/Safari: abrir modal com instruções
+        var modal = document.getElementById('iosInstallModal');
+        if (modal) { modal.style.display = 'flex'; modal.classList.add('open'); }
+        trackEvent('ios_install_guide_open');
+      } else if (_pwaDeferred) {
+        // Android/Chrome: instalar nativo
+        hidePwaBanner();
+        _pwaDeferred.prompt();
+        _pwaDeferred.userChoice.then(function(choice) {
+          _pwaDeferred = null;
+          window.deferredPrompt = null;
+          if (choice.outcome === 'accepted') {
+            trackEvent('pwa_install_accepted');
+            // Salvar flag imediatamente ao aceitar instalação
+            localStorage.setItem('av_installed', '1');
+            // Remover bloqueio imediatamente
+            if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
+            showToast('✅ Instalando... Abrindo o app!', 3000);
+          } else {
+            trackEvent('pwa_install_dismissed');
+          }
+        });
+      } else {
+        // Fallback: redirecionar para Chrome via intent
+        var appUrl = 'https://acessoplatafomas.com.br/';
+        var intentUrl = 'intent://' + appUrl.replace('https://', '') + '#Intent;scheme=https;package=com.android.chrome;end';
+        try {
+          var a = document.createElement('a');
+          a.href = intentUrl;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          trackEvent('pwa_install_chrome_redirect');
+        } catch(err) {
+          showToast('Abra no Chrome para instalar o app!', 3000);
+        }
+      }
     }
   });
 
-  // Modal iOS: fechar
+  // Modal iOS: fechar ao clicar no botão ou fora
   document.addEventListener('click', function(e) {
     if (e.target && (e.target.id === 'iosModalClose' || e.target.id === 'iosInstallModal')) {
       var modal = document.getElementById('iosInstallModal');
       if (modal) { modal.classList.remove('open'); modal.style.display = ''; }
     }
   });
+
+  // Após instalação: confirmar e abrir app
+  window.addEventListener('appinstalled', function() {
+    isInstalled = true;
+    _ls.set('av_installed', '1');
+    _ls.set('av_install_counted', '1');
+    hidePwaBanner();
+    installCount++;
+    _ls.set('av_installs', installCount);
+    showToast('✅ App instalado! Abrindo...', 3000);
+    trackEvent('pwa_installed');
+    gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' });
+    // Remover bloqueio imediatamente (sem esperar standalone)
+    if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
+    // Reabrir em modo standalone após instalação
+    setTimeout(function() {
+      try { window.location.href = 'https://acessoplatafomas.com.br/?pwa=1&notif=1'; } catch(e2) {}
+    }, 1500);
+    // Contagem no Firebase
+    if (!_ls.get('av_install_fb_counted')) {
+      _ls.set('av_install_fb_counted', '1');
+      var installOs = isIOS ? 'ios' : isAndroid ? 'android' : 'other';
+      var installDay = new Date();
+      var installDayKey = installDay.getFullYear() + '-' + String(installDay.getMonth()+1).padStart(2,'0') + '-' + String(installDay.getDate()).padStart(2,'0');
+      var fbBase = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+      var fbAuth = '?auth=' + FIREBASE_API_KEY;
+      fetch(fbBase + '/stats/total_installs.json' + fbAuth)
+        .then(function(r) { return r.json(); }).then(function(cur) {
+          var next = (parseInt(cur) || 0) + 1;
+          fetch(fbBase + '/stats/total_installs.json' + fbAuth, {
+            method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
+          });
+        }).catch(function(){});
+      fetch(fbBase + '/analytics/installs_daily/' + installDayKey + '/' + installOs + '.json' + fbAuth)
+        .then(function(r) { return r.json(); }).then(function(cur) {
+          var next = (parseInt(cur) || 0) + 1;
+          fetch(fbBase + '/analytics/installs_daily/' + installDayKey + '/' + installOs + '.json' + fbAuth, {
+            method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
+          });
+        }).catch(function(){});
+      var logKey = Date.now() + '_' + Math.random().toString(36).substr(2,6);
+      fetch(fbBase + '/install_log/' + logKey + '.json' + fbAuth, {
+        method: 'PUT', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ os: installOs, ts: Date.now(), day: installDayKey })
+      }).catch(function(){});
+    }
+  });
+
+  // Ocultar se já instalado
+  if (isInStandalone) {
+    hidePwaBanner();
+    isInstalled = true;
+    _ls.set('av_installed', '1');
+  }
 })();
+
+// ===== NOTIFICATIONS =====
+async function requestNotificationPermission() {
+  if (typeof Notification === 'undefined' || !('Notification' in window) || !('serviceWorker' in navigator)) {
+    showToast('Notificações não suportadas neste navegador');
+    return false;
+  }
+  
+  // Web Push nativo (VAPID) - sem OneSignal
+  const perm = await Notification.requestPermission();
+  notifPermission = perm;
+  if (perm === 'granted') {
+    document.getElementById('notifBanner').classList.add('hidden');
+    _ls.set('av_notif_asked', '1');
+    pushTokens++;
+    _ls.set('av_tokens', pushTokens);
+    showToast('🔔 Notificações ativadas!', 3000);
+    trackEvent('notification_granted');
+    updateNotifBtn();
+    // Registrar subscription Web Push no Worker
+    if (window._registerWebPushSubscription) {
+      window._registerWebPushSubscription().catch(e => console.warn('WebPush register error:', e));
+    }
+    return true;
+  } else {
+    showToast('Notificações bloqueadas. Ative nas configurações do Chrome.');
+    trackEvent('notification_denied');
+    return false;
+  }
+}
+
+document.getElementById('notifHeaderBtn').addEventListener('click', requestNotificationPermission);
+
+// Botão ATIVAR NOTIFICAÇÕES no modal pós-instalação
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.id === 'notifRequestActivateBtn') {
+    var btn = e.target;
+    btn.disabled = true;
+    btn.innerHTML = '⏳ Aguardando...';
+    requestNotificationPermission().then(function(granted) {
+      fecharNotifModal();
+      if (granted) {
+        showToast('🔔 Notificações ativadas com sucesso!', 3000);
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = '🔔 ATIVAR NOTIFICAÇÕES';
+      }
+    }).catch(function() {
+      btn.disabled = false;
+      btn.innerHTML = '🔔 ATIVAR NOTIFICAÇÕES';
+    });
+  }
+});
+document.getElementById('notifBanner').addEventListener('click', (e) => {
+  if (e.target.id !== 'notifBannerClose') requestNotificationPermission();
+});
+document.getElementById('notifBannerClose').addEventListener('click', (e) => {
+  e.stopPropagation();
+  document.getElementById('notifBanner').classList.add('hidden');
+  _ls.set('av_notif_asked', '1');
+});
+document.getElementById('enableNotifBtn').addEventListener('click', async () => {
+  var btn = document.getElementById('enableNotifBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span>⏳</span> Aguardando...'; }
+  var granted = await requestNotificationPermission();
+  // Atualizar visual do botão após a resposta
+  if (btn) {
+    if (granted || (typeof Notification !== 'undefined' && Notification.permission === 'granted')) {
+      btn.innerHTML = '<span>✅</span> Notificações Ativas';
+      btn.style.background = 'linear-gradient(135deg,#16a34a,#15803d)';
+      btn.disabled = true;
+    } else {
+      btn.innerHTML = '<span>🔔</span> Ativar Notificações';
+      btn.disabled = false;
+    }
+  }
+});
+
+// Hide notif banner if already granted or asked
+if ((typeof Notification !== 'undefined' && Notification.permission === 'granted') || _ls.get('av_notif_asked') === '1') {
+  document.getElementById('notifBanner').classList.add('hidden');
+}
+
+// ===== ADMIN CONFIG WHATSAPP =====
+function loadAdminWppConfig() {
+  var currentEl = document.getElementById('adminWppCurrentLink');
+  var inputEl = document.getElementById('adminWppInput');
+  if (!currentEl) return;
+  fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/config/wpp_group_link.json')
+    .then(function(r) { return r.json(); })
+    .then(function(val) {
+      if (val && typeof val === 'string') {
+        currentEl.textContent = val;
+        if (inputEl) inputEl.value = val;
+      } else {
+        currentEl.textContent = VIP_WPP_LINK;
+        if (inputEl) inputEl.value = VIP_WPP_LINK;
+      }
+    })
+    .catch(function() {
+      currentEl.textContent = VIP_WPP_LINK;
+      if (inputEl) inputEl.value = VIP_WPP_LINK;
+    });
+}
+document.getElementById('adminWppSaveBtn').addEventListener('click', function() {
+  var inputEl = document.getElementById('adminWppInput');
+  var statusEl = document.getElementById('adminWppStatus');
+  var currentEl = document.getElementById('adminWppCurrentLink');
+  var link = (inputEl ? inputEl.value.trim() : '');
+  // Validação
+  if (!link.startsWith('https://chat.whatsapp.com/')) {
+    statusEl.textContent = '❌ Link inválido. Deve começar com https://chat.whatsapp.com/';
+    statusEl.className = 'admin-wpp-status err';
+    return;
+  }
+  statusEl.textContent = '⏳ Salvando...';
+  statusEl.className = 'admin-wpp-status ok';
+  // Salvar no Firebase
+  fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/config/wpp_group_link.json?auth=' + FIREBASE_API_KEY, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(link)
+  })
+  .then(function(r) { return r.json(); })
+  .then(function() {
+    VIP_WPP_LINK = link;
+    if (currentEl) currentEl.textContent = link;
+    statusEl.textContent = '✅ Link salvo com sucesso! Todos os botões foram atualizados.';
+    statusEl.className = 'admin-wpp-status ok';
+    showToast('✅ Link do WhatsApp atualizado!', 3000);
+  })
+  .catch(function() {
+    statusEl.textContent = '❌ Erro ao salvar. Tente novamente.';
+    statusEl.className = 'admin-wpp-status err';
+  });
+});
+// ===== SHARE =====
+document.getElementById('shareWhatsapp').addEventListener('click', () => {
+  const msg = encodeURIComponent(`🎰 ACESSO VIP - Plataformas exclusivas com bônus de registro!\n\n🎁 Bônus de Registro ATIVO!\n🔔 Ative as notificações e receba os lançamentos em primeira mão!\n\n📲 Acesse agora: ${APP_URL}`);
+  openExternalLink(`https://wa.me/?text=${msg}`);
+  trackEvent('share_whatsapp');
+});
+document.getElementById('shareCopy').addEventListener('click', () => {
+  navigator.clipboard.writeText(APP_URL).then(() => showToast('✅ Link copiado!')).catch(() => {
+    const input = document.createElement('input');
+    input.value = APP_URL;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    document.body.removeChild(input);
+    showToast('✅ Link copiado!');
+  });
+  trackEvent('share_copy');
+});
+
+// ===== HEADER SECRET TAP (3x = admin) =====
+document.getElementById('headerLogo').addEventListener('click', () => {
+  headerTapCount++;
+  if (headerTapTimer) clearTimeout(headerTapTimer);
+  if (headerTapCount >= 3) {
+    headerTapCount = 0;
+    document.getElementById('adminScreen').style.display = 'block';
+  } else {
+    headerTapTimer = setTimeout(() => { headerTapCount = 0; }, 1500);
+  }
+});
+document.getElementById('adminBack').addEventListener('click', () => {
+  document.getElementById('adminScreen').style.display = 'none';
+  // Resetar usuário ao sair
+  _adminCurrentUser = { name: '', role: '', label: '', icon: '' };
+  adminLoggedIn = false;
+  document.getElementById('adminPanelWrap').style.display = 'none';
+  document.getElementById('adminLoginWrap').style.display = 'flex';
+  document.getElementById('adminPasswordInput').value = '';
+  document.getElementById('adminNameInput').value = '';
+  window._editorMode = false;
+});
+
+// Logout pelo botão Sair
+document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+  _adminCurrentUser = { name: '', role: '', label: '', icon: '' };
+  adminLoggedIn = false;
+  window._editorMode = false;
+  document.getElementById('adminPanelWrap').style.display = 'none';
+  document.getElementById('adminLoginWrap').style.display = 'flex';
+  document.getElementById('adminPasswordInput').value = '';
+  document.getElementById('adminNameInput').value = '';
+  showToast('&#128275; Sessão encerrada');
+});
+
+// ===== ADMIN =====
+
+// Obter IP do usuário (assíncrono, armazena globalmente)
+var _adminUserIP = 'N/D';
+var _adminUserDevice = (function() {
+  var ua = navigator.userAgent;
+  if (/iPhone|iPad/i.test(ua)) return 'iOS';
+  if (/Android/i.test(ua)) return 'Android';
+  if (/Windows/i.test(ua)) return 'Windows';
+  if (/Mac/i.test(ua)) return 'Mac';
+  return 'Desconhecido';
+})();
+
+fetch('https://api.ipify.org?format=json', { cache: 'no-store' })
+  .then(function(r) { return r.json(); })
+  .then(function(d) { _adminUserIP = d.ip || 'N/D'; })
+  .catch(function() { _adminUserIP = 'N/D'; });
+
+document.getElementById('adminLoginBtn').addEventListener('click', () => {
+  const pass = document.getElementById('adminPasswordInput').value.trim();
+  const name = (document.getElementById('adminNameInput').value.trim() || 'Anônimo');
+  const userConfig = ADMIN_USERS[pass];
+  if (userConfig) {
+    adminLoggedIn = true;
+    _adminCurrentUser = {
+      name: name,
+      role: userConfig.role,
+      label: userConfig.label,
+      icon: userConfig.icon
+    };
+    // Atualizar badge no header
+    var badge = document.getElementById('adminUserBadge');
+    if (badge) {
+      badge.className = 'admin-user-badge role-' + userConfig.role;
+      badge.innerHTML = userConfig.icon + ' ' + name + ' &mdash; ' + userConfig.label;
+    }
+    // Aplicar restrições visuais por role
+    applyRoleRestrictions(userConfig.role);
+    document.getElementById('adminLoginWrap').style.display = 'none';
+    document.getElementById('adminPanelWrap').style.display = 'block';
+    adminGoTo('home');
+    populatePlatformSelects(); // Registrar login no log
+    addAuditLog('login', '(acesso ao painel)', null);
+  } else {
+    showToast('Senha incorreta!');
+  }
+});
+
+function applyRoleRestrictions(role) {
+  // Viewer: bloquear todas as ações de escrita
+  if (role === 'viewer') {
+    // Bloquear botões de adicionar, notificações, sinais, config
+    ['admin-tab-add','admin-tab-notifications','admin-tab-sinais','admin-tab-config'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.add('perm-blocked');
+    });
+    // Bloquear botões de lixeira permanente e limpar log (via CSS)
+    document.querySelectorAll('.trash-btn-perm,.trash-btn-restore,.admin-btn-del,.admin-btn-high,.admin-btn-launch,.admin-btn-up,.admin-btn-down').forEach(function(b) {
+      b.disabled = true; b.style.opacity = '0.3'; b.style.pointerEvents = 'none';
+    });
+  }
+  // Editor: bloquear apenas exclusão permanente e limpar histórico
+  if (role === 'editor') {
+    // Marcar os botões de excluir permanente e limpar log como bloqueados
+    // (serão bloqueados dinamicamente nas funções)
+    window._editorMode = true;
+  }
+}
+
+// Função central de navegação do painel admin
+function adminGoTo(tab) {
+  // Esconder todas as seções
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  // Mostrar a seção alvo
+  var target = document.getElementById('admin-tab-' + tab);
+  if (target) target.classList.add('active');
+  // Atualizar nav buttons (para compatibilidade)
+  document.querySelectorAll('[data-admin-tab]').forEach(b => {
+    b.classList.toggle('active', b.dataset.adminTab === tab);
+  });
+  // Scroll para o topo do content
+  var content = document.querySelector('.admin-content');
+  if (content) content.scrollTop = 0;
+  // Callbacks de carregamento
+  if (tab === 'stats') loadAdminStats();
+  if (tab === 'config') loadAdminWppConfig();
+  if (tab === 'sinais') { renderAdminSinais(); populatePlatformSelects(); }
+  if (tab === 'rtp') { renderAdminRtp(); populatePlatformSelects(); }
+  if (tab === 'trash') loadTrash();
+  if (tab === 'log') loadAuditLog();
+  if (tab === 'platforms') renderAdminPlatforms();
+  if (tab === 'analytics') loadAnalytics();
+  if (tab === 'ranking') { window.adminLoadRanking && window.adminLoadRanking(); }
+  if (tab === 'metrics') loadPlatformMetrics(_metricsCurrentPeriod || 'all');
+}
+
+// Manter compatibilidade com os data-admin-tab buttons (nav escondida)
+document.querySelectorAll('[data-admin-tab]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    adminGoTo(btn.dataset.adminTab);
+  });
+});
+
+function renderAdminPlatforms(filter = '') {
+  // Aplicar filtro de Em Alta
+  let list = platforms.filter(p => !filter || p.name.toLowerCase().includes(filter.toLowerCase()));
+  if (adminHighFilterMode === 'high') list = list.filter(p => p.isHigh);
+  else if (adminHighFilterMode === 'normal') list = list.filter(p => !p.isHigh);
+  // Atualizar visual dos botões de filtro
+  var btnAll = document.getElementById('adminFilterAll');
+  var btnHigh = document.getElementById('adminFilterHigh');
+  var btnNormal = document.getElementById('adminFilterNotHigh');
+  if (btnAll) btnAll.style.background = adminHighFilterMode === 'all' ? 'rgba(124,58,237,0.5)' : 'rgba(124,58,237,0.15)';
+  if (btnHigh) btnHigh.style.background = adminHighFilterMode === 'high' ? 'rgba(239,68,68,0.45)' : 'rgba(239,68,68,0.15)';
+  if (btnNormal) btnNormal.style.background = adminHighFilterMode === 'normal' ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)';
+  const el = document.getElementById('adminPlatformList');
+  el.innerHTML = list.map((p, idx) => `
+    <div class="admin-card" id="acard-${p.id}">
+      <div class="admin-card-header">
+        ${p.imageUrl ? `<img class="admin-card-img" src="${p.imageUrl}" alt="${p.name}" onerror="this.style.display='none'" />` : `<div class="admin-card-img" style="display:flex;align-items:center;justify-content:center;font-size:20px;background:var(--surface2)">🔗</div>`}
+        <div style="flex:1;min-width:0">
+          <div class="admin-card-name">${p.name}</div>
+          <div style="display:flex;gap:4px;margin-top:3px;flex-wrap:wrap">
+            ${p.isHigh ? '<span style="font-size:9px;background:rgba(239,68,68,0.25);color:#EF4444;border-radius:4px;padding:1px 5px;font-weight:800">🔥 EM ALTA</span>' : ''}
+            ${p.isLaunch ? '<span style="font-size:9px;background:rgba(16,185,129,0.25);color:#10B981;border-radius:4px;padding:1px 5px;font-weight:800">🚀 LANÇAMENTO</span>' : ''}
+          </div>
+        </div>
+      </div>
+      <div style="margin-bottom:6px">
+        <div style="font-size:9px;color:#10B981;font-weight:800;margin-bottom:4px;letter-spacing:0.5px">🎮 JOGOS PAGANDO (até 3)</div>
+        <div style="display:grid;grid-template-columns:1fr 80px;gap:4px;margin-bottom:4px">
+          <input class="admin-hot-input" id="hotgame1-${p.id}" value="${(p.games && p.games[0] && p.games[0].name) || p.hot_game || ''}" placeholder="Jogo 1" onblur="saveGamesForPlatform(${p.id})" />
+          <input class="admin-hot-input" id="hotrtp1-${p.id}" value="${(p.games && p.games[0] && p.games[0].rtp) || p.hot_rtp || ''}" placeholder="RTP %" type="number" min="0" max="100" step="0.01" style="text-align:center" onblur="saveGamesForPlatform(${p.id})" />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 80px;gap:4px;margin-bottom:4px">
+          <input class="admin-hot-input" id="hotgame2-${p.id}" value="${(p.games && p.games[1] && p.games[1].name) || ''}" placeholder="Jogo 2 (opcional)" onblur="saveGamesForPlatform(${p.id})" />
+          <input class="admin-hot-input" id="hotrtp2-${p.id}" value="${(p.games && p.games[1] && p.games[1].rtp) || ''}" placeholder="RTP %" type="number" min="0" max="100" step="0.01" style="text-align:center" onblur="saveGamesForPlatform(${p.id})" />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 80px;gap:4px">
+          <input class="admin-hot-input" id="hotgame3-${p.id}" value="${(p.games && p.games[2] && p.games[2].name) || ''}" placeholder="Jogo 3 (opcional)" onblur="saveGamesForPlatform(${p.id})" />
+          <input class="admin-hot-input" id="hotrtp3-${p.id}" value="${(p.games && p.games[2] && p.games[2].rtp) || ''}" placeholder="RTP %" type="number" min="0" max="100" step="0.01" style="text-align:center" onblur="saveGamesForPlatform(${p.id})" />
+        </div>
+      </div>
+      <div class="admin-card-actions" style="grid-template-columns:1fr 1fr 36px 36px auto">
+        <button class="admin-btn admin-btn-high ${p.isHigh ? 'active' : ''}" data-toggle-high="${p.id}">${p.isHigh ? '🔥 Em Alta' : '📊 Em Alta'}</button>
+        <button class="admin-btn admin-btn-launch ${p.isLaunch ? 'active' : ''}" data-toggle-launch="${p.id}">${p.isLaunch ? '✅ Lançamento' : '🚀 Lançamento'}</button>
+        <button class="admin-btn admin-btn-up" data-move-up="${p.id}" style="font-size:14px">⬆️</button>
+        <button class="admin-btn admin-btn-down" data-move-down="${p.id}" style="font-size:14px">⬇️</button>
+        <button class="admin-btn admin-btn-del" data-delete="${p.id}" style="font-size:12px;padding:6px 10px;min-width:70px">🗑️ Lixeira</button>
+      </div>
+      <div style="margin-top:6px">
+        <button class="admin-btn-perm-del" data-perm-delete="${p.id}">&#x1F6AB; Excluir Permanentemente</button>
+      </div>
+    </div>`).join('');
+}
+
+document.getElementById('adminSearch').addEventListener('input', (e) => {
+  renderAdminPlatforms(e.target.value);
+});
+
+document.getElementById('adminPlatformList').addEventListener('click', (e) => {
+  const toggleHigh = e.target.closest('[data-toggle-high]')?.dataset.toggleHigh;
+  const toggleLaunch = e.target.closest('[data-toggle-launch]')?.dataset.toggleLaunch;
+  const moveUp = e.target.closest('[data-move-up]')?.dataset.moveUp;
+  const moveDown = e.target.closest('[data-move-down]')?.dataset.moveDown;
+  const del = e.target.closest('[data-delete]')?.dataset.delete;
+
+  if (toggleHigh) {
+    const p = platforms.find(x => x.id == toggleHigh);
+    if (p) {
+      // Salvar os 3 jogos
+      var g1n = document.getElementById('hotgame1-' + p.id)?.value.trim() || '';
+      var g1r = document.getElementById('hotrtp1-' + p.id)?.value.trim() || '';
+      var g2n = document.getElementById('hotgame2-' + p.id)?.value.trim() || '';
+      var g2r = document.getElementById('hotrtp2-' + p.id)?.value.trim() || '';
+      var g3n = document.getElementById('hotgame3-' + p.id)?.value.trim() || '';
+      var g3r = document.getElementById('hotrtp3-' + p.id)?.value.trim() || '';
+      p.games = [];
+      if (g1n) p.games.push({ name: g1n, rtp: g1r });
+      if (g2n) p.games.push({ name: g2n, rtp: g2r });
+      if (g3n) p.games.push({ name: g3n, rtp: g3r });
+      p.hot_game = g1n || p.hot_game;
+      p.hot_rtp = g1r || p.hot_rtp;
+      if (!p.isHigh) {
+        // Ativando Em Alta: salvar timestamp para ordenação
+        p.highAt = Date.now();
+      } else {
+        // Desativando: limpar timestamp
+        delete p.highAt;
+      }
+      p.isHigh = !p.isHigh;
+      saveState(); renderAdminPlatforms(); renderHome(); renderHot(); renderSinais();
+      showToast(p.isHigh ? `🔥 ${p.name} marcada como Em Alta e adicionada aos Sinais!` : `${p.name} removida de Em Alta e dos Sinais`);
+      // Disparo automático de notificação ao marcar como Em Alta (anti-spam: 30min por plataforma)
+      if (p.isHigh) {
+        var spamKey = 'av_notif_high_' + p.id;
+        var lastSent = parseInt(_ls.get(spamKey) || '0');
+        var now = Date.now();
+        if (now - lastSent > 30 * 60 * 1000) { // 30 minutos
+          _ls.set(spamKey, String(now));
+          (function() {
+            var platName = (p.name || 'Plataforma').toUpperCase();
+            var platLogo = p.imageUrl || 'https://acessoplatafomas.com.br/icons/icon-192.png';
+            var title = '🔥 ' + platName + ' EM ALTA AGORA';
+            var body = '🤖 IA analisou e detectou alta distribuição na ' + platName;
+            sendPushNotification(title, body, 'hot', platLogo, p.id)
+              .then(result => {
+                if (result.success) showToast('📲 Notificação enviada para todos!');
+                else showToast('⚠️ Erro ao enviar notificação');
+              });
+          })();
+        } else {
+          showToast('⏳ Aguarde 30min para enviar outra notificação desta plataforma');
+        }
+      }
+    }
+  }
+  if (toggleLaunch) {
+    const p = platforms.find(x => x.id == toggleLaunch);
+    if (p) {
+      p.isLaunch = !p.isLaunch;
+      saveState(); renderAdminPlatforms(); renderHome();
+      showToast(`${p.name} ${p.isLaunch ? 'marcada como Lançamento' : 'removida de Lançamento'}`);
+      // Notificação automática ao marcar como Lançamento (anti-spam: 30min)
+      if (p.isLaunch) {
+        var spamKeyL = 'av_notif_launch_' + p.id;
+        var lastSentL = parseInt(_ls.get(spamKeyL) || '0');
+        var nowL = Date.now();
+        if (nowL - lastSentL > 30 * 60 * 1000) {
+          _ls.set(spamKeyL, String(nowL));
+          sendPushNotification('🆕 NOVO LANÇAMENTO DISPONÍVEL', '🚀 Veja agora a novidade liberada no app', 'home')
+            .then(result => {
+              if (result.success) showToast('📲 Notificação de lançamento enviada!');
+            });
+        }
+      }
+    }
+  }
+  if (moveUp) {
+    const idx = platforms.findIndex(x => x.id == moveUp);
+    if (idx > 0) {
+      const tmp = platforms[idx].position; platforms[idx].position = platforms[idx-1].position; platforms[idx-1].position = tmp;
+      platforms.sort((a,b) => (a.position||0)-(b.position||0));
+      saveState(); renderAdminPlatforms(); renderHome();
+    }
+  }
+  if (moveDown) {
+    const idx = platforms.findIndex(x => x.id == moveDown);
+    if (idx < platforms.length - 1) {
+      const tmp = platforms[idx].position; platforms[idx].position = platforms[idx+1].position; platforms[idx+1].position = tmp;
+      platforms.sort((a,b) => (a.position||0)-(b.position||0));
+      saveState(); renderAdminPlatforms(); renderHome();
+    }
+  }
+  if (del) {
+    const p = platforms.find(x => x.id == del);
+    if (p) openDeleteConfirm(del, p.name);
+  }
+  const permDel = e.target.closest('[data-perm-delete]')?.dataset.permDelete;
+  if (permDel) {
+    const p = platforms.find(x => x.id == permDel);
+    if (p) openPermDeleteConfirm(permDel, p.name, 'active');
+  }
+});
+
+
+// ===== UPLOAD DE LOGO DE PLATAFORMA =====
+window._logoMode = 'url';
+window._logoBase64 = '';
+
+function setLogoMode(mode) {
+  window._logoMode = mode;
+  var urlBtn = document.getElementById('logoModeUrl');
+  var uploadBtn = document.getElementById('logoModeUpload');
+  var urlDiv = document.getElementById('logoUrlMode');
+  var uploadDiv = document.getElementById('logoUploadMode');
+  if (!urlBtn || !uploadBtn) return;
+  if (mode === 'url') {
+    urlBtn.style.borderColor = 'rgba(16,185,129,0.6)';
+    urlBtn.style.background = 'rgba(16,185,129,0.15)';
+    urlBtn.style.color = '#10B981';
+    uploadBtn.style.borderColor = 'rgba(255,255,255,0.15)';
+    uploadBtn.style.background = 'rgba(255,255,255,0.05)';
+    uploadBtn.style.color = 'rgba(255,255,255,0.5)';
+    if (urlDiv) urlDiv.style.display = '';
+    if (uploadDiv) uploadDiv.style.display = 'none';
+  } else {
+    uploadBtn.style.borderColor = 'rgba(99,102,241,0.6)';
+    uploadBtn.style.background = 'rgba(99,102,241,0.15)';
+    uploadBtn.style.color = '#818CF8';
+    urlBtn.style.borderColor = 'rgba(255,255,255,0.15)';
+    urlBtn.style.background = 'rgba(255,255,255,0.05)';
+    urlBtn.style.color = 'rgba(255,255,255,0.5)';
+    if (urlDiv) urlDiv.style.display = 'none';
+    if (uploadDiv) uploadDiv.style.display = '';
+  }
+}
+
+function handleLogoUpload(input) {
+  var file = input.files && input.files[0];
+  if (!file) return;
+  // Validar tamanho (max 2MB)
+  if (file.size > 2 * 1024 * 1024) {
+    showToast('❌ Imagem muito grande! Máximo 2MB.');
+    return;
+  }
+  var statusEl = document.getElementById('logoUploadStatus');
+  if (statusEl) { statusEl.style.display = 'block'; statusEl.textContent = '⏳ Processando imagem...'; }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var dataUrl = e.target.result;
+    // Redimensionar para max 200x200 mantendo proporção
+    var img = new Image();
+    img.onload = function() {
+      var canvas = document.createElement('canvas');
+      var maxSize = 200;
+      var w = img.width, h = img.height;
+      if (w > maxSize || h > maxSize) {
+        if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
+        else { w = Math.round(w * maxSize / h); h = maxSize; }
+      }
+      canvas.width = w; canvas.height = h;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      var compressed = canvas.toDataURL('image/jpeg', 0.82);
+      window._logoBase64 = compressed;
+      // Mostrar preview
+      var previewImg = document.getElementById('logoPreviewImg');
+      var previewDiv = document.getElementById('logoUploadPreview');
+      var placeholder = document.getElementById('logoUploadPlaceholder');
+      var area = document.getElementById('logoUploadArea');
+      if (previewImg) previewImg.src = compressed;
+      if (previewDiv) previewDiv.style.display = 'block';
+      if (placeholder) placeholder.style.display = 'none';
+      if (area) area.classList.add('has-image');
+      if (statusEl) { statusEl.textContent = '✅ Logo pronta! (' + w + 'x' + h + 'px)'; }
+    };
+    img.src = dataUrl;
+  };
+  reader.readAsDataURL(file);
+}
+
+document.getElementById('addPlatformBtn').addEventListener('click', () => {
+  // Determinar a URL da logo (link ou base64 do upload)
+  var logoMode = window._logoMode || 'url';
+  var logoUrl = '';
+  if (logoMode === 'url') {
+    logoUrl = document.getElementById('addLogoUrl').value.trim();
+  } else {
+    logoUrl = window._logoBase64 || '';
+  }
+  const name = document.getElementById('addName').value.trim();
+  const url = document.getElementById('addUrl').value.trim();
+  const isLaunch = document.getElementById('addIsLaunch').checked;
+  if (!name || !url) { showToast('Preencha o nome e o link!'); return; }
+  const newP = { id: Date.now(), name, url, imageUrl: logoUrl, isHigh: false, isLaunch: isLaunch, hot_game: '', position: -1 };
+  platforms.unshift(newP);
+  saveState(); renderHome(); renderAdminPlatforms();
+  addAuditLog('add', name, newP.id);
+  // Limpar campos
+  document.getElementById('addLogoUrl').value = '';
+  document.getElementById('addName').value = '';
+  document.getElementById('addUrl').value = '';
+  document.getElementById('addIsLaunch').checked = true;
+  // Resetar modo de logo
+  window._logoBase64 = '';
+  window._logoMode = 'url';
+  setLogoMode('url');
+  showToast('✅ ' + name + ' adicionada!');
+  trackEvent('platform_added', { name });
+});
+
+// ===== NOTIFICAÇÃO: Preencher dropdown de plataformas =====
+function populateNotifPlatSelect() {
+  var sel = document.getElementById('notifPlatSelect');
+  if (!sel) return;
+  // Limpar opções exceto a primeira
+  while (sel.options.length > 1) sel.remove(1);
+  var allPlats = (platforms.length > 0 ? platforms : PLATFORMS_DATA).filter(function(p) { return p.url && p.name; });
+  // Ordenar: em alta primeiro, depois por nome
+  allPlats.sort(function(a, b) {
+    if (a.isHigh && !b.isHigh) return -1;
+    if (!a.isHigh && b.isHigh) return 1;
+    return a.name.localeCompare(b.name);
+  });
+  allPlats.forEach(function(p) {
+    var opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = (p.isHigh ? '🔥 ' : '') + p.name;
+    opt.dataset.logo = p.imageUrl || '';
+    opt.dataset.name = p.name;
+    sel.appendChild(opt);
+  });
+}
+
+function onNotifPlatSelect() {
+  var sel = document.getElementById('notifPlatSelect');
+  var preview = document.getElementById('notifPlatPreview');
+  var logoImg = document.getElementById('notifPlatLogo');
+  var nameEl = document.getElementById('notifPlatName');
+  var titleInput = document.getElementById('notifTitle');
+  var line1Input = document.getElementById('notifBodyLine1');
+  var line2Input = document.getElementById('notifBodyLine2');
+  var platIdInput = document.getElementById('notifPlatId');
+
+  if (!sel || !sel.value) {
+    if (preview) preview.style.display = 'none';
+    return;
+  }
+  var opt = sel.options[sel.selectedIndex];
+  var platName = opt.dataset.name || opt.textContent.replace('🔥 ', '');
+  var logoUrl = opt.dataset.logo || '';
+  var platId = sel.value;
+
+  // Atualizar preview
+  if (preview) preview.style.display = 'flex';
+  if (logoImg) { logoImg.src = logoUrl; logoImg.style.display = logoUrl ? 'block' : 'none'; }
+  if (nameEl) nameEl.textContent = platName;
+
+  // Preencher título automaticamente
+  if (titleInput) titleInput.value = '🔥 ' + platName.toUpperCase() + ' EM ALTA AGORA';
+
+  // Preencher linha principal automaticamente
+  if (line1Input) line1Input.value = '🔥 ' + platName + ' em alta agora';
+
+  // Preencher linha IA automaticamente
+  if (line2Input) line2Input.value = '🤖 IA analisou e detectou alta distribuição na ' + platName;
+
+  // Preencher ID da plataforma
+  if (platIdInput) platIdInput.value = platId;
+
+  // Preencher notifImage com logo da plataforma (se não tiver imagem manual)
+  var notifImageField = document.getElementById('notifImage');
+  var notifImagePreview = document.getElementById('notifImagePreview');
+  if (notifImageField && !notifImageField.value && logoUrl) {
+    notifImageField.value = logoUrl;
+    // Mostrar preview da logo como imagem da notificação
+    if (!notifImagePreview || notifImagePreview.style.display === 'none') {
+      if (notifImagePreview) {
+        var previewImg = document.getElementById('notifImagePreviewImg');
+        if (previewImg) previewImg.src = logoUrl;
+        notifImagePreview.style.display = 'block';
+        var statusEl = document.getElementById('notifImageUploadStatus');
+        if (statusEl) statusEl.textContent = '✅ Logo da plataforma selecionada';
+      }
+    }
+  }
+}
+
+// ===== SEND NOTIFICATION via Firebase REST (sem CORS) =====
+async function sendPushNotification(title, body, tab, overrideIcon, overridePlatId) {
+  // Salva no Firebase como notificação pendente
+  // O Firebase aceita escrita sem bloqueio de CORS
+  var targetUrl;
+  if (tab === 'hot') targetUrl = 'https://acessoplatafomas.com.br/?tab=hot';
+  else if (tab === 'launch') targetUrl = 'https://acessoplatafomas.com.br/?tab=home&highlight=launch';
+  else targetUrl = 'https://acessoplatafomas.com.br/';
+  const imageUrl = document.getElementById('notifImage') ? document.getElementById('notifImage').value.trim() : '';
+  const platId = overridePlatId ? String(overridePlatId) : (document.getElementById('notifPlatId') ? document.getElementById('notifPlatId').value.trim() : '');
+  // Usar logo da plataforma como icon se disponível (overrideIcon tem prioridade)
+  var notifIcon = overrideIcon || 'https://acessoplatafomas.com.br/icons/icon-192.png';
+  if (!overrideIcon && platId) {
+    var selPlat = (platforms.length > 0 ? platforms : PLATFORMS_DATA).find(function(p) { return String(p.id) === String(platId); });
+    if (selPlat && selPlat.imageUrl) notifIcon = selPlat.imageUrl;
+  }
+  const notifData = {
+    title: title,
+    body: body,
+    url: targetUrl,
+    timestamp: Date.now(),
+    sent: false,
+    icon: notifIcon,
+    badge: 'https://acessoplatafomas.com.br/icons/notif-icon-mono.png'
+  };
+  if (imageUrl) notifData.image = imageUrl;
+  if (platId) notifData.platId = platId;
+  // Salva no Firebase
+  const fbUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com/pending_notifications/' + Date.now() + '.json?auth=' + FIREBASE_API_KEY;
+  const fbResp = await fetch(fbUrl, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(notifData)
+  });
+  const fbData = await fbResp.json();
+  if (fbData && !fbData.error) {
+    try {
+      // Usa o Cloudflare Worker com Web Push nativo (VAPID)
+      // Buscar logo da plataforma para usar como ícone (overrideIcon tem prioridade)
+      var workerIcon = overrideIcon || 'https://acessoplatafomas.com.br/icons/icon-192.png';
+      if (!overrideIcon && platId) {
+        var _allPlats = (typeof platforms !== 'undefined' && platforms.length > 0) ? platforms : (typeof PLATFORMS_DATA !== 'undefined' ? PLATFORMS_DATA : []);
+        var _fp = _allPlats.find(function(p) { return String(p.id) === String(platId); });
+        if (_fp && _fp.imageUrl) workerIcon = _fp.imageUrl;
+      }
+      // ONESIGNAL: Uma única chamada para enviar para TODOS os assinantes
+      // Sem loop, sem paginação, sem limite de subrequests
+      const payload = {
+        action: 'send_all',
+        title: title,
+        message: body,
+        url: targetUrl,
+        icon: workerIcon
+      };
+      if (platId) payload.platId = platId;
+
+      const resp = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await resp.json();
+
+      if (data.success) {
+        return { success: true, recipients: data.sent || 0 };
+      } else {
+        return { success: false, error: data.error || 'Falha no envio' };
+      }
+    } catch(e) {
+      // CORS bloqueou - notificação salva no Firebase para envio posterior
+      return { success: true, queued: true };
+    }
+  }
+  return { success: false, error: 'Firebase error' };
+}
+
+// ============================================================
+// Upload de imagem para notificação (GitHub Pages - v2)
+// ============================================================
+// Upload de imagem para notificação (via GitHub Pages)
+// ============================================================
+function clearNotifImage() {
+  document.getElementById('notifImage').value = '';
+  document.getElementById('notifImageFile').value = '';
+  document.getElementById('notifImagePreview').style.display = 'none';
+  document.getElementById('notifImagePreviewImg').src = '';
+  document.getElementById('notifImageUploadBtn').innerHTML = '&#128247; Selecionar imagem da galeria';
+  document.getElementById('notifImageUploadBtn').style.borderColor = 'rgba(124,58,237,0.5)';
+  document.getElementById('notifImageUploadBtn').style.color = '#A78BFA';
+  document.getElementById('notifImageUploadStatus').textContent = '';
+}
+
+async function getUploadToken() {
+  // Busca o token de upload do Firebase (não fica exposto no código)
+  const resp = await fetch(FIREBASE_DB_URL + '/config/gh_upload_token.json');
+  if (!resp.ok) throw new Error('Token não encontrado');
+  const token = await resp.json();
+  return token;
+}
+
+document.getElementById('notifImageFile').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+  if (!validTypes.includes(file.type)) { showToast('\u274c Use imagens JPG, PNG, WebP ou GIF'); return; }
+  if (file.size > 3 * 1024 * 1024) { showToast('\u274c Imagem muito grande (m\u00e1x 3MB)'); return; }
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    document.getElementById('notifImagePreviewImg').src = e.target.result;
+    document.getElementById('notifImagePreview').style.display = 'block';
+    document.getElementById('notifImageUploadStatus').textContent = '\u23f3 Fazendo upload...';
+    document.getElementById('notifImageUploadBtn').innerHTML = '&#128247; Trocar imagem';
+    try {
+      const token = await getUploadToken();
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace('jpeg','jpg');
+      const fileName = 'notif-images/' + Date.now() + '.' + ext;
+      const base64Data = e.target.result.split(',')[1];
+      const ghResp = await fetch('https://api.github.com/repos/xavierdasilvamarcos2-pixel/acessovip/contents/' + fileName, {
+        method: 'PUT',
+        headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'upload: imagem notif ' + Date.now(), content: base64Data })
+      });
+      if (ghResp.ok) {
+        const publicUrl = 'https://acessoplatafomas.com.br/' + fileName;
+        document.getElementById('notifImage').value = publicUrl;
+        document.getElementById('notifImageUploadStatus').textContent = '\u2705 Upload conclu\u00eddo!';
+        document.getElementById('notifImageUploadBtn').style.borderColor = 'rgba(16,185,129,0.6)';
+        document.getElementById('notifImageUploadBtn').style.color = '#34D399';
+      } else {
+        throw new Error('Upload falhou: ' + ghResp.status);
+      }
+    } catch(err) {
+      console.error('Upload error:', err);
+      document.getElementById('notifImageUploadStatus').textContent = '\u26a0\ufe0f Erro no upload. Tente novamente.';
+      document.getElementById('notifImageUploadBtn').style.borderColor = 'rgba(239,68,68,0.5)';
+      showToast('\u26a0\ufe0f Erro no upload da imagem');
+    }
+  };
+  reader.readAsDataURL(file);
+});
+document.getElementById('sendNotifBtn').addEventListener('click', async () => {
+  const titleInput = document.getElementById('notifTitle');
+  const line1Input = document.getElementById('notifBodyLine1');
+  const line2Input = document.getElementById('notifBodyLine2');
+  const bodyInput = document.getElementById('notifBody');
+  const title = (titleInput && titleInput.value.trim()) ? titleInput.value.trim() : '🚨 ENTRADA AO VIVO';
+  // Combinar as 2 linhas em uma mensagem
+  const line1 = (line1Input && line1Input.value.trim()) ? line1Input.value.trim() : '';
+  const line2 = (line2Input && line2Input.value.trim()) ? line2Input.value.trim() : '';
+  const body = line1 && line2 ? line1 + '\n' + line2 : (line1 || line2 || (bodyInput ? bodyInput.value.trim() : ''));
+  const tab = document.getElementById('notifUrl').value || 'hot';
+  // Validação obrigatória
+  if (!line1 && !line2) {
+    showToast('⚠️ Preencha pelo menos a linha principal antes de enviar!');
+    if (line1Input) { line1Input.focus(); line1Input.style.borderColor = '#F87171'; setTimeout(() => { line1Input.style.borderColor = ''; }, 2000); }
+    return;
+  }
+  const imgField = document.getElementById('notifImage');
+  const resultEl = document.getElementById('notifResult');
+  const deliveryBox = document.getElementById('notifDeliveryBox');
+  const deliveryNum = document.getElementById('notifDeliveryNum');
+  const sendBtn = document.getElementById('sendNotifBtn');
+  if (deliveryBox) deliveryBox.style.display = 'none';
+  // Feedback de loading
+  resultEl.style.color = 'rgba(255,255,255,0.5)';
+  resultEl.textContent = '⏳ Enviando para todos os dispositivos...';
+  if (sendBtn) { sendBtn.disabled = true; sendBtn.textContent = '⏳ Enviando...'; }
+  try {
+    const result = await sendPushNotification(title, body, tab);
+    if (result.success) {
+      const count = result.recipients || 0;
+      const countFmt = count.toLocaleString('pt-BR');
+      resultEl.textContent = '';
+      if (deliveryBox) { deliveryBox.style.display = 'block'; if (deliveryNum) deliveryNum.textContent = countFmt; }
+      showToast('✅ Notificação enviada para ' + countFmt + ' dispositivos!');
+      trackEvent('notification_sent', { title });
+      if (bodyInput) bodyInput.value = '';
+      if (imgField) { imgField.value = ''; try { clearNotifImage(); } catch(e){} }
+    } else {
+      resultEl.style.color = '#F87171';
+      resultEl.textContent = '❌ Erro: ' + (result.error || 'Falha desconhecida');
+      showToast('❌ Erro ao enviar notificação.');
+    }
+  } catch(err) {
+    resultEl.style.color = '#F87171';
+    resultEl.textContent = '❌ Erro inesperado: ' + err.message;
+    showToast('❌ Erro inesperado ao enviar.');
+  } finally {
+    if (sendBtn) { sendBtn.disabled = false; sendBtn.innerHTML = '&#128228; ENVIAR PARA TODOS'; }
+  }
+});
+
+// Botão de notificação de teste
+document.getElementById('testNotifBtn').addEventListener('click', async () => {
+  const resultEl = document.getElementById('notifResult');
+  const deliveryBox = document.getElementById('notifDeliveryBox');
+  const deliveryNum = document.getElementById('notifDeliveryNum');
+  const testBtn = document.getElementById('testNotifBtn');
+  if (deliveryBox) deliveryBox.style.display = 'none';
+  resultEl.style.color = 'rgba(255,255,255,0.5)';
+  resultEl.textContent = '⏳ Enviando notificação de teste...';
+  if (testBtn) { testBtn.disabled = true; testBtn.textContent = '⏳ Enviando teste...'; }
+  try {
+    const result = await sendPushNotification(
+      '🔔 NOTIFICAÇÃO ATIVA!',
+      'Você já pode receber sinais e atualizações em tempo real.',
+      'hot'
+    );
+    if (result.success) {
+      const count = result.recipients || 0;
+      const countFmt = count.toLocaleString('pt-BR');
+      resultEl.textContent = '';
+      if (deliveryBox) { deliveryBox.style.display = 'block'; if (deliveryNum) deliveryNum.textContent = countFmt; }
+      showToast('🧪 Notificação de teste enviada para ' + countFmt + ' dispositivos!');
+    } else {
+      resultEl.style.color = '#F87171';
+      resultEl.textContent = '❌ Erro: ' + (result.error || 'Falha desconhecida');
+      showToast('❌ Erro ao enviar teste.');
+    }
+  } catch(err) {
+    resultEl.style.color = '#F87171';
+    resultEl.textContent = '❌ Erro inesperado: ' + err.message;
+  } finally {
+    if (testBtn) { testBtn.disabled = false; testBtn.textContent = '🧪 ENVIAR NOTIFICAÇÃO DE TESTE'; }
+  }
+});
+
+// Redirecionamento ao abrir o app via notificação (?tab=hot ou ?tab=home)
+(function handleNotifRedirect() {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var tab = params.get('tab');
+    var platId = params.get('plataforma');
+    if (tab) {
+      // Aguardar o app inicializar antes de navegar
+      setTimeout(function() {
+        // BLOQUEIO: se tab é área restrita e não instalado, mostrar popup
+        var _tabsRestritas = ['hot', 'favs', 'share'];
+        if (_tabsRestritas.indexOf(tab) !== -1 && typeof _appInstalado === 'function' && !_appInstalado()) {
+          var popup = document.getElementById('installBlockPopup');
+          if (popup) popup.classList.remove('hidden');
+          return;
+        }
+        var tabBtn = document.querySelector('[data-tab="' + tab + '"');
+        if (tabBtn) tabBtn.click();
+        // Se veio com parâmetro de plataforma, abrir o sinal direto
+        if (platId) {
+          setTimeout(function() {
+            var pid = parseInt(platId);
+            if (typeof openSinalDetail === 'function') {
+              openSinalDetail(pid);
+            }
+          }, 600);
+        }
+      }, 800);
+    }
+
+    // Listener para navegação via Service Worker (clique em notificação)
+    navigator.serviceWorker && navigator.serviceWorker.addEventListener('message', function(event) {
+      if (event.data && event.data.type === 'NAVIGATE_TAB') {
+        var targetTab = event.data.tab || 'hot';
+        var tabBtn = document.querySelector('[data-tab="' + targetTab + '"]');
+        if (tabBtn) {
+          tabBtn.click();
+          window.scrollTo(0, 0);
+        }
+        // Se veio com platId, abrir o sinal direto após a aba carregar
+        if (event.data.platId) {
+          setTimeout(function() {
+            var platId = parseInt(event.data.platId);
+            if (typeof openSinalDetail === 'function') {
+              openSinalDetail(platId);
+            }
+          }, 600);
+        }
+      }
+    });
+  } catch(e) {}
+})();
+
+// Mostrar/ocultar campo de plataforma baseado no destino selecionado
+(function() {
+  var sel = document.getElementById('notifUrl');
+  var row = document.getElementById('notifPlatRow');
+  if (sel && row) {
+    function togglePlatRow() {
+      row.style.display = sel.value === 'hot' ? 'block' : 'none';
+    }
+    sel.addEventListener('change', togglePlatRow);
+    togglePlatRow(); // estado inicial
+  }
+})();
+
+// Buscar subscribers reais do Worker (Web Push nativo)
+async function loadSubscriberCount() {
+  // Preencher dropdown de plataformas ao abrir o admin
+  try { populateNotifPlatSelect(); } catch(e) {}
+  var el = document.getElementById('notifSubscriberCount');
+  var elStats = document.getElementById('adminStatTokens');
+  if (el) el.textContent = '...';
+  try {
+    // Buscar contagem diretamente do Worker
+    var resp = await fetch(WORKER_URL + '/count?_=' + Date.now());
+    var data = await resp.json();
+    var count = data.count || 0;
+    if (el) el.textContent = count.toLocaleString();
+    if (elStats) elStats.textContent = count.toLocaleString();
+    // Atualizar Firebase com a contagem real
+    fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_push_subscribers.json?auth=' + FIREBASE_API_KEY, {
+      method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(count)
+    }).catch(()=>{});
+  } catch(e) {
+    // Fallback: usar valor salvo no Firebase
+    try {
+      var fbResp = await fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_push_subscribers.json');
+      var fbVal = await fbResp.json();
+      var fbCount = parseInt(fbVal) || pushTokens;
+      if (el) el.textContent = fbCount.toLocaleString();
+      if (elStats) elStats.textContent = fbCount.toLocaleString();
+    } catch(e2) {
+      if (el) el.textContent = pushTokens.toLocaleString();
+      if (elStats) elStats.textContent = pushTokens.toLocaleString();
+    }
+  }
+}
+
+function loadAdminStats() {
+  // Mostrar "..." enquanto carrega
+  document.getElementById('adminStatPlatforms').textContent = '...';
+  document.getElementById('adminStatHigh').textContent = '...';
+  // Buscar plataformas do Firebase (fonte de verdade - pode ter mais que o PLATFORMS_DATA local)
+  fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/platforms.json')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var fbPlatforms = null;
+      if (data && Array.isArray(data) && data.length > 0) {
+        fbPlatforms = data.filter(function(p) { return p && p.url; });
+      } else if (data && typeof data === 'object' && !Array.isArray(data)) {
+        fbPlatforms = Object.values(data).filter(function(p) { return p && p.url; });
+      }
+      if (fbPlatforms && fbPlatforms.length > 0) {
+        document.getElementById('adminStatPlatforms').textContent = fbPlatforms.length;
+        document.getElementById('adminStatHigh').textContent = fbPlatforms.filter(function(p) { return p.isHigh; }).length;
+      } else {
+        // Fallback para dados locais
+        document.getElementById('adminStatPlatforms').textContent = platforms.length;
+        document.getElementById('adminStatHigh').textContent = platforms.filter(function(p) { return p.isHigh; }).length;
+      }
+    })
+    .catch(function() {
+      document.getElementById('adminStatPlatforms').textContent = platforms.length;
+      document.getElementById('adminStatHigh').textContent = platforms.filter(function(p) { return p.isHigh; }).length;
+    });
+  // Installs e Notificações: buscar do Firebase (contador global)
+  fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats.json?_=' + Date.now())
+    .then(r => r.json()).then(stats => {
+      if (stats) {
+        var installs = parseInt(stats.total_installs) || 0;
+        document.getElementById('adminStatInstalls').textContent = installs.toLocaleString();
+        var notifsSent = parseInt(stats.total_notifs_sent) || 0;
+        var elNotifs = document.getElementById('adminStatNotifsSent');
+        if (elNotifs) elNotifs.textContent = notifsSent.toLocaleString();
+      } else {
+        document.getElementById('adminStatInstalls').textContent = '0';
+      }
+    }).catch(() => {
+      document.getElementById('adminStatInstalls').textContent = installCount.toLocaleString();
+    });
+  // Subscribers push: buscar do Worker (Web Push nativo - fonte de verdade)
+  loadSubscriberCount();
+}
+document.getElementById('refreshStatsBtn').addEventListener('click', loadAdminStats);
+
+// ===== SERVICE WORKER =====
+// Nota: O OneSignal registra o OneSignalSDKWorker.js automaticamente via SDK
+// O sw.js antigo foi substituido pelo OneSignalSDKWorker.js que inclui o código do PWA
+if ('serviceWorker' in navigator) {
+  // Desregistrar TODOS os SWs antigos e registrar o novo sw.js v11
+  navigator.serviceWorker.getRegistrations().then(registrations => {
+    var hasNewSW = registrations.some(reg => reg.active && reg.active.scriptURL && reg.active.scriptURL.includes('sw.js'));
+    registrations.forEach(reg => {
+      // Desregistrar qualquer SW que NÃO seja o sw.js atual
+      if (reg.active && reg.active.scriptURL && !reg.active.scriptURL.endsWith('/sw.js')) {
+        reg.unregister().then(() => console.log('Old SW unregistered:', reg.active.scriptURL));
+      }
+    });
+    // Registrar o sw.js v11 se ainda não estiver registrado
+    if (!hasNewSW) {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' })
+        .then(reg => {
+          console.log('SW v11 registered:', reg.scope);
+          // Forçar ativação imediata
+          if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+        })
+        .catch(err => console.log('SW register error:', err));
+    }
+  });
+
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    if (event.data?.type === 'NOTIFICATION_CLICK') {
+      const url = event.data.url;
+      if (url.includes('hot') || url.includes('quente')) {
+        document.querySelector('[data-tab="hot"]').click();
+      }
+    }
+  });
+
+  // Avisar o SW para verificar notificações quando a página carrega
+  // e a cada 25 segundos enquanto o app está aberto
+  function pingSwForNotifications() {
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: 'CHECK_NOTIFICATIONS' });
+    }
+  }
+  // Verificar logo após o SW estar pronto
+  navigator.serviceWorker.ready.then(() => {
+    setTimeout(pingSwForNotifications, 2000);
+    setInterval(pingSwForNotifications, 25000);
+  });
+}
+
+// ===== WELCOME MODAL =====
+function checkWelcomeModal() {
+  updateNotifBtn();
+  // Se está instalado e notificações não foram ativadas: mostrar pedido
+  var jaInstalado = window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true
+    || document.referrer.includes('android-app://')
+    || localStorage.getItem('av_installed') === '1'
+    || window.location.search.indexOf('pwa=1') !== -1;
+  if (!jaInstalado) return; // Não instalado: não pedir notificações
+  var notifPerm = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
+  if (notifPerm === 'granted') return; // Já ativou: não mostrar
+  // Mostrar pedido após 2 segundos (deixar o app carregar primeiro)
+  setTimeout(mostrarPedidoNotificacoes, 2000);
+}
+
+function updateNotifBtn() {
+  const btn = document.getElementById('notifHeaderBtn');
+  if (!btn) return;
+  const notifPerm = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
+  if (notifPerm === 'granted') {
+    btn.textContent = '🔔';
+    btn.title = 'Notificações ativas';
+    btn.style.opacity = '1';
+  } else {
+    btn.textContent = '🔕';
+    btn.title = 'Ativar notificações';
+    btn.style.opacity = '0.7';
+  }
+}
+
+document.getElementById('welcomeNotifBtn').addEventListener('click', async () => {
+  _ls.set('av_welcome_seen', '1');
+  document.getElementById('welcomeModal').classList.remove('open');
+  // Registrar subscription Web Push
+  await requestNotificationPermission();
+  updateNotifBtn();
+});
+
+document.getElementById('welcomeSkipBtn').addEventListener('click', () => {
+  _ls.set('av_welcome_seen', '1');
+  document.getElementById('welcomeModal').classList.remove('open');
+  showToast('💡 Você pode ativar as notificações a qualquer momento!');
+});
+
+// Botão de notificação no header — abre modal se não ativado
+document.getElementById('notifHeaderBtn').addEventListener('click', async () => {
+  const notifPerm = (typeof Notification !== 'undefined') ? Notification.permission : 'unsupported';
+  if (notifPerm === 'granted') {
+    showToast('✅ Notificações já estão ativas!');
+    return;
+  }
+  if (notifPerm === 'denied' || notifPerm === 'unsupported') {
+    showToast('⚠️ Notificação bloqueada. Vá em Configurações > Chrome > Notificações para ativar.');
+    return;
+  }
+  // Mostra modal novamente
+  document.getElementById('welcomeModal').classList.add('open');
+});
+
+/// ===== INIT =====
+// ===== ANALYTICS: RASTREAMENTO DE ACESSOS =====
+function detectOS() {
+  var ua = navigator.userAgent || '';
+  if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) return 'ios';
+  if (/android/i.test(ua)) return 'android';
+  if (/Windows/.test(ua)) return 'windows';
+  if (/Mac/.test(ua)) return 'mac';
+  return 'other';
+}
+
+function getTodayKey() {
+  var d = new Date();
+  var y = d.getFullYear();
+  var m = String(d.getMonth()+1).padStart(2,'0');
+  var day = String(d.getDate()).padStart(2,'0');
+  return y + '-' + m + '-' + day;
+}
+
+function trackDailyAccess() {
+  try {
+    var os = detectOS();
+    var today = getTodayKey();
+    var base = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+    var auth = '?auth=' + FIREBASE_API_KEY;
+
+    // 1. Incrementar acesso total do dia
+    fetch(base + '/analytics/daily/' + today + '/total.json' + auth)
+      .then(function(r){return r.json();})
+      .then(function(cur){
+        var next = (parseInt(cur)||0)+1;
+        fetch(base + '/analytics/daily/' + today + '/total.json' + auth, {
+          method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(next)
+        });
+      }).catch(function(){});
+
+    // 2. Incrementar acesso por OS do dia
+    fetch(base + '/analytics/daily/' + today + '/os/' + os + '.json' + auth)
+      .then(function(r){return r.json();})
+      .then(function(cur){
+        var next = (parseInt(cur)||0)+1;
+        fetch(base + '/analytics/daily/' + today + '/os/' + os + '.json' + auth, {
+          method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(next)
+        });
+      }).catch(function(){});
+
+    // 3. Registrar presença online (timestamp da última visita)
+    var visitorId = _ls.get('av_visitor_id');
+    if (!visitorId) {
+      visitorId = 'v' + Date.now() + Math.random().toString(36).substr(2,5);
+      _ls.set('av_visitor_id', visitorId);
+    }
+    var presenceData = { ts: Date.now(), os: os, day: today };
+    fetch(base + '/analytics/online/' + visitorId + '.json' + auth, {
+      method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(presenceData)
+    }).catch(function(){});
+
+    // 4. Incrementar total geral de acessos
+    fetch(base + '/analytics/total_accesses.json' + auth)
+      .then(function(r){return r.json();})
+      .then(function(cur){
+        var next = (parseInt(cur)||0)+1;
+        fetch(base + '/analytics/total_accesses.json' + auth, {
+          method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(next)
+        });
+      }).catch(function(){});
+  } catch(e) {}
+}
+
+function init() {
+  // PASSO 1: Usar sempre PLATFORMS_DATA embutido no HTML (61 plataformas garantidas)
+  // Nunca depende de Firebase ou localStorage para renderizar
+  platforms = [...PLATFORMS_DATA];
+  
+  // Tenta pegar dados mais recentes do localStorage (se tiver)
+  try {
+    const saved = _ls.get('av_platforms');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        platforms = parsed;
+      }
+    }
+  } catch(e) {}
+  
+  // Renderiza IMEDIATAMENTE - sempre tem dados (PLATFORMS_DATA)
+  renderHome();
+  // Fallback 1: renderiza novamente após 200ms (celulares lentos)
+  setTimeout(function() {
+    if (document.getElementById('platformGrid').children.length === 0) {
+      renderHome();
+    }
+  }, 200);
+  // Fallback 2: renderiza novamente após 600ms (celulares muito lentos ou com SW antigo)
+  setTimeout(function() {
+    if (document.getElementById('platformGrid').children.length === 0) {
+      renderHome();
+    }
+  }, 600);
+
+  // PASSO 2: Atualizar do Firebase em SEGUNDO PLANO (sem bloquear o app)
+  // Usa AbortController para cancelar se demorar mais de 5 segundos
+  function updateFromFirebase() {
+    var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timeoutId = controller ? setTimeout(function() { controller.abort(); }, 8000) : null;
+    var fetchOptions = controller ? { signal: controller.signal } : {};
+    
+    // REGRA CRÍTICA: Firebase é SEMPRE a fonte de verdade.
+    // Nunca sobrescrever o Firebase com dados locais que tenham MENOS plataformas.
+    // O painel admin salva no Firebase — esses dados nunca devem ser perdidos.
+    fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/platforms.json', fetchOptions)
+      .then(function(r) {
+        if (timeoutId) clearTimeout(timeoutId);
+        return r.json();
+      })
+      .then(function(data) {
+        var newList = null;
+        if (data && Array.isArray(data) && data.length > 0) {
+          newList = data.filter(function(x) { return x && x.url; });
+        } else if (data && typeof data === 'object' && !Array.isArray(data)) {
+          var arr = Object.values(data).filter(function(x) { return x && x.url; });
+          if (arr.length > 0) newList = arr;
+        }
+        if (newList && newList.length > 0) {
+          // Sempre usar os dados do Firebase (fonte de verdade)
+          platforms = newList;
+          var now = Date.now();
+          try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
+          try { _ls.set('av_platforms_ts', String(now)); } catch(e) {}
+          renderHome();
+          renderHot();
+          console.log('Firebase: ' + platforms.length + ' plataformas carregadas.');
+        }
+      })
+      .catch(function(e) {
+        if (timeoutId) clearTimeout(timeoutId);
+        console.log('Firebase update falhou, mantendo dados locais:', e.message);
+      });
+  }
+  // Aguarda 500ms para não atrasar a renderização inicial
+  setTimeout(updateFromFirebase, 500);
+  checkWelcomeModal();
+  trackEvent('app_open', { source: document.referrer || 'direct' });
+  // Rastrear acesso diário para Analytics
+  setTimeout(trackDailyAccess, 1000);
+  // Track install count
+  if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+    if (!_ls.get('av_install_counted')) {
+      _ls.set('av_install_counted', '1');
+      installCount++;
+      _ls.set('av_installs', installCount);
+      trackEvent('pwa_launch_standalone');
+    }
+    // Garantir que o Firebase também seja incrementado (iOS não dispara appinstalled)
+    if (!_ls.get('av_install_fb_counted')) {
+      _ls.set('av_install_fb_counted', '1');
+      fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_installs.json?auth=' + FIREBASE_API_KEY)
+        .then(function(r) { return r.json(); }).then(function(cur) {
+          var next = (parseInt(cur) || 0) + 1;
+          fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/stats/total_installs.json?auth=' + FIREBASE_API_KEY, {
+            method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
+          });
+        }).catch(function(){});
+    }
+  }
+}
+// init() movido para o final do script
+// ===== SINAIS SYSTEM =====
+var sinalTimer = null;
+
+var SINAIS_DEFAULTS = [
+  { _key: 'd1', name: 'Fortune Tiger', platform: 'PG Soft', logo: 'https://cdn.softswiss.net/i/s4/softswiss/fortune_tiger.png', url: '' },
+  { _key: 'd2', name: 'Fortune Mouse', platform: 'PG Soft', logo: 'https://cdn.softswiss.net/i/s4/softswiss/fortune_mouse.png', url: '' },
+  { _key: 'd3', name: 'Fortune Ox', platform: 'PG Soft', logo: 'https://cdn.softswiss.net/i/s4/softswiss/fortune_ox.png', url: '' },
+  { _key: 'd4', name: 'Gates of Olympus', platform: 'Pragmatic', logo: 'https://cdn.softswiss.net/i/s4/pragmaticplay/gates_of_olympus.png', url: '' },
+  { _key: 'd5', name: 'Sweet Bonanza', platform: 'Pragmatic', logo: 'https://cdn.softswiss.net/i/s4/pragmaticplay/sweet_bonanza.png', url: '' }
+];
+
+// Notificações de saque falsas para engajamento
+var SAQUES_NOTIF = [
+  'Débora A. Sacou: R$ 87,00',
+  'Carlos M. Sacou: R$ 320,00',
+  'Ana P. Sacou: R$ 145,00',
+  'Fernanda L. Sacou: R$ 560,00',
+  'Juliana C. Sacou: R$ 210,00',
+  'Paulo R. Sacou: R$ 750,00',
+  'Thiago B. Sacou: R$ 95,00',
+  'Larissa O. Sacou: R$ 430,00',
+  'Rafael N. Sacou: R$ 1.200,00',
+  'Camila S. Sacou: R$ 175,00',
+  'Bruno F. Sacou: R$ 680,00',
+  'Patrícia G. Sacou: R$ 310,00',
+  'Diego V. Sacou: R$ 62,00',
+  'Aline R. Sacou: R$ 890,00',
+  'Rodrigo T. Sacou: R$ 125,00',
+  'Mariana K. Sacou: R$ 1.450,00',
+  'Felipe H. Sacou: R$ 240,00',
+  'Vanessa M. Sacou: R$ 78,00',
+  'Lucas P. Sacou: R$ 970,00',
+  'Bianca D. Sacou: R$ 380,00',
+  'Eduardo C. Sacou: R$ 1.100,00',
+  'Priscila W. Sacou: R$ 155,00',
+  'Gustavo A. Sacou: R$ 490,00',
+  'Tatiana L. Sacou: R$ 67,00',
+  'Renato S. Sacou: R$ 830,00',
+  'Isabela F. Sacou: R$ 290,00',
+  'Marcelo J. Sacou: R$ 1.350,00',
+  'Letícia B. Sacou: R$ 115,00',
+  'Anderson R. Sacou: R$ 640,00',
+  'Simone V. Sacou: R$ 195,00',
+  'Leandro G. Sacou: R$ 72,00',
+  'Natália C. Sacou: R$ 1.000,00',
+  'Fábio M. Sacou: R$ 350,00',
+  'Cristiane P. Sacou: R$ 580,00',
+  'Henrique T. Sacou: R$ 88,00',
+  'Mônica A. Sacou: R$ 1.500,00',
+  'Sérgio L. Sacou: R$ 270,00',
+  'Adriana N. Sacou: R$ 420,00',
+  'Vinícius O. Sacou: R$ 135,00',
+  'Luciana D. Sacou: R$ 760,00',
+  'Alexandre K. Sacou: R$ 65,00',
+  'Sandra H. Sacou: R$ 910,00',
+  'Danilo W. Sacou: R$ 185,00',
+  'Elaine S. Sacou: R$ 1.250,00',
+  'Tiago F. Sacou: R$ 340,00',
+  'Cláudia R. Sacou: R$ 520,00',
+  'Maurício B. Sacou: R$ 98,00',
+  'Jéssica V. Sacou: R$ 1.050,00',
+  'Everton G. Sacou: R$ 230,00',
+  'Rosana C. Sacou: R$ 455,00',
+  'Nilton A. Sacou: R$ 70,00',
+  'Viviane M. Sacou: R$ 870,00',
+  'Cleber T. Sacou: R$ 160,00',
+  'Fabiana L. Sacou: R$ 1.400,00',
+  'Welington P. Sacou: R$ 305,00',
+  'Kátia S. Sacou: R$ 590,00',
+  'Jonatan R. Sacou: R$ 82,00',
+  'Miriam F. Sacou: R$ 940,00',
+  'Edson B. Sacou: R$ 215,00',
+  'Suelen V. Sacou: R$ 1.150,00',
+  'Renan G. Sacou: R$ 375,00',
+  'Denise C. Sacou: R$ 480,00',
+  'Caio A. Sacou: R$ 110,00',
+  'Talita M. Sacou: R$ 720,00',
+  'Breno T. Sacou: R$ 63,00',
+  'Samara L. Sacou: R$ 1.300,00',
+  'Ítalo P. Sacou: R$ 255,00',
+  'Gisele S. Sacou: R$ 540,00',
+  'Adilson R. Sacou: R$ 92,00',
+  'Luana F. Sacou: R$ 980,00',
+  'Márcio B. Sacou: R$ 330,00',
+  'Raquel V. Sacou: R$ 1.080,00',
+  'Emerson G. Sacou: R$ 170,00',
+  'Keila C. Sacou: R$ 415,00',
+  'Josué A. Sacou: R$ 75,00',
+  'Nathalia M. Sacou: R$ 850,00',
+  'Celso T. Sacou: R$ 200,00',
+  'Verônica L. Sacou: R$ 1.480,00',
+  'Fausto P. Sacou: R$ 285,00',
+  'Eliane S. Sacou: R$ 610,00',
+  'Weverton R. Sacou: R$ 105,00',
+  'Cíntia F. Sacou: R$ 1.020,00',
+  'Augusto B. Sacou: R$ 395,00',
+  'Sheila V. Sacou: R$ 500,00',
+  'Cleidson G. Sacou: R$ 68,00',
+  'Tânia C. Sacou: R$ 790,00',
+  'Eliton A. Sacou: R$ 145,00',
+  'Rosiane M. Sacou: R$ 1.180,00',
+  'Davi T. Sacou: R$ 360,00',
+  'Alessandra L. Sacou: R$ 570,00',
+  'Hélio P. Sacou: R$ 85,00',
+  'Gláucia S. Sacou: R$ 1.380,00',
+  'Ronaldo R. Sacou: R$ 225,00',
+  'Iara F. Sacou: R$ 440,00',
+  'Osmar B. Sacou: R$ 120,00',
+  'Edilene V. Sacou: R$ 930,00',
+  'Robson G. Sacou: R$ 310,00',
+  'Carine C. Sacou: R$ 1.120,00',
+  'Jailton A. Sacou: R$ 77,00',
+  'Poliana M. Sacou: R$ 660,00',
+  'Gilberto T. Sacou: R$ 195,00',
+  'Ariane L. Sacou: R$ 1.460,00',
+  'Eraldo P. Sacou: R$ 280,00',
+  'Solange S. Sacou: R$ 530,00',
+  'Wanderson R. Sacou: R$ 93,00',
+  'Elza F. Sacou: R$ 1.040,00',
+  'Jadson B. Sacou: R$ 345,00',
+  'Marta V. Sacou: R$ 470,00',
+  'Ednaldo G. Sacou: R$ 61,00',
+  'Tereza C. Sacou: R$ 820,00',
+  'Lindomar A. Sacou: R$ 165,00'
+];
+
+function showSaqueNotif() {
+  var notif = document.getElementById('saqueNotif');
+  if (!notif) return;
+  var msg = SAQUES_NOTIF[Math.floor(Math.random() * SAQUES_NOTIF.length)];
+  document.getElementById('saqueNotifText').textContent = msg;
+  notif.classList.add('show');
+  setTimeout(function() { notif.classList.remove('show'); }, 3500);
+}
+
+function startSaqueLoop() {
+  setTimeout(function() {
+    showSaqueNotif();
+    setInterval(showSaqueNotif, 8000);
+  }, 2000);
+}
+
+function getPct() { return Math.floor(Math.random() * 70) + 25; }
+
+function getPctColor(pct) {
+  if (pct >= 80) return '#10B981';
+  if (pct >= 55) return '#F59E0B';
+  return '#EF4444';
+}
+
+function loadSinaisData() {
+  var baseUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+  var authKey = 'AIzaSyD5rgvnm8Ytu0XqISzq7fYCk0p_PYEiuI4';
+  fetch(baseUrl + '/sinais.json?auth=' + authKey)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data && typeof data === 'object') {
+        sinaisData = Object.entries(data).map(function(e) {
+          return Object.assign({ _key: e[0] }, e[1]);
+        });
+      } else { sinaisData = []; }
+      renderSinais();
+    })
+    .catch(function() { sinaisData = []; renderSinais(); });
+}
+
+function buildSinalListFromPlatforms() {
+  // Pegar plataformas Em Alta e converter para formato de sinal
+  var allPlats = platforms.length > 0 ? platforms : PLATFORMS_DATA;
+  var highPlats = allPlats.filter(function(p) { return p.isHigh && p.url; });
+  if (highPlats.length === 0) return null; // Nenhuma Em Alta, usar SINAIS_DEFAULTS
+  return highPlats.map(function(p) {
+    // Buscar imageUrl: SEMPRE buscar no PLATFORMS_DATA original (tem as logos reais)
+    // O objeto salvo no localStorage pode ter imageUrl vazio se foi adicionado manualmente
+    var orig = PLATFORMS_DATA.find(function(x) { return x.id === p.id; });
+    var imgUrl = (orig && orig.imageUrl) ? orig.imageUrl : (p.imageUrl || '');
+    return {
+      _key: 'plat_' + p.id,
+      name: p.name,
+      platform: '',
+      logo: imgUrl,
+      url: p.url,
+      linkedPlatformId: String(p.id),
+      isPaying: false,
+      _isPlatform: true
+    };
+  });
+}
+
+function renderSinais() {
+  var grid = document.getElementById('sinaisGrid');
+  if (!grid) return;
+
+  // Prioridade: 1) sinaisData cadastrados, 2) plataformas Em Alta, 3) SINAIS_DEFAULTS
+  var platList = buildSinalListFromPlatforms();
+  var list;
+  if (sinaisData.length > 0) {
+    list = sinaisData;
+  } else if (platList && platList.length > 0) {
+    list = platList;
+  } else {
+    list = SINAIS_DEFAULTS;
+  }
+
+  if (!Array.isArray(sinaisIntervals)) sinaisIntervals = [];
+  sinaisIntervals.forEach(function(id) { clearInterval(id); });
+  sinaisIntervals = [];
+
+  grid.innerHTML = list.map(function(jogo) {
+    var pct = getPct();
+    var color = getPctColor(pct);
+    var logoHtml = jogo.logo
+      ? '<img class="sinal-card-logo" src="' + jogo.logo + '" alt="' + jogo.name + '" onerror="this.style.display=\'none\'">'
+      : '<div class="sinal-card-logo-ph">&#127918;</div>';
+    var payingTag = jogo.isPaying ? '<span style="font-size:9px;background:#F59E0B;color:#000;border-radius:4px;padding:1px 5px;font-weight:900;margin-left:4px;">&#128176; PAGANDO</span>' : '';
+    // Gerar número de pessoas (fixo por jogo, baseado no nome)
+    var seed = jogo.name.charCodeAt(0) + (jogo.name.charCodeAt(1) || 0);
+    var people = 12 + (seed % 27); // 12-38 pessoas
+    // Status baseado na assertividade
+    var statusDot, statusTxt;
+    if (pct >= 75) { statusDot = '🟢'; statusTxt = 'Ativo'; }
+    else if (pct >= 55) { statusDot = '🟡'; statusTxt = 'Finalizando'; }
+    else { statusDot = '🔴'; statusTxt = 'Encerrado'; }
+    return '<div class="sinal-card">' +
+      '<div class="sinal-card-logo-wrap">' + logoHtml + '</div>' +
+      '<div class="sinal-card-body">' +
+      '<div class="sinal-card-ao-vivo"><span class="sinal-card-ao-vivo-dot"></span><span class="sinal-card-ao-vivo-txt">AO VIVO</span></div>' +
+      '<div class="sinal-card-name">' + jogo.name + payingTag + '</div>' +
+      '<div class="sinal-card-status-label ' + (pct >= 80 ? 'sinal-card-status-hot">🔥 MUITO QUENTE' : pct >= 70 ? 'sinal-card-status-alta">⚡ EM ALTA' : 'sinal-card-status-teste">🟡 EM TESTE') + '</div>' +
+      '<div class="sinal-card-timer" id="stimer-' + jogo._key + '">⏳ RESTAM: --:--</div>' +
+      '<div class="sinal-card-ia">🤖 padrão detectado automaticamente</div>' +
+      '<div class="sinal-progress-wrap">' +
+        '<div class="sinal-progress-bg">' +
+          '<div class="sinal-progress-fill" id="sfill-' + jogo._key + '" style="width:' + pct + '%;background:' + color + '"></div>' +
+          '<div class="sinal-progress-pct" id="spct-' + jogo._key + '">' + pct + '%</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="sinal-card-status"><span>' + statusDot + '</span><span style="color:#e2e8f0">' + statusTxt + '</span></div>' +
+      '<div class="sinal-card-people">💬 ' + people + ' pessoas entrando agora</div>' +
+      '<button class="sinal-card-entrar" onclick="openSinalDetail(&quot;' + jogo._key + '&quot;)">🚀 ENTRAR AGORA</button>' +
+      '<div class="sinal-card-avaliar">' +
+        '<button class="sinal-card-avaliar-btn" data-avalia="ok">👍 Funcionou</button>' +
+        '<button class="sinal-card-avaliar-btn" data-avalia="nao">👎 Não funcionou</button>' +
+      '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  // Destaque top - melhor sinal
+  var topDestSinais = document.getElementById('sinaisTopDestaque');
+  if (topDestSinais && list.length > 0) {
+    var topSinal = list[0];
+    var topPctS = 78 + Math.floor(Math.random() * 18);
+    topDestSinais.innerHTML = '<div class="sinais-top-destaque"><span class="sinais-top-destaque-icon">🔥</span><div class="sinais-top-destaque-text"><div class="sinais-top-destaque-title">MELHOR OPORTUNIDADE AGORA</div><div class="sinais-top-destaque-name">' + topSinal.name + '</div></div><span class="sinais-top-destaque-pct">' + topPctS + '%</span></div>';
+  }
+  // Tempo base para cada card (entre 4 e 9 minutos)
+  list.forEach(function(jogo) {
+    var id = setInterval(function() {
+      var fill = document.getElementById('sfill-' + jogo._key);
+      var pctEl = document.getElementById('spct-' + jogo._key);
+      if (!fill || !pctEl) { clearInterval(id); return; }
+      var newPct = getPct();
+      var newColor = getPctColor(newPct);
+      fill.style.width = newPct + '%';
+      fill.style.backgroundColor = newColor;
+      pctEl.textContent = newPct + '%';
+    }, 3000 + Math.random() * 2000);
+    sinaisIntervals.push(id);
+    // Contador regressivo individual por card
+    var seed2 = (jogo.name.charCodeAt(0) || 65) + (jogo.name.charCodeAt(1) || 65);
+    var totalSecs = 240 + (seed2 % 300); // 4 a 9 minutos
+    var remaining = totalSecs;
+    var timerId = setInterval(function() {
+      var timerEl = document.getElementById('stimer-' + jogo._key);
+      if (!timerEl) { clearInterval(timerId); return; }
+      remaining--;
+      if (remaining <= 0) {
+        remaining = 240 + Math.floor(Math.random() * 300); // reiniciar
+      }
+      var m = Math.floor(remaining / 60);
+      var s = remaining % 60;
+      timerEl.textContent = '⏳ RESTAM: ' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+      // Cor do timer baseada no tempo restante
+      if (remaining <= 60) timerEl.style.color = '#EF4444'; // vermelho < 1min
+      else if (remaining <= 120) timerEl.style.color = '#F59E0B'; // amarelo < 2min
+      else timerEl.style.color = '#F59E0B';
+    }, 1000);
+    sinaisIntervals.push(timerId);
+  });
+}
+
+function openSinalDetail(key) {
+  var jogo = null;
+  // Se a key começa com 'plat_', buscar diretamente no array de plataformas
+  if (key.indexOf('plat_') === 0) {
+    var platId = key.replace('plat_', '');
+    // Buscar em platforms (array local com isHigh) e em PLATFORMS_DATA (banco original)
+    var platObj = platforms.find(function(p) { return String(p.id) === platId; })
+               || PLATFORMS_DATA.find(function(p) { return String(p.id) === platId; });
+    if (platObj) {
+      var origP = PLATFORMS_DATA.find(function(p) { return String(p.id) === platId; });
+      var imgUrl = (origP && origP.imageUrl) ? origP.imageUrl : (platObj.imageUrl || '');
+      jogo = {
+        _key: key,
+        name: platObj.name,
+        platform: '',
+        logo: imgUrl,
+        url: platObj.url || '',
+        linkedPlatformId: String(platObj.id),
+        isPaying: false,
+        _isPlatform: true
+      };
+    }
+  }
+  // Se não encontrou ainda, buscar nas listas de sinais
+  if (!jogo) {
+    var platList = buildSinalListFromPlatforms();
+    var allLists = [];
+    if (sinaisData.length > 0) allLists = allLists.concat(sinaisData);
+    if (platList) allLists = allLists.concat(platList);
+    allLists = allLists.concat(SINAIS_DEFAULTS);
+    jogo = allLists.find(function(j) { return j._key === key; });
+  }
+  if (!jogo) return;
+
+  document.getElementById('sinalDetailTitle').textContent = jogo.name;
+  document.getElementById('sinalDetailName').textContent = jogo.name;
+  document.getElementById('sinalDetailPlat').textContent = jogo.platform || '';
+  // Mostrar jogo pagando da plataforma vinculada
+  var hotGameEl = document.getElementById('sinalDetailHotGame');
+  var linkedPlatForHot = jogo.linkedPlatformId ? ((platforms).find(function(p) { return String(p.id) === String(jogo.linkedPlatformId); })) : null;
+  var platData = linkedPlatForHot || jogo;
+  var gamesList = (platData.games && platData.games.length > 0) ? platData.games
+    : (platData.hot_game ? [{ name: platData.hot_game, rtp: platData.hot_rtp || '' }] : []);
+  // Fallback: se não há jogos cadastrados, gerar 1 jogo aleatório
+  var DEFAULT_GAMES = ['Fortune Tiger','Fortune Rabbit','Fortune Ox','Fortune Mouse','Fortune Dragon','Ganesha Gold','Mahjong Ways','Wild Bandito','Starlight Princess','Gates of Olympus'];
+  if (gamesList.length === 0) {
+    var seed = (platData.id || 1) * 7;
+    var rnd = function(n) { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return Math.abs(seed) % n; };
+    var g1 = DEFAULT_GAMES[rnd(DEFAULT_GAMES.length)];
+    var rtp1 = (93 + rnd(5) + rnd(100) / 100).toFixed(2);
+    gamesList = [{ name: g1, rtp: rtp1 }];
+  }
+  var gamesListEl = document.getElementById('sinalDetailGamesList');
+  hotGameEl.style.display = 'block';
+  gamesListEl.innerHTML = gamesList.map(function(g) {
+    return '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">' +
+      '<span style="font-size:13px;font-weight:800;color:#fff">' + g.name + '</span>' +
+      (g.rtp ? '<span style="background:rgba(16,185,129,0.25);border:1px solid rgba(16,185,129,0.5);border-radius:6px;padding:2px 8px;font-size:13px;font-weight:900;color:#10B981">RTP ' + parseFloat(g.rtp).toFixed(2) + '%</span>' : '') +
+    '</div>';
+  }).join('');
+
+  var logoWrap = document.getElementById('sinalDetailLogoWrap');
+  // Para plataformas Em Alta: buscar logo do PLATFORMS_DATA original
+  if (jogo._isPlatform && !jogo.logo) {
+    var origPlat = PLATFORMS_DATA.find(function(x) { return String(x.id) === String(jogo.linkedPlatformId); });
+    if (origPlat && origPlat.imageUrl) jogo.logo = origPlat.imageUrl;
+  }
+  if (jogo.logo) {
+    logoWrap.innerHTML = '<img class="sinal-detail-logo" src="' + jogo.logo + '" alt="' + jogo.name + '" onerror="this.outerHTML=\'<div class=\\\"sinal-detail-logo-ph\\\">&#127918;</div>\'">';
+  } else {
+    // Tentar buscar imagem do jogo por nome
+    var gameImages = {
+      'fortune tiger': 'https://static.pragmaticplay.net/game-icons/vs20tiger.png',
+      'fortune mouse': 'https://static.pragmaticplay.net/game-icons/vs5mouse.png',
+      'fortune ox': 'https://static.pragmaticplay.net/game-icons/vs25ox.png',
+      'gates of olympus': 'https://static.pragmaticplay.net/game-icons/vs20olympgate.png',
+      'sweet bonanza': 'https://static.pragmaticplay.net/game-icons/vs20fruitsw.png',
+      'aviator': 'https://cdn.softswiss.net/i/s4/spribe/aviator.png'
+    };
+    var imgUrl = gameImages[(jogo.name || '').toLowerCase().trim()];
+    if (imgUrl) {
+      logoWrap.innerHTML = '<img class="sinal-detail-logo" src="' + imgUrl + '" alt="' + jogo.name + '" onerror="this.outerHTML=\'<div class=\\"sinal-detail-logo-ph\\">&#127918;</div>\'">';
+    } else {
+      logoWrap.innerHTML = '<div class="sinal-detail-logo-ph">&#127918;</div>';
+    }
+  }
+
+  // Gerar sinal automaticamente ao abrir a tela de detalhe
+  if (sinalCountdownTimer) { clearInterval(sinalCountdownTimer); sinalCountdownTimer = null; }
+  if (sinalSaquesTimer) { clearInterval(sinalSaquesTimer); sinalSaquesTimer = null; }
+  if (sinalTimer) { clearInterval(sinalTimer); sinalTimer = null; }
+  var _autoNormal = NORMAIS[Math.floor(Math.random() * NORMAIS.length)];
+  var _autoTurbo = TURBOS[Math.floor(Math.random() * TURBOS.length)];
+  var _autoAssertNum = (Math.floor(Math.random() * 20) + 75) + '.' + Math.floor(Math.random() * 99).toString().padStart(2, '0');
+  var _autoTotalSecs = (Math.floor(Math.random() * 20) + 5) * 60;
+  document.getElementById('sinalNormal').textContent = 'modo normal';
+  document.getElementById('sinalTurbo').textContent = 'modo turbo';
+  document.getElementById('sinalAssert').textContent = '\u{1F4CA} ' + _autoAssertNum + '% - ASSERTIVIDADE ALTA';
+  startSinalCountdown(_autoTotalSecs);
+  fillSinalExtras(_autoNormal, _autoTurbo, _autoAssertNum);
+  // Mostrar badge SINAL PRONTO
+  var _readyBadge = document.getElementById('sinalReadyBadge');
+  if (_readyBadge) _readyBadge.style.display = 'flex';
+  // Botão GERAR NOVO SINAL: iniciar cooldown de 30s
+  var btn = document.getElementById('sinalGerarBtn');
+  btn.classList.add('waiting');
+  var _autoSeconds = 30;
+  btn.textContent = '\u26A1 Nova an\u00e1lise em andamento\u2026';
+  sinalTimer = setInterval(function() {
+    _autoSeconds--;
+    if (_autoSeconds <= 0) {
+      clearInterval(sinalTimer);
+      sinalTimer = null;
+      btn.classList.remove('waiting');
+      btn.textContent = '\u{1F504} GERAR NOVO SINAL';
+    } else {
+      btn.textContent = '\u26A1 Nova an\u00e1lise em andamento\u2026';
+    }
+  }, 1000);
+  if (sinalTimer) { clearInterval(sinalTimer); sinalTimer = null; }
+
+  // Mostrar plataforma vinculada
+  // Buscar em PLATFORMS_DATA original (tem as logos reais) e em _allPlatforms (tem isHigh/url atualizados)
+  var linkedPlatId = jogo.linkedPlatformId;
+  var linkedPlatOrig = linkedPlatId ? PLATFORMS_DATA.find(function(p) { return String(p.id) === String(linkedPlatId); }) : null;
+  var linkedPlatLive = linkedPlatId ? ((platforms).find(function(p) { return String(p.id) === String(linkedPlatId); })) : null;
+  var linkedPlat = linkedPlatLive || linkedPlatOrig || null;
+  // Garantir que imageUrl vem do PLATFORMS_DATA original se o live não tiver
+  if (linkedPlat && !linkedPlat.imageUrl && linkedPlatOrig) linkedPlat = Object.assign({}, linkedPlat, { imageUrl: linkedPlatOrig.imageUrl });
+  var effectiveUrl = (linkedPlat ? linkedPlat.url : null) || jogo.url || '';
+  var platCard = document.getElementById('sinalPlatCard');
+  var accessBtn = document.getElementById('sinalAccessBtn');
+  var fallbackBtn = document.getElementById('sinalAccessBtnFallback');
+  if (linkedPlat && effectiveUrl) {
+    // Mostrar card da plataforma vinculada
+    platCard.style.display = 'block';
+    if (fallbackBtn) fallbackBtn.style.display = 'none';
+    var logoEl = document.getElementById('sinalPlatCardLogo');
+    var nameEl = document.getElementById('sinalPlatCardName');
+    if (logoEl) {
+      logoEl.src = linkedPlat.imageUrl || '';
+      logoEl.alt = linkedPlat.name;
+      if (!linkedPlat.imageUrl) logoEl.parentElement.style.display = 'none';
+      else logoEl.parentElement.style.display = 'flex';
+    }
+    if (nameEl) nameEl.textContent = linkedPlat.name;
+    if (accessBtn) {
+      accessBtn.innerHTML = '🚀 ENTRAR AGORA — ' + linkedPlat.name.toUpperCase();
+      accessBtn.onclick = function() { openExternalLink(effectiveUrl); };
+    }
+  } else if (effectiveUrl) {
+    // Mostrar botão simples sem plataforma vinculada
+    platCard.style.display = 'none';
+    if (fallbackBtn) {
+      fallbackBtn.style.display = 'flex';
+      fallbackBtn.classList.add('visible');
+      fallbackBtn.innerHTML = '🚀 ENTRAR AGORA';
+      fallbackBtn.onclick = function() { openExternalLink(effectiveUrl); };
+    }
+  } else {
+    platCard.style.display = 'none';
+    if (fallbackBtn) fallbackBtn.style.display = 'none';
+  }
+
+  // Salvar de qual aba o sinal foi aberto
+  var activeTab = document.querySelector('.tab-item.active');
+  document.getElementById('sinalDetail').dataset.fromTab = activeTab ? activeTab.dataset.tab : 'hot';
+  // Iniciar saques rotativos
+  startSinalSaquesRotativo();
+  document.getElementById('sinalDetail').classList.add('open');
+}
+document.getElementById('sinalDetailBack').addEventListener('click', function() {
+  document.getElementById('sinalDetail').classList.remove('open');
+  if (sinalTimer) { clearInterval(sinalTimer); sinalTimer = null; }
+  if (sinalCountdownTimer) { clearInterval(sinalCountdownTimer); sinalCountdownTimer = null; }
+  if (sinalSaquesTimer) { clearInterval(sinalSaquesTimer); sinalSaquesTimer = null; }
+  // Voltar para a aba de onde veio
+  var fromTab = document.getElementById('sinalDetail').dataset.fromTab || 'hot';
+  var tabBtn = document.querySelector('[data-tab="' + fromTab + '"]');
+  if (tabBtn) tabBtn.click();
+});
+
+var NORMAIS = ['5', '8', '10', '15', '20', '25', '30'];
+var TURBOS = ['5', '8', '10', '15', '20', '25', '30'];
+
+// ===== CONTADOR DO BANNER SINAL ATIVO (HOME) - REMOVIDO =====
+
+// ===== CONTADOR REGRESSIVO DO SINAL =====
+var sinalCountdownTimer = null;
+function startSinalCountdown(totalSeconds) {
+  if (sinalCountdownTimer) clearInterval(sinalCountdownTimer);
+  var remaining = totalSeconds;
+  var el = document.getElementById('sinalCountdown');
+  function update() {
+    if (!el) return;
+    var m = Math.floor(remaining / 60);
+    var s = remaining % 60;
+    el.textContent = m.toString().padStart(2,'0') + ':' + s.toString().padStart(2,'0') + ' restantes';
+    if (remaining <= 60) el.style.color = '#ef4444';
+    else el.style.color = '#FBBF24';
+    if (remaining <= 0) {
+      clearInterval(sinalCountdownTimer);
+      sinalCountdownTimer = null;
+      el.textContent = 'EXPIRADO';
+      el.style.color = '#ef4444';
+    }
+    remaining--;
+  }
+  update();
+  sinalCountdownTimer = setInterval(update, 1000);
+}
+
+// ===== SAQUES ROTATIVOS NA TELA DE DETALHE =====
+var sinalSaquesTimer = null;
+function startSinalSaquesRotativo() {
+  if (sinalSaquesTimer) clearInterval(sinalSaquesTimer);
+  var lista = document.getElementById('sinalSaquesLista');
+  if (!lista) return;
+  var idx = 0;
+  function renderSaques() {
+    var items = [];
+    for (var i = 0; i < 3; i++) {
+      items.push(SAQUES_NOTIF[(idx + i) % SAQUES_NOTIF.length]);
+    }
+    lista.innerHTML = items.map(function(s) {
+      return '<div class="sinal-saque-item"><div class="sinal-saque-dot"></div><span>&#128176; ' + s + '</span></div>';
+    }).join('');
+    idx = (idx + 1) % SAQUES_NOTIF.length;
+  }
+  renderSaques();
+  sinalSaquesTimer = setInterval(renderSaques, 3500);
+}
+
+// ===== PREENCHER ESTRATÉGIA E INDICADORES =====
+function fillSinalExtras(normal, turbo, assert) {
+  // Extrair número do normal e turbo
+  var nVal = parseInt(normal) || 10;
+  var tVal = parseInt(turbo) || 20;
+  // Mostrar estratégia unificada no painel principal
+  var sinalNormalEl = document.getElementById('sinalNormal');
+  if (sinalNormalEl) sinalNormalEl.textContent = nVal + ' giros normal + ' + tVal + ' giros turbo';
+  // Manter IDs de compatibilidade ocultos
+  var step1 = document.getElementById('sinalStratStep1');
+  var step2 = document.getElementById('sinalStratStep2');
+  if (step1) step1.textContent = nVal + ' giros no NORMAL';
+  if (step2) step2.textContent = tVal + ' giros no TURBO';
+}
+
+document.getElementById('sinalGerarBtn').addEventListener('click', function() {
+  var btn = this;
+  if (btn.classList.contains('waiting')) return;
+  var normal = NORMAIS[Math.floor(Math.random() * NORMAIS.length)];
+  var turbo = TURBOS[Math.floor(Math.random() * TURBOS.length)];
+  var assertNum = (Math.floor(Math.random() * 20) + 75) + '.' + Math.floor(Math.random() * 99).toString().padStart(2, '0');
+  var assert = assertNum + '%';
+  // Contador regressivo: entre 5 e 25 minutos
+  var totalSecs = (Math.floor(Math.random() * 20) + 5) * 60;
+  // Resumo de cima: sempre texto descritivo, sem números
+  document.getElementById('sinalNormal').textContent = 'modo normal';
+  document.getElementById('sinalTurbo').textContent = 'modo turbo';
+  document.getElementById('sinalAssert').textContent = '\uD83D\uDCCA ' + assertNum + '% - ASSERTIVIDADE ALTA';
+  startSinalCountdown(totalSecs);
+  fillSinalExtras(normal, turbo, assertNum);
+  var seconds = 30;
+  btn.classList.add('waiting');
+  btn.textContent = '\u26A1 Nova an\u00e1lise em andamento\u2026';
+  if (sinalTimer) clearInterval(sinalTimer);
+  sinalTimer = setInterval(function() {
+    seconds--;
+    if (seconds <= 0) {
+      clearInterval(sinalTimer);
+      sinalTimer = null;
+      btn.classList.remove('waiting');
+      btn.textContent = '\u{1F3AF} GERAR NOVO SINAL';
+    } else {
+      btn.textContent = '\u26A1 Nova an\u00e1lise em andamento\u2026';
+    }
+  }, 1000);
+});
+
+// Iniciar loop de notificações de saque
+// startSaqueLoop(); // removido
+// ===== LIVE COUNTER =====
+// Atualiza contadores LIVE com valores aleatórios 200+
+function updateLiveCounters() {
+  var base = 200 + Math.floor(Math.random() * 150); // 200-349
+  var el1 = document.getElementById('hotLiveCount');
+  var el2 = document.getElementById('sinaisLiveCount');
+  if (el1) el1.textContent = base + '+';
+  if (el2) el2.textContent = base + '+';
+}
+updateLiveCounters();
+setInterval(updateLiveCounters, 8000 + Math.floor(Math.random() * 4000));
+// ===== RTP SYSTEM =====
+// ===== RTP SYSTEM ======
+function loadRtpData() {
+  var baseUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+  var authKey = 'AIzaSyD5rgvnm8Ytu0XqISzq7fYCk0p_PYEiuI4';
+  fetch(baseUrl + '/rtp.json?auth=' + authKey)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data && typeof data === 'object') {
+        rtpData = Object.entries(data).map(function(e) {
+          return Object.assign({ _key: e[0] }, e[1]);
+        });
+      } else {
+        rtpData = [];
+      }
+      renderRtp();
+    })
+    .catch(function() {
+      rtpData = [];
+      renderRtp();
+    });
+}
+
+function renderRtp() {
+  var list = rtpData.length > 0 ? rtpData : RTP_DEFAULTS;
+  var filtered = rtpFilter === 'all' ? list : list.filter(function(i) { return i.platform === rtpFilter; });
+  
+  // Filtros
+  var platforms = ['all'].concat(list.map(function(i) { return i.platform; }).filter(function(v, i, a) { return a.indexOf(v) === i; }));
+  var filterBar = document.getElementById('rtpFilterBar');
+  if (filterBar) {
+    filterBar.innerHTML = platforms.map(function(p) {
+      return '<button class="rtp-filter-btn' + (rtpFilter === p ? ' active' : '') + '" onclick="setRtpFilter(&quot;' + p + '&quot;)">' + (p === 'all' ? '&#128293; Todos' : p) + '</button>';
+    }).join('');
+  }
+  
+  var grid = document.getElementById('rtpGrid');
+  if (!grid) return;
+  if (!filtered.length) {
+    grid.innerHTML = '<div style="grid-column:span 2;text-align:center;padding:40px 20px;color:var(--muted)">Nenhum jogo encontrado</div>';
+    return;
+  }
+  grid.innerHTML = filtered.map(function(item) {
+    var logoHtml = item.logo
+      ? '<img class="rtp-card-logo" src="' + item.logo + '" alt="' + item.game + '" onerror="this.style.display=\'none\'">'
+      : '<div class="rtp-card-logo-ph">&#127918;</div>';
+    // Buscar plataforma vinculada
+    var linkedPlat = item.linkedPlatformId ? (PLATFORMS_DATA.find(function(p) { return String(p.id) === String(item.linkedPlatformId); }) || null) : null;
+    var platLogoHtml = '';
+    var accessBtn = '';
+    if (linkedPlat) {
+      platLogoHtml = linkedPlat.imageUrl
+        ? '<img src="' + linkedPlat.imageUrl + '" style="width:28px;height:28px;border-radius:8px;object-fit:contain;background:#fff;flex-shrink:0;" onerror="this.style.display=\'none\'">'
+        : '<span style="font-size:20px;">&#127968;</span>';
+      accessBtn = '<a href="' + linkedPlat.url + '" target="_blank" class="rtp-access-btn">' +
+        platLogoHtml + '<span>' + linkedPlat.name + '</span><span style="font-size:11px;font-weight:900;background:rgba(16,185,129,0.2);color:#10B981;border-radius:6px;padding:2px 7px;">ACESSAR</span>' +
+        '</a>';
+    }
+    return '<div class="rtp-card">' +
+      logoHtml +
+      '<div class="rtp-card-name">' + item.game + '</div>' +
+      '<div class="rtp-card-plat">' + (item.platform || '') + '</div>' +
+      '<div class="rtp-card-pct">' + item.rtp + '%</div>' +
+      '<div class="rtp-card-badge">&#128200; RTP</div>' +
+      accessBtn +
+    '</div>';
+  }).join('');
+}
+
+function setRtpFilter(p) {
+  rtpFilter = p;
+  renderRtp();
+}
+
+// ===== ADMIN SINAIS =====
+function renderAdminSinais() {
+  var list = sinaisData;
+  var el = document.getElementById('adminSinalList');
+  var countEl = document.getElementById('sinalCount');
+  if (countEl) countEl.textContent = list.length;
+  if (!el) return;
+  if (!list.length) {
+    el.innerHTML = '<div class="admin-empty"><div class="admin-empty-icon">&#127919;</div><div class="admin-empty-text">Nenhum jogo cadastrado. Usando jogos padrão.</div></div>';
+    return;
+  }
+  el.innerHTML = list.map(function(jogo) {
+    var logoHtml = jogo.logo
+      ? '<img class="admin-sinal-item-logo" src="' + jogo.logo + '" alt="' + jogo.name + '">'
+      : '<div class="admin-sinal-item-logo" style="display:flex;align-items:center;justify-content:center;font-size:20px;">&#127918;</div>';
+    var linkedPlat = jogo.linkedPlatformId ? (PLATFORMS_DATA.find(function(p) { return String(p.id) === String(jogo.linkedPlatformId); }) || null) : null;
+    var platBadge = linkedPlat ? '<span style="font-size:10px;background:rgba(16,185,129,0.15);color:#10B981;border-radius:6px;padding:2px 6px;margin-left:4px;">&#128279; ' + linkedPlat.name + '</span>' : '';
+    var payingBadge = jogo.isPaying ? '<span style="font-size:10px;background:rgba(245,158,11,0.2);color:#F59E0B;border-radius:6px;padding:2px 6px;margin-left:4px;font-weight:900;">&#128176; MAIS PAGANDO</span>' : '';
+    return '<div class="admin-sinal-item">' +
+      logoHtml +
+      '<div class="admin-sinal-item-info">' +
+        '<div class="admin-sinal-item-name">' + jogo.name + platBadge + payingBadge + '</div>' +
+        '<div class="admin-sinal-item-plat">' + (jogo.platform || '') + '</div>' +
+      '</div>' +
+      '<button class="admin-sinal-item-del" onclick="deleteSinalItem(&quot;' + jogo._key + '&quot;)">&#128465;</button>' +
+    '</div>';
+  }).join('');
+}
+
+function deleteSinalItem(key) {
+  if (!confirm('Remover este jogo?')) return;
+  var baseUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+  var authKey = 'AIzaSyD5rgvnm8Ytu0XqISzq7fYCk0p_PYEiuI4';
+  fetch(baseUrl + '/sinais/' + key + '.json?auth=' + authKey, { method: 'DELETE' })
+    .then(function() { loadSinaisData(); renderAdminSinais(); });
+}
+
+var addSinalBtn = document.getElementById('addSinalBtn');
+if (addSinalBtn) {
+  addSinalBtn.addEventListener('click', function() {
+    var name = (document.getElementById('sinalGameName') || {}).value || '';
+    var platform = (document.getElementById('sinalPlatform') || {}).value || '';
+    var logo = (document.getElementById('sinalLogoUrl') || {}).value || '';
+    var linkedPlatformId = (document.getElementById('sinalGameUrl') || {}).value || '';
+    var isPaying = (document.getElementById('sinalIsPaying') || {}).checked || false;
+    // Buscar URL da plataforma vinculada
+    var linkedPlat = linkedPlatformId ? (PLATFORMS_DATA.find(function(p) { return String(p.id) === String(linkedPlatformId); }) || null) : null;
+    var url = linkedPlat ? linkedPlat.url : '';
+    if (!name.trim()) { showToast('Digite o nome do jogo'); return; }
+    var baseUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+    var authKey = 'AIzaSyD5rgvnm8Ytu0XqISzq7fYCk0p_PYEiuI4';
+    fetch(baseUrl + '/sinais.json?auth=' + authKey, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name.trim(), platform: platform.trim(), logo: logo.trim(), url: url, linkedPlatformId: linkedPlatformId, isPaying: isPaying })
+    }).then(function() {
+      document.getElementById('sinalGameName').value = '';
+      document.getElementById('sinalPlatform').value = '';
+      document.getElementById('sinalLogoUrl').value = '';
+      document.getElementById('sinalGameUrl').value = '';
+      if (document.getElementById('sinalIsPaying')) document.getElementById('sinalIsPaying').checked = false;
+      clearSinalPlatSelect();
+      showToast('Jogo adicionado!');
+      loadSinaisData();
+    });
+  });
+}
+
+// ===== ADMIN RTP =====
+function renderAdminRtp() {
+  var baseUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+  var authKey = 'AIzaSyD5rgvnm8Ytu0XqISzq7fYCk0p_PYEiuI4';
+  var el = document.getElementById('adminRtpList');
+  if (!el) return;
+  fetch(baseUrl + '/rtp.json?auth=' + authKey)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var items = [];
+      if (data && typeof data === 'object') {
+        items = Object.entries(data).map(function(e) {
+          return Object.assign({ _key: e[0] }, e[1]);
+        });
+      }
+      var countEl = document.getElementById('rtpCount');
+      if (countEl) countEl.textContent = items.length;
+      if (!items.length) {
+        el.innerHTML = '<div class="admin-empty"><div class="admin-empty-icon">&#128176;</div><div class="admin-empty-text">Nenhum jogo RTP cadastrado</div></div>';
+        return;
+      }
+      el.innerHTML = items.map(function(item) {
+        var logoHtml = item.logo
+          ? '<img class="admin-rtp-item-logo" src="' + item.logo + '" alt="' + item.game + '">'
+          : '<div class="admin-rtp-item-logo" style="display:flex;align-items:center;justify-content:center;font-size:20px;">&#127918;</div>';
+        var linkedPlat = item.linkedPlatformId ? (PLATFORMS_DATA.find(function(p) { return String(p.id) === String(item.linkedPlatformId); }) || null) : null;
+        var platBadge = linkedPlat ? '<span style="font-size:10px;background:rgba(16,185,129,0.15);color:#10B981;border-radius:6px;padding:2px 6px;margin-left:4px;">&#128279; ' + linkedPlat.name + '</span>' : '';
+        return '<div class="admin-rtp-item">' +
+          logoHtml +
+          '<div class="admin-rtp-item-info">' +
+            '<div class="admin-rtp-item-game">' + item.game + platBadge + '</div>' +
+            '<div class="admin-rtp-item-plat">' + (item.platform || '') + '</div>' +
+          '</div>' +
+          '<div class="admin-rtp-item-pct">' + item.rtp + '%</div>' +
+          '<button class="admin-rtp-item-del" onclick="deleteRtpItem(&quot;' + item._key + '&quot;)">&#128465;</button>' +
+        '</div>';
+      }).join('');
+    })
+    .catch(function() {
+      el.innerHTML = '<div class="admin-empty"><div class="admin-empty-icon">&#9888;</div><div class="admin-empty-text">Erro ao carregar</div></div>';
+    });
+}
+
+function deleteRtpItem(key) {
+  if (!confirm('Remover este jogo?')) return;
+  var baseUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
+  var authKey = 'AIzaSyD5rgvnm8Ytu0XqISzq7fYCk0p_PYEiuI4';
+  fetch(baseUrl + '/rtp/' + key + '.json?auth=' + authKey, { method: 'DELETE' })
+    .then(function() { renderAdminRtp(); loadRtpData(); });
+}
+
+
+
+// Pré-renderizar com dados padrão imediatamente (sem esperar Firebase)
+renderSinais();
+renderRtp();
+// Carregar dados do Firebase em segundo plano
+loadSinaisData();
+loadRtpData();
+// Inicializar o app DEPOIS de todo o código estar carregado
+init();
+
+// ===== BOTÃO FÍSICO VOLTAR (ANDROID PWA) =====
+// Estratégia: usar history.pushState para empurrar estados no histórico.
+// Cada vez que o usuário abre um overlay/modal/aba, empurramos um estado.
+// O evento 'popstate' (botão voltar físico) fecha o overlay/modal mais recente.
+
+function pushNavState(state) {
+  history.pushState(state, '');
+}
+
+// Empurrar estado inicial para que o primeiro "voltar" não feche o app
+history.replaceState({ view: 'home' }, '');
+
+// Interceptar abas — empurrar estado ao trocar de aba
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    pushNavState({ view: 'tab', tab: tab.dataset.tab });
+  });
+});
+
+// Interceptar abertura do sinalDetail
+var _origOpenSinalDetail = window.openSinalDetail;
+if (typeof openSinalDetail === 'function') {
+  var _origOpen = openSinalDetail;
+  openSinalDetail = function(jogo) {
+    _origOpen(jogo);
+    pushNavState({ view: 'sinalDetail' });
+  };
+}
+
+// Interceptar abertura dos modais
+var _sorteioOpen = document.getElementById('sorteioModal');
+var _iosModalOpen = document.getElementById('iosInstallModal');
+var _welcomeModalOpen = document.getElementById('welcomeModal');
+
+// Sobrescrever classList.add para modais para empurrar estado
+function patchModalOpen(el, stateKey) {
+  if (!el) return;
+  var orig = el.classList.add.bind(el.classList);
+  el.classList.add = function(cls) {
+    orig(cls);
+    if (cls === 'open') pushNavState({ view: stateKey });
+  };
+}
+patchModalOpen(_sorteioOpen, 'sorteioModal');
+patchModalOpen(_iosModalOpen, 'iosModal');
+patchModalOpen(_welcomeModalOpen, 'welcomeModal');
+
+// Interceptar abertura do sinalDetail via classList.add
+var _sinalDetailEl = document.getElementById('sinalDetail');
+if (_sinalDetailEl) {
+  var _origSinalAdd = _sinalDetailEl.classList.add.bind(_sinalDetailEl.classList);
+  _sinalDetailEl.classList.add = function(cls) {
+    _origSinalAdd(cls);
+    if (cls === 'open') pushNavState({ view: 'sinalDetail' });
+  };
+}
+
+// (MutationObserver do admin movido para depois do handler popstate)
+
+// Handler do evento popstate (botão físico voltar)
+window.addEventListener('popstate', function(e) {
+  // ===== PRIORIDADE 1: PAINEL ADMIN =====
+  // Se o painel admin estiver aberto, NUNCA sair dele pelo botão voltar.
+  // Sempre navegar para o menu home do admin.
+  var adminWrap = document.getElementById('adminPanelWrap');
+  if (adminWrap && adminWrap.style.display === 'block') {
+    // Verificar se já está no menu home do admin
+    var homeSection = document.getElementById('admin-tab-home');
+    if (homeSection && homeSection.classList.contains('active')) {
+      // Já está no menu home: empurrar estado para não sair do app
+      history.pushState({ view: 'admin', tab: 'home' }, '');
+    } else {
+      // Está em alguma seção interna: voltar para o menu home do admin
+      adminGoTo('home');
+      history.pushState({ view: 'admin', tab: 'home' }, '');
+    }
+    return;
+  }
+
+  // ===== PRIORIDADE 2: SINAL DETAIL =====
+  var sinalDetailEl = document.getElementById('sinalDetail');
+  if (sinalDetailEl && sinalDetailEl.classList.contains('open')) {
+    var sinalBack = document.getElementById('sinalDetailBack');
+    if (sinalBack) sinalBack.click();
+    history.pushState({ view: 'home' }, '');
+    return;
+  }
+
+  // ===== PRIORIDADE 3: MODAIS ABERTOS =====
+  var openModal = document.querySelector('.modal-overlay.open, .ios-modal.open');
+  if (openModal) {
+    openModal.classList.remove('open');
+    history.pushState({ view: 'home' }, '');
+    return;
+  }
+
+  // ===== PRIORIDADE 4: ABAS DO APP =====
+  var activeTab = document.querySelector('.tab-item.active');
+  if (activeTab && activeTab.dataset.tab !== 'home') {
+    var homeTabBtn = document.querySelector('[data-tab="home"]');
+    if (homeTabBtn) homeTabBtn.click();
+    history.pushState({ view: 'home' }, '');
+    return;
+  }
+
+  // ===== PRIORIDADE 5: JÁ NA HOME =====
+  // Empurrar estado para não fechar o app
+  history.pushState({ view: 'home' }, '');
+});
+
+// Garantir que ao abrir o painel admin, empurramos um estado no histórico
+// para que o primeiro "voltar" vá ao menu home do admin (não saia do painel)
+var _adminWrapNav = document.getElementById('adminPanelWrap');
+if (_adminWrapNav) {
+  new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      if (m.attributeName === 'style' && _adminWrapNav.style.display === 'block') {
+        // Empurrar 2 estados: um para o painel e outro para garantir o buffer
+        history.pushState({ view: 'admin', tab: 'home' }, '');
+        history.pushState({ view: 'admin', tab: 'home' }, '');
+      }
+    });
+  }).observe(_adminWrapNav, { attributes: true });
+}
+</script>
+
+  <!-- POP-UP DE INSTALAÇÃO (central, aparece ao clicar em área bloqueada) -->
+  <div id="installBlockPopup" class="hidden">
+    <div class="install-popup-box">
+      <button class="install-popup-x" id="installPopupClose" aria-label="Fechar">&#x2715;</button>
+      <span class="install-popup-icon">&#x1F512;</span>
+      <div class="install-popup-title">Instale para liberar o acesso</div>
+      <div class="install-popup-sub">Esta &#xe1;rea est&#xe1; dispon&#xed;vel somente no aplicativo instalado. Instale agora &#x2014; &#xe9; gr&#xe1;tis e leva menos de 30 segundos!</div>
+      <button class="install-popup-btn" id="installPopupBtn">&#x1F4F2; INSTALAR AGORA &#x2014; &#xC9; GR&#xC1;TIS</button>
+    </div>
+  </div>
+  <!-- Overlay legado (oculto) -->
+  <div id="tabLockOverlay" class="tab-lock-overlay hidden"></div>
+
+  <!-- BOLHA FLUTUANTE - INSTALAR APP (removida - substituída pelo banner premium) -->
+  <div class="bolha-flutuante bolha-install" id="bolhaInstall" style="display:none!important"></div>
+
+  <!-- BOLHA FLUTUANTE - ATIVAR NOTIFICAÇÕES -->
+  <div class="bolha-flutuante bolha-notif" id="bolhaNotif">
+    <span class="bolha-icon">🔔</span>
+    <div class="bolha-texto">
+      <div class="bolha-titulo">Ativar notificações</div>
+      <div class="bolha-sub">Receba sinais e lançamentos</div>
+    </div>
+    <button class="bolha-fechar" id="bolhaNotifFechar">✕</button>
+  </div>
+
+  <script>
+  // ===== BOLHAS FLUTUANTES =====
+  (function() {
+    var isStandalone = window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true;
+    var jaFechouInstall = sessionStorage.getItem('bolha_install_fechou');
+    var jaFechouNotif = sessionStorage.getItem('bolha_notif_fechou');
+    var notifJaAtiva = (typeof Notification !== 'undefined' && Notification.permission === 'granted');
+
+    // BOLHA INSTALAR (desativada - substituída pelo banner premium)
+    // if (!isStandalone && !jaFechouInstall) { ... }
+
+    // BOLHA NOTIFICAÇÃO
+    if (!notifJaAtiva && !jaFechouNotif) {
+      setTimeout(function() {
+        var bolha = document.getElementById('bolhaNotif');
+        if (bolha) bolha.classList.add('visivel');
+      }, 6000);
+    }
+
+    // Fechar bolha instalar
+    document.addEventListener('DOMContentLoaded', function() {
+      var btnFecharInstall = document.getElementById('bolhaInstallFechar');
+      if (btnFecharInstall) {
+        btnFecharInstall.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var bolha = document.getElementById('bolhaInstall');
+          if (bolha) bolha.classList.remove('visivel');
+          sessionStorage.setItem('bolha_install_fechou', '1');
+        });
+      }
+
+      // Fechar bolha notif
+      var btnFecharNotif = document.getElementById('bolhaNotifFechar');
+      if (btnFecharNotif) {
+        btnFecharNotif.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var bolha = document.getElementById('bolhaNotif');
+          if (bolha) bolha.classList.remove('visivel');
+          sessionStorage.setItem('bolha_notif_fechou', '1');
+        });
+      }
+
+      // Clique na bolha instalar (desativada - substituída pelo banner premium)
+
+      // Clique na bolha notificação
+      var bolhaNotif = document.getElementById('bolhaNotif');
+      if (bolhaNotif) {
+        bolhaNotif.addEventListener('click', function(e) {
+          if (e.target.id === 'bolhaNotifFechar') return;
+          bolhaNotif.classList.remove('visivel');
+          sessionStorage.setItem('bolha_notif_fechou', '1');
+          if (typeof requestNotificationPermission === 'function') {
+            requestNotificationPermission();
+          } else if (typeof Notification !== 'undefined') {
+            Notification.requestPermission();
+          }
+        });
+      }
+    });
+
+    // Esconder bolha instalar quando app for instalado
+    window.addEventListener('appinstalled', function() {
+      var bolha = document.getElementById('bolhaInstall');
+      if (bolha) bolha.classList.remove('visivel');
+    });
+
+    // Capturar evento de instalação PWA
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      window.deferredPrompt = e;
+    });
+  })();
+  
 
 // ===== MÉTRICAS DE CLIQUES DAS PLATAFORMAS =====
 var _metricsCurrentPeriod = 'all';
@@ -5435,9 +7460,26 @@ function clearPlatformMetrics() {
   // Acionar instalação PWA
   function acionarInstalacao() {
     fecharPopup();
-    // Usar função global unificada (captura o prompt mais cedo)
-    if (typeof window._triggerInstall === 'function') {
-      window._triggerInstall();
+    if (window.deferredPrompt) {
+      window.deferredPrompt.prompt();
+      window.deferredPrompt.userChoice.then(function(choice) {
+        window.deferredPrompt = null;
+        if (choice.outcome === 'accepted') {
+          localStorage.setItem('av_installed', '1');
+          localStorage.setItem(STORAGE_KEY, '1');
+          removerBloqueioVisual();
+          // Mostrar pedido de notificações após desbloqueio
+          setTimeout(mostrarPedidoNotificacoes, 1500);
+        }
+      });
+    } else {
+      // iOS ou sem prompt: mostrar guia
+      var iosModal = document.getElementById('iosInstallModal');
+      if (iosModal) { iosModal.style.display = 'flex'; iosModal.classList.add('open'); }
+      else {
+        var guideModal = document.getElementById('installGuideModal');
+        if (guideModal) guideModal.classList.add('open');
+      }
     }
   }
   
@@ -7414,8 +9456,6 @@ document.addEventListener('click', function(e) {
 // ===== FIM CARROSSEL =====
 
 </script>
-
-
 
 </body>
 </html>
