@@ -5827,8 +5827,27 @@ document.getElementById('testNotifBtn').addEventListener('click', async () => {
       }, 800);
     }
 
-    // Listener para navegação via Service Worker (clique em notificação)
+    // Listener para navegação via Service Worker (clique em notificação) e atualização
     navigator.serviceWorker && navigator.serviceWorker.addEventListener('message', function(event) {
+      // SW_UPDATED: Service Worker foi atualizado, recarregar para pegar novo HTML
+      if (event.data && event.data.type === 'SW_UPDATED') {
+        console.log('[SW] Atualizado para ' + event.data.version + '. Recarregando...');
+        // Limpar localStorage antigo antes de recarregar
+        try {
+          var saved = localStorage.getItem('av_platforms');
+          if (saved) {
+            var parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length < 72) {
+              localStorage.removeItem('av_platforms');
+              localStorage.removeItem('av_platforms_ts');
+              console.log('[SW] Cache antigo removido (' + parsed.length + ' plataformas)');
+            }
+          }
+        } catch(e) {}
+        // Recarregar a página para pegar o novo HTML com 72 plataformas
+        window.location.reload(true);
+        return;
+      }
       if (event.data && event.data.type === 'NAVIGATE_TAB') {
         var targetTab = event.data.tab || 'hot';
         var tabBtn = document.querySelector('[data-tab="' + targetTab + '"]');
@@ -5968,6 +5987,13 @@ if ('serviceWorker' in navigator) {
     }
   });
 
+  // Verificar atualização do Service Worker ao abrir o app
+  navigator.serviceWorker.getRegistration().then(function(reg) {
+    if (reg) {
+      reg.update(); // Verifica se há nova versão do SW
+      console.log('[SW] Verificando atualização...');
+    }
+  }).catch(function() {});
   navigator.serviceWorker.addEventListener('message', (event) => {
     if (event.data?.type === 'NOTIFICATION_CLICK') {
       const url = event.data.url;
