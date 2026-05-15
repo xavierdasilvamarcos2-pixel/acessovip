@@ -8559,7 +8559,7 @@ document.addEventListener('click', function(e) {
 
   // ── Constantes ──────────────────────────────────────────────────────────────
   var FIREBASE_URL = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com';
-  var POINTS = { click: 1, newUser: 3, notification: 5 };
+  var POINTS = { click: 1, newUser: 3, notification: 5, share: 5 };
 
   // ── Utilitários ─────────────────────────────────────────────────────────────
   function getWeekKey() {
@@ -9133,11 +9133,32 @@ document.addEventListener('click', function(e) {
   function doShare() {
     var link = getShareLink();
     var msg = '🎯 Acesse o ACESSO VIP — as melhores plataformas e sinais ao vivo!\n\n' + link;
+    function awardSharePoints() {
+      var uid = getOrCreateUserId();
+      if (!uid) return;
+      // Verificar cooldown: máximo 1 compartilhamento por hora para evitar abuso
+      var lastShare = parseInt(localStorage.getItem('rv_last_share') || '0', 10);
+      var now = Date.now();
+      var ONE_HOUR = 3600000;
+      if (now - lastShare < ONE_HOUR) {
+        showPtsToast('Compartilhe novamente em ' + Math.ceil((ONE_HOUR - (now - lastShare)) / 60000) + ' min para ganhar pontos');
+        return;
+      }
+      localStorage.setItem('rv_last_share', String(now));
+      addPoints(uid, POINTS.share, 'share', function() {
+        showPtsToast('+' + POINTS.share + ' pontos por compartilhar! 🎉');
+        updateMyProfileCard();
+        renderRankingScreen();
+      });
+    }
     if (navigator.share) {
-      navigator.share({ title: 'ACESSO VIP', text: msg, url: link }).catch(function(){});
+      navigator.share({ title: 'ACESSO VIP', text: msg, url: link })
+        .then(function() { awardSharePoints(); })
+        .catch(function(){});
     } else {
       var wa = 'https://wa.me/?text=' + encodeURIComponent(msg);
       window.open(wa, '_blank');
+      awardSharePoints();
     }
   }
 
