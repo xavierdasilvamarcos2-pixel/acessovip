@@ -6096,9 +6096,11 @@ function updateNotifBtn() {
 
 document.getElementById('welcomeNotifBtn').addEventListener('click', async () => {
   _ls.set('av_welcome_seen', '1');
+  // IMPORTANTE: chamar requestPermission ANTES de fechar o modal
+  // O Android Chrome exige que requestPermission seja chamado diretamente
+  // do evento de clique, sem operações assíncronas intermediárias
+  var granted = await requestNotificationPermission();
   document.getElementById('welcomeModal').classList.remove('open');
-  // Registrar subscription Web Push
-  await requestNotificationPermission();
   updateNotifBtn();
 });
 
@@ -6115,12 +6117,18 @@ document.getElementById('notifHeaderBtn').addEventListener('click', async () => 
     showToast('✅ Notificações já estão ativas!');
     return;
   }
-  if (notifPerm === 'denied' || notifPerm === 'unsupported') {
-    showToast('⚠️ Notificação bloqueada. Vá em Configurações > Chrome > Notificações para ativar.');
+  if (notifPerm === 'denied') {
+    showToast('⚠️ Notificação bloqueada. Vá em Configurações > Chrome > Notificações para ativar.', 5000);
     return;
   }
-  // Mostra modal novamente
-  document.getElementById('welcomeModal').classList.add('open');
+  if (notifPerm === 'unsupported') {
+    showToast('Notificações não suportadas neste navegador');
+    return;
+  }
+  // Chamar requestPermission DIRETAMENTE do evento de clique (sem abrir modal intermediário)
+  // Isso garante que o Android Chrome reconheça como evento de usuário direto
+  await requestNotificationPermission();
+  updateNotifBtn();
 });
 
 /// ===== INIT =====
@@ -7334,10 +7342,19 @@ if (_adminWrapNav) {
           if (e.target.id === 'bolhaNotifFechar') return;
           bolhaNotif.classList.remove('visivel');
           sessionStorage.setItem('bolha_notif_fechou', '1');
-          if (typeof requestNotificationPermission === 'function') {
-            requestNotificationPermission();
-          } else if (typeof Notification !== 'undefined') {
-            Notification.requestPermission();
+          // Chamar diretamente do evento de clique para garantir que o Android mostre o diálogo
+          if (typeof Notification !== 'undefined' && Notification.permission === 'default') {
+            Notification.requestPermission().then(function(perm) {
+              if (perm === 'granted') {
+                _ls.set('av_notif_asked', '1');
+                showToast('🔔 Notificações ativadas!', 3000);
+                trackEvent('notification_granted');
+                updateNotifBtn();
+                if (window._registerWebPushSubscription) {
+                  window._registerWebPushSubscription().catch(function(){});
+                }
+              }
+            });
           }
         });
       }
