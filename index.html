@@ -5458,168 +5458,43 @@ function setLogoMode(mode) {
 function handleLogoUpload(input) {
   var file = input.files && input.files[0];
   if (!file) return;
-  // Validar tamanho (max 5MB para suportar fotos de celular)
-  if (file.size > 5 * 1024 * 1024) {
-    showToast('❌ Imagem muito grande! Máximo 5MB.');
+  var statusEl = document.getElementById('logoUploadStatus');
+  var previewImg = document.getElementById('logoPreviewImg');
+  var previewDiv = document.getElementById('logoUploadPreview');
+  var placeholder = document.getElementById('logoUploadPlaceholder');
+  var area = document.getElementById('logoUploadArea');
+  // Mostrar status imediatamente
+  if (statusEl) { statusEl.style.display = 'block'; statusEl.textContent = '⏳ Carregando...'; statusEl.style.color = '#10B981'; }
+  // Usar URL.createObjectURL para preview imediato (sem processar)
+  try {
+    var objectUrl = URL.createObjectURL(file);
+    if (previewImg) {
+      previewImg.onload = function() {
+        URL.revokeObjectURL(objectUrl);
+      };
+      previewImg.src = objectUrl;
+    }
+    if (previewDiv) previewDiv.style.display = 'block';
+    if (placeholder) placeholder.style.display = 'none';
+    if (area) area.classList.add('has-image');
+    if (statusEl) { statusEl.textContent = '✅ Logo carregada!'; statusEl.style.color = '#10B981'; }
+  } catch(e) {
+    if (statusEl) { statusEl.textContent = '❌ Erro ao carregar imagem.'; statusEl.style.color = '#EF4444'; }
     return;
   }
-  var statusEl = document.getElementById('logoUploadStatus');
-  if (statusEl) { statusEl.style.display = 'block'; statusEl.textContent = '⏳ Processando imagem...'; statusEl.style.color = '#10B981'; }
-
-  // Timeout de segurança: se demorar mais de 15s, mostrar erro
-  var _uploadTimeout = setTimeout(function() {
-    if (statusEl && statusEl.textContent.indexOf('⏳') >= 0) {
-      statusEl.textContent = '❌ Timeout ao processar imagem. Tente outra foto.';
-      statusEl.style.color = '#EF4444';
-      showToast('❌ Erro ao carregar imagem. Tente uma foto menor ou diferente.');
-    }
-  }, 15000);
-
-  function _cleanupTimeout() { clearTimeout(_uploadTimeout); }
-
+  // Ler como base64 em segundo plano para salvar depois
   var reader = new FileReader();
-
   reader.onerror = function() {
-    _cleanupTimeout();
-    if (statusEl) { statusEl.textContent = '❌ Erro ao ler arquivo. Tente outra imagem.'; statusEl.style.color = '#EF4444'; }
-    showToast('❌ Não foi possível ler a imagem. Tente outra foto.');
+    // Preview já está visível via objectUrl — apenas log
+    console.warn('FileReader error, usando objectUrl como fallback');
   };
-
   reader.onload = function(e) {
-    var dataUrl = e.target.result;
-    if (!dataUrl || dataUrl.length < 100) {
-      _cleanupTimeout();
-      if (statusEl) { statusEl.textContent = '❌ Imagem inválida. Tente outra foto.'; statusEl.style.color = '#EF4444'; }
-      showToast('❌ Imagem inválida. Tente outra foto.');
-      return;
+    if (e.target.result && e.target.result.length > 100) {
+      window._logoBase64 = e.target.result;
     }
-    // Redimensionar para max 200x200 mantendo proporção
-    var img = new Image();
-
-    img.onerror = function() {
-      _cleanupTimeout();
-      // Fallback: usar o dataUrl diretamente sem redimensionar
-      // Isso cobre casos de HEIC ou formatos não suportados pelo canvas
-      if (dataUrl.length < 200 * 1024) {
-        // Arquivo pequeno o suficiente para usar direto
-        window._logoBase64 = dataUrl;
-        var previewImg = document.getElementById('logoPreviewImg');
-        var previewDiv = document.getElementById('logoUploadPreview');
-        var placeholder = document.getElementById('logoUploadPlaceholder');
-        var area = document.getElementById('logoUploadArea');
-        if (previewImg) previewImg.src = dataUrl;
-        if (previewDiv) previewDiv.style.display = 'block';
-        if (placeholder) placeholder.style.display = 'none';
-        if (area) area.classList.add('has-image');
-        if (statusEl) { statusEl.textContent = '✅ Logo carregada!'; statusEl.style.color = '#10B981'; }
-      } else {
-        if (statusEl) { statusEl.textContent = '❌ Formato não suportado. Use JPG, PNG ou WebP.'; statusEl.style.color = '#EF4444'; }
-        showToast('❌ Formato não suportado. Use JPG, PNG ou WebP.');
-      }
-    };
-
-    img.onload = function() {
-      _cleanupTimeout();
-      try {
-        var canvas = document.createElement('canvas');
-        var maxSize = 200;
-        var w = img.width, h = img.height;
-        if (w === 0 || h === 0) {
-          // Dimensões inválidas — usar dataUrl direto se pequeno
-          if (dataUrl.length < 200 * 1024) {
-            window._logoBase64 = dataUrl;
-            if (statusEl) { statusEl.textContent = '✅ Logo carregada!'; statusEl.style.color = '#10B981'; }
-          } else {
-            if (statusEl) { statusEl.textContent = '❌ Imagem com dimensões inválidas.'; statusEl.style.color = '#EF4444'; }
-          }
-          return;
-        }
-        if (w > maxSize || h > maxSize) {
-          if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
-          else { w = Math.round(w * maxSize / h); h = maxSize; }
-        }
-        canvas.width = w; canvas.height = h;
-        var ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, w, h);
-        var compressed = canvas.toDataURL('image/jpeg', 0.82);
-        if (!compressed || compressed === 'data:,') {
-          // Canvas bloqueado (tainted) — usar dataUrl original se pequeno
-          if (dataUrl.length < 200 * 1024) {
-            window._logoBase64 = dataUrl;
-            if (statusEl) { statusEl.textContent = '✅ Logo carregada!'; statusEl.style.color = '#10B981'; }
-          } else {
-            if (statusEl) { statusEl.textContent = '❌ Erro ao comprimir imagem.'; statusEl.style.color = '#EF4444'; }
-            showToast('❌ Erro ao processar imagem. Tente uma foto menor.');
-          }
-          return;
-        }
-        window._logoBase64 = compressed;
-        // Mostrar preview
-        var previewImg = document.getElementById('logoPreviewImg');
-        var previewDiv = document.getElementById('logoUploadPreview');
-        var placeholder = document.getElementById('logoUploadPlaceholder');
-        var area = document.getElementById('logoUploadArea');
-        if (previewImg) previewImg.src = compressed;
-        if (previewDiv) previewDiv.style.display = 'block';
-        if (placeholder) placeholder.style.display = 'none';
-        if (area) area.classList.add('has-image');
-        if (statusEl) { statusEl.textContent = '✅ Logo pronta! (' + w + 'x' + h + 'px)'; statusEl.style.color = '#10B981'; }
-      } catch(canvasErr) {
-        _cleanupTimeout();
-        // Fallback para dataUrl original
-        if (dataUrl.length < 200 * 1024) {
-          window._logoBase64 = dataUrl;
-          if (statusEl) { statusEl.textContent = '✅ Logo carregada!'; statusEl.style.color = '#10B981'; }
-        } else {
-          if (statusEl) { statusEl.textContent = '❌ Erro ao processar. Tente foto menor.'; statusEl.style.color = '#EF4444'; }
-          showToast('❌ Erro ao processar imagem. Tente uma foto menor.');
-        }
-      }
-    };
-
-    img.src = dataUrl;
   };
-
-  try {
-    reader.readAsDataURL(file);
-  } catch(readerErr) {
-    _cleanupTimeout();
-    if (statusEl) { statusEl.textContent = '❌ Erro ao ler arquivo.'; statusEl.style.color = '#EF4444'; }
-    showToast('❌ Erro ao ler imagem. Tente outra foto.');
-  }
+  reader.readAsDataURL(file);
 }
-
-document.getElementById('addPlatformBtn').addEventListener('click', () => {
-  // Determinar a URL da logo (link ou base64 do upload)
-  var logoMode = window._logoMode || 'url';
-  var logoUrl = '';
-  if (logoMode === 'url') {
-    logoUrl = document.getElementById('addLogoUrl').value.trim();
-  } else {
-    logoUrl = window._logoBase64 || '';
-  }
-  const name = document.getElementById('addName').value.trim();
-  const url = document.getElementById('addUrl').value.trim();
-  const isLaunch = document.getElementById('addIsLaunch').checked;
-  if (!name || !url) { showToast('Preencha o nome e o link!'); return; }
-  const newP = { id: Date.now(), name, url, imageUrl: logoUrl, isHigh: false, isLaunch: isLaunch, hot_game: '', position: -1 };
-  platforms.unshift(newP);
-  saveState(); renderHome(); renderAdminPlatforms();
-  addAuditLog('add', name, newP.id);
-  // Limpar campos
-  document.getElementById('addLogoUrl').value = '';
-  document.getElementById('addName').value = '';
-  document.getElementById('addUrl').value = '';
-  document.getElementById('addIsLaunch').checked = true;
-  // Resetar modo de logo
-  window._logoBase64 = '';
-  window._logoMode = 'url';
-  setLogoMode('url');
-  showToast('✅ ' + name + ' adicionada!');
-  trackEvent('platform_added', { name });
-});
-
-// ===== NOTIFICAÇÃO: Preencher dropdown de plataformas =====
 function populateNotifPlatSelect() {
   var sel = document.getElementById('notifPlatSelect');
   if (!sel) return;
