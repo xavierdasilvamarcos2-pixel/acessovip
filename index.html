@@ -2986,7 +2986,11 @@
             </div>
           </div>
         </div>
-        <!-- Botão compartilhar -->
+        <!-- Botão Entrar no Ranking (para quem não tem cadastro) -->
+        <button id="rankingJoinBtn" style="display:none;margin-top:12px;width:100%;padding:14px;background:linear-gradient(135deg,#7C3AED,#6D28D9);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:0.5px;align-items:center;justify-content:center;gap:8px" onclick="showNameModal(function(){renderRankingScreen();})">
+          🏆 Entrar no Ranking
+        </button>
+        <!-- Botão compartilhar (para quem já tem cadastro) -->
         <button class="ranking-share-btn" id="rankingShareBtn" style="margin-top:12px">
           🚀 Compartilhar meu link
         </button>
@@ -8645,9 +8649,25 @@ document.addEventListener('click', function(e) {
     var nameEl = document.getElementById('myProfileNameDisplay');
     var phoneEl = document.getElementById('myProfilePhoneDisplay');
     var avatarEl = document.getElementById('myProfileAvatarDisplay');
+    var card = document.getElementById('myRankCard');
     if (nameEl) nameEl.textContent = name || '—';
     if (phoneEl) phoneEl.textContent = phone ? '📲 ' + phone : '';
     renderAvatarEl(avatarEl, name, avatar);
+    // Mostrar/ocultar botão "Entrar no Ranking" dependendo se tem cadastro
+    var joinBtn = document.getElementById('rankingJoinBtn');
+    var shareBtn = document.getElementById('rankingShareBtn');
+    var linkBox = card ? card.querySelector('.ranking-link-box') : null;
+    if (!name || !phone) {
+      // Sem cadastro: mostrar botão "Entrar no Ranking"
+      if (joinBtn) joinBtn.style.display = 'flex';
+      if (shareBtn) shareBtn.style.display = 'none';
+      if (linkBox) linkBox.style.display = 'none';
+    } else {
+      // Com cadastro: mostrar botão de compartilhar e link
+      if (joinBtn) joinBtn.style.display = 'none';
+      if (shareBtn) shareBtn.style.display = 'flex';
+      if (linkBox) linkBox.style.display = 'flex';
+    }
   }
 
   function getMyPoints() {
@@ -9173,6 +9193,27 @@ document.addEventListener('click', function(e) {
     if (getUserName()) {
       setTimeout(syncMyProfile, 2000);
     }
+    // Tentar recuperar dados do usuário do Firebase (caso tenha limpado o cache)
+    // Se não tem nome local mas tem UID, buscar no Firebase
+    if (!getUserName()) {
+      var uid4 = getOrCreateUserId();
+      var week4 = getWeekKey();
+      var fbUrl4 = FIREBASE_DB_URL + '/ranking/' + week4 + '/' + uid4 + '.json?auth=' + FIREBASE_API_KEY;
+      fetch(fbUrl4).then(function(r) { return r.json(); }).then(function(data) {
+        if (data && data.name && data.name.length >= 2) {
+          // Dados encontrados no Firebase — pré-preencher automaticamente
+          setUserName(data.name);
+          if (data.phone) setUserPhone(data.phone);
+          if (data.pts) setMyPoints(data.pts);
+          if (data.refs) setMyRefs(data.refs);
+          // Atualizar a tela se estiver na aba ranking
+          var rankScreen = document.getElementById('screen-ranking');
+          if (rankScreen && rankScreen.classList.contains('active')) {
+            renderRankingScreen();
+          }
+        }
+      }).catch(function() {});
+    }
 
     // Interceptar ativação de notificação para dar pontos ao referrer
     var origNotifHandler = window._onNotifGranted;
@@ -9211,17 +9252,11 @@ document.addEventListener('click', function(e) {
     document.querySelectorAll('.tab-item').forEach(function(tab) {
       tab.addEventListener('click', function() {
         if (tab.dataset.tab === 'ranking') {
-          // Sempre renderizar o ranking imediatamente
+          // Sempre renderizar o ranking imediatamente — sem bloquear com modal
           renderRankingScreen();
-          // Modal de cadastro aparece em paralelo (não bloqueia o ranking)
-          if (!getUserName() || !getUserPhone()) {
-            setTimeout(function() {
-              showNameModal(function() {
-                // Após cadastro, re-renderizar para atualizar o perfil
-                renderRankingScreen();
-              });
-            }, 500);
-          }
+          // Modal NÃO aparece automaticamente: usuário entra direto no ranking
+          // Quem já tem cadastro (rv_name + rv_phone) vê seus dados imediatamente
+          // Quem não tem pode ver o ranking e clicar em "Entrar no Ranking" para se cadastrar
         }
       });
     });
