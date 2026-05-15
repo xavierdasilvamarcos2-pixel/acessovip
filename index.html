@@ -4372,9 +4372,33 @@ window.addEventListener('beforeinstallprompt', function(e) {
 });
 // =====
 let deferredPrompt = null;
+
+// ===== DETECÇÃO IMEDIATA DE STANDALONE =====
+// Se o app está rodando em modo standalone (instalado), salvar o flag AGORA
+// antes de qualquer outra lógica — isso garante que o botão INSTALAR não apareça
+(function() {
+  var isStandalone = window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true
+    || document.referrer.includes('android-app://')
+    || window.location.search.indexOf('pwa=1') !== -1;
+  if (isStandalone) {
+    localStorage.setItem('av_installed', '1');
+  }
+  // Listener para detectar mudança para standalone (acontece quando o app é aberto pela primeira vez após instalação)
+  try {
+    window.matchMedia('(display-mode: standalone)').addEventListener('change', function(e) {
+      if (e.matches) {
+        localStorage.setItem('av_installed', '1');
+        if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
+      }
+    });
+  } catch(e) {}
+})();
+
 let isInstalled = window.matchMedia('(display-mode: standalone)').matches
   || window.navigator.standalone === true
-  || document.referrer.includes('android-app://');
+  || document.referrer.includes('android-app://')
+  || localStorage.getItem('av_installed') === '1';
 let notifPermission = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
 let adminLoggedIn = false;
 let adminHighFilterMode = 'all'; // 'all' | 'high' | 'normal'
@@ -4809,7 +4833,9 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
   var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   var isInStandalone = window.navigator.standalone === true
     || window.matchMedia('(display-mode: standalone)').matches
-    || document.referrer.includes('android-app://');
+    || document.referrer.includes('android-app://')
+    || localStorage.getItem('av_installed') === '1'
+    || window.location.search.indexOf('pwa=1') !== -1;
 
   // Compatibilidade: manter deferredPrompt global para outros scripts
   window.deferredPrompt = null;
@@ -4843,8 +4869,14 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     _pwaDeferred = e;
     window.deferredPrompt = e;
     window._pwaPrompt = e;
-    // Mostrar banner imediatamente se ainda não apareceu
-    if (!isInStandalone && !_pwaDismissed) {
+    // Verificar novamente se está instalado (o flag pode ter sido salvo depois da inicialização)
+    var jaInstalado = window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true
+      || document.referrer.includes('android-app://')
+      || localStorage.getItem('av_installed') === '1'
+      || window.location.search.indexOf('pwa=1') !== -1;
+    // Mostrar banner apenas se não instalado e não dispensado
+    if (!jaInstalado && !isInStandalone && !_pwaDismissed) {
       showPwaBanner();
     }
   });
