@@ -5025,8 +5025,10 @@ document.getElementById('notifBanner').addEventListener('click', (e) => {
 });
 document.getElementById('notifBannerClose').addEventListener('click', (e) => {
   e.stopPropagation();
+  // Apenas esconde na sessão atual — não salva no localStorage
+  // O banner volta a aparecer na próxima sessão se a permissão não foi concedida
   document.getElementById('notifBanner').classList.add('hidden');
-  _ls.set('av_notif_asked', '1');
+  sessionStorage.setItem('notif_banner_dismissed', '1');
 });
 document.getElementById('enableNotifBtn').addEventListener('click', async () => {
   var btn = document.getElementById('enableNotifBtn');
@@ -5045,8 +5047,13 @@ document.getElementById('enableNotifBtn').addEventListener('click', async () => 
   }
 });
 
-// Hide notif banner if already granted or asked
-if ((typeof Notification !== 'undefined' && Notification.permission === 'granted') || _ls.get('av_notif_asked') === '1') {
+// Esconder banner SOMENTE se a permissão foi realmente concedida
+// Não usar av_notif_asked para esconder — o usuário pode ter clicado mas não concedido
+if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+  document.getElementById('notifBanner').classList.add('hidden');
+}
+// Se o usuário fechou o banner nesta sessão, esconder temporariamente
+if (sessionStorage.getItem('notif_banner_dismissed') === '1') {
   document.getElementById('notifBanner').classList.add('hidden');
 }
 
@@ -6100,7 +6107,11 @@ document.getElementById('welcomeNotifBtn').addEventListener('click', async () =>
   // O Android Chrome exige que requestPermission seja chamado diretamente
   // do evento de clique, sem operações assíncronas intermediárias
   var granted = await requestNotificationPermission();
-  document.getElementById('welcomeModal').classList.remove('open');
+  // Fechar o modal SOMENTE se a permissão foi concedida
+  // Se não foi concedida, manter o modal aberto para o usuário tentar novamente
+  if (granted || (typeof Notification !== 'undefined' && Notification.permission === 'granted')) {
+    document.getElementById('welcomeModal').classList.remove('open');
+  }
   updateNotifBtn();
 });
 
@@ -7346,6 +7357,9 @@ if (_adminWrapNav) {
           if (typeof Notification !== 'undefined' && Notification.permission === 'default') {
             Notification.requestPermission().then(function(perm) {
               if (perm === 'granted') {
+                // Permissão concedida — esconder banner e salvar estado
+                var banner = document.getElementById('notifBanner');
+                if (banner) banner.classList.add('hidden');
                 _ls.set('av_notif_asked', '1');
                 showToast('🔔 Notificações ativadas!', 3000);
                 trackEvent('notification_granted');
@@ -7353,6 +7367,10 @@ if (_adminWrapNav) {
                 if (window._registerWebPushSubscription) {
                   window._registerWebPushSubscription().catch(function(){});
                 }
+              } else {
+                // Permissão negada — mostrar o banner novamente para o usuário tentar depois
+                var banner = document.getElementById('notifBanner');
+                if (banner) banner.classList.remove('hidden');
               }
             });
           }
