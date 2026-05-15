@@ -1993,13 +1993,6 @@
 
     /* Loading ranking */
     .ranking-loading {
-    // Auto-refresh a cada 30 segundos quando a aba está ativa
-    if (window._rankingRefreshTimer) clearInterval(window._rankingRefreshTimer);
-    window._rankingRefreshTimer = setInterval(function() {
-      var screen = document.getElementById('screen-ranking');
-      if (screen && screen.classList.contains('active')) renderRankingScreen();
-      else clearInterval(window._rankingRefreshTimer);
-    }, 30000);
       text-align: center; padding: 40px 16px; color: rgba(255,255,255,0.4);
       font-size: 14px;
     }
@@ -3083,7 +3076,6 @@
         <div class="ranking-list-title" style="margin-top:16px">🏅 Vencedores Anteriores</div>
         <div id="rankingHistoryList"></div>
       </div>
-    </div>
     <!-- SINAIS SCREEN -->
     <div class="screen" id="screen-sinais">
       <div class="sinais-header">
