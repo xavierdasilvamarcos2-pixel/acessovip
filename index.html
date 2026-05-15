@@ -2929,104 +2929,106 @@
     <div class="screen" id="screen-ranking">
       <!-- Header com gradiente -->
       <div class="ranking-header">
-        <div class="ranking-header-title">🏆 Ranking de Indicações</div>
-        <div class="ranking-header-sub">Indique amigos e concorra a prêmios semanais</div>
-        <div class="ranking-week-badge" id="rankingWeekBadge">Semana atual</div>
-
-      </div>
-
-      <!-- Prêmios -->
-      <div class="ranking-prizes">
-        <div class="ranking-prize-card gold">
-          <span class="ranking-prize-medal">🥇</span>
-          <div class="ranking-prize-place">1º lugar</div>
-          <div class="ranking-prize-value">R$50</div>
-          <div style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px">PIX</div>
-        </div>
-        <div class="ranking-prize-card silver">
-          <span class="ranking-prize-medal">🥈</span>
-          <div class="ranking-prize-place">2º lugar</div>
-          <div class="ranking-prize-value">R$20</div>
-          <div style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px">PIX</div>
-        </div>
-        <div class="ranking-prize-card bronze">
-          <span class="ranking-prize-medal">🥉</span>
-          <div class="ranking-prize-place">3º lugar</div>
-          <div class="ranking-prize-value">R$10</div>
-          <div style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px">PIX</div>
+        <div class="ranking-header-title">🏆 Ranking Semanal</div>
+        <div class="ranking-header-sub">Indique amigos · Ganhe pontos · Concorra a PIX</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <div class="ranking-week-badge" id="rankingWeekBadge">Semana atual</div>
+          <div class="ranking-week-badge" style="background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.4);color:#f87171">⏱ Encerra em: <span id="rankingCountdown" style="font-weight:900">—</span></div>
         </div>
       </div>
 
-      <!-- Minha posição / Meu Perfil -->
-      <div class="my-rank-card" id="myRankCard">
-        <div class="my-rank-title">👤 Meu Perfil</div>
-        <div class="my-rank-row" style="align-items:flex-start;gap:14px">
-          <!-- Avatar do usuário -->
-          <div class="my-profile-avatar-wrap" onclick="window._rankingEditProfile && window._rankingEditProfile()">
+      </div>
+
+      <!-- ══ BANNER PREMIAÇÃO ══ -->
+      <div style="margin:12px 16px 0;background:linear-gradient(135deg,#1a1a2e,#0f3460);border:1px solid rgba(245,158,11,0.35);border-radius:16px;padding:14px 16px;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:radial-gradient(circle,rgba(245,158,11,0.25),transparent 70%);pointer-events:none"></div>
+        <div style="font-size:13px;font-weight:900;color:#F59E0B;letter-spacing:0.5px;margin-bottom:10px;text-align:center">🎁 PREMIAÇÃO TODA SEMANA</div>
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;text-align:center;background:linear-gradient(135deg,#78350f,#92400e);border:1px solid #F59E0B;border-radius:12px;padding:10px 6px;box-shadow:0 0 10px rgba(245,158,11,0.25)">
+            <div style="font-size:20px">🥇</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:2px">1º lugar</div>
+            <div style="font-size:16px;font-weight:900;color:#F59E0B;margin-top:2px">R$50</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.4)">PIX</div>
+          </div>
+          <div style="flex:1;text-align:center;background:linear-gradient(135deg,#1e293b,#334155);border:1px solid #94a3b8;border-radius:12px;padding:10px 6px">
+            <div style="font-size:20px">🥈</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:2px">2º lugar</div>
+            <div style="font-size:16px;font-weight:900;color:#e2e8f0;margin-top:2px">R$20</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.4)">PIX</div>
+          </div>
+          <div style="flex:1;text-align:center;background:linear-gradient(135deg,#1c1917,#292524);border:1px solid #b45309;border-radius:12px;padding:10px 6px">
+            <div style="font-size:20px">🥉</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:2px">3º lugar</div>
+            <div style="font-size:16px;font-weight:900;color:#d97706;margin-top:2px">R$10</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.4)">PIX</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;text-align:center;font-size:12px;color:rgba(255,255,255,0.55)">
+          🏆 Compartilhe com seus amigos e ganhe <strong style="color:#F59E0B">+5 pontos</strong> por compartilhamento.<br>
+          🎁 Toda semana terá premiação/sorteio para os usuários do ranking.
+        </div>
+      </div>
+
+      <!-- ══ MEU DESEMPENHO ══ -->
+      <div id="myRankCard" style="margin:12px 16px 0;background:linear-gradient(135deg,rgba(124,58,237,0.18),rgba(109,40,217,0.10));border:1px solid rgba(124,58,237,0.35);border-radius:18px;padding:16px">
+        <!-- Linha: avatar + nome + editar -->
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+          <div class="my-profile-avatar-wrap" onclick="window._rankingEditProfile && window._rankingEditProfile()" style="flex-shrink:0">
             <div class="my-profile-avatar" id="myProfileAvatarDisplay">?</div>
             <div class="my-profile-edit-btn">✏️</div>
           </div>
-          <!-- Info do usuário -->
           <div style="flex:1;min-width:0">
-            <div style="font-size:16px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="myProfileNameDisplay">—</div>
+            <div style="font-size:17px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="myProfileNameDisplay">—</div>
             <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px" id="myProfilePhoneDisplay"></div>
-            <div style="display:flex;gap:8px;margin-top:8px">
-              <div class="my-rank-stat" style="flex:1">
-                <div class="my-rank-stat-num" id="myRankPos">#--</div>
-                <div class="my-rank-stat-label">Posição</div>
-              </div>
-              <div class="my-rank-stat" style="flex:1">
-                <div class="my-rank-stat-num" id="myRankPts">0</div>
-                <div class="my-rank-stat-label">Pontos</div>
-              </div>
-              <div class="my-rank-stat" style="flex:1">
-                <div class="my-rank-stat-num" id="myRankRefs">0</div>
-                <div class="my-rank-stat-label">Indicações</div>
-              </div>
-            </div>
+          </div>
+        </div>
+        <!-- Stats: Posição · Pontos · Indicações -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+          <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 6px;text-align:center">
+            <div style="font-size:22px;font-weight:900;color:#a78bfa;line-height:1" id="myRankPos">#--</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.45);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Posição</div>
+          </div>
+          <div style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:12px;padding:10px 6px;text-align:center">
+            <div style="font-size:22px;font-weight:900;color:#F59E0B;line-height:1" id="myRankPts">0</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.45);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Pontos</div>
+          </div>
+          <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);border-radius:12px;padding:10px 6px;text-align:center">
+            <div style="font-size:22px;font-weight:900;color:#34d399;line-height:1" id="myRankRefs">0</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.45);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Indicações</div>
           </div>
         </div>
         <!-- Botão Entrar no Ranking (para quem não tem cadastro) -->
-        <button id="rankingJoinBtn" style="display:none;margin-top:12px;width:100%;padding:14px;background:linear-gradient(135deg,#7C3AED,#6D28D9);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:0.5px;align-items:center;justify-content:center;gap:8px" onclick="showNameModal(function(){renderRankingScreen();})">
+        <button id="rankingJoinBtn" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,#7C3AED,#6D28D9);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:0.5px;align-items:center;justify-content:center;gap:8px" onclick="showNameModal(function(){renderRankingScreen();})">
           🏆 Entrar no Ranking
         </button>
-        <!-- Botão compartilhar (para quem já tem cadastro) -->
-        <button class="ranking-share-btn" id="rankingShareBtn" style="margin-top:12px;background:linear-gradient(135deg,#7C3AED,#6D28D9);font-size:15px;font-weight:900;padding:14px;letter-spacing:0.5px">
-          🚀 Compartilhar e Ganhar Pontos
+        <!-- Botão Compartilhar Aplicativo (para quem já tem cadastro) -->
+        <button id="rankingShareAppBtn" style="display:none;width:100%;padding:15px;background:linear-gradient(135deg,#10b981,#059669);border:none;border-radius:14px;color:#fff;font-size:16px;font-weight:900;cursor:pointer;letter-spacing:0.5px;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(16,185,129,0.35)">
+          📲 Compartilhar e Ganhar +5 Pontos
         </button>
+        <!-- Botão compartilhar (compatibilidade) -->
+        <button id="rankingShareBtn" style="display:none"></button>
         <!-- Link de convite -->
-        <div class="ranking-link-box">
+        <div class="ranking-link-box" style="margin-top:10px">
           <span class="ranking-link-text" id="rankingLinkText">Carregando...</span>
           <button class="ranking-link-copy" id="rankingLinkCopy">Copiar</button>
         </div>
       </div>
 
-      <!-- Bloco explicação de pontuação na tela principal -->
-      <div id="rankingHowToCard" style="background:rgba(124,58,237,0.10);border:1px solid rgba(124,58,237,0.25);border-radius:16px;padding:16px;margin:12px 0 4px 0">
-        <div style="font-size:13px;font-weight:900;color:#c4b5fd;letter-spacing:0.5px;margin-bottom:10px;text-align:center">🏆 COMO GANHAR PONTOS</div>
-        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
-          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.85)">
-            <span style="color:#22c55e;font-size:15px">✅</span><span>Compartilhando o aplicativo</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.85)">
-            <span style="color:#22c55e;font-size:15px">✅</span><span>Chamando novos usuários</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.85)">
-            <span style="color:#22c55e;font-size:15px">✅</span><span>Compartilhando seu link de convite</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.85)">
-            <span style="color:#22c55e;font-size:15px">✅</span><span>Participando diariamente</span>
-          </div>
+      <!-- ══ COMO GANHAR PONTOS (compacto) ══ -->
+      <div id="rankingHowToCard" style="margin:10px 16px 0;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:12px 14px">
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Como ganhar pontos</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.75)">✅ Compartilhar o app</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.75)">✅ Chamar amigos</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.75)">✅ Enviar seu link</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.75)">✅ Participar todo dia</div>
         </div>
-        <div style="padding:8px 12px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);border-radius:10px;font-size:12px;color:#fbbf24;text-align:center;font-weight:700;margin-bottom:12px">
-          📌 Cada compartilhamento vale <span style="font-size:14px">+5 pontos</span> no ranking
+        <div style="margin-top:8px;padding:6px 10px;background:rgba(245,158,11,0.12);border-radius:8px;font-size:12px;color:#fbbf24;text-align:center;font-weight:700">
+          📌 Cada compartilhamento = <strong>+5 pontos</strong>
         </div>
-        <!-- Botão Compartilhar Aplicativo -->
-        <button id="rankingShareAppBtn" style="width:100%;padding:14px;background:linear-gradient(135deg,#10b981,#059669);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:900;cursor:pointer;letter-spacing:0.5px;display:flex;align-items:center;justify-content:center;gap:8px">
-          📲 Compartilhar Aplicativo
-        </button>
       </div>
-      <!-- Pódio Top 3 -->
+
+            <!-- Pódio Top 3 -->
       <div class="ranking-podium" id="rankingPodium" style="display:none">
         <!-- p2 = 2º, p1 = 1º (centro/maior), p3 = 3º -->
         <div class="podium-card p2" id="podiumCard2">
@@ -8699,23 +8701,22 @@ document.addEventListener('click', function(e) {
     var nameEl = document.getElementById('myProfileNameDisplay');
     var phoneEl = document.getElementById('myProfilePhoneDisplay');
     var avatarEl = document.getElementById('myProfileAvatarDisplay');
-    var card = document.getElementById('myRankCard');
     if (nameEl) nameEl.textContent = name || '—';
     if (phoneEl) phoneEl.textContent = phone ? '📲 ' + phone : '';
     renderAvatarEl(avatarEl, name, avatar);
-    // Mostrar/ocultar botão "Entrar no Ranking" dependendo se tem cadastro
+    // Controle de visibilidade dos botões
     var joinBtn = document.getElementById('rankingJoinBtn');
-    var shareBtn = document.getElementById('rankingShareBtn');
-    var linkBox = card ? card.querySelector('.ranking-link-box') : null;
+    var shareAppBtn = document.getElementById('rankingShareAppBtn');
+    var linkBox = document.querySelector('#myRankCard .ranking-link-box');
     if (!name || !phone) {
-      // Sem cadastro: mostrar botão "Entrar no Ranking"
+      // Sem cadastro: mostrar "Entrar no Ranking", ocultar compartilhar
       if (joinBtn) joinBtn.style.display = 'flex';
-      if (shareBtn) shareBtn.style.display = 'none';
+      if (shareAppBtn) shareAppBtn.style.display = 'none';
       if (linkBox) linkBox.style.display = 'none';
     } else {
-      // Com cadastro: mostrar botão de compartilhar e link
+      // Com cadastro: ocultar "Entrar no Ranking", mostrar compartilhar + link
       if (joinBtn) joinBtn.style.display = 'none';
-      if (shareBtn) shareBtn.style.display = 'flex';
+      if (shareAppBtn) shareAppBtn.style.display = 'flex';
       if (linkBox) linkBox.style.display = 'flex';
     }
   }
@@ -8979,8 +8980,9 @@ document.addEventListener('click', function(e) {
     var badge = document.getElementById('rankingWeekBadge');
     if (badge) badge.textContent = weekLabel;
 
-    // Countdown até segunda-feira
+    // Countdown até segunda-feira (auto-refresh a cada minuto)
     updateCountdown();
+    setInterval(updateCountdown, 60000);
 
     // Link de convite
     var linkEl = document.getElementById('rankingLinkText');
