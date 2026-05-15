@@ -3288,7 +3288,7 @@
                   <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;">PNG, JPG ou WebP · Max 2MB</div>
                 </div>
               </div>
-              <input type="file" id="logoFileInput" accept="image/png,image/jpeg,image/webp,image/gif"
+              <input type="file" id="logoFileInput" accept="image/*"
                 style="display:none;" onchange="handleLogoUpload(this)" />
               <div id="logoUploadStatus" style="font-size:12px;color:#10B981;margin-top:6px;text-align:center;display:none;"></div>
             </div>
@@ -5458,45 +5458,135 @@ function setLogoMode(mode) {
 function handleLogoUpload(input) {
   var file = input.files && input.files[0];
   if (!file) return;
-  // Validar tamanho (max 2MB)
-  if (file.size > 2 * 1024 * 1024) {
-    showToast('❌ Imagem muito grande! Máximo 2MB.');
+  // Validar tamanho (max 5MB para suportar fotos de celular)
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('❌ Imagem muito grande! Máximo 5MB.');
     return;
   }
   var statusEl = document.getElementById('logoUploadStatus');
-  if (statusEl) { statusEl.style.display = 'block'; statusEl.textContent = '⏳ Processando imagem...'; }
+  if (statusEl) { statusEl.style.display = 'block'; statusEl.textContent = '⏳ Processando imagem...'; statusEl.style.color = '#10B981'; }
+
+  // Timeout de segurança: se demorar mais de 15s, mostrar erro
+  var _uploadTimeout = setTimeout(function() {
+    if (statusEl && statusEl.textContent.indexOf('⏳') >= 0) {
+      statusEl.textContent = '❌ Timeout ao processar imagem. Tente outra foto.';
+      statusEl.style.color = '#EF4444';
+      showToast('❌ Erro ao carregar imagem. Tente uma foto menor ou diferente.');
+    }
+  }, 15000);
+
+  function _cleanupTimeout() { clearTimeout(_uploadTimeout); }
+
   var reader = new FileReader();
+
+  reader.onerror = function() {
+    _cleanupTimeout();
+    if (statusEl) { statusEl.textContent = '❌ Erro ao ler arquivo. Tente outra imagem.'; statusEl.style.color = '#EF4444'; }
+    showToast('❌ Não foi possível ler a imagem. Tente outra foto.');
+  };
+
   reader.onload = function(e) {
     var dataUrl = e.target.result;
+    if (!dataUrl || dataUrl.length < 100) {
+      _cleanupTimeout();
+      if (statusEl) { statusEl.textContent = '❌ Imagem inválida. Tente outra foto.'; statusEl.style.color = '#EF4444'; }
+      showToast('❌ Imagem inválida. Tente outra foto.');
+      return;
+    }
     // Redimensionar para max 200x200 mantendo proporção
     var img = new Image();
-    img.onload = function() {
-      var canvas = document.createElement('canvas');
-      var maxSize = 200;
-      var w = img.width, h = img.height;
-      if (w > maxSize || h > maxSize) {
-        if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
-        else { w = Math.round(w * maxSize / h); h = maxSize; }
+
+    img.onerror = function() {
+      _cleanupTimeout();
+      // Fallback: usar o dataUrl diretamente sem redimensionar
+      // Isso cobre casos de HEIC ou formatos não suportados pelo canvas
+      if (dataUrl.length < 200 * 1024) {
+        // Arquivo pequeno o suficiente para usar direto
+        window._logoBase64 = dataUrl;
+        var previewImg = document.getElementById('logoPreviewImg');
+        var previewDiv = document.getElementById('logoUploadPreview');
+        var placeholder = document.getElementById('logoUploadPlaceholder');
+        var area = document.getElementById('logoUploadArea');
+        if (previewImg) previewImg.src = dataUrl;
+        if (previewDiv) previewDiv.style.display = 'block';
+        if (placeholder) placeholder.style.display = 'none';
+        if (area) area.classList.add('has-image');
+        if (statusEl) { statusEl.textContent = '✅ Logo carregada!'; statusEl.style.color = '#10B981'; }
+      } else {
+        if (statusEl) { statusEl.textContent = '❌ Formato não suportado. Use JPG, PNG ou WebP.'; statusEl.style.color = '#EF4444'; }
+        showToast('❌ Formato não suportado. Use JPG, PNG ou WebP.');
       }
-      canvas.width = w; canvas.height = h;
-      var ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, w, h);
-      var compressed = canvas.toDataURL('image/jpeg', 0.82);
-      window._logoBase64 = compressed;
-      // Mostrar preview
-      var previewImg = document.getElementById('logoPreviewImg');
-      var previewDiv = document.getElementById('logoUploadPreview');
-      var placeholder = document.getElementById('logoUploadPlaceholder');
-      var area = document.getElementById('logoUploadArea');
-      if (previewImg) previewImg.src = compressed;
-      if (previewDiv) previewDiv.style.display = 'block';
-      if (placeholder) placeholder.style.display = 'none';
-      if (area) area.classList.add('has-image');
-      if (statusEl) { statusEl.textContent = '✅ Logo pronta! (' + w + 'x' + h + 'px)'; }
     };
+
+    img.onload = function() {
+      _cleanupTimeout();
+      try {
+        var canvas = document.createElement('canvas');
+        var maxSize = 200;
+        var w = img.width, h = img.height;
+        if (w === 0 || h === 0) {
+          // Dimensões inválidas — usar dataUrl direto se pequeno
+          if (dataUrl.length < 200 * 1024) {
+            window._logoBase64 = dataUrl;
+            if (statusEl) { statusEl.textContent = '✅ Logo carregada!'; statusEl.style.color = '#10B981'; }
+          } else {
+            if (statusEl) { statusEl.textContent = '❌ Imagem com dimensões inválidas.'; statusEl.style.color = '#EF4444'; }
+          }
+          return;
+        }
+        if (w > maxSize || h > maxSize) {
+          if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
+          else { w = Math.round(w * maxSize / h); h = maxSize; }
+        }
+        canvas.width = w; canvas.height = h;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        var compressed = canvas.toDataURL('image/jpeg', 0.82);
+        if (!compressed || compressed === 'data:,') {
+          // Canvas bloqueado (tainted) — usar dataUrl original se pequeno
+          if (dataUrl.length < 200 * 1024) {
+            window._logoBase64 = dataUrl;
+            if (statusEl) { statusEl.textContent = '✅ Logo carregada!'; statusEl.style.color = '#10B981'; }
+          } else {
+            if (statusEl) { statusEl.textContent = '❌ Erro ao comprimir imagem.'; statusEl.style.color = '#EF4444'; }
+            showToast('❌ Erro ao processar imagem. Tente uma foto menor.');
+          }
+          return;
+        }
+        window._logoBase64 = compressed;
+        // Mostrar preview
+        var previewImg = document.getElementById('logoPreviewImg');
+        var previewDiv = document.getElementById('logoUploadPreview');
+        var placeholder = document.getElementById('logoUploadPlaceholder');
+        var area = document.getElementById('logoUploadArea');
+        if (previewImg) previewImg.src = compressed;
+        if (previewDiv) previewDiv.style.display = 'block';
+        if (placeholder) placeholder.style.display = 'none';
+        if (area) area.classList.add('has-image');
+        if (statusEl) { statusEl.textContent = '✅ Logo pronta! (' + w + 'x' + h + 'px)'; statusEl.style.color = '#10B981'; }
+      } catch(canvasErr) {
+        _cleanupTimeout();
+        // Fallback para dataUrl original
+        if (dataUrl.length < 200 * 1024) {
+          window._logoBase64 = dataUrl;
+          if (statusEl) { statusEl.textContent = '✅ Logo carregada!'; statusEl.style.color = '#10B981'; }
+        } else {
+          if (statusEl) { statusEl.textContent = '❌ Erro ao processar. Tente foto menor.'; statusEl.style.color = '#EF4444'; }
+          showToast('❌ Erro ao processar imagem. Tente uma foto menor.');
+        }
+      }
+    };
+
     img.src = dataUrl;
   };
-  reader.readAsDataURL(file);
+
+  try {
+    reader.readAsDataURL(file);
+  } catch(readerErr) {
+    _cleanupTimeout();
+    if (statusEl) { statusEl.textContent = '❌ Erro ao ler arquivo.'; statusEl.style.color = '#EF4444'; }
+    showToast('❌ Erro ao ler imagem. Tente outra foto.');
+  }
 }
 
 document.getElementById('addPlatformBtn').addEventListener('click', () => {
