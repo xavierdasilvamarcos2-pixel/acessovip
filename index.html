@@ -5292,6 +5292,8 @@ document.getElementById('adminLoginBtn').addEventListener('click', () => {
     document.getElementById('adminLoginWrap').style.display = 'none';
     document.getElementById('adminPanelWrap').style.display = 'block';
     adminGoTo('home');
+    loadAdminStats(); // Carregar stats ao fazer login
+
     populatePlatformSelects(); // Registrar login no log
     addAuditLog('login', '(acesso ao painel)', null);
   } else {
@@ -7474,7 +7476,6 @@ if (_adminWrapNav) {
     // Capturar evento de instalação PWA
     // CORREÇÃO: listener duplicado removido — usar apenas o listener global
     // window.addEventListener('beforeinstallprompt', ...
-    });
   })();
   
 
