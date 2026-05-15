@@ -2991,8 +2991,8 @@
           🏆 Entrar no Ranking
         </button>
         <!-- Botão compartilhar (para quem já tem cadastro) -->
-        <button class="ranking-share-btn" id="rankingShareBtn" style="margin-top:12px">
-          🚀 Compartilhar meu link
+        <button class="ranking-share-btn" id="rankingShareBtn" style="margin-top:12px;background:linear-gradient(135deg,#7C3AED,#6D28D9);font-size:15px;font-weight:900;padding:14px;letter-spacing:0.5px">
+          🚀 Compartilhar e Ganhar Pontos
         </button>
         <!-- Link de convite -->
         <div class="ranking-link-box">
@@ -3001,6 +3001,31 @@
         </div>
       </div>
 
+      <!-- Bloco explicação de pontuação na tela principal -->
+      <div id="rankingHowToCard" style="background:rgba(124,58,237,0.10);border:1px solid rgba(124,58,237,0.25);border-radius:16px;padding:16px;margin:12px 0 4px 0">
+        <div style="font-size:13px;font-weight:900;color:#c4b5fd;letter-spacing:0.5px;margin-bottom:10px;text-align:center">🏆 COMO GANHAR PONTOS</div>
+        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.85)">
+            <span style="color:#22c55e;font-size:15px">✅</span><span>Compartilhando o aplicativo</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.85)">
+            <span style="color:#22c55e;font-size:15px">✅</span><span>Chamando novos usuários</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.85)">
+            <span style="color:#22c55e;font-size:15px">✅</span><span>Compartilhando seu link de convite</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.85)">
+            <span style="color:#22c55e;font-size:15px">✅</span><span>Participando diariamente</span>
+          </div>
+        </div>
+        <div style="padding:8px 12px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);border-radius:10px;font-size:12px;color:#fbbf24;text-align:center;font-weight:700;margin-bottom:12px">
+          📌 Cada compartilhamento vale <span style="font-size:14px">+5 pontos</span> no ranking
+        </div>
+        <!-- Botão Compartilhar Aplicativo -->
+        <button id="rankingShareAppBtn" style="width:100%;padding:14px;background:linear-gradient(135deg,#10b981,#059669);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:900;cursor:pointer;letter-spacing:0.5px;display:flex;align-items:center;justify-content:center;gap:8px" onclick="(function(){var link=getShareLink();var msg='🎯 Acesse o ACESSO VIP — as melhores plataformas e sinais ao vivo!\n\n'+link;if(navigator.share){navigator.share({title:'ACESSO VIP',text:msg,url:link}).catch(function(){});}else{var wa='https://wa.me/?text='+encodeURIComponent(msg);window.open(wa,'_blank');}})()">
+          📲 Compartilhar Aplicativo
+        </button>
+      </div>
       <!-- Pódio Top 3 -->
       <div class="ranking-podium" id="rankingPodium" style="display:none">
         <!-- p2 = 2º, p1 = 1º (centro/maior), p3 = 3º -->
@@ -3922,6 +3947,31 @@
       <!-- Descrição curta e direta -->
       <div class="rnm-desc">
         Compartilhe seu link e suba no ranking para ganhar PIX toda semana.
+      </div>
+      <!-- Bloco: Como Ganhar Pontos -->
+      <div style="background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);border-radius:14px;padding:14px 16px;margin:10px 0 6px 0">
+        <div style="font-size:13px;font-weight:900;color:#c4b5fd;letter-spacing:0.5px;margin-bottom:10px;text-align:center">🏆 COMO GANHAR PONTOS</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.9)">
+            <span style="color:#22c55e;font-size:15px">✅</span>
+            <span>Compartilhando o aplicativo</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.9)">
+            <span style="color:#22c55e;font-size:15px">✅</span>
+            <span>Chamando novos usuários</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.9)">
+            <span style="color:#22c55e;font-size:15px">✅</span>
+            <span>Compartilhando seu link de convite</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.9)">
+            <span style="color:#22c55e;font-size:15px">✅</span>
+            <span>Participando diariamente</span>
+          </div>
+        </div>
+        <div style="margin-top:10px;padding:8px 12px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);border-radius:10px;font-size:12px;color:#fbbf24;text-align:center;font-weight:700">
+          📌 Cada compartilhamento vale <span style="font-size:14px">+5 pontos</span> no ranking
+        </div>
       </div>
       <div class="rnm-divider"></div>
       <!-- Campo nome -->
