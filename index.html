@@ -5495,6 +5495,37 @@ function handleLogoUpload(input) {
   };
   reader.readAsDataURL(file);
 }
+document.getElementById('addPlatformBtn').addEventListener('click', () => {
+  // Determinar a URL da logo (link ou base64 do upload)
+  var logoMode = window._logoMode || 'url';
+  var logoUrl = '';
+  if (logoMode === 'url') {
+    logoUrl = document.getElementById('addLogoUrl').value.trim();
+  } else {
+    logoUrl = window._logoBase64 || '';
+  }
+  const name = document.getElementById('addName').value.trim();
+  const url = document.getElementById('addUrl').value.trim();
+  const isLaunch = document.getElementById('addIsLaunch').checked;
+  if (!name || !url) { showToast('Preencha o nome e o link!'); return; }
+  const newP = { id: Date.now(), name, url, imageUrl: logoUrl, isHigh: false, isLaunch: isLaunch, hot_game: '', position: -1 };
+  platforms.unshift(newP);
+  saveState(); renderHome(); renderAdminPlatforms();
+  addAuditLog('add', name, newP.id);
+  // Limpar campos
+  document.getElementById('addLogoUrl').value = '';
+  document.getElementById('addName').value = '';
+  document.getElementById('addUrl').value = '';
+  document.getElementById('addIsLaunch').checked = true;
+  // Resetar modo de logo
+  window._logoBase64 = '';
+  window._logoMode = 'url';
+  setLogoMode('url');
+  showToast('✅ ' + name + ' adicionada!');
+  trackEvent('platform_added', { name });
+});
+
+
 function populateNotifPlatSelect() {
   var sel = document.getElementById('notifPlatSelect');
   if (!sel) return;
