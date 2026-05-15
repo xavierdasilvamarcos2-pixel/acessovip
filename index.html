@@ -4838,7 +4838,7 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     || window.location.search.indexOf('pwa=1') !== -1;
 
   // Compatibilidade: manter deferredPrompt global para outros scripts
-  window.deferredPrompt = null;
+  // CORREÇÃO: NÃO zerar window.deferredPrompt aqui — o listener global já pode ter capturado o prompt
 
   function showPwaBanner() {
     if (_pwaDismissed || isInStandalone || _pwaBannerShown) return;
@@ -4904,7 +4904,11 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
         var _prompt = window._pwaPrompt || window.deferredPrompt || _pwaDeferred;
         if (_prompt) {
           hidePwaBanner();
-          _prompt.prompt();
+          try {
+            _prompt.prompt();
+          } catch(promptErr) {
+            console.error('prompt error:', promptErr);
+          }
           _prompt.userChoice.then(function(choice) {
             _pwaDeferred = null;
             window.deferredPrompt = null;
@@ -7468,10 +7472,8 @@ if (_adminWrapNav) {
     });
 
     // Capturar evento de instalação PWA
-    window.addEventListener('beforeinstallprompt', function(e) {
-      e.preventDefault();
-      window.deferredPrompt = e;
-      window._pwaPrompt = e;
+    // CORREÇÃO: listener duplicado removido — usar apenas o listener global
+    // window.addEventListener('beforeinstallprompt', ...
     });
   })();
   
