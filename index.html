@@ -3022,7 +3022,7 @@
           📌 Cada compartilhamento vale <span style="font-size:14px">+5 pontos</span> no ranking
         </div>
         <!-- Botão Compartilhar Aplicativo -->
-        <button id="rankingShareAppBtn" style="width:100%;padding:14px;background:linear-gradient(135deg,#10b981,#059669);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:900;cursor:pointer;letter-spacing:0.5px;display:flex;align-items:center;justify-content:center;gap:8px" onclick="(function(){var link=getShareLink();var msg='🎯 Acesse o ACESSO VIP — as melhores plataformas e sinais ao vivo!\n\n'+link;if(navigator.share){navigator.share({title:'ACESSO VIP',text:msg,url:link}).catch(function(){});}else{var wa='https://wa.me/?text='+encodeURIComponent(msg);window.open(wa,'_blank');}})()">
+        <button id="rankingShareAppBtn" style="width:100%;padding:14px;background:linear-gradient(135deg,#10b981,#059669);border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:900;cursor:pointer;letter-spacing:0.5px;display:flex;align-items:center;justify-content:center;gap:8px">
           📲 Compartilhar Aplicativo
         </button>
       </div>
@@ -9275,13 +9275,17 @@ document.addEventListener('click', function(e) {
 
     // Botões da tela ranking
     document.addEventListener('click', function(e) {
-      // Botão compartilhar ranking
+      // Botão compartilhar ranking (link pessoal)
       if (e.target.id === 'rankingShareBtn' || e.target.closest('#rankingShareBtn')) {
         if (!getUserName()) {
           showNameModal(function() { doShare(); });
         } else {
           doShare();
         }
+      }
+      // Botão Compartilhar Aplicativo (tela principal do ranking)
+      if (e.target.id === 'rankingShareAppBtn' || e.target.closest('#rankingShareAppBtn')) {
+        doShare();
       }
       // Copiar link
       if (e.target.id === 'rankingLinkCopy' || e.target.closest('#rankingLinkCopy')) {
