@@ -3277,19 +3277,19 @@
             </div>
             <!-- Modo Upload -->
             <div id="logoUploadMode" style="display:none;">
-              <div id="logoUploadArea" onclick="document.getElementById('logoFileInput').click()"
-                style="border:2px dashed rgba(99,102,241,0.4);border-radius:12px;padding:20px;text-align:center;cursor:pointer;background:rgba(99,102,241,0.05);transition:all 0.2s;">
+              <label for="logoFileInput" id="logoUploadArea"
+                style="display:block;border:2px dashed rgba(99,102,241,0.4);border-radius:12px;padding:20px;text-align:center;cursor:pointer;background:rgba(99,102,241,0.05);transition:all 0.2s;">
                 <div id="logoUploadPreview" style="display:none;margin-bottom:10px;">
                   <img id="logoPreviewImg" style="width:72px;height:72px;border-radius:10px;object-fit:contain;background:#222;border:1px solid rgba(255,255,255,0.1);" />
                 </div>
                 <div id="logoUploadPlaceholder">
                   <div style="font-size:28px;margin-bottom:6px;">&#128247;</div>
                   <div style="font-size:13px;color:rgba(255,255,255,0.6);">Toque para selecionar logo</div>
-                  <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;">PNG, JPG ou WebP · Max 2MB</div>
+                  <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;">PNG, JPG ou WebP · Max 5MB</div>
                 </div>
-              </div>
+              </label>
               <input type="file" id="logoFileInput" accept="image/*"
-                style="display:none;" onchange="handleLogoUpload(this)" />
+                style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;z-index:-1;" onchange="handleLogoUpload(this)" />
               <div id="logoUploadStatus" style="font-size:12px;color:#10B981;margin-top:6px;text-align:center;display:none;"></div>
             </div>
           </div>
@@ -7328,6 +7328,26 @@ if (_adminWrapNav) {
     });
   }).observe(_adminWrapNav, { attributes: true });
 }
+
+// Garantir que o input de arquivo funcione no Android/PWA
+(function() {
+  function bindLogoInput() {
+    var inp = document.getElementById('logoFileInput');
+    if (inp && !inp._bound) {
+      inp._bound = true;
+      inp.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+          handleLogoUpload(this);
+        }
+      });
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindLogoInput);
+  } else {
+    bindLogoInput();
+  }
+})();
 </script>
 
   <!-- POP-UP DE INSTALAÇÃO (central, aparece ao clicar em área bloqueada) -->
