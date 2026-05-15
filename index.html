@@ -4974,9 +4974,64 @@ async function requestNotificationPermission() {
     showToast('Notificações não suportadas neste navegador');
     return false;
   }
-  
-  // Web Push nativo (VAPID) - sem OneSignal
-  const perm = await Notification.requestPermission();
+
+  // Se já foi negada permanentemente, orientar o usuário
+  if (Notification.permission === 'denied') {
+    showToast('🔕 Notificações bloqueadas. Vá em Configurações do Android → Apps → Chrome → Notificações → acessoplatafomas.com.br → Permitir', 6000);
+    return false;
+  }
+
+  // Se já foi concedida, registrar subscription e retornar
+  if (Notification.permission === 'granted') {
+    if (window._registerWebPushSubscription) {
+      window._registerWebPushSubscription().catch(function(){});
+    }
+    updateNotifBtn();
+    return true;
+  }
+
+  // ESTRATÉGIA PARA ANDROID PWA:
+  // Usar pushManager.subscribe() como gatilho principal.
+  // No Android Chrome, pushManager.subscribe() SEMPRE força o diálogo oficial
+  // do sistema (mesmo quando Notification.requestPermission() é suprimido).
+  var perm = 'default';
+  try {
+    var reg = await navigator.serviceWorker.ready;
+    if (reg && reg.pushManager && ('PushManager' in window)) {
+      // Tentar subscribe — isso força o diálogo de permissão no Android
+      var sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: window._urlBase64ToUint8Array
+          ? window._urlBase64ToUint8Array(window.VAPID_PUBLIC_KEY)
+          : null,
+      });
+      if (sub) {
+        // Subscribe funcionou — permissão concedida
+        perm = 'granted';
+        // Enviar subscription para o Worker
+        fetch(window.WORKER_URL_BASE + '/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ subscription: sub.toJSON() }),
+        }).catch(function(){});
+      }
+    } else {
+      // PushManager não disponível — fallback para requestPermission
+      perm = await Notification.requestPermission();
+    }
+  } catch(e) {
+    // Se subscribe falhou por permissão negada, verificar o estado atual
+    perm = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
+    if (perm === 'default') {
+      // Subscribe falhou mas permissão ainda não foi negada — tentar requestPermission diretamente
+      try {
+        perm = await Notification.requestPermission();
+      } catch(e2) {
+        perm = 'denied';
+      }
+    }
+  }
+
   notifPermission = perm;
   if (perm === 'granted') {
     document.getElementById('notifBanner').classList.add('hidden');
@@ -4986,13 +5041,9 @@ async function requestNotificationPermission() {
     showToast('🔔 Notificações ativadas!', 3000);
     trackEvent('notification_granted');
     updateNotifBtn();
-    // Registrar subscription Web Push no Worker
-    if (window._registerWebPushSubscription) {
-      window._registerWebPushSubscription().catch(e => console.warn('WebPush register error:', e));
-    }
     return true;
   } else {
-    showToast('Notificações bloqueadas. Ative nas configurações do Chrome.');
+    showToast('🔕 Notificações não ativadas. Tente novamente ou ative nas configurações do Chrome.');
     trackEvent('notification_denied');
     return false;
   }
