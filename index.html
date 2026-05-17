@@ -150,8 +150,8 @@
     .tab-badge { background: var(--red); color: #fff; border-radius: 10px; padding: 1px 5px; font-size: 9px; font-weight: 900; position: absolute; top: 4px; right: calc(50% - 20px); }
 
     /* ===== MAIN CONTENT ===== */
-    .main { flex: 1; overflow: hidden; position: relative; min-height: 0; }
-    .screen { display: none; }
+    .main { flex: 1; overflow: hidden; position: relative; min-height: 0; isolation: isolate; }
+    .screen { display: none; overflow: hidden; }
     .screen.active {
   display: flex;
   flex-direction: column;
@@ -161,7 +161,8 @@
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   padding-bottom: calc(65px + max(8px, env(safe-area-inset-bottom)));
-}
+  isolation: isolate;
+  }
 
     /* ===== HOME SCREEN ===== */
     .banner-img { width: calc(100% - 32px); margin: 8px 16px 0; border-radius: 16px; display: block; height: auto; max-height: 220px; object-fit: cover; object-position: top; }
