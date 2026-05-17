@@ -3003,9 +3003,13 @@
           🏆 Entrar no Ranking
         </button>
         <!-- Botão Compartilhar Aplicativo (para quem já tem cadastro) -->
-        <button id="rankingShareAppBtn" style="display:none;width:100%;padding:15px;background:linear-gradient(135deg,#10b981,#059669);border:none;border-radius:14px;color:#fff;font-size:16px;font-weight:900;cursor:pointer;letter-spacing:0.5px;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(16,185,129,0.35)">
+        <button id="rankingShareAppBtn" style="display:flex;width:100%;padding:15px;background:linear-gradient(135deg,#10b981,#059669);border:none;border-radius:14px;color:#fff;font-size:16px;font-weight:900;cursor:pointer;letter-spacing:0.5px;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(16,185,129,0.35)">
           📲 Compartilhar e Ganhar +5 Pontos
         </button>
+        <!-- Informação de pontos por compartilhamento -->
+        <div id="rankingShareInfo" style="text-align:center;font-size:13px;color:rgba(255,255,255,0.7);margin-top:6px;padding:8px 12px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);border-radius:10px;">
+          📌 Cada compartilhamento vale <strong style="color:#10b981">+5 pontos</strong> no ranking
+        </div>
         <!-- Botão compartilhar (compatibilidade) -->
         <button id="rankingShareBtn" style="display:none"></button>
         <!-- Link de convite -->
@@ -8712,7 +8716,7 @@ document.addEventListener('click', function(e) {
     if (!name || !phone) {
       // Sem cadastro: mostrar "Entrar no Ranking", ocultar compartilhar
       if (joinBtn) joinBtn.style.display = 'flex';
-      if (shareAppBtn) shareAppBtn.style.display = 'none';
+      if (shareAppBtn) shareAppBtn.style.display = 'flex';
       if (linkBox) linkBox.style.display = 'none';
     } else {
       // Com cadastro: ocultar "Entrar no Ranking", mostrar compartilhar + link
