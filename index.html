@@ -8,7 +8,7 @@
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // Se o app estiver com cache antigo, limpa e recarrega
 (function() {
-  var APP_VERSION = 'v72';
+  var APP_VERSION = 'v73';
   try {
     var storedVersion = localStorage.getItem('app_version');
     if (storedVersion !== APP_VERSION) {
@@ -6478,9 +6478,9 @@ function init() {
   // Nunca depende de Firebase ou localStorage para renderizar
   platforms = [...PLATFORMS_DATA];
   
-  // VERSÃO DO CACHE: v72 — qualquer versão diferente limpa o localStorage
+  // VERSÃO DO CACHE: v73 — qualquer versão diferente limpa o localStorage
   // Isso garante que dispositivos com cache antigo (58 plataformas) sejam atualizados
-  var CACHE_VERSION = 'v72';
+  var CACHE_VERSION = 'v73';
   try {
     var cacheVer = _ls.get('av_cache_version');
     if (cacheVer !== CACHE_VERSION) {
@@ -6553,7 +6553,7 @@ function init() {
           var now = Date.now();
           try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
           try { _ls.set('av_platforms_ts', String(now)); } catch(e) {}
-          try { _ls.set('av_cache_version', 'v72'); } catch(e) {}
+          try { _ls.set('av_cache_version', 'v73'); } catch(e) {}
           renderHome();
           renderHot();
           console.log('[Firebase] ' + platforms.length + ' plataformas carregadas do servidor.');
