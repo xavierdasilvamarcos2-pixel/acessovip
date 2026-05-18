@@ -1,6 +1,6 @@
 // Service Worker - Acesso VIP PWA
-// Versão: v18 - Força atualização imediata + notifica clientes para recarregar
-const CACHE_NAME = 'acesso-vip-v18';
+// Versão: v19 - Força atualização imediata + notifica clientes para recarregar
+const CACHE_NAME = 'acesso-vip-v19';
 // NÃO incluir index.html nem / no cache - sempre buscar do servidor
 const STATIC_ASSETS = ['/manifest.json'];
 self.addEventListener('install', (event) => {
@@ -23,7 +23,7 @@ self.addEventListener('activate', (event) => {
     }).then((clients) => {
       clients.forEach((client) => {
         // Envia mensagem para o app recarregar e pegar o novo HTML
-        client.postMessage({ type: 'SW_UPDATED', version: 'v18' });
+        client.postMessage({ type: 'SW_UPDATED', version: 'v19' });
       });
     })
   );
