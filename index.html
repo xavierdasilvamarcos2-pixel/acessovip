@@ -8,7 +8,7 @@
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // Se o app estiver com cache antigo, limpa e recarrega
 (function() {
-  var APP_VERSION = 'v73';
+  var APP_VERSION = 'v72';
   try {
     var storedVersion = localStorage.getItem('app_version');
     if (storedVersion !== APP_VERSION) {
@@ -191,11 +191,9 @@
     .pwa-banner-features { display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:14px; }
     .pwa-banner-feat { display:flex; align-items:center; gap:6px; font-size:11.5px; color:rgba(255,255,255,0.85); background:rgba(255,255,255,0.05); border-radius:8px; padding:5px 8px; border:1px solid rgba(255,255,255,0.07); }
     .pwa-banner-feat-icon { font-size:13px; flex-shrink:0; }
-    #pwaBannerInstallBtn { width:100%; padding:14px; border-radius:14px; border:none; font-size:15px; font-weight:900; cursor:pointer; letter-spacing:0.5px; position:relative; overflow:hidden; background:linear-gradient(135deg,#7C3AED 0%,#5B21B6 50%,#3B82F6 100%); color:#fff; box-shadow:0 4px 20px rgba(124,58,237,0.6); transition:transform 0.15s,box-shadow 0.15s,background 0.3s; }
+    #pwaBannerInstallBtn { width:100%; padding:14px; border-radius:14px; border:none; font-size:15px; font-weight:900; cursor:pointer; letter-spacing:0.5px; position:relative; overflow:hidden; background:linear-gradient(135deg,#7C3AED 0%,#5B21B6 50%,#3B82F6 100%); color:#fff; box-shadow:0 4px 20px rgba(124,58,237,0.6); transition:transform 0.15s,box-shadow 0.15s; }
     #pwaBannerInstallBtn::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.15) 50%,transparent 100%); background-size:200% auto; animation:pwa-shimmer 2s linear infinite; }
     #pwaBannerInstallBtn:active { transform:scale(0.97); box-shadow:0 2px 12px rgba(124,58,237,0.4); }
-    /* Estado "ABRIR APP" — verde */
-    #pwaBannerInstallBtn.open-app { background:linear-gradient(135deg,#059669 0%,#047857 100%); box-shadow:0 4px 20px rgba(5,150,105,0.6); }
     .pwa-banner-arrow { text-align:center; font-size:18px; margin-top:8px; animation:pwa-bounce-arrow 1.5s ease-in-out infinite; color:rgba(167,139,250,0.7); }
     /* Esconder banners antigos */
     .install-banner { display:none !important; }
@@ -1294,53 +1292,28 @@
     /* ===== GANHADORES DA SEMANA ===== */
     .ranking-winners-section {
       margin: 0 16px 16px;
-      background: linear-gradient(135deg, rgba(255,215,0,0.06), rgba(245,158,11,0.03));
-      border: 1.5px solid rgba(255,215,0,0.25);
-      border-radius: 18px;
-      padding: 0;
-      overflow: hidden;
-    }
-    .ranking-winners-header {
-      background: linear-gradient(135deg, rgba(120,53,15,0.7), rgba(146,64,14,0.5));
-      padding: 12px 16px 10px;
-      display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid rgba(255,215,0,0.15);
+      background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(5,150,105,0.04));
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 16px;
+      padding: 16px;
     }
     .ranking-winners-title {
-      font-size: 13px; font-weight: 900; color: #FFD700;
+      font-size: 14px; font-weight: 900; color: #10B981;
       text-transform: uppercase; letter-spacing: 1px;
-      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
     }
-    .ranking-winners-week-badge {
-      font-size: 10px; font-weight: 700; color: rgba(255,215,0,0.7);
-      background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.2);
-      padding: 3px 8px; border-radius: 20px;
-    }
-    .ranking-winners-body { padding: 12px 14px 14px; }
-    .ranking-winners-empty {
-      text-align: center; padding: 20px 16px;
-      color: rgba(255,255,255,0.4); font-size: 13px; line-height: 1.5;
-    }
-    .ranking-winners-empty-icon { font-size: 32px; margin-bottom: 8px; }
     .winner-card {
-      display: flex; align-items: center; gap: 10px;
+      display: flex; align-items: center; gap: 12px;
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.07);
       border-radius: 12px; padding: 10px 12px;
       margin-bottom: 8px; position: relative;
     }
-    .winner-card:last-child { margin-bottom: 0; }
-    .winner-card.paid { border-color: rgba(16,185,129,0.35); background: rgba(16,185,129,0.04); }
-    .winner-card.top1 { border-color: rgba(255,215,0,0.35); background: rgba(255,215,0,0.04); }
-    .winner-card.top2 { border-color: rgba(192,192,192,0.25); }
-    .winner-card.top3 { border-color: rgba(205,127,50,0.25); }
-    .winner-medal-badge {
-      font-size: 22px; min-width: 28px; text-align: center; flex-shrink: 0;
-    }
+    .winner-card.paid { border-color: rgba(16,185,129,0.3); }
     .winner-avatar {
-      width: 40px; height: 40px; border-radius: 50%;
+      width: 44px; height: 44px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 16px; font-weight: 900; color: #fff;
+      font-size: 18px; font-weight: 900; color: #fff;
       flex-shrink: 0; overflow: hidden;
       border: 2px solid rgba(255,255,255,0.15);
     }
@@ -1350,31 +1323,21 @@
     .winner-avatar.bronze { border-color: #CD7F32; background: linear-gradient(135deg,#451a03,#78350f); }
     .winner-info { flex: 1; min-width: 0; }
     .winner-name { font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .winner-meta { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; }
-    .winner-right { text-align: right; flex-shrink: 0; }
-    .winner-prize { font-size: 16px; font-weight: 900; color: #FFD700; line-height: 1.1; }
-    .winner-prize-label { font-size: 9px; color: rgba(255,255,255,0.3); }
+    .winner-meta { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+    .winner-prize { font-size: 16px; font-weight: 900; color: #FFD700; }
     .winner-badge-paid {
-      display: inline-block; margin-top: 4px;
+      position: absolute; top: 8px; right: 10px;
       background: linear-gradient(135deg, #059669, #047857);
       color: #fff; font-size: 9px; font-weight: 900;
       padding: 3px 8px; border-radius: 20px;
       letter-spacing: 0.5px; text-transform: uppercase;
     }
     .winner-badge-pending {
-      display: inline-block; margin-top: 4px;
+      position: absolute; top: 8px; right: 10px;
       background: rgba(245,158,11,0.15);
       color: #F59E0B; font-size: 9px; font-weight: 700;
       padding: 3px 8px; border-radius: 20px;
       border: 1px solid rgba(245,158,11,0.3);
-    }
-    .ranking-winners-footer {
-      margin-top: 10px; padding: 8px 12px;
-      background: rgba(255,215,0,0.06);
-      border: 1px solid rgba(255,215,0,0.12);
-      border-radius: 10px;
-      font-size: 11px; color: rgba(255,215,0,0.7);
-      text-align: center; font-weight: 600;
     }
     /* Lista de ranking melhorada */
     .rank-list-item {
@@ -1410,40 +1373,23 @@
     .rank-list-pts-label { font-size: 9px; color: rgba(255,255,255,0.3); text-align: right; }
     /* Admin PIX PAGO */
     .admin-winner-row {
+      display: flex; align-items: center; gap: 8px;
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 12px; padding: 12px;
-      margin-bottom: 8px;
+      border-radius: 10px; padding: 10px 12px;
+      margin-bottom: 6px;
     }
     .admin-winner-row.paid { border-color: rgba(16,185,129,0.3); }
-    .admin-winner-row-top {
-      display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
-    }
-    .admin-winner-row-actions {
-      display: flex; gap: 6px; flex-wrap: wrap;
-    }
     .admin-pago-btn {
       background: linear-gradient(135deg,#059669,#047857);
       color: #fff; border: none; border-radius: 8px;
-      padding: 7px 14px; font-size: 11px; font-weight: 700;
-      cursor: pointer; white-space: nowrap; flex: 1;
+      padding: 6px 12px; font-size: 11px; font-weight: 700;
+      cursor: pointer; white-space: nowrap; flex-shrink: 0;
     }
     .admin-pago-btn.paid {
       background: rgba(16,185,129,0.15);
       color: #10B981; border: 1px solid rgba(16,185,129,0.3);
-      cursor: default; flex: 1;
-    }
-    .admin-wa-btn {
-      background: linear-gradient(135deg,#25D366,#128C7E);
-      color: #fff; border: none; border-radius: 8px;
-      padding: 7px 14px; font-size: 11px; font-weight: 700;
-      cursor: pointer; white-space: nowrap; text-decoration: none;
-      display: inline-flex; align-items: center; gap: 4px; flex: 1;
-      justify-content: center;
-    }
-    .admin-winner-paid-info {
-      font-size: 10px; color: #10B981; font-weight: 700;
-      margin-top: 4px; text-align: center;
+      cursor: default;
     }
     /* ── Admin Ranking Manager ── */
     .ar-stat-card {
@@ -2449,7 +2395,7 @@
             <div class="pwa-banner-feat"><span class="pwa-banner-feat-icon">&#x26A1;</span>Acesso instant&#226;neo</div>
             <div class="pwa-banner-feat"><span class="pwa-banner-feat-icon">&#x1F3AF;</span>Ferramentas VIP</div>
           </div>
-          <button id="pwaBannerInstallBtn">📲 INSTALAR AGORA — É GRÁTIS</button>
+          <button id="pwaBannerInstallBtn">&#x1F4F2; INSTALAR AGORA &#x2014; &#xC9; GR&#xC1;TIS</button>
           <div class="pwa-banner-arrow">&#x25BC;</div>
         </div>
       </div>
@@ -3133,22 +3079,10 @@
         </div>
       </div>
 
-      <!-- Ganhadores da Semana Atual - SEMPRE VISÍVEL -->
-      <div class="ranking-winners-section" id="rankingWinnersSection">
-        <div class="ranking-winners-header">
-          <div class="ranking-winners-title">🏆 Ganhadores da Semana</div>
-          <div class="ranking-winners-week-badge" id="winnersWeekBadge">Semana Atual</div>
-        </div>
-        <div class="ranking-winners-body" id="rankingWinnersList">
-          <div class="ranking-winners-empty">
-            <div class="ranking-winners-empty-icon">🏆</div>
-            <div style="font-weight:700;color:rgba(255,255,255,0.6);margin-bottom:4px">Semana em andamento!</div>
-            <div>Os ganhadores serão anunciados ao final da semana.<br>Compartilhe e suba no ranking para ganhar PIX!</div>
-          </div>
-        </div>
-        <div class="ranking-winners-footer" id="rankingWinnersFooter" style="display:none">
-          ✅ Pagamentos verificados e realizados via PIX
-        </div>
+      <!-- Ganhadores da Semana Atual -->
+      <div class="ranking-winners-section" id="rankingWinnersSection" style="display:none">
+        <div class="ranking-winners-title">🏆 Ganhadores da Semana</div>
+        <div id="rankingWinnersList"></div>
       </div>
       <!-- Histórico de vencedores -->
       <div class="ranking-history-section" id="rankingHistorySection" style="display:none">
@@ -3937,11 +3871,6 @@
           <div id="adminRankHistory">
             <div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">Nenhum histórico ainda</div>
           </div>
-          <!-- Histórico completo de pagamentos -->
-          <div class="ar-section-title" style="margin-top:20px;color:#25D366">💰 Histórico de Pagamentos</div>
-          <div id="adminPaymentHistory">
-            <div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">⏳ Carregando...</div>
-          </div>
         </div>
       </div>
 
@@ -4495,63 +4424,42 @@ let platforms = [...PLATFORMS_DATA];
 let favorites = JSON.parse(_ls.get('av_favorites') || '[]');
 let installCount = parseInt(_ls.get('av_installs') || '0');
 let pushTokens = parseInt(_ls.get('av_tokens') || '0');
-// ===== SISTEMA DE INSTALAÇÃO PWA - DETECÇÃO PROFISSIONAL =====
-// Captura o evento beforeinstallprompt o mais cedo possível
+// ===== LISTENER GLOBAL beforeinstallprompt (captura o evento o mais cedo possível) =====
 window._pwaPrompt = null;
-window._pwaInstallAvailable = false; // true quando Chrome pode instalar
 window.addEventListener('beforeinstallprompt', function(e) {
   e.preventDefault();
   window._pwaPrompt = e;
   window.deferredPrompt = e;
-  window._pwaInstallAvailable = true;
-  // Notificar o sistema de instalação que o prompt está disponível
-  if (typeof window._onInstallPromptReady === 'function') {
-    window._onInstallPromptReady();
-  }
 });
 // =====
 let deferredPrompt = null;
 
-// ===== FUNÇÃO CENTRAL DE DETECÇÃO DE INSTALAÇÃO =====
-// Hierarquia de confiança:
-// 1. display-mode: standalone (mais confiável — app realmente aberto como PWA)
-// 2. navigator.standalone (iOS Safari)
-// 3. document.referrer android-app:// (WebAPK Android)
-// 4. localStorage av_installed (fallback — pode ser falso positivo após desinstalação)
-function _appEstaInstalado() {
-  // Verificação real do modo standalone (mais confiável)
-  var standaloneReal = window.matchMedia('(display-mode: standalone)').matches
-    || window.navigator.standalone === true
-    || document.referrer.includes('android-app://');
-  if (standaloneReal) {
-    localStorage.setItem('av_installed', '1');
-    return true;
-  }
-  // Fallback: flag salva (pode ser falso positivo, mas melhor que nada)
-  return localStorage.getItem('av_installed') === '1';
-}
-
 // ===== DETECÇÃO IMEDIATA DE STANDALONE =====
+// Se o app está rodando em modo standalone (instalado), salvar o flag AGORA
+// antes de qualquer outra lógica — isso garante que o botão INSTALAR não apareça
 (function() {
-  var standaloneReal = window.matchMedia('(display-mode: standalone)').matches
+  var isStandalone = window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true
-    || document.referrer.includes('android-app://');
-  if (standaloneReal) {
+    || document.referrer.includes('android-app://')
+    || window.location.search.indexOf('pwa=1') !== -1;
+  if (isStandalone) {
     localStorage.setItem('av_installed', '1');
   }
-  // Listener para detectar transição para standalone
+  // Listener para detectar mudança para standalone (acontece quando o app é aberto pela primeira vez após instalação)
   try {
     window.matchMedia('(display-mode: standalone)').addEventListener('change', function(e) {
       if (e.matches) {
         localStorage.setItem('av_installed', '1');
         if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
-        if (typeof window._atualizarBotaoInstalacao === 'function') window._atualizarBotaoInstalacao();
       }
     });
   } catch(e) {}
 })();
 
-let isInstalled = _appEstaInstalado();
+let isInstalled = window.matchMedia('(display-mode: standalone)').matches
+  || window.navigator.standalone === true
+  || document.referrer.includes('android-app://')
+  || localStorage.getItem('av_installed') === '1';
 let notifPermission = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
 let adminLoggedIn = false;
 let adminHighFilterMode = 'all'; // 'all' | 'high' | 'normal'
@@ -4844,9 +4752,15 @@ function renderShare() {
 }
 
 // ===== TAB NAVIGATION =====
-// Função global de verificação de instalação (usa a função central)
+// Função global de verificação de instalação
 function _appInstalado() {
-  return _appEstaInstalado();
+  // Critério: modo standalone OU flag salva após instalação/aceitação do prompt
+  var standalone = window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true
+    || document.referrer.includes('android-app://');
+  var flagSalva = localStorage.getItem('av_installed') === '1';
+  var paramPwa = window.location.search.indexOf('pwa=1') !== -1;
+  return standalone || flagSalva || paramPwa;
 }
 // Função global de bloqueio (usada pelo sinalAtivoBanner e outros)
 window._irParaAbaHot = function() {
@@ -4965,149 +4879,122 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
   if (e.target === document.getElementById('sorteioModal')) document.getElementById('sorteioModal').classList.remove('open');
 });
 
-// ===== SISTEMA DE INSTALAÇÃO PWA PROFISSIONAL =====
+// ===== PWA INSTALL =====
+// ===== PWA INSTALL BANNER PREMIUM =====
 (function() {
   var _pwaDeferred = null;
+  var _pwaBannerShown = false;
+  var _pwaDismissed = sessionStorage.getItem('pwa_banner_dismissed') === '1';
+
   var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
   var isAndroid = /android/i.test(navigator.userAgent);
   var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  var isInStandalone = window.navigator.standalone === true
+    || window.matchMedia('(display-mode: standalone)').matches
+    || document.referrer.includes('android-app://')
+    || localStorage.getItem('av_installed') === '1'
+    || window.location.search.indexOf('pwa=1') !== -1;
 
-  // Verificação REAL do estado de instalação (sem depender de localStorage)
-  // Só retorna true se o app está genuinamente rodando como PWA instalado
-  function _verificarInstalado() {
-    return window.matchMedia('(display-mode: standalone)').matches
-      || window.navigator.standalone === true
-      || document.referrer.includes('android-app://');
-  }
-  // Expor globalmente para uso em outros blocos
-  window._verificarInstalado = _verificarInstalado;
+  // Compatibilidade: manter deferredPrompt global para outros scripts
+  // CORREÇÃO: NÃO zerar window.deferredPrompt aqui — o listener global já pode ter capturado o prompt
 
-  // Atualizar o banner: mostrar INSTALAR, ABRIR APP ou ocultar
-  function _atualizarBotaoInstalacao() {
+  function showPwaBanner() {
+    if (_pwaDismissed || isInStandalone || _pwaBannerShown) return;
     var overlay = document.getElementById('pwaBannerOverlay');
-    var installBtn = document.getElementById('pwaBannerInstallBtn');
-    var bannerTitle = document.querySelector('.pwa-banner-title');
-    var bannerSub = document.querySelector('.pwa-banner-subtitle');
-    if (!overlay || !installBtn) return;
-
-    var instaladoReal = _verificarInstalado();
-    var instaladoFlag = localStorage.getItem('av_installed') === '1';
-
-    if (instaladoReal) {
-      // App está rodando em modo standalone — ocultar banner completamente
-      overlay.classList.remove('pwa-visible');
-      overlay.style.display = 'none';
-      localStorage.setItem('av_installed', '1');
-      return;
-    }
-
-    if (instaladoFlag && !window._pwaInstallAvailable) {
-      // Flag salva mas não está em standalone e não há prompt disponível
-      // Provavelmente instalado mas aberto no navegador — mostrar "ABRIR APP"
-      installBtn.textContent = '🚀 ABRIR O APLICATIVO';
-      installBtn.style.background = 'linear-gradient(135deg,#059669 0%,#047857 100%)';
-      installBtn.style.boxShadow = '0 4px 20px rgba(5,150,105,0.6)';
-      if (bannerTitle) bannerTitle.textContent = 'App já instalado!';
-      if (bannerSub) bannerSub.textContent = '✅ Toque para abrir o aplicativo';
-      overlay.classList.add('pwa-visible');
-      overlay.style.display = '';
-      return;
-    }
-
-    if (!instaladoReal && !instaladoFlag) {
-      // Não instalado — mostrar botão INSTALAR
-      installBtn.textContent = '📲 INSTALAR AGORA — É GRÁTIS';
-      installBtn.style.background = '';
-      installBtn.style.boxShadow = '';
-      if (bannerTitle) bannerTitle.textContent = 'Instale o Aplicativo Oficial';
-      if (bannerSub) bannerSub.textContent = '⚡ Acesso rápido & notificações';
-      overlay.classList.add('pwa-visible');
-      overlay.style.display = '';
-      return;
-    }
-
-    // Instalado via flag E prompt disponível — ocultar (usuário já tem o app)
-    overlay.classList.remove('pwa-visible');
+    if (!overlay) return;
+    _pwaBannerShown = true;
+    overlay.classList.add('pwa-visible');
+    trackEvent('pwa_banner_shown', { platform: isIOS ? 'ios' : isAndroid ? 'android' : 'other' });
   }
-  // Expor globalmente
-  window._atualizarBotaoInstalacao = _atualizarBotaoInstalacao;
 
   function hidePwaBanner() {
     var overlay = document.getElementById('pwaBannerOverlay');
-    if (overlay) { overlay.classList.remove('pwa-visible'); overlay.style.display = 'none'; }
+    if (overlay) overlay.classList.remove('pwa-visible');
   }
 
-  // Callback quando o prompt de instalação fica disponível
-  window._onInstallPromptReady = function() {
-    if (!_verificarInstalado()) {
-      _atualizarBotaoInstalacao();
+  // Mostrar banner após 4s se não instalado
+  if (!isInStandalone && !_pwaDismissed) {
+    setTimeout(function() {
+      if (!isInStandalone && !sessionStorage.getItem('pwa_banner_dismissed')) {
+        showPwaBanner();
+      }
+    }, 4000);
+  }
+
+  // Capturar evento de instalação Android/Chrome
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    _pwaDeferred = e;
+    window.deferredPrompt = e;
+    window._pwaPrompt = e;
+    // Verificar novamente se está instalado (o flag pode ter sido salvo depois da inicialização)
+    var jaInstalado = window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true
+      || document.referrer.includes('android-app://')
+      || localStorage.getItem('av_installed') === '1'
+      || window.location.search.indexOf('pwa=1') !== -1;
+    // Mostrar banner apenas se não instalado e não dispensado
+    if (!jaInstalado && !isInStandalone && !_pwaDismissed) {
+      showPwaBanner();
     }
-  };
+  });
 
   // Botão fechar (X)
   document.addEventListener('click', function(e) {
     if (e.target && e.target.id === 'pwaBannerClose') {
       hidePwaBanner();
       sessionStorage.setItem('pwa_banner_dismissed', '1');
+      _pwaDismissed = true;
       trackEvent('pwa_banner_dismissed');
     }
   });
 
-  // Botão principal: INSTALAR ou ABRIR APP
+  // Botão INSTALAR
   document.addEventListener('click', function(e) {
-    if (!e.target || e.target.id !== 'pwaBannerInstallBtn') return;
-    var instaladoReal = _verificarInstalado();
-    var instaladoFlag = localStorage.getItem('av_installed') === '1';
-
-    // App instalado mas aberto no navegador — tentar abrir em standalone
-    if (instaladoFlag && !instaladoReal) {
-      try { window.location.href = 'https://acessoplatafomas.com.br/?pwa=1'; } catch(e2) {}
-      trackEvent('pwa_open_installed');
-      return;
-    }
-
-    // Fluxo de instalação
-    if (isIOS || (isSafari && !isAndroid)) {
-      // iOS/Safari: mostrar instruções
-      var modal = document.getElementById('iosInstallModal');
-      if (modal) { modal.style.display = 'flex'; modal.classList.add('open'); }
-      trackEvent('ios_install_guide_open');
-    } else {
-      // Android/Chrome: usar prompt nativo
-      var _prompt = window._pwaPrompt || window.deferredPrompt || _pwaDeferred;
-      if (_prompt) {
-        hidePwaBanner();
-        try { _prompt.prompt(); } catch(promptErr) { console.error('prompt error:', promptErr); }
-        _prompt.userChoice.then(function(choice) {
-          _pwaDeferred = null;
-          window.deferredPrompt = null;
-          window._pwaPrompt = null;
-          window._pwaInstallAvailable = false;
-          if (choice.outcome === 'accepted') {
-            trackEvent('pwa_install_accepted');
-            localStorage.setItem('av_installed', '1');
-            if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
-            showToast('✅ Instalando... O app aparecerá na sua tela inicial!', 3500);
-          } else {
-            trackEvent('pwa_install_dismissed');
-            // Mostrar banner novamente após recusa (sem o botão ABRIR)
-            setTimeout(_atualizarBotaoInstalacao, 500);
-          }
-        });
+    if (e.target && e.target.id === 'pwaBannerInstallBtn') {
+      if (isIOS || (isSafari && !isAndroid)) {
+        // iOS/Safari: abrir modal com instruções
+        var modal = document.getElementById('iosInstallModal');
+        if (modal) { modal.style.display = 'flex'; modal.classList.add('open'); }
+        trackEvent('ios_install_guide_open');
       } else {
-        // Sem prompt disponível — mostrar instruções manuais
-        var msg = document.createElement('div');
-        msg.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.88);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
-        msg.innerHTML = '<div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border:1px solid rgba(124,58,237,0.5);border-radius:20px;padding:28px 24px;max-width:340px;width:100%;text-align:center;color:#fff;">'
-          + '<div style="font-size:36px;margin-bottom:12px">📲</div>'
-          + '<div style="font-size:18px;font-weight:900;margin-bottom:8px">Instalar o App</div>'
-          + '<div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;margin-bottom:20px">'
-          + 'Toque nos <strong>3 pontos ⋮</strong> do Chrome (canto superior direito)<br>e selecione<br><strong>"Instalar app"</strong><br>ou<br><strong>"Adicionar à tela inicial"</strong>'
-          + '</div>'
-          + '<button onclick="this.closest('div[style]').remove()" style="background:linear-gradient(135deg,#7C3AED,#3B82F6);border:none;color:#fff;padding:12px 32px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;width:100%">Entendido</button>'
-          + '</div>';
-        document.body.appendChild(msg);
-        trackEvent('pwa_install_manual_instructions');
+        // Android/Chrome: instalar nativo — usar qualquer prompt disponível
+        var _prompt = window._pwaPrompt || window.deferredPrompt || _pwaDeferred;
+        if (_prompt) {
+          hidePwaBanner();
+          try {
+            _prompt.prompt();
+          } catch(promptErr) {
+            console.error('prompt error:', promptErr);
+          }
+          _prompt.userChoice.then(function(choice) {
+            _pwaDeferred = null;
+            window.deferredPrompt = null;
+            window._pwaPrompt = null;
+            if (choice.outcome === 'accepted') {
+              trackEvent('pwa_install_accepted');
+              localStorage.setItem('av_installed', '1');
+              if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
+              showToast('✅ Instalando... Abrindo o app!', 3000);
+            } else {
+              trackEvent('pwa_install_dismissed');
+            }
+          });
+        } else {
+          // Fallback: instruções manuais claras para Android/Chrome
+          var msg = document.createElement('div');
+          msg.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+          msg.innerHTML = '<div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border:1px solid rgba(124,58,237,0.5);border-radius:20px;padding:28px 24px;max-width:340px;width:100%;text-align:center;color:#fff;">'
+            + '<div style="font-size:36px;margin-bottom:12px">📲</div>'
+            + '<div style="font-size:18px;font-weight:900;margin-bottom:8px">Instalar o App</div>'
+            + '<div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;margin-bottom:20px">'
+            + 'Para instalar, toque nos <strong>3 pontos ⋮</strong> do Chrome (canto superior direito)<br>e selecione<br><strong>"Instalar app"</strong> ou<br><strong>"Adicionar à tela inicial"</strong>'
+            + '</div>'
+            + '<button onclick="this.closest(\'div[style]\').remove()" style="background:linear-gradient(135deg,#7C3AED,#3B82F6);border:none;color:#fff;padding:12px 32px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;width:100%">Entendido</button>'
+            + '</div>';
+          document.body.appendChild(msg);
+          trackEvent('pwa_install_manual_instructions');
+        }
       }
     }
   });
@@ -5120,7 +5007,7 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     }
   });
 
-  // Após instalação confirmada pelo browser (evento appinstalled)
+  // Após instalação: confirmar e abrir app
   window.addEventListener('appinstalled', function() {
     isInstalled = true;
     _ls.set('av_installed', '1');
@@ -5128,14 +5015,15 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     hidePwaBanner();
     installCount++;
     _ls.set('av_installs', installCount);
-    showToast('✅ App instalado! Procure o ícone ACESSO VIP na tela inicial.', 4000);
+    showToast('✅ App instalado! Abrindo...', 3000);
     trackEvent('pwa_installed');
-    try { gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' }); } catch(e) {}
+    gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' });
+    // Remover bloqueio imediatamente (sem esperar standalone)
     if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
     // Reabrir em modo standalone após instalação
     setTimeout(function() {
       try { window.location.href = 'https://acessoplatafomas.com.br/?pwa=1&notif=1'; } catch(e2) {}
-    }, 2000);
+    }, 1500);
     // Contagem no Firebase
     if (!_ls.get('av_install_fb_counted')) {
       _ls.set('av_install_fb_counted', '1');
@@ -5147,38 +5035,31 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
       fetch(fbBase + '/stats/total_installs.json' + fbAuth)
         .then(function(r) { return r.json(); }).then(function(cur) {
           var next = (parseInt(cur) || 0) + 1;
-          fetch(fbBase + '/stats/total_installs.json' + fbAuth, { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next) });
+          fetch(fbBase + '/stats/total_installs.json' + fbAuth, {
+            method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
+          });
         }).catch(function(){});
       fetch(fbBase + '/analytics/installs_daily/' + installDayKey + '/' + installOs + '.json' + fbAuth)
         .then(function(r) { return r.json(); }).then(function(cur) {
           var next = (parseInt(cur) || 0) + 1;
-          fetch(fbBase + '/analytics/installs_daily/' + installDayKey + '/' + installOs + '.json' + fbAuth, { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next) });
+          fetch(fbBase + '/analytics/installs_daily/' + installDayKey + '/' + installOs + '.json' + fbAuth, {
+            method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(next)
+          });
         }).catch(function(){});
       var logKey = Date.now() + '_' + Math.random().toString(36).substr(2,6);
-      fetch(fbBase + '/install_log/' + logKey + '.json' + fbAuth, { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ os: installOs, ts: Date.now(), day: installDayKey }) }).catch(function(){});
+      fetch(fbBase + '/install_log/' + logKey + '.json' + fbAuth, {
+        method: 'PUT', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ os: installOs, ts: Date.now(), day: installDayKey })
+      }).catch(function(){});
     }
   });
 
-  // Inicialização: verificar estado e mostrar banner correto
-  (function() {
-    var instaladoReal = _verificarInstalado();
-    if (instaladoReal) {
-      // Rodando em standalone — ocultar tudo relacionado a instalação
-      hidePwaBanner();
-      isInstalled = true;
-      _ls.set('av_installed', '1');
-      return;
-    }
-    // Não está em standalone — verificar se deve mostrar banner
-    var dismissed = sessionStorage.getItem('pwa_banner_dismissed') === '1';
-    if (dismissed) return;
-    // Mostrar banner após 3s (dar tempo para carregar)
-    setTimeout(function() {
-      if (!_verificarInstalado() && !sessionStorage.getItem('pwa_banner_dismissed')) {
-        _atualizarBotaoInstalacao();
-      }
-    }, 3000);
-  })();
+  // Ocultar se já instalado
+  if (isInStandalone) {
+    hidePwaBanner();
+    isInstalled = true;
+    _ls.set('av_installed', '1');
+  }
 })();
 
 // ===== NOTIFICATIONS =====
@@ -6340,7 +6221,11 @@ if ('serviceWorker' in navigator) {
 function checkWelcomeModal() {
   updateNotifBtn();
   // Se está instalado e notificações não foram ativadas: mostrar pedido
-  var jaInstalado = _appEstaInstalado();
+  var jaInstalado = window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true
+    || document.referrer.includes('android-app://')
+    || localStorage.getItem('av_installed') === '1'
+    || window.location.search.indexOf('pwa=1') !== -1;
   if (!jaInstalado) return; // Não instalado: não pedir notificações
   var notifPerm = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
   if (notifPerm === 'granted') return; // Já ativou: não mostrar
@@ -6478,9 +6363,9 @@ function init() {
   // Nunca depende de Firebase ou localStorage para renderizar
   platforms = [...PLATFORMS_DATA];
   
-  // VERSÃO DO CACHE: v73 — qualquer versão diferente limpa o localStorage
+  // VERSÃO DO CACHE: v72 — qualquer versão diferente limpa o localStorage
   // Isso garante que dispositivos com cache antigo (58 plataformas) sejam atualizados
-  var CACHE_VERSION = 'v73';
+  var CACHE_VERSION = 'v72';
   try {
     var cacheVer = _ls.get('av_cache_version');
     if (cacheVer !== CACHE_VERSION) {
@@ -6553,7 +6438,7 @@ function init() {
           var now = Date.now();
           try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
           try { _ls.set('av_platforms_ts', String(now)); } catch(e) {}
-          try { _ls.set('av_cache_version', 'v73'); } catch(e) {}
+          try { _ls.set('av_cache_version', 'v72'); } catch(e) {}
           renderHome();
           renderHot();
           console.log('[Firebase] ' + platforms.length + ' plataformas carregadas do servidor.');
@@ -7544,7 +7429,7 @@ if (_adminWrapNav) {
       <span class="install-popup-icon">&#x1F512;</span>
       <div class="install-popup-title">Instale para liberar o acesso</div>
       <div class="install-popup-sub">Esta &#xe1;rea est&#xe1; dispon&#xed;vel somente no aplicativo instalado. Instale agora &#x2014; &#xe9; gr&#xe1;tis e leva menos de 30 segundos!</div>
-      <button class="install-popup-btn" id="installPopupBtn">📲 INSTALAR AGORA — É GRÁTIS</button>
+      <button class="install-popup-btn" id="installPopupBtn">&#x1F4F2; INSTALAR AGORA &#x2014; &#xC9; GR&#xC1;TIS</button>
     </div>
   </div>
   <!-- Overlay legado (oculto) -->
@@ -7566,10 +7451,8 @@ if (_adminWrapNav) {
   <script>
   // ===== BOLHAS FLUTUANTES =====
   (function() {
-    var isStandalone = _verificarInstalado ? _verificarInstalado() : (
-      window.matchMedia('(display-mode: standalone)').matches
-      || window.navigator.standalone === true
-    );
+    var isStandalone = window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true;
     var jaFechouInstall = sessionStorage.getItem('bolha_install_fechou');
     var jaFechouNotif = sessionStorage.getItem('bolha_notif_fechou');
     var notifJaAtiva = (typeof Notification !== 'undefined' && Notification.permission === 'granted');
@@ -7829,9 +7712,13 @@ function clearPlatformMetrics() {
 (function() {
   var STORAGE_KEY = 'av_popup_install_done';
   
-  // Verificar se já instalou (usa função central)
+  // Verificar se já instalou (standalone OU flag salva OU param ?pwa=1)
   function jaInstalou() {
-    return _appEstaInstalado();
+    return window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true
+      || document.referrer.includes('android-app://')
+      || localStorage.getItem('av_installed') === '1'
+      || window.location.search.indexOf('pwa=1') !== -1;
   }
   
   // Aplicar efeito visual de bloqueio nas áreas
@@ -7888,26 +7775,19 @@ function clearPlatformMetrics() {
     if (popup) popup.classList.add('hidden');
   }
   
-  // Acionar instalação PWA (ou abrir app se já instalado)
+  // Acionar instalação PWA
   function acionarInstalacao() {
     fecharPopup();
-    // Se já instalado (flag), tentar abrir em standalone
-    if (localStorage.getItem('av_installed') === '1' && !_verificarInstalado()) {
-      try { window.location.href = 'https://acessoplatafomas.com.br/?pwa=1'; } catch(e) {}
-      return;
-    }
     var _prompt = window._pwaPrompt || window.deferredPrompt;
     if (_prompt) {
       _prompt.prompt();
       _prompt.userChoice.then(function(choice) {
         window.deferredPrompt = null;
         window._pwaPrompt = null;
-        window._pwaInstallAvailable = false;
         if (choice.outcome === 'accepted') {
           localStorage.setItem('av_installed', '1');
           localStorage.setItem(STORAGE_KEY, '1');
           removerBloqueioVisual();
-          showToast('✅ Instalando... O app aparecerá na tela inicial!', 3500);
           // Mostrar pedido de notificações após desbloqueio
           setTimeout(mostrarPedidoNotificacoes, 1500);
         }
@@ -9645,14 +9525,7 @@ document.addEventListener('click', function(e) {
 
     var actionsEl = document.getElementById('arProfileActions');
     if (actionsEl) {
-      var waActionBtn = '';
-      if (u.phone) {
-        var waPhoneP = u.phone.replace(/\D/g,'');
-        var waMsgP = encodeURIComponent('Olá ' + (u.name||'') + '! Aqui é o time ACESSO VIP. Você está participando do nosso Ranking Semanal com ' + (u.pts||0) + ' pontos. Continue compartilhando para ganhar PIX! 🏆');
-        waActionBtn = '<a href="https://wa.me/55' + waPhoneP + '?text=' + waMsgP + '" target="_blank" class="admin-wa-btn" style="display:flex;justify-content:center;margin-bottom:8px">📲 Contatar via WhatsApp</a>';
-      }
       actionsEl.innerHTML =
-        waActionBtn +
         '<button class="ar-edit-pts-btn" data-ar-edit-uid="' + u.uid + '" data-ar-edit-name="' + escapeHtml(u.name||'') + '">✏️ Editar Pontos</button>';
     }
 
@@ -9762,8 +9635,6 @@ document.addEventListener('click', function(e) {
         html += '</div>';
       });
       histEl.innerHTML = html;
-      // Também carregar histórico de vencedores com pagamentos
-      adminLoadWinnersHistory();
     });
   };
 
@@ -9872,7 +9743,7 @@ document.addEventListener('click', function(e) {
     if (!container) return;
     fbGet('/ranking/winners/' + week, function(err, data) {
       if (!data || Object.keys(data).length === 0) {
-        container.innerHTML = '<div style="text-align:center;padding:16px;color:rgba(255,255,255,0.3);font-size:13px">Nenhum vencedor definido ainda.<br>Clique em <strong style="color:#F59E0B">🏆 Finalizar Semana</strong> para definir os top 3.</div>';
+        container.innerHTML = '<div style="text-align:center;padding:16px;color:rgba(255,255,255,0.3);font-size:13px">Nenhum vencedor definido ainda. Clique em "Finalizar Semana".</div>';
         return;
       }
       var list = Object.keys(data).map(function(uid) {
@@ -9881,37 +9752,20 @@ document.addEventListener('click', function(e) {
       var html = '';
       list.forEach(function(w) {
         var paidClass = w.paid ? ' paid' : '';
-        // Botão marcar pago ou status pago
-        var pagoBtn = w.paid
-          ? '<span class="admin-pago-btn paid">✅ PIX PAGO</span>'
-          : '<button class="admin-pago-btn" data-week="' + week + '" data-uid="' + w.uid + '">💰 Marcar Pago</button>';
-        // Botão WhatsApp (só se tiver telefone)
-        var waBtn = '';
-        if (w.phone) {
-          var waPhone = w.phone.replace(/\D/g,'');
-          var waMsg = encodeURIComponent('Olá ' + (w.name||'') + '! 🏆 Você ficou em ' + (w.medal||'') + ' lugar no Ranking Semanal da ACESSO VIP e ganhou ' + (w.prize||'') + ' via PIX! Entre em contato para receber seu prêmio.');
-          waBtn = '<a href="https://wa.me/55' + waPhone + '?text=' + waMsg + '" target="_blank" class="admin-wa-btn">📲 WhatsApp</a>';
-        } else {
-          waBtn = '<span style="flex:1;text-align:center;font-size:10px;color:rgba(255,255,255,0.3);padding:7px 0">📵 Sem telefone</span>';
-        }
+        var btnHtml = w.paid
+          ? '<span class="admin-pago-btn paid">✅ PIX PAGO ' + (w.paidAt || '') + '</span>'
+          : '<button class="admin-pago-btn" data-week="' + week + '" data-uid="' + w.uid + '">Marcar Pago</button>';
         var avatarHtml = w.avatar
-          ? '<img src="' + w.avatar + '" style="width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,215,0,0.3)">'
-          : '<div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#5B21B6);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#fff;border:2px solid rgba(124,58,237,0.4)">' + (w.name||'?')[0].toUpperCase() + '</div>';
-        var paidDateInfo = w.paid && w.paidAt ? '<div class="admin-winner-paid-info">✅ Pago em ' + escapeHtml(w.paidAt) + '</div>' : '';
+          ? '<img src="' + w.avatar + '" style="width:36px;height:36px;border-radius:50%;object-fit:cover">'
+          : '<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#5B21B6);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff">' + (w.name||'?')[0].toUpperCase() + '</div>';
         html += '<div class="admin-winner-row' + paidClass + '">';
-        html += '<div class="admin-winner-row-top">';
-        html += '<div style="font-size:20px;min-width:24px;text-align:center">' + (w.medal||'') + '</div>';
+        html += '<div style="font-size:18px;min-width:20px">' + (w.medal||'') + '</div>';
         html += avatarHtml;
         html += '<div style="flex:1;min-width:0">';
         html += '<div style="font-size:13px;font-weight:700;color:#fff">' + escapeHtml(w.name||'') + '</div>';
-        html += '<div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:1px">' + (w.pts||0) + ' pts • <strong style="color:#FFD700">' + (w.prize||'') + '</strong>' + (w.phone ? ' • 📱 ' + escapeHtml(w.phone) : ' • 📵 sem tel') + '</div>';
+        html += '<div style="font-size:10px;color:rgba(255,255,255,0.4)">' + (w.pts||0) + ' pts • ' + (w.prize||'') + (w.phone ? ' • ' + w.phone : '') + '</div>';
         html += '</div>';
-        html += '</div>';
-        html += '<div class="admin-winner-row-actions">';
-        html += waBtn;
-        html += pagoBtn;
-        html += '</div>';
-        html += paidDateInfo;
+        html += btnHtml;
         html += '</div>';
       });
       container.innerHTML = html;
@@ -9920,111 +9774,42 @@ document.addEventListener('click', function(e) {
 
   // ── Renderizar seção de ganhadores na tela do usuário ────────────
   function renderWinnersSection(week) {
+    var section = document.getElementById('rankingWinnersSection');
     var list = document.getElementById('rankingWinnersList');
-    var footer = document.getElementById('rankingWinnersFooter');
-    var weekBadge = document.getElementById('winnersWeekBadge');
-    if (!list) return;
-    // Atualizar badge da semana
-    if (weekBadge && week) {
-      var parts = week.split('-W');
-      if (parts.length === 2) weekBadge.textContent = 'Semana ' + parts[1] + '/' + parts[0];
-      else weekBadge.textContent = week;
-    }
+    if (!section || !list) return;
     fbGet('/ranking/winners/' + week, function(err, data) {
       if (!data || Object.keys(data).length === 0) {
-        // Mostrar mensagem motivacional (seção sempre visível)
-        list.innerHTML = '<div class="ranking-winners-empty"><div class="ranking-winners-empty-icon">🏆</div><div style="font-weight:700;color:rgba(255,255,255,0.6);margin-bottom:4px">Semana em andamento!</div><div>Os ganhadores serão anunciados ao final da semana.<br>Compartilhe e suba no ranking para ganhar PIX!</div></div>';
-        if (footer) footer.style.display = 'none';
+        section.style.display = 'none';
         return;
       }
       var winners = Object.keys(data).map(function(uid) {
         var w = data[uid]; w.uid = uid; return w;
       }).sort(function(a,b){ return a.pos - b.pos; });
+      section.style.display = 'block';
       var medalColors = ['gold','silver','bronze'];
-      var medals = ['🥇','🥈','🥉'];
-      var allPaid = winners.every(function(w){ return w.paid; });
       var html = '';
       winners.forEach(function(w, i) {
         var colorClass = medalColors[i] || 'gold';
-        var medalEmoji = medals[i] || '🏅';
-        var topClass = i === 0 ? ' top1' : i === 1 ? ' top2' : ' top3';
         var avatarHtml = w.avatar
           ? '<img src="' + w.avatar + '">'
           : (w.name||'?')[0].toUpperCase();
         var badgeHtml = w.paid
           ? '<span class="winner-badge-paid">✅ PIX PAGO</span>'
-          : '<span class="winner-badge-pending">⏳ Aguardando PIX</span>';
-        var paidDateHtml = w.paid && w.paidAt ? '<div style="font-size:9px;color:rgba(16,185,129,0.6);margin-top:1px">Pago em ' + escapeHtml(w.paidAt) + '</div>' : '';
-        html += '<div class="winner-card' + topClass + (w.paid ? ' paid' : '') + '">';
-        html += '<div class="winner-medal-badge">' + medalEmoji + '</div>';
+          : '<span class="winner-badge-pending">⏳ Aguardando</span>';
+        html += '<div class="winner-card' + (w.paid ? ' paid' : '') + '">';
         html += '<div class="winner-avatar ' + colorClass + '">' + avatarHtml + '</div>';
         html += '<div class="winner-info">';
-        html += '<div class="winner-name">' + escapeHtml(w.name||'') + '</div>';
-        html += '<div class="winner-meta">' + (w.pts||0) + ' pts • ' + (w.refs||0) + ' indicações</div>';
-        html += paidDateHtml;
+        html += '<div class="winner-name">' + (w.medal||'') + ' ' + escapeHtml(w.name||'') + '</div>';
+        html += '<div class="winner-meta">' + (w.pts||0) + ' pontos • ' + (w.refs||0) + ' indicações</div>';
         html += '</div>';
-        html += '<div class="winner-right">';
+        html += '<div style="text-align:right">';
         html += '<div class="winner-prize">' + (w.prize||'') + '</div>';
-        html += '<div class="winner-prize-label">PIX</div>';
-        html += badgeHtml;
+        html += '<div style="font-size:9px;color:rgba(255,255,255,0.3)">PIX</div>';
         html += '</div>';
+        html += badgeHtml;
         html += '</div>';
       });
       list.innerHTML = html;
-      if (footer) footer.style.display = allPaid ? 'block' : 'none';
-    });
-  }
-
-  // ── Carregar histórico completo de pagamentos ────────────────────
-  function adminLoadWinnersHistory() {
-    var container = document.getElementById('adminPaymentHistory');
-    if (!container) return;
-    // Buscar todos os winners de todas as semanas
-    fbGet('/ranking/winners', function(err, data) {
-      if (!data || Object.keys(data).length === 0) {
-        container.innerHTML = '<div style="text-align:center;padding:16px;color:rgba(255,255,255,0.3);font-size:13px">Nenhum pagamento registrado ainda</div>';
-        return;
-      }
-      var allWeeks = Object.keys(data).sort().reverse(); // mais recente primeiro
-      var html = '';
-      var totalPaid = 0;
-      var totalPending = 0;
-      allWeeks.forEach(function(week) {
-        var weekData = data[week];
-        if (!weekData || typeof weekData !== 'object') return;
-        var weekWinners = Object.keys(weekData).map(function(uid) {
-          var w = weekData[uid]; w.uid = uid; return w;
-        }).sort(function(a,b){ return a.pos - b.pos; });
-        if (weekWinners.length === 0) return;
-        var weekParts = week.split('-W');
-        var weekLabel = weekParts.length === 2 ? 'Semana ' + weekParts[1] + '/' + weekParts[0] : week;
-        html += '<div style="margin-bottom:12px">';
-        html += '<div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;padding:4px 8px;background:rgba(255,255,255,0.04);border-radius:6px">' + weekLabel + '</div>';
-        weekWinners.forEach(function(w) {
-          var isPaid = w.paid;
-          if (isPaid) totalPaid++; else totalPending++;
-          var statusBg = isPaid ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.08)';
-          var statusBorder = isPaid ? 'rgba(16,185,129,0.25)' : 'rgba(245,158,11,0.2)';
-          var statusText = isPaid
-            ? '<span style="color:#10B981;font-weight:700;font-size:10px">✅ PAGO' + (w.paidAt ? ' em ' + escapeHtml(w.paidAt) : '') + '</span>'
-            : '<span style="color:#F59E0B;font-weight:700;font-size:10px">⏳ PENDENTE</span>';
-          html += '<div style="display:flex;align-items:center;gap:8px;background:' + statusBg + ';border:1px solid ' + statusBorder + ';border-radius:8px;padding:8px 10px;margin-bottom:4px">';
-          html += '<div style="font-size:16px;min-width:20px">' + (w.medal||'🏅') + '</div>';
-          html += '<div style="flex:1;min-width:0">';
-          html += '<div style="font-size:12px;font-weight:700;color:#fff">' + escapeHtml(w.name||'') + '</div>';
-          html += '<div style="font-size:10px;color:rgba(255,255,255,0.4)">' + (w.pts||0) + ' pts • <strong style="color:#FFD700">' + (w.prize||'') + '</strong>' + (w.phone ? ' • 📱 ' + escapeHtml(w.phone) : '') + '</div>';
-          html += '</div>';
-          html += statusText;
-          html += '</div>';
-        });
-        html += '</div>';
-      });
-      // Resumo no topo
-      var summaryHtml = '<div style="display:flex;gap:8px;margin-bottom:12px">';
-      summaryHtml += '<div style="flex:1;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);border-radius:10px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:900;color:#10B981">' + totalPaid + '</div><div style="font-size:10px;color:rgba(255,255,255,0.4)">✅ Pagos</div></div>';
-      summaryHtml += '<div style="flex:1;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:10px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:900;color:#F59E0B">' + totalPending + '</div><div style="font-size:10px;color:rgba(255,255,255,0.4)">⏳ Pendentes</div></div>';
-      summaryHtml += '</div>';
-      container.innerHTML = summaryHtml + (html || '<div style="text-align:center;padding:16px;color:rgba(255,255,255,0.3);font-size:13px">Nenhum registro encontrado</div>');
     });
   }
 
