@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // Se o app estiver com cache antigo, limpa e recarrega
 (function() {
-  var APP_VERSION = 'v75';
+  var APP_VERSION = 'v76';
   try {
     var storedVersion = localStorage.getItem('app_version');
     if (storedVersion !== APP_VERSION) {
@@ -4621,6 +4621,22 @@ window.addEventListener('beforeinstallprompt', function(e) {
   e.preventDefault();
   window._pwaPrompt = e;
   window.deferredPrompt = e;
+  // Prompt pronto: garantir que o botão está ativo e visível
+  var btn = document.getElementById('installPopupBtn');
+  if (btn) {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.innerHTML = '&#x1F4F2; INSTALAR AGORA &#x2014; &#xC9; GR&#xC1;TIS';
+  }
+  var waiting = document.getElementById('installPopupWaiting');
+  if (waiting) waiting.style.display = 'none';
+  var ready = document.getElementById('installPopupReady');
+  if (ready) ready.style.display = 'block';
+  // Se o popup não estiver visível ainda, mostrar agora
+  var popup = document.getElementById('installBlockPopup');
+  if (popup && popup.classList.contains('hidden') && typeof _appInstalado === 'function' && !_appInstalado()) {
+    popup.classList.remove('hidden');
+  }
 });
 // =====
 let deferredPrompt = null;
@@ -5104,9 +5120,12 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     if (overlay) overlay.classList.remove('pwa-visible');
   }
 
-  // Mostrar banner após 4s se não instalado
+  // Mostrar banner após 8s se não instalado E popup não estiver visível
   if (!isInStandalone && !_pwaDismissed) {
     setTimeout(function() {
+      // Não mostrar banner se o popup de bloqueio estiver visível
+      var popup = document.getElementById('installBlockPopup');
+      if (popup && !popup.classList.contains('hidden')) return;
       if (!isInStandalone && !sessionStorage.getItem('pwa_banner_dismissed')) {
         showPwaBanner();
       }
@@ -5212,10 +5231,9 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' });
     // Remover bloqueio imediatamente (sem esperar standalone)
     if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
-    // Reabrir em modo standalone após instalação
-    setTimeout(function() {
-      try { window.location.href = 'https://acessoplatafomas.com.br/?pwa=1&notif=1'; } catch(e2) {}
-    }, 1500);
+    // Liberar acesso na mesma página — sem reload
+    // O reload era o maior gargalo: causava 2-3s de espera desnecessária
+    // O acesso já foi liberado pelo removerBloqueioVisual() acima
     // Contagem no Firebase
     if (!_ls.get('av_install_fb_counted')) {
       _ls.set('av_install_fb_counted', '1');
@@ -6557,7 +6575,7 @@ function init() {
   
   // VERSÃO DO CACHE: v74 — qualquer versão diferente limpa o localStorage
   // Isso garante que dispositivos com cache antigo (58 plataformas) sejam atualizados
-  var CACHE_VERSION = 'v75';
+  var CACHE_VERSION = 'v76';
   try {
     var cacheVer = _ls.get('av_cache_version');
     if (cacheVer !== CACHE_VERSION) {
@@ -7621,7 +7639,10 @@ if (_adminWrapNav) {
       <div class="install-popup-title">Instale o app para continuar</div>
       <div class="install-popup-sub">&#x1F3C6; Sinais, plataformas e ranking est&#xe3;o dispon&#xed;veis somente no aplicativo instalado.<br><br>&#x2705; Gr&#xe1;tis &nbsp;&#x2022;&nbsp; &#x26A1; Menos de 30 segundos &nbsp;&#x2022;&nbsp; &#x1F514; Notifica&#xe7;&#xf5;es em tempo real</div>
       <button class="install-popup-btn" id="installPopupBtn">&#x1F4F2; INSTALAR AGORA &#x2014; &#xC9; GR&#xC1;TIS</button>
-      <div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,0.35);text-align:center">Ap&#xf3;s instalar, o acesso ser&#xe1; liberado automaticamente</div>
+      <div id="installPopupWaiting" style="display:none;margin-top:10px;font-size:12px;color:rgba(255,255,255,0.45);text-align:center">
+        &#x23F3; Preparando instala&#xe7;&#xe3;o...
+      </div>
+      <div id="installPopupReady" style="margin-top:10px;font-size:11px;color:rgba(255,255,255,0.35);text-align:center">Ap&#xf3;s instalar, o acesso ser&#xe1; liberado automaticamente</div>
     </div>
   </div>
   <!-- Overlay legado (oculto) -->
@@ -7980,8 +8001,11 @@ function clearPlatformMetrics() {
           localStorage.setItem('av_installed', '1');
           localStorage.setItem(STORAGE_KEY, '1');
           removerBloqueioVisual();
-          // Mostrar pedido de notificações após desbloqueio
-          setTimeout(mostrarPedidoNotificacoes, 1500);
+          // Pedir notificações depois (30s) — não imediatamente após instalar
+          // Dar tempo para o usuário explorar o app primeiro
+          setTimeout(function() {
+            if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
+          }, 30000);
         }
       });
     } else {
@@ -8001,19 +8025,15 @@ function clearPlatformMetrics() {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', function() {
         aplicarBloqueioVisual();
-        // Mostrar popup obrigatório automaticamente após 1.2s
-        setTimeout(function() {
-          var popup = document.getElementById('installBlockPopup');
-          if (popup) popup.classList.remove('hidden');
-        }, 1200);
+        // Mostrar popup imediatamente — sem delay
+        var popup = document.getElementById('installBlockPopup');
+        if (popup) popup.classList.remove('hidden');
       });
     } else {
       aplicarBloqueioVisual();
-      // Mostrar popup obrigatório automaticamente após 1.2s
-      setTimeout(function() {
-        var popup = document.getElementById('installBlockPopup');
-        if (popup) popup.classList.remove('hidden');
-      }, 1200);
+      // Mostrar popup imediatamente — sem delay
+      var popup = document.getElementById('installBlockPopup');
+      if (popup) popup.classList.remove('hidden');
     }
     
     // Expor função globalmente para uso externo (faixa, bolha, etc.)
