@@ -5236,6 +5236,9 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     setTimeout(function() {
       if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
     }, 3000);
+    setTimeout(function() {
+      if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
+    }, 3000);
     gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' });
     // Remover bloqueio imediatamente (sem esperar standalone)
     if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
@@ -6436,6 +6439,20 @@ if ('serviceWorker' in navigator) {
 }
 
 // ===== WELCOME MODAL =====
+// ===== PEDIDO DE NOTIFICACOES =====
+function mostrarPedidoNotificacoes() {
+  if (typeof Notification === 'undefined') return;
+  if (Notification.permission === 'granted') return;
+  if (Notification.permission === 'denied') return;
+  try { if (sessionStorage.getItem('av_notif_asked_s') === '1') return; } catch(e) {}
+  try { sessionStorage.setItem('av_notif_asked_s', '1'); } catch(e) {}
+  var wm = document.getElementById('welcomeModal');
+  if (wm) { wm.classList.add('open'); wm.style.display = ''; return; }
+  var nb = document.getElementById('notifBanner');
+  if (nb) { nb.style.display = 'flex'; return; }
+  if (typeof requestNotificationPermission === 'function') requestNotificationPermission();
+}
+
 // ===== PEDIDO DE NOTIFICACOES =====
 function mostrarPedidoNotificacoes() {
   if (typeof Notification === 'undefined') return;
