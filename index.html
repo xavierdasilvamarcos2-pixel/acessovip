@@ -6453,12 +6453,7 @@ function mostrarPedidoNotificacoes() {
   if (typeof Notification === 'undefined') return;
   if (Notification.permission === 'granted') return;
   if (Notification.permission === 'denied') return;
-  try { if (sessionStorage.getItem('av_notif_asked_s') === '1') return; } catch(e) {}
-  try { sessionStorage.setItem('av_notif_asked_s', '1'); } catch(e) {}
-  var wm = document.getElementById('welcomeModal');
-  if (wm) { wm.classList.add('open'); wm.style.display = ''; return; }
-  var nb = document.getElementById('notifBanner');
-  if (nb) { nb.style.display = 'flex'; return; }
+  // Chamar requestPermission diretamente — faz o diálogo oficial do Android aparecer
   if (typeof requestNotificationPermission === 'function') requestNotificationPermission();
 }
 
