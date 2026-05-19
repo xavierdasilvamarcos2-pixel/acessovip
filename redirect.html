@@ -4,567 +4,129 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#0f0f1a" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>ACESSO VIP — Abrir no Chrome</title>
-
+  <title>ACESSO VIP</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     html, body {
       height: 100%;
       background: #0f0f1a;
-      color: #ECEDEE;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-      overflow-x: hidden;
-    }
-
-    /* ── TELA NORMAL (Chrome/Safari) ── */
-    #screen-loading {
-      height: 100vh;
-      height: 100dvh;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 24px;
-      padding: 32px;
       text-align: center;
+      padding: 32px;
     }
-
-    .logo-wrap {
-      position: relative;
-      animation: logo-in 0.5s ease-out both;
-    }
-
-    .logo-wrap img {
-      width: 96px;
-      height: 96px;
-      border-radius: 22px;
-      box-shadow: 0 0 40px rgba(124, 58, 237, 0.55);
-    }
-
-    .pulse-ring {
-      position: absolute;
-      inset: -12px;
-      border-radius: 34px;
-      border: 2px solid rgba(124, 58, 237, 0.4);
-      animation: pulse-ring 1.6s ease-out infinite;
-    }
-
-    @keyframes pulse-ring {
-      0%   { transform: scale(1);    opacity: 0.7; }
-      100% { transform: scale(1.25); opacity: 0; }
-    }
-
-    @keyframes logo-in {
+    .wrap { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .logo { width: 88px; height: 88px; border-radius: 20px;
+      box-shadow: 0 0 36px rgba(124,58,237,0.55);
+      animation: pop-in 0.4s ease-out both; }
+    @keyframes pop-in {
       from { transform: scale(0.8); opacity: 0; }
       to   { transform: scale(1);   opacity: 1; }
     }
-
-    .title {
-      font-size: 24px;
-      font-weight: 900;
-      color: #fff;
-      letter-spacing: 0.5px;
-      animation: fade-up 0.5s 0.15s ease-out both;
-    }
-
-    .subtitle {
-      font-size: 14px;
-      color: rgba(255,255,255,0.5);
-      margin-top: -12px;
-      animation: fade-up 0.5s 0.25s ease-out both;
-    }
-
-    .status {
-      font-size: 13px;
-      color: rgba(255,255,255,0.45);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      animation: fade-up 0.5s 0.35s ease-out both;
-    }
-
-    .dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: #7C3AED;
-      animation: dot-blink 1s ease-in-out infinite;
-    }
-
-    @keyframes dot-blink {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.3; }
-    }
-
-    @keyframes fade-up {
-      from { transform: translateY(12px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
-    }
-
-    .progress-bar {
-      width: 160px; height: 3px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 10px; overflow: hidden;
-      animation: fade-up 0.5s 0.4s ease-out both;
-    }
-
-    .progress-fill {
-      height: 100%; width: 0%;
-      background: linear-gradient(90deg, #7C3AED, #9F67FF);
-      border-radius: 10px;
-      animation: progress-go 1.6s 0.1s ease-out forwards;
-    }
-
-    @keyframes progress-go {
-      from { width: 0%; }
-      to   { width: 100%; }
-    }
-
-    /* ── TELA INSTAGRAM ── */
-    #screen-instagram {
+    .title { font-size: 22px; font-weight: 900; }
+    .sub { font-size: 13px; color: rgba(255,255,255,0.45); margin-top: -10px; }
+    .dot-wrap { display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: rgba(255,255,255,0.4); }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #7C3AED;
+      animation: blink 1s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+    /* Botão fallback — só aparece se automático falhar */
+    .btn-fallback {
       display: none;
-      min-height: 100vh;
-      min-height: 100dvh;
-      flex-direction: column;
-      align-items: center;
-      padding: 0 0 32px;
-      background: #0f0f1a;
-      animation: fade-in 0.4s ease-out both;
-    }
-
-    @keyframes fade-in {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-
-    /* Faixa de alerta no topo */
-    .insta-alert-bar {
-      width: 100%;
-      background: linear-gradient(135deg, #E1306C, #C13584);
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: 0.3px;
-    }
-
-    .insta-alert-icon {
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-
-    /* Card principal */
-    .insta-card {
-      width: calc(100% - 32px);
-      max-width: 400px;
-      margin: 20px auto 0;
-      background: linear-gradient(135deg, rgba(124,58,237,0.12), rgba(109,40,217,0.06));
-      border: 1.5px solid rgba(124,58,237,0.35);
-      border-radius: 20px;
-      padding: 24px 20px;
-      text-align: center;
-    }
-
-    .insta-logo {
-      width: 72px; height: 72px;
-      border-radius: 18px;
-      box-shadow: 0 0 30px rgba(124,58,237,0.5);
-      margin: 0 auto 16px;
-      display: block;
-    }
-
-    .insta-app-name {
-      font-size: 20px;
-      font-weight: 900;
-      color: #fff;
-      margin-bottom: 4px;
-    }
-
-    .insta-app-sub {
-      font-size: 13px;
-      color: rgba(255,255,255,0.45);
-      margin-bottom: 20px;
-    }
-
-    /* Caixa de aviso */
-    .insta-warning-box {
-      background: rgba(225,48,108,0.12);
-      border: 1px solid rgba(225,48,108,0.3);
-      border-radius: 14px;
-      padding: 14px 16px;
-      margin-bottom: 20px;
-      text-align: left;
-    }
-
-    .insta-warning-title {
-      font-size: 13px;
-      font-weight: 800;
-      color: #f87171;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .insta-warning-text {
-      font-size: 12px;
-      color: rgba(255,255,255,0.6);
-      line-height: 1.6;
-    }
-
-    /* Botão principal ABRIR NO CHROME */
-    .btn-chrome {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      padding: 16px 24px;
+      padding: 15px 32px;
       background: linear-gradient(135deg, #1a73e8, #0d62d0);
-      color: #fff;
-      font-size: 16px;
-      font-weight: 900;
-      border: none;
-      border-radius: 16px;
-      cursor: pointer;
-      text-decoration: none;
-      box-shadow: 0 4px 24px rgba(26,115,232,0.45);
+      color: #fff; font-size: 16px; font-weight: 900;
+      border: none; border-radius: 50px; cursor: pointer;
+      box-shadow: 0 4px 24px rgba(26,115,232,0.5);
       letter-spacing: 0.5px;
-      margin-bottom: 12px;
-      animation: btn-pulse 2s ease-in-out infinite;
+      animation: fade-in 0.3s ease-out both;
     }
-
-    @keyframes btn-pulse {
-      0%, 100% { box-shadow: 0 4px 24px rgba(26,115,232,0.45); }
-      50%       { box-shadow: 0 4px 36px rgba(26,115,232,0.7); }
-    }
-
-    .btn-chrome:active {
-      transform: scale(0.97);
-      opacity: 0.9;
-    }
-
-    .chrome-icon {
-      width: 24px; height: 24px;
-      border-radius: 50%;
-      background: conic-gradient(
-        #EA4335 0deg 90deg,
-        #FBBC04 90deg 180deg,
-        #34A853 180deg 270deg,
-        #4285F4 270deg 360deg
-      );
-      flex-shrink: 0;
-    }
-
-    /* Instruções passo a passo */
-    .insta-steps {
-      width: calc(100% - 32px);
-      max-width: 400px;
-      margin: 16px auto 0;
-    }
-
-    .insta-steps-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: rgba(255,255,255,0.4);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 12px;
-      text-align: center;
-    }
-
-    .step-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 12px 14px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 12px;
-      margin-bottom: 8px;
-    }
-
-    .step-num {
-      width: 26px; height: 26px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #7C3AED, #6D28D9);
-      color: #fff;
-      font-size: 13px;
-      font-weight: 900;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .step-text {
-      font-size: 13px;
-      color: rgba(255,255,255,0.75);
-      line-height: 1.5;
-      padding-top: 3px;
-    }
-
-    .step-text strong {
-      color: #fff;
-      font-weight: 700;
-    }
-
-    /* Seta animada para o canto superior direito (menu "...") */
-    .arrow-hint {
-      position: fixed;
-      top: 10px;
-      right: 16px;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      z-index: 999;
-      animation: arrow-bounce 1s ease-in-out infinite;
-    }
-
-    .arrow-hint-text {
-      background: rgba(124,58,237,0.9);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 5px 10px;
-      border-radius: 20px;
-      white-space: nowrap;
-    }
-
-    .arrow-up {
-      font-size: 28px;
-      color: #a78bfa;
-      line-height: 1;
-    }
-
-    @keyframes arrow-bounce {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-6px); }
-    }
-
-    /* Rodapé */
-    .insta-footer {
-      margin-top: 20px;
-      text-align: center;
-      font-size: 11px;
-      color: rgba(255,255,255,0.25);
-      padding: 0 20px;
-    }
+    @keyframes fade-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
   </style>
 </head>
 <body>
-
-  <!-- ── TELA 1: Carregando (Chrome/Safari normal) ── -->
-  <div id="screen-loading">
-    <div class="logo-wrap">
-      <div class="pulse-ring"></div>
-      <img
-        src="https://acessoplatafomas.com.br/icons/icon-192.png"
-        alt="ACESSO VIP"
-        onerror="this.style.display='none'"
-      />
-    </div>
+  <div class="wrap">
+    <img class="logo"
+      src="https://acessoplatafomas.com.br/icons/icon-192.png"
+      alt="ACESSO VIP"
+      onerror="this.style.display='none'" />
     <div class="title">ACESSO VIP</div>
-    <div class="subtitle">Plataformas exclusivas com bônus</div>
-    <div class="status">
+    <div class="sub">Plataformas exclusivas com bônus</div>
+    <div class="dot-wrap">
       <div class="dot"></div>
-      <span id="statusText">Acessando plataforma...</span>
+      <span id="msg">Abrindo...</span>
     </div>
-    <div class="progress-bar">
-      <div class="progress-fill"></div>
-    </div>
-  </div>
-
-  <!-- ── TELA 2: Instruções Instagram ── -->
-  <div id="screen-instagram">
-
-    <!-- Faixa de alerta -->
-    <div class="insta-alert-bar">
-      <span class="insta-alert-icon">⚠️</span>
-      <span>Você está no navegador do Instagram</span>
-    </div>
-
-    <!-- Card principal -->
-    <div class="insta-card">
-      <img
-        class="insta-logo"
-        src="https://acessoplatafomas.com.br/icons/icon-192.png"
-        alt="ACESSO VIP"
-        onerror="this.style.display='none'"
-      />
-      <div class="insta-app-name">ACESSO VIP</div>
-      <div class="insta-app-sub">Plataformas exclusivas com bônus</div>
-
-      <!-- Aviso -->
-      <div class="insta-warning-box">
-        <div class="insta-warning-title">❌ Por que não funciona aqui?</div>
-        <div class="insta-warning-text">
-          O navegador interno do Instagram <strong>não permite instalar aplicativos</strong>, ativar notificações ou adicionar à tela inicial.<br><br>
-          Para instalar corretamente, você precisa abrir no <strong>Chrome</strong>.
-        </div>
-      </div>
-
-      <!-- Botão Chrome -->
-      <button class="btn-chrome" id="btnOpenChrome" onclick="openInChrome()">
-        <div class="chrome-icon"></div>
-        ABRIR NO CHROME
-      </button>
-
-      <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px">
-        Toque no botão acima para continuar
-      </div>
-    </div>
-
-    <!-- Passos manuais (fallback) -->
-    <div class="insta-steps">
-      <div class="insta-steps-title">Ou siga esses passos manualmente</div>
-
-      <div class="step-item">
-        <div class="step-num">1</div>
-        <div class="step-text">
-          Toque nos <strong>três pontinhos ···</strong> no canto superior direito desta tela
-        </div>
-      </div>
-
-      <div class="step-item">
-        <div class="step-num">2</div>
-        <div class="step-text">
-          Selecione <strong>"Abrir no navegador externo"</strong> ou <strong>"Abrir no Chrome"</strong>
-        </div>
-      </div>
-
-      <div class="step-item">
-        <div class="step-num">3</div>
-        <div class="step-text">
-          No Chrome, toque em <strong>"INSTALAR"</strong> para adicionar o app à tela inicial
-        </div>
-      </div>
-
-    </div>
-
-    <div class="insta-footer">
-      ACESSO VIP · Instalação gratuita · Funciona como app nativo
-    </div>
-  </div>
-
-  <!-- Seta animada apontando para o menu "..." -->
-  <div class="arrow-hint" id="arrowHint">
-    <div class="arrow-hint-text">Toque aqui ···</div>
-    <div class="arrow-up">↑</div>
+    <button class="btn-fallback" id="btnFallback" onclick="tryChrome()">
+      Abrir no Chrome →
+    </button>
   </div>
 
   <script>
-    (function () {
-      var TARGET = 'https://acessoplatafomas.com.br';
-      var ua = navigator.userAgent || '';
+  (function(){
+    var TARGET = 'https://acessoplatafomas.com.br';
+    var ua = navigator.userAgent || '';
+    var isAndroid = /Android/i.test(ua);
+    var isIOS     = /iPhone|iPad|iPod/i.test(ua);
+    var isInWebView = /Instagram|FBAN|FBAV|TikTok|musical_ly/i.test(ua);
 
-      // ── Detecção de ambiente ──────────────────────────────────
-      var isInstagram = ua.indexOf('Instagram') !== -1;
-      var isFacebook  = ua.indexOf('FBAN') !== -1 || ua.indexOf('FBAV') !== -1;
-      var isTikTok    = ua.indexOf('musical_ly') !== -1 || ua.indexOf('TikTok') !== -1;
-      var isInWebView = isInstagram || isFacebook || isTikTok;
-      var isAndroid   = /Android/i.test(ua);
-      var isIOS       = /iPhone|iPad|iPod/i.test(ua);
+    // Constrói a URL intent:// que dispara o diálogo nativo do Android
+    // "Deseja abrir com Chrome?" — 1 toque, sem página intermediária
+    function intentUrl(pkg) {
+      return 'intent://' + TARGET.replace(/^https?:\/\//, '') +
+        '#Intent;scheme=https;package=' + pkg + ';end';
+    }
 
-      // ── Função de abertura no Chrome ─────────────────────────
-      window.openInChrome = function () {
-        var btn = document.getElementById('btnOpenChrome');
-        if (btn) {
-          btn.textContent = '⏳ Abrindo Chrome...';
-          btn.style.opacity = '0.7';
-        }
+    function tryChrome() {
+      if (isAndroid) {
+        // 1ª tentativa: Chrome direto (dispara diálogo nativo do Android)
+        window.location.href = intentUrl('com.android.chrome');
 
-        if (isAndroid) {
-          // Estratégia 1: intent:// com package do Chrome
-          var intentUrl = 'intent://' + TARGET.replace(/^https?:\/\//, '') +
-            '#Intent;scheme=https;package=com.android.chrome;end';
-          try { window.location.href = intentUrl; } catch(e) {}
+        // 2ª tentativa (400ms): navegador padrão do Android
+        setTimeout(function(){
+          window.location.href = intentUrl('com.google.android.browser');
+        }, 400);
 
-          // Estratégia 2: intent:// com browser padrão
-          setTimeout(function () {
-            var intentDefault = 'intent://' + TARGET.replace(/^https?:\/\//, '') +
-              '#Intent;scheme=https;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end';
-            try { window.location.href = intentDefault; } catch(e) {}
-          }, 600);
+        // 3ª tentativa (900ms): qualquer navegador via VIEW action
+        setTimeout(function(){
+          window.location.href =
+            'intent://' + TARGET.replace(/^https?:\/\//, '') +
+            '#Intent;scheme=https;action=android.intent.action.VIEW;' +
+            'category=android.intent.category.BROWSABLE;end';
+        }, 900);
 
-          // Estratégia 3: _blank trick
-          setTimeout(function () {
-            var a = document.createElement('a');
-            a.href = TARGET;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-          }, 1200);
-
-          // Estratégia 4: clipboard + instrução
-          setTimeout(function () {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(TARGET).then(function () {
-                var btn2 = document.getElementById('btnOpenChrome');
-                if (btn2) {
-                  btn2.innerHTML = '📋 Link copiado! Cole no Chrome';
-                  btn2.style.background = 'linear-gradient(135deg,#059669,#047857)';
-                  btn2.style.opacity = '1';
-                  btn2.style.animation = 'none';
-                }
-              }).catch(function(){});
-            }
-          }, 2500);
-
-        } else if (isIOS) {
-          // iOS: x-safari scheme
-          try { window.location.href = 'x-safari-' + TARGET; } catch(e) {}
-
-          setTimeout(function () {
-            try { window.location.href = TARGET; } catch(e) {}
-          }, 600);
-
-        } else {
-          // Outro: redirect direto
-          window.location.href = TARGET;
-        }
-      };
-
-      // ── Lógica principal ─────────────────────────────────────
-      if (isInWebView) {
-        // Mostrar tela do Instagram imediatamente
-        document.getElementById('screen-loading').style.display = 'none';
-        var screenInsta = document.getElementById('screen-instagram');
-        screenInsta.style.display = 'flex';
-
-        // Mostrar seta apontando para o menu "..." após 1.5s
-        setTimeout(function () {
-          var arrow = document.getElementById('arrowHint');
-          if (arrow) arrow.style.display = 'flex';
+        // 4ª tentativa (1.5s): _blank trick
+        setTimeout(function(){
+          var a = document.createElement('a');
+          a.href = TARGET; a.target = '_blank'; a.rel = 'noopener';
+          document.body.appendChild(a); a.click(); document.body.removeChild(a);
         }, 1500);
 
-        // Tentar abertura automática no Chrome (silenciosa) em paralelo
-        // Só para Android — iOS não suporta
-        if (isAndroid) {
-          setTimeout(function () {
-            var intentUrl = 'intent://' + TARGET.replace(/^https?:\/\//, '') +
-              '#Intent;scheme=https;package=com.android.chrome;end';
-            try { window.location.href = intentUrl; } catch(e) {}
-          }, 800);
-        }
-
+      } else if (isIOS) {
+        try { window.location.href = 'x-safari-' + TARGET; } catch(e){}
+        setTimeout(function(){ window.location.replace(TARGET); }, 500);
       } else {
-        // Navegador normal: redirecionar direto
-        setTimeout(function () {
-          window.location.replace(TARGET);
-        }, 1500);
+        window.location.replace(TARGET);
       }
+    }
 
-    })();
+    if (isInWebView) {
+      // Disparar imediatamente — sem nenhuma tela intermediária
+      tryChrome();
+
+      // Se após 2.5s ainda estiver aqui, mostrar botão de 1 toque
+      setTimeout(function(){
+        document.getElementById('msg').textContent = 'Toque para continuar';
+        document.getElementById('btnFallback').style.display = 'block';
+      }, 2500);
+
+    } else {
+      // Já está no Chrome/Safari — redirecionar direto
+      window.location.replace(TARGET);
+    }
+  })();
   </script>
 </body>
 </html>
