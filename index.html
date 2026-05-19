@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // Se o app estiver com cache antigo, limpa e recarrega
 (function() {
-  var APP_VERSION = 'v74';
+  var APP_VERSION = 'v75';
   try {
     var storedVersion = localStorage.getItem('app_version');
     if (storedVersion !== APP_VERSION) {
@@ -4650,7 +4650,7 @@ let deferredPrompt = null;
 let isInstalled = window.matchMedia('(display-mode: standalone)').matches
   || window.navigator.standalone === true
   || document.referrer.includes('android-app://')
-  || localStorage.getItem('av_installed') === '1';
+  || window.location.search.indexOf('pwa=1') !== -1;
 let notifPermission = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
 let adminLoggedIn = false;
 let adminHighFilterMode = 'all'; // 'all' | 'high' | 'normal'
@@ -4945,13 +4945,14 @@ function renderShare() {
 // ===== TAB NAVIGATION =====
 // Função global de verificação de instalação
 function _appInstalado() {
-  // Critério: modo standalone OU flag salva após instalação/aceitação do prompt
+  // Critério REAL: apenas modo standalone (SO) ou parâmetro de deep link pós-instalação
+  // localStorage NÃO é aceito — pode estar salvo mesmo sem o app instalado
   var standalone = window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true
     || document.referrer.includes('android-app://');
-  var flagSalva = localStorage.getItem('av_installed') === '1';
+  // ?pwa=1 é injetado pelo Service Worker ao abrir o app instalado
   var paramPwa = window.location.search.indexOf('pwa=1') !== -1;
-  return standalone || flagSalva || paramPwa;
+  return standalone || paramPwa;
 }
 // Função global de bloqueio (usada pelo sinalAtivoBanner e outros)
 window._irParaAbaHot = function() {
@@ -4993,7 +4994,7 @@ tabs.forEach(tab => {
   tab.addEventListener('click', () => {
     const name = tab.dataset.tab;
     // BLOQUEIO FUNCIONAL COMPLETO: bloquear todas as abas exceto home
-    var _abasBloqueadas = ['hot', 'favs', 'share', 'ranking'];
+    var _abasBloqueadas = ['hot', 'favs', 'share', 'ranking', 'sinais'];
     if (_abasBloqueadas.indexOf(name) !== -1 && !_appInstalado()) {
       var popup = document.getElementById('installBlockPopup');
       if (popup) popup.classList.remove('hidden');
@@ -6556,7 +6557,7 @@ function init() {
   
   // VERSÃO DO CACHE: v74 — qualquer versão diferente limpa o localStorage
   // Isso garante que dispositivos com cache antigo (58 plataformas) sejam atualizados
-  var CACHE_VERSION = 'v74';
+  var CACHE_VERSION = 'v75';
   try {
     var cacheVer = _ls.get('av_cache_version');
     if (cacheVer !== CACHE_VERSION) {
@@ -7616,11 +7617,11 @@ if (_adminWrapNav) {
   <!-- POP-UP DE INSTALAÇÃO (central, aparece ao clicar em área bloqueada) -->
   <div id="installBlockPopup" class="hidden">
     <div class="install-popup-box">
-      <button class="install-popup-x" id="installPopupClose" aria-label="Fechar">&#x2715;</button>
-      <span class="install-popup-icon">&#x1F512;</span>
-      <div class="install-popup-title">Instale para liberar o acesso</div>
-      <div class="install-popup-sub">Esta &#xe1;rea est&#xe1; dispon&#xed;vel somente no aplicativo instalado. Instale agora &#x2014; &#xe9; gr&#xe1;tis e leva menos de 30 segundos!</div>
+      <span class="install-popup-icon">&#x1F4F2;</span>
+      <div class="install-popup-title">Instale o app para continuar</div>
+      <div class="install-popup-sub">&#x1F3C6; Sinais, plataformas e ranking est&#xe3;o dispon&#xed;veis somente no aplicativo instalado.<br><br>&#x2705; Gr&#xe1;tis &nbsp;&#x2022;&nbsp; &#x26A1; Menos de 30 segundos &nbsp;&#x2022;&nbsp; &#x1F514; Notifica&#xe7;&#xf5;es em tempo real</div>
       <button class="install-popup-btn" id="installPopupBtn">&#x1F4F2; INSTALAR AGORA &#x2014; &#xC9; GR&#xC1;TIS</button>
+      <div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,0.35);text-align:center">Ap&#xf3;s instalar, o acesso ser&#xe1; liberado automaticamente</div>
     </div>
   </div>
   <!-- Overlay legado (oculto) -->
@@ -7905,10 +7906,10 @@ function clearPlatformMetrics() {
   
   // Verificar se já instalou (standalone OU flag salva OU param ?pwa=1)
   function jaInstalou() {
+    // Apenas critérios reais do SO — sem localStorage
     return window.matchMedia('(display-mode: standalone)').matches
       || window.navigator.standalone === true
       || document.referrer.includes('android-app://')
-      || localStorage.getItem('av_installed') === '1'
       || window.location.search.indexOf('pwa=1') !== -1;
   }
   
@@ -7994,13 +7995,25 @@ function clearPlatformMetrics() {
     }
   }
   
-  // Inicializar bloqueio visual
+  // Inicializar bloqueio visual + mostrar popup obrigatório automaticamente
   if (!jaInstalou()) {
     // Aplicar após DOM pronto
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', aplicarBloqueioVisual);
+      document.addEventListener('DOMContentLoaded', function() {
+        aplicarBloqueioVisual();
+        // Mostrar popup obrigatório automaticamente após 1.2s
+        setTimeout(function() {
+          var popup = document.getElementById('installBlockPopup');
+          if (popup) popup.classList.remove('hidden');
+        }, 1200);
+      });
     } else {
       aplicarBloqueioVisual();
+      // Mostrar popup obrigatório automaticamente após 1.2s
+      setTimeout(function() {
+        var popup = document.getElementById('installBlockPopup');
+        if (popup) popup.classList.remove('hidden');
+      }, 1200);
     }
     
     // Expor função globalmente para uso externo (faixa, bolha, etc.)
@@ -8016,10 +8029,8 @@ function clearPlatformMetrics() {
     // NOTA: O bloqueio funcional da aba hot está diretamente no handler TAB NAVIGATION
     // e no onclick do sinalAtivoBanner via window._irParaAbaHot()
     
-    // Fechar pop-up ao clicar no overlay (fundo escuro)
-    document.addEventListener('click', function(e) {
-      if (e.target.id === 'installBlockPopup') fecharPopup();
-    });
+    // Bloqueio obrigatório: NÃO fechar ao clicar no overlay
+    // O usuário DEVE instalar para continuar
   } else {
     // App instalado: garantir que bloqueio visual está removido
     removerBloqueioVisual();
