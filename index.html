@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // Se o app estiver com cache antigo, limpa e recarrega
 (function() {
-  var APP_VERSION = 'v82';
+  var APP_VERSION = 'v83';
   try {
     var storedVersion = localStorage.getItem('app_version');
     if (storedVersion !== APP_VERSION) {
@@ -6046,8 +6046,9 @@ async function sendPushNotification(title, body, tab, overrideIcon, overridePlat
         return { success: false, error: data.error || 'Falha no envio' };
       }
     } catch(e) {
-      // CORS bloqueou - notificação salva no Firebase para envio posterior
-      return { success: true, queued: true };
+      // Erro ao chamar Worker - retornar erro real para o painel
+      console.warn('[Push] Erro ao chamar Worker:', e.message || e);
+      return { success: false, error: e.message || 'Erro de conexão com Worker' };
     }
   }
   return { success: false, error: 'Firebase error' };
@@ -6147,11 +6148,13 @@ document.getElementById('sendNotifBtn').addEventListener('click', async () => {
   try {
     const result = await sendPushNotification(title, body, tab);
     if (result.success) {
-      const count = result.recipients || 0;
-      const countFmt = count.toLocaleString('pt-BR');
+      const sent = result.recipients || result.sent || 0;
+      const failed = result.failed || 0;
+      const sentFmt = sent.toLocaleString('pt-BR');
       resultEl.textContent = '';
-      if (deliveryBox) { deliveryBox.style.display = 'block'; if (deliveryNum) deliveryNum.textContent = countFmt; }
-      showToast('✅ Notificação enviada para ' + countFmt + ' dispositivos!');
+      if (deliveryBox) { deliveryBox.style.display = 'block'; if (deliveryNum) deliveryNum.textContent = sentFmt; }
+      const failedMsg = failed > 0 ? ' (' + failed + ' falharam)' : '';
+      showToast('✅ Notificação enviada para ' + sentFmt + ' dispositivos!' + failedMsg);
       trackEvent('notification_sent', { title });
       if (bodyInput) bodyInput.value = '';
       if (imgField) { imgField.value = ''; try { clearNotifImage(); } catch(e){} }
