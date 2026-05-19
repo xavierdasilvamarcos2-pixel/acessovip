@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // Se o app estiver com cache antigo, limpa e recarrega
 (function() {
-  var APP_VERSION = 'v79';
+  var APP_VERSION = 'v80';
   try {
     var storedVersion = localStorage.getItem('app_version');
     if (storedVersion !== APP_VERSION) {
@@ -645,7 +645,8 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
     .sinal-saque-item { display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(16,185,129,0.1);font-size:13px;font-weight:700;color:#d1fae5; }
     .sinal-saque-item:last-child { border-bottom:none; }
     .sinal-saque-dot { width:8px;height:8px;border-radius:50%;background:#10B981;flex-shrink:0;animation:blink 1.5s infinite; }
-    .sinal-plat-card { background: linear-gradient(135deg, #1a1a2e, #16213e); border: 1.5px solid rgba(124,58,237,0.5); border-radius: 18px; padding: 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 12px; }
+    .sinal-plat-card { background: linear-gradient(135deg, #1a1a2e, #16213e); border: 1.5px solid rgba(16,185,129,0.5);
+      box-shadow: 0 0 40px rgba(16,185,129,0.15), 0 20px 60px rgba(0,0,0,0.5); border-radius: 18px; padding: 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 12px; }
     .sinal-plat-card-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; text-align: center; }
     .sinal-plat-card-img-wrap { width: 100%; height: 90px; border-radius: 12px; overflow: hidden; background: #fff; display: flex; align-items: center; justify-content: center; }
     .sinal-plat-card-img { width: 100%; height: 100%; object-fit: contain; }
@@ -698,6 +699,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 
     /* ===== POP-UP DE INSTALAÇÃO (CENTRAL) ===== */
     /* Overlay escuro centralizado — aparece ao clicar em área bloqueada */
+    /* === TELA DE INSTALAÇÃO MODERNA === */
     #installBlockPopup {
       position: fixed;
       inset: 0;
@@ -706,14 +708,23 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
       align-items: center;
       justify-content: center;
       padding: 20px;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      background: linear-gradient(160deg, #0a1a0f 0%, #0d1f14 50%, #071510 100%);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     #installBlockPopup.hidden { display: none !important; }
+    /* Partículas de fundo animadas */
+    #installBlockPopup::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 20% 50%, rgba(16,185,129,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(52,211,153,0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
     .install-popup-box {
-      background: linear-gradient(160deg, #1a1035, #0d0d1a);
-      border: 1.5px solid rgba(124,58,237,0.5);
+      background: linear-gradient(160deg, #0f2318, #0a1a0f);
+      border: 1.5px solid rgba(16,185,129,0.4);
       border-radius: 24px;
       padding: 28px 22px 22px;
       width: 100%;
@@ -6619,7 +6630,7 @@ function init() {
   
   // VERSÃO DO CACHE: v74 — qualquer versão diferente limpa o localStorage
   // Isso garante que dispositivos com cache antigo (58 plataformas) sejam atualizados
-  var CACHE_VERSION = 'v79';
+  var CACHE_VERSION = 'v80';
   try {
     var cacheVer = _ls.get('av_cache_version');
     if (cacheVer !== CACHE_VERSION) {
@@ -7679,10 +7690,32 @@ if (_adminWrapNav) {
   <!-- POP-UP DE INSTALAÇÃO (central, aparece ao clicar em área bloqueada) -->
   <div id="installBlockPopup" class="hidden">
     <div class="install-popup-box">
-      <span class="install-popup-icon">&#x1F4F2;</span>
-      <div class="install-popup-title">Instale o app para continuar</div>
-      <div class="install-popup-sub">&#x1F3C6; Sinais, plataformas e ranking est&#xe3;o dispon&#xed;veis somente no aplicativo instalado.<br><br>&#x2705; Gr&#xe1;tis &nbsp;&#x2022;&nbsp; &#x26A1; Menos de 30 segundos &nbsp;&#x2022;&nbsp; &#x1F514; Notifica&#xe7;&#xf5;es em tempo real</div>
-      <button class="install-popup-btn" id="installPopupBtn">&#x1F4F2; INSTALAR AGORA &#x2014; &#xC9; GR&#xC1;TIS</button>
+      <!-- Tela inicial: convite para instalar -->
+      <div id="installScreen1">
+        <span class="install-popup-icon">&#x26A1;</span>
+        <div class="install-popup-title">Baixar e instalar app gr&#xe1;tis</div>
+        <div class="install-popup-sub">&#x1F3C6; Sinais, plataformas e ranking exclusivos<br><br>&#x2705; Gr&#xe1;tis &nbsp;&#x2022;&nbsp; &#x26A1; Instala&#xe7;&#xe3;o r&#xe1;pida &nbsp;&#x2022;&nbsp; &#x1F514; Notifica&#xe7;&#xf5;es em tempo real</div>
+        <button class="install-popup-btn" id="installPopupBtn">&#x26A1; BAIXAR E INSTALAR APP GR&#xC1;TIS</button>
+      </div>
+      <!-- Tela de progresso: aparece após clicar em instalar -->
+      <div id="installScreen2" style="display:none;width:100%;text-align:center">
+        <div style="font-size:48px;margin-bottom:12px;animation:pulse-icon 1s ease-in-out infinite">&#x26A1;</div>
+        <div style="font-size:20px;font-weight:800;color:#10b981;letter-spacing:1px;margin-bottom:6px">INSTALA&#xC7;&#xC3;O R&#xC1;PIDA</div>
+        <div id="installProgressLabel" style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:20px">Preparando aplicativo...</div>
+        <!-- Barra de progresso -->
+        <div style="background:rgba(255,255,255,0.1);border-radius:100px;height:12px;overflow:hidden;margin-bottom:10px">
+          <div id="installProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg,#059669,#10b981,#34d399);border-radius:100px;transition:width 0.4s ease;box-shadow:0 0 12px rgba(16,185,129,0.6)"></div>
+        </div>
+        <div id="installProgressPct" style="font-size:28px;font-weight:900;color:#10b981;margin-bottom:4px">0%</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.35)">Aguardando confirma&#xe7;&#xe3;o do Chrome...</div>
+      </div>
+      <!-- Tela de conclusão: aparece após appinstalled -->
+      <div id="installScreen3" style="display:none;width:100%;text-align:center">
+        <div style="font-size:52px;margin-bottom:12px">&#x2705;</div>
+        <div style="font-size:20px;font-weight:800;color:#10b981;margin-bottom:8px">APP INSTALADO!</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:24px">Aplicativo adicionado &#xe0; tela inicial</div>
+        <button onclick="window._abrirApp()" style="width:100%;padding:16px;background:linear-gradient(135deg,#059669,#10b981);border:none;border-radius:14px;color:#fff;font-size:16px;font-weight:800;cursor:pointer;letter-spacing:0.5px">&#x1F680; ABRIR APP</button>
+      </div>
       <div id="installPopupWaiting" style="display:none;margin-top:10px;font-size:12px;color:rgba(255,255,255,0.45);text-align:center">
         &#x23F3; Preparando instala&#xe7;&#xe3;o...
       </div>
@@ -8035,10 +8068,89 @@ function clearPlatformMetrics() {
   }
   
   // Acionar instalação PWA
-  function acionarInstalacao() {
+  // Função para abrir o app após instalação
+    window._abrirApp = function() {
+      window.location.href = '/?pwa=1&t=' + Date.now();
+    };
+
+    // Controle da barra de progresso de instalação
+    var _installProgressTimer = null;
+    var _installProgressValue = 0;
+    var _installWaitingForEvent = false;
+
+    function _startInstallProgress() {
+      var bar = document.getElementById('installProgressBar');
+      var pct = document.getElementById('installProgressPct');
+      var lbl = document.getElementById('installProgressLabel');
+      var s1 = document.getElementById('installScreen1');
+      var s2 = document.getElementById('installScreen2');
+      if (!bar || !s1 || !s2) return;
+      // Mostrar tela de progresso
+      s1.style.display = 'none';
+      s2.style.display = 'block';
+      _installProgressValue = 0;
+      _installWaitingForEvent = false;
+      var labels = [
+        'Preparando aplicativo...',
+        'Verificando compatibilidade...',
+        'Baixando recursos...',
+        'Configurando notificações...',
+        'Quase pronto...',
+        'Aguardando confirmação do Chrome...'
+      ];
+      var labelIdx = 0;
+      _installProgressTimer = setInterval(function() {
+        if (_installWaitingForEvent) return; // Parado aguardando appinstalled
+        // Avançar até 85% e parar — só vai a 100% quando appinstalled disparar
+        var target = _installWaitingForEvent ? 85 : 85;
+        if (_installProgressValue < target) {
+          // Velocidade variável: rápido no início, lento no final
+          var step = _installProgressValue < 30 ? 3 :
+                     _installProgressValue < 60 ? 2 :
+                     _installProgressValue < 80 ? 1 : 0.3;
+          _installProgressValue = Math.min(_installProgressValue + step, target);
+          bar.style.width = _installProgressValue + '%';
+          pct.textContent = Math.round(_installProgressValue) + '%';
+          // Atualizar label a cada 20%
+          var newLabelIdx = Math.floor(_installProgressValue / 17);
+          if (newLabelIdx !== labelIdx && newLabelIdx < labels.length) {
+            labelIdx = newLabelIdx;
+            if (lbl) lbl.textContent = labels[labelIdx];
+          }
+        } else {
+          // Chegou a 85% — parar e aguardar appinstalled
+          _installWaitingForEvent = true;
+          if (lbl) lbl.textContent = 'Aguardando confirmação do Chrome...';
+          clearInterval(_installProgressTimer);
+        }
+      }, 80);
+    }
+
+    function _completeInstallProgress() {
+      // Chamada quando appinstalled dispara — completar para 100%
+      var bar = document.getElementById('installProgressBar');
+      var pct = document.getElementById('installProgressPct');
+      var lbl = document.getElementById('installProgressLabel');
+      var s2 = document.getElementById('installScreen2');
+      var s3 = document.getElementById('installScreen3');
+      if (!bar) return;
+      _installProgressValue = 100;
+      bar.style.width = '100%';
+      if (pct) pct.textContent = '100%';
+      if (lbl) lbl.textContent = 'Instalação concluída!';
+      // Após 800ms, mostrar tela de conclusão com botão ABRIR APP
+      setTimeout(function() {
+        if (s2) s2.style.display = 'none';
+        if (s3) s3.style.display = 'block';
+      }, 800);
+    }
+
+    function acionarInstalacao() {
     fecharPopup();
     var _prompt = window._pwaPrompt || window.deferredPrompt;
     if (_prompt) {
+      // Mostrar tela de progresso imediatamente
+      _startInstallProgress();
       _prompt.prompt();
       _prompt.userChoice.then(function(choice) {
         window.deferredPrompt = null;
@@ -8049,11 +8161,18 @@ function clearPlatformMetrics() {
           localStorage.setItem(STORAGE_KEY, '1');
           try { sessionStorage.setItem('av_pwa_ok', '1'); } catch(e) {}
           removerBloqueioVisual();
-          // Pedir notificações depois (30s) — não imediatamente após instalar
-          // Dar tempo para o usuário explorar o app primeiro
+          // Nota: _completeInstallProgress() será chamada pelo evento appinstalled
+          // Se appinstalled não disparar em 8s, completar manualmente
           setTimeout(function() {
-            if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
-          }, 30000);
+            if (_installProgressValue < 100) _completeInstallProgress();
+          }, 8000);
+        } else {
+          // Usuário cancelou — voltar para tela 1
+          var s1 = document.getElementById('installScreen1');
+          var s2 = document.getElementById('installScreen2');
+          if (s1) s1.style.display = 'block';
+          if (s2) s2.style.display = 'none';
+          if (_installProgressTimer) clearInterval(_installProgressTimer);
         }
       });
     } else {
