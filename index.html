@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // Se o app estiver com cache antigo, limpa e recarrega
 (function() {
-  var APP_VERSION = 'v77';
+  var APP_VERSION = 'v78';
   try {
     var storedVersion = localStorage.getItem('app_version');
     if (storedVersion !== APP_VERSION) {
@@ -4970,7 +4970,7 @@ function _appInstalado() {
   // Critério 3: flag de sessão (instalou nesta sessão ou na anterior imediata)
   // Diferente do localStorage permanente — esta flag é limpa na troca de versão
   var flagSessao = sessionStorage.getItem('av_pwa_ok') === '1'
-    || localStorage.getItem('av_installed_v77') === '1';
+    || localStorage.getItem('av_installed_v78') === '1';
   return standalone || paramPwa || flagSessao;
 }
 // Função global de bloqueio (usada pelo sinalAtivoBanner e outros)
@@ -5224,7 +5224,7 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
   window.addEventListener('appinstalled', function() {
     isInstalled = true;
     _ls.set('av_installed', '1');
-    _ls.set('av_installed_v77', '1');
+    _ls.set('av_installed_v78', '1');
     _ls.set('av_install_counted', '1');
     // Flag de sessão — para liberar acesso imediatamente
     try { sessionStorage.setItem('av_pwa_ok', '1'); } catch(e) {}
@@ -5233,6 +5233,9 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     _ls.set('av_installs', installCount);
     showToast('✅ App instalado! Abrindo...', 3000);
     trackEvent('pwa_installed');
+    setTimeout(function() {
+      if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
+    }, 3000);
     gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' });
     // Remover bloqueio imediatamente (sem esperar standalone)
     if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
@@ -6433,17 +6436,34 @@ if ('serviceWorker' in navigator) {
 }
 
 // ===== WELCOME MODAL =====
+// ===== PEDIDO DE NOTIFICACOES =====
+function mostrarPedidoNotificacoes() {
+  if (typeof Notification === 'undefined') return;
+  if (Notification.permission === 'granted') return;
+  if (Notification.permission === 'denied') return;
+  try { if (sessionStorage.getItem('av_notif_asked_s') === '1') return; } catch(e) {}
+  try { sessionStorage.setItem('av_notif_asked_s', '1'); } catch(e) {}
+  var wm = document.getElementById('welcomeModal');
+  if (wm) { wm.classList.add('open'); wm.style.display = ''; return; }
+  var nb = document.getElementById('notifBanner');
+  if (nb) { nb.style.display = 'flex'; return; }
+  if (typeof requestNotificationPermission === 'function') requestNotificationPermission();
+}
+
 function checkWelcomeModal() {
   updateNotifBtn();
   // Se está instalado e notificações não foram ativadas: mostrar pedido
   var jaInstalado = window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true
     || document.referrer.includes('android-app://')
-    || window.location.search.indexOf('pwa=1') !== -1;
-  if (!jaInstalado) return; // Não instalado: não pedir notificações
-  var notifPerm = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
-  if (notifPerm === 'granted') return; // Já ativou: não mostrar
-  // Mostrar pedido após 2 segundos (deixar o app carregar primeiro)
+    || window.location.search.indexOf('pwa=1') !== -1
+    || (function(){ try { return sessionStorage.getItem('av_pwa_ok')==='1'; } catch(e){ return false; } })()
+    || localStorage.getItem('av_installed_v78') === '1'
+    || localStorage.getItem('av_installed_v78') === '1';
+  if (!jaInstalado) return;
+  var notifPerm = (typeof Notification !== 'undefined') ? Notification.permission : 'default';
+  if (notifPerm === 'granted') return;
+  if (notifPerm === 'denied') return;
   setTimeout(mostrarPedidoNotificacoes, 2000);
 }
 
@@ -6579,7 +6599,7 @@ function init() {
   
   // VERSÃO DO CACHE: v74 — qualquer versão diferente limpa o localStorage
   // Isso garante que dispositivos com cache antigo (58 plataformas) sejam atualizados
-  var CACHE_VERSION = 'v77';
+  var CACHE_VERSION = 'v78';
   try {
     var cacheVer = _ls.get('av_cache_version');
     if (cacheVer !== CACHE_VERSION) {
@@ -7936,7 +7956,7 @@ function clearPlatformMetrics() {
       || document.referrer.includes('android-app://');
     var paramPwa = window.location.search.indexOf('pwa=1') !== -1;
     var flagSessao = sessionStorage.getItem('av_pwa_ok') === '1'
-      || localStorage.getItem('av_installed_v77') === '1';
+      || localStorage.getItem('av_installed_v78') === '1';
     return standalone || paramPwa || flagSessao;
   }
   
@@ -8005,7 +8025,7 @@ function clearPlatformMetrics() {
         window._pwaPrompt = null;
         if (choice.outcome === 'accepted') {
           localStorage.setItem('av_installed', '1');
-          localStorage.setItem('av_installed_v77', '1');
+          localStorage.setItem('av_installed_v78', '1');
           localStorage.setItem(STORAGE_KEY, '1');
           try { sessionStorage.setItem('av_pwa_ok', '1'); } catch(e) {}
           removerBloqueioVisual();
