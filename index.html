@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // Se o app estiver com cache antigo, limpa e recarrega
 (function() {
-  var APP_VERSION = 'v76';
+  var APP_VERSION = 'v77';
   try {
     var storedVersion = localStorage.getItem('app_version');
     if (storedVersion !== APP_VERSION) {
@@ -4961,14 +4961,17 @@ function renderShare() {
 // ===== TAB NAVIGATION =====
 // Função global de verificação de instalação
 function _appInstalado() {
-  // Critério REAL: apenas modo standalone (SO) ou parâmetro de deep link pós-instalação
-  // localStorage NÃO é aceito — pode estar salvo mesmo sem o app instalado
+  // Critério 1: modo standalone real (app aberto como PWA instalado)
   var standalone = window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true
     || document.referrer.includes('android-app://');
-  // ?pwa=1 é injetado pelo Service Worker ao abrir o app instalado
+  // Critério 2: parâmetro pwa=1 (injetado após instalação)
   var paramPwa = window.location.search.indexOf('pwa=1') !== -1;
-  return standalone || paramPwa;
+  // Critério 3: flag de sessão (instalou nesta sessão ou na anterior imediata)
+  // Diferente do localStorage permanente — esta flag é limpa na troca de versão
+  var flagSessao = sessionStorage.getItem('av_pwa_ok') === '1'
+    || localStorage.getItem('av_installed_v76') === '1';
+  return standalone || paramPwa || flagSessao;
 }
 // Função global de bloqueio (usada pelo sinalAtivoBanner e outros)
 window._irParaAbaHot = function() {
@@ -5100,7 +5103,6 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
   var isInStandalone = window.navigator.standalone === true
     || window.matchMedia('(display-mode: standalone)').matches
     || document.referrer.includes('android-app://')
-    || localStorage.getItem('av_installed') === '1'
     || window.location.search.indexOf('pwa=1') !== -1;
 
   // Compatibilidade: manter deferredPrompt global para outros scripts
@@ -5222,7 +5224,10 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
   window.addEventListener('appinstalled', function() {
     isInstalled = true;
     _ls.set('av_installed', '1');
+    _ls.set('av_installed_v76', '1');
     _ls.set('av_install_counted', '1');
+    // Flag de sessão — para liberar acesso imediatamente
+    try { sessionStorage.setItem('av_pwa_ok', '1'); } catch(e) {}
     hidePwaBanner();
     installCount++;
     _ls.set('av_installs', installCount);
@@ -6434,7 +6439,6 @@ function checkWelcomeModal() {
   var jaInstalado = window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true
     || document.referrer.includes('android-app://')
-    || localStorage.getItem('av_installed') === '1'
     || window.location.search.indexOf('pwa=1') !== -1;
   if (!jaInstalado) return; // Não instalado: não pedir notificações
   var notifPerm = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
@@ -6575,7 +6579,7 @@ function init() {
   
   // VERSÃO DO CACHE: v74 — qualquer versão diferente limpa o localStorage
   // Isso garante que dispositivos com cache antigo (58 plataformas) sejam atualizados
-  var CACHE_VERSION = 'v76';
+  var CACHE_VERSION = 'v77';
   try {
     var cacheVer = _ls.get('av_cache_version');
     if (cacheVer !== CACHE_VERSION) {
@@ -7927,11 +7931,13 @@ function clearPlatformMetrics() {
   
   // Verificar se já instalou (standalone OU flag salva OU param ?pwa=1)
   function jaInstalou() {
-    // Apenas critérios reais do SO — sem localStorage
-    return window.matchMedia('(display-mode: standalone)').matches
+    var standalone = window.matchMedia('(display-mode: standalone)').matches
       || window.navigator.standalone === true
-      || document.referrer.includes('android-app://')
-      || window.location.search.indexOf('pwa=1') !== -1;
+      || document.referrer.includes('android-app://');
+    var paramPwa = window.location.search.indexOf('pwa=1') !== -1;
+    var flagSessao = sessionStorage.getItem('av_pwa_ok') === '1'
+      || localStorage.getItem('av_installed_v76') === '1';
+    return standalone || paramPwa || flagSessao;
   }
   
   // Aplicar efeito visual de bloqueio nas áreas
@@ -7999,7 +8005,9 @@ function clearPlatformMetrics() {
         window._pwaPrompt = null;
         if (choice.outcome === 'accepted') {
           localStorage.setItem('av_installed', '1');
+          localStorage.setItem('av_installed_v76', '1');
           localStorage.setItem(STORAGE_KEY, '1');
+          try { sessionStorage.setItem('av_pwa_ok', '1'); } catch(e) {}
           removerBloqueioVisual();
           // Pedir notificações depois (30s) — não imediatamente após instalar
           // Dar tempo para o usuário explorar o app primeiro
