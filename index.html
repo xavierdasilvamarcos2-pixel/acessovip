@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // Se o app estiver com cache antigo, limpa e recarrega
 (function() {
-  var APP_VERSION = 'v73';
+  var APP_VERSION = 'v74';
   try {
     var storedVersion = localStorage.getItem('app_version');
     if (storedVersion !== APP_VERSION) {
@@ -1348,6 +1348,128 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
       color: #fff; font-size: 9px; font-weight: 900;
       padding: 3px 8px; border-radius: 20px;
       letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .ranking-payments-section {
+      margin: 12px 16px 0;
+      background: linear-gradient(135deg, rgba(16,185,129,0.10), rgba(5,150,105,0.05));
+      border: 1.5px solid rgba(16,185,129,0.35);
+      border-radius: 18px;
+      padding: 14px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .ranking-payments-section::before {
+      content: '';
+      position: absolute;
+      top: -30px; right: -30px;
+      width: 100px; height: 100px;
+      background: radial-gradient(circle, rgba(16,185,129,0.18), transparent 70%);
+      pointer-events: none;
+    }
+    .ranking-payments-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .ranking-payments-title {
+      font-size: 13px;
+      font-weight: 900;
+      color: #10B981;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ranking-payments-badge {
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, #059669, #047857);
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+    .ranking-payment-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      margin-bottom: 6px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      transition: background 0.2s;
+    }
+    .ranking-payment-row.paid {
+      background: rgba(16,185,129,0.07);
+      border-color: rgba(16,185,129,0.25);
+    }
+    .ranking-payment-row.pending {
+      background: rgba(245,158,11,0.05);
+      border-color: rgba(245,158,11,0.15);
+    }
+    .ranking-payment-medal {
+      font-size: 20px;
+      min-width: 26px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .ranking-payment-name {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ranking-payment-prize {
+      font-size: 15px;
+      font-weight: 900;
+      color: #FFD700;
+      white-space: nowrap;
+      margin-right: 6px;
+    }
+    .ranking-payment-status-paid {
+      font-size: 10px;
+      font-weight: 800;
+      color: #10B981;
+      background: rgba(16,185,129,0.15);
+      border: 1px solid rgba(16,185,129,0.3);
+      padding: 3px 9px;
+      border-radius: 20px;
+      white-space: nowrap;
+      letter-spacing: 0.3px;
+    }
+    .ranking-payment-status-pending {
+      font-size: 10px;
+      font-weight: 700;
+      color: #F59E0B;
+      background: rgba(245,158,11,0.1);
+      border: 1px solid rgba(245,158,11,0.25);
+      padding: 3px 9px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .ranking-payments-footer {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: rgba(16,185,129,0.08);
+      border: 1px solid rgba(16,185,129,0.15);
+      border-radius: 10px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.55);
+      text-align: center;
+      line-height: 1.5;
+    }
+    .ranking-payments-empty {
+      text-align: center;
+      padding: 14px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      font-style: italic;
     }
     .winner-badge-pending {
       position: absolute; top: 8px; right: 10px;
@@ -2992,6 +3114,20 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
         <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap">
           <div class="ranking-week-badge" id="rankingWeekBadge">Semana atual</div>
           <div class="ranking-week-badge" style="background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.4);color:#f87171">⏱ Encerra em: <span id="rankingCountdown" style="font-weight:900">—</span></div>
+        </div>
+      </div>
+
+      <!-- ══ PAGAMENTOS DA SEMANA ══ -->
+      <div class="ranking-payments-section" id="rankingPaymentsSection" style="display:none">
+        <div class="ranking-payments-header">
+          <div class="ranking-payments-title">🏆 Pagamentos da Semana</div>
+          <div class="ranking-payments-badge" id="rankingPaymentsWeekBadge">Semana atual</div>
+        </div>
+        <div id="rankingPaymentsList">
+          <div class="ranking-payments-empty">Carregando...</div>
+        </div>
+        <div class="ranking-payments-footer" id="rankingPaymentsFooter" style="display:none">
+          ✅ Pagamentos verificados e realizados via PIX · ACESSO VIP
         </div>
       </div>
 
@@ -6418,9 +6554,9 @@ function init() {
   // Nunca depende de Firebase ou localStorage para renderizar
   platforms = [...PLATFORMS_DATA];
   
-  // VERSÃO DO CACHE: v73 — qualquer versão diferente limpa o localStorage
+  // VERSÃO DO CACHE: v74 — qualquer versão diferente limpa o localStorage
   // Isso garante que dispositivos com cache antigo (58 plataformas) sejam atualizados
-  var CACHE_VERSION = 'v73';
+  var CACHE_VERSION = 'v74';
   try {
     var cacheVer = _ls.get('av_cache_version');
     if (cacheVer !== CACHE_VERSION) {
@@ -6493,7 +6629,7 @@ function init() {
           var now = Date.now();
           try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
           try { _ls.set('av_platforms_ts', String(now)); } catch(e) {}
-          try { _ls.set('av_cache_version', 'v73'); } catch(e) {}
+          try { _ls.set('av_cache_version', 'v74'); } catch(e) {}
           renderHome();
           renderHot();
           console.log('[Firebase] ' + platforms.length + ' plataformas carregadas do servidor.');
@@ -9624,6 +9760,7 @@ document.addEventListener('click', function(e) {
     if (weekEl) weekEl.textContent = week;
     adminLoadWinnersControl();
     renderWinnersSection(week);
+    renderPaymentsSection(week);
 
     var container = document.getElementById('adminRankingList');
     if (container) container.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px">⏳ Carregando...</div>';
@@ -9884,6 +10021,63 @@ document.addEventListener('click', function(e) {
         html += '</div>';
       });
       list.innerHTML = html;
+    });
+  }
+
+  // ── Renderizar seção de PAGAMENTOS DA SEMANA (pública) ─────────
+  function renderPaymentsSection(week) {
+    var section = document.getElementById('rankingPaymentsSection');
+    var listEl = document.getElementById('rankingPaymentsList');
+    var footerEl = document.getElementById('rankingPaymentsFooter');
+    var badgeEl = document.getElementById('rankingPaymentsWeekBadge');
+    if (!section || !listEl) return;
+
+    // Atualizar badge da semana
+    if (badgeEl) {
+      var weekNum = week ? week.replace('semana-','').replace('-',' / ') : '';
+      badgeEl.textContent = weekNum ? 'Semana ' + weekNum : 'Semana atual';
+    }
+
+    fbGet('/ranking/winners/' + week, function(err, data) {
+      // Ocultar se não há vencedores definidos
+      if (!data || Object.keys(data).length === 0) {
+        section.style.display = 'none';
+        return;
+      }
+
+      var winners = Object.keys(data).map(function(uid) {
+        var w = data[uid]; w.uid = uid; return w;
+      }).sort(function(a,b){ return a.pos - b.pos; });
+
+      // Mostrar seção
+      section.style.display = 'block';
+
+      var html = '';
+      var allPaid = true;
+
+      winners.forEach(function(w) {
+        var isPaid = !!w.paid;
+        if (!isPaid) allPaid = false;
+
+        var rowClass = isPaid ? 'paid' : 'pending';
+        var statusHtml = isPaid
+          ? '<span class="ranking-payment-status-paid">✅ Pago</span>'
+          : '<span class="ranking-payment-status-pending">⏳ Aguardando</span>';
+
+        html += '<div class="ranking-payment-row ' + rowClass + '">';
+        html += '<div class="ranking-payment-medal">' + (w.medal || '🏆') + '</div>';
+        html += '<div class="ranking-payment-name">' + escapeHtml(w.name || '') + '</div>';
+        html += '<div class="ranking-payment-prize">' + (w.prize || '') + '</div>';
+        html += statusHtml;
+        html += '</div>';
+      });
+
+      listEl.innerHTML = html;
+
+      // Mostrar rodapé de verificação quando todos estiverem pagos
+      if (footerEl) {
+        footerEl.style.display = allPaid ? 'block' : 'none';
+      }
     });
   }
 
