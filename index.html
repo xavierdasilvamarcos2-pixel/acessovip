@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // Se o app estiver com cache antigo, limpa e recarrega
 (function() {
-  var APP_VERSION = 'v81';
+  var APP_VERSION = 'v82';
   try {
     var storedVersion = localStorage.getItem('app_version');
     if (storedVersion !== APP_VERSION) {
@@ -4621,6 +4621,22 @@ window.addEventListener('beforeinstallprompt', function(e) {
   e.preventDefault();
   window._pwaPrompt = e;
   window.deferredPrompt = e;
+  // Prompt pronto: garantir que o botão está ativo e visível
+  var btn = document.getElementById('installPopupBtn');
+  if (btn) {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.innerHTML = '&#x1F4F2; INSTALAR AGORA &#x2014; &#xC9; GR&#xC1;TIS';
+  }
+  var waiting = document.getElementById('installPopupWaiting');
+  if (waiting) waiting.style.display = 'none';
+  var ready = document.getElementById('installPopupReady');
+  if (ready) ready.style.display = 'block';
+  // Se o popup não estiver visível ainda, mostrar agora
+  var popup = document.getElementById('installBlockPopup');
+  if (popup && popup.classList.contains('hidden') && typeof _appInstalado === 'function' && !_appInstalado()) {
+    popup.classList.remove('hidden');
+  }
 });
 // =====
 let deferredPrompt = null;
@@ -4650,7 +4666,7 @@ let deferredPrompt = null;
 let isInstalled = window.matchMedia('(display-mode: standalone)').matches
   || window.navigator.standalone === true
   || document.referrer.includes('android-app://')
-  || localStorage.getItem('av_installed') === '1';
+  || window.location.search.indexOf('pwa=1') !== -1;
 let notifPermission = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
 let adminLoggedIn = false;
 let adminHighFilterMode = 'all'; // 'all' | 'high' | 'normal'
@@ -4945,13 +4961,17 @@ function renderShare() {
 // ===== TAB NAVIGATION =====
 // Função global de verificação de instalação
 function _appInstalado() {
-  // Critério: modo standalone OU flag salva após instalação/aceitação do prompt
+  // Critério 1: modo standalone real (app aberto como PWA instalado)
   var standalone = window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true
     || document.referrer.includes('android-app://');
-  var flagSalva = localStorage.getItem('av_installed') === '1';
+  // Critério 2: parâmetro pwa=1 (injetado após instalação)
   var paramPwa = window.location.search.indexOf('pwa=1') !== -1;
-  return standalone || flagSalva || paramPwa;
+  // Critério 3: flag de sessão (instalou nesta sessão ou na anterior imediata)
+  // Diferente do localStorage permanente — esta flag é limpa na troca de versão
+  var flagSessao = sessionStorage.getItem('av_pwa_ok') === '1'
+    || localStorage.getItem('av_installed_v79') === '1';
+  return standalone || paramPwa || flagSessao;
 }
 // Função global de bloqueio (usada pelo sinalAtivoBanner e outros)
 window._irParaAbaHot = function() {
@@ -4993,7 +5013,7 @@ tabs.forEach(tab => {
   tab.addEventListener('click', () => {
     const name = tab.dataset.tab;
     // BLOQUEIO FUNCIONAL COMPLETO: bloquear todas as abas exceto home
-    var _abasBloqueadas = ['hot', 'favs', 'share', 'ranking'];
+    var _abasBloqueadas = ['hot', 'favs', 'share', 'ranking', 'sinais'];
     if (_abasBloqueadas.indexOf(name) !== -1 && !_appInstalado()) {
       var popup = document.getElementById('installBlockPopup');
       if (popup) popup.classList.remove('hidden');
@@ -5083,7 +5103,6 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
   var isInStandalone = window.navigator.standalone === true
     || window.matchMedia('(display-mode: standalone)').matches
     || document.referrer.includes('android-app://')
-    || localStorage.getItem('av_installed') === '1'
     || window.location.search.indexOf('pwa=1') !== -1;
 
   // Compatibilidade: manter deferredPrompt global para outros scripts
@@ -5103,9 +5122,12 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     if (overlay) overlay.classList.remove('pwa-visible');
   }
 
-  // Mostrar banner após 4s se não instalado
+  // Mostrar banner após 8s se não instalado E popup não estiver visível
   if (!isInStandalone && !_pwaDismissed) {
     setTimeout(function() {
+      // Não mostrar banner se o popup de bloqueio estiver visível
+      var popup = document.getElementById('installBlockPopup');
+      if (popup && !popup.classList.contains('hidden')) return;
       if (!isInStandalone && !sessionStorage.getItem('pwa_banner_dismissed')) {
         showPwaBanner();
       }
@@ -5202,19 +5224,27 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
   window.addEventListener('appinstalled', function() {
     isInstalled = true;
     _ls.set('av_installed', '1');
+    _ls.set('av_installed_v79', '1');
     _ls.set('av_install_counted', '1');
+    // Flag de sessão — para liberar acesso imediatamente
+    try { sessionStorage.setItem('av_pwa_ok', '1'); } catch(e) {}
     hidePwaBanner();
     installCount++;
     _ls.set('av_installs', installCount);
     showToast('✅ App instalado! Abrindo...', 3000);
     trackEvent('pwa_installed');
+    setTimeout(function() {
+      if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
+    }, 3000);
+    setTimeout(function() {
+      if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
+    }, 3000);
     gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' });
     // Remover bloqueio imediatamente (sem esperar standalone)
     if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
-    // Reabrir em modo standalone após instalação
-    setTimeout(function() {
-      try { window.location.href = 'https://acessoplatafomas.com.br/?pwa=1&notif=1'; } catch(e2) {}
-    }, 1500);
+    // Liberar acesso na mesma página — sem reload
+    // O reload era o maior gargalo: causava 2-3s de espera desnecessária
+    // O acesso já foi liberado pelo removerBloqueioVisual() acima
     // Contagem no Firebase
     if (!_ls.get('av_install_fb_counted')) {
       _ls.set('av_install_fb_counted', '1');
@@ -6409,19 +6439,52 @@ if ('serviceWorker' in navigator) {
 }
 
 // ===== WELCOME MODAL =====
+// ===== PEDIDO DE NOTIFICACOES =====
+function mostrarPedidoNotificacoes() {
+  if (typeof Notification === 'undefined') return;
+  if (Notification.permission === 'granted') return;
+  if (Notification.permission === 'denied') return;
+  // Chamar requestPermission diretamente — faz o diálogo oficial do Android aparecer
+  if (typeof requestNotificationPermission === 'function') requestNotificationPermission();
+}
+
+// ===== PEDIDO DE NOTIFICACOES =====
+function mostrarPedidoNotificacoes() {
+  if (typeof Notification === 'undefined') return;
+  if (Notification.permission === 'granted') return;
+  if (Notification.permission === 'denied') return;
+  // Chamar requestPermission diretamente — faz o diálogo oficial do Android aparecer
+  if (typeof requestNotificationPermission === 'function') requestNotificationPermission();
+}
+
 function checkWelcomeModal() {
   updateNotifBtn();
-  // Se está instalado e notificações não foram ativadas: mostrar pedido
+  // Verificar se está em modo standalone (app instalado)
   var jaInstalado = window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true
     || document.referrer.includes('android-app://')
-    || localStorage.getItem('av_installed') === '1'
-    || window.location.search.indexOf('pwa=1') !== -1;
-  if (!jaInstalado) return; // Não instalado: não pedir notificações
-  var notifPerm = (typeof Notification !== 'undefined') ? Notification.permission : 'denied';
-  if (notifPerm === 'granted') return; // Já ativou: não mostrar
-  // Mostrar pedido após 2 segundos (deixar o app carregar primeiro)
-  setTimeout(mostrarPedidoNotificacoes, 2000);
+    || window.location.search.indexOf('pwa=1') !== -1
+    || (function(){ try { return sessionStorage.getItem('av_pwa_ok')==='1'; } catch(e){ return false; } })()
+    || localStorage.getItem('av_installed_v79') === '1'
+    || localStorage.getItem('av_installed_v79') === '1'
+    || localStorage.getItem('av_installed_v77') === '1';
+  if (!jaInstalado) return;
+  // Verificar permissão atual
+  var notifPerm = (typeof Notification !== 'undefined') ? Notification.permission : 'default';
+  if (notifPerm === 'granted') return; // Já ativou
+  if (notifPerm === 'denied') return;  // Bloqueou permanentemente — não incomodar
+  // Verificar se já pediu nesta sessão (evitar pedir toda vez que abre)
+  try { if (sessionStorage.getItem('av_notif_req') === '1') return; } catch(e) {}
+  // Marcar que vai pedir nesta sessão
+  try { sessionStorage.setItem('av_notif_req', '1'); } catch(e) {}
+  // Chamar requestPermission DIRETAMENTE após 1.5s
+  // Isso faz o diálogo oficial do Android aparecer automaticamente:
+  // "Permitir que o app ACESSO VIP envie notificações?"
+  setTimeout(function() {
+    if (typeof requestNotificationPermission === 'function') {
+      requestNotificationPermission();
+    }
+  }, 1500);
 }
 
 function updateNotifBtn() {
@@ -6556,7 +6619,7 @@ function init() {
   
   // VERSÃO DO CACHE: v74 — qualquer versão diferente limpa o localStorage
   // Isso garante que dispositivos com cache antigo (58 plataformas) sejam atualizados
-  var CACHE_VERSION = 'v81';
+  var CACHE_VERSION = 'v82';
   try {
     var cacheVer = _ls.get('av_cache_version');
     if (cacheVer !== CACHE_VERSION) {
@@ -7616,11 +7679,14 @@ if (_adminWrapNav) {
   <!-- POP-UP DE INSTALAÇÃO (central, aparece ao clicar em área bloqueada) -->
   <div id="installBlockPopup" class="hidden">
     <div class="install-popup-box">
-      <button class="install-popup-x" id="installPopupClose" aria-label="Fechar">&#x2715;</button>
-      <span class="install-popup-icon">&#x1F512;</span>
-      <div class="install-popup-title">Instale para liberar o acesso</div>
-      <div class="install-popup-sub">Esta &#xe1;rea est&#xe1; dispon&#xed;vel somente no aplicativo instalado. Instale agora &#x2014; &#xe9; gr&#xe1;tis e leva menos de 30 segundos!</div>
+      <span class="install-popup-icon">&#x1F4F2;</span>
+      <div class="install-popup-title">Instale o app para continuar</div>
+      <div class="install-popup-sub">&#x1F3C6; Sinais, plataformas e ranking est&#xe3;o dispon&#xed;veis somente no aplicativo instalado.<br><br>&#x2705; Gr&#xe1;tis &nbsp;&#x2022;&nbsp; &#x26A1; Menos de 30 segundos &nbsp;&#x2022;&nbsp; &#x1F514; Notifica&#xe7;&#xf5;es em tempo real</div>
       <button class="install-popup-btn" id="installPopupBtn">&#x1F4F2; INSTALAR AGORA &#x2014; &#xC9; GR&#xC1;TIS</button>
+      <div id="installPopupWaiting" style="display:none;margin-top:10px;font-size:12px;color:rgba(255,255,255,0.45);text-align:center">
+        &#x23F3; Preparando instala&#xe7;&#xe3;o...
+      </div>
+      <div id="installPopupReady" style="margin-top:10px;font-size:11px;color:rgba(255,255,255,0.35);text-align:center">Ap&#xf3;s instalar, o acesso ser&#xe1; liberado automaticamente</div>
     </div>
   </div>
   <!-- Overlay legado (oculto) -->
@@ -7905,11 +7971,13 @@ function clearPlatformMetrics() {
   
   // Verificar se já instalou (standalone OU flag salva OU param ?pwa=1)
   function jaInstalou() {
-    return window.matchMedia('(display-mode: standalone)').matches
+    var standalone = window.matchMedia('(display-mode: standalone)').matches
       || window.navigator.standalone === true
-      || document.referrer.includes('android-app://')
-      || localStorage.getItem('av_installed') === '1'
-      || window.location.search.indexOf('pwa=1') !== -1;
+      || document.referrer.includes('android-app://');
+    var paramPwa = window.location.search.indexOf('pwa=1') !== -1;
+    var flagSessao = sessionStorage.getItem('av_pwa_ok') === '1'
+      || localStorage.getItem('av_installed_v79') === '1';
+    return standalone || paramPwa || flagSessao;
   }
   
   // Aplicar efeito visual de bloqueio nas áreas
@@ -7977,30 +8045,67 @@ function clearPlatformMetrics() {
         window._pwaPrompt = null;
         if (choice.outcome === 'accepted') {
           localStorage.setItem('av_installed', '1');
+          localStorage.setItem('av_installed_v79', '1');
           localStorage.setItem(STORAGE_KEY, '1');
+          try { sessionStorage.setItem('av_pwa_ok', '1'); } catch(e) {}
           removerBloqueioVisual();
-          // Mostrar pedido de notificações após desbloqueio
-          setTimeout(mostrarPedidoNotificacoes, 1500);
+          // Pedir notificações depois (30s) — não imediatamente após instalar
+          // Dar tempo para o usuário explorar o app primeiro
+          setTimeout(function() {
+            if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
+          }, 30000);
         }
       });
     } else {
-      // iOS ou sem prompt: mostrar guia
-      var iosModal = document.getElementById('iosInstallModal');
-      if (iosModal) { iosModal.style.display = 'flex'; iosModal.classList.add('open'); }
-      else {
-        var guideModal = document.getElementById('installGuideModal');
-        if (guideModal) guideModal.classList.add('open');
+      // Sem prompt disponível: verificar dispositivo antes de mostrar modal
+      var _isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (_isIOS) {
+        // iOS/iPhone: mostrar guia de instalação manual (Compartilhar → Tela Inicial)
+        var iosModal = document.getElementById('iosInstallModal');
+        if (iosModal) { iosModal.style.display = 'flex'; iosModal.classList.add('open'); }
+      } else {
+        // Android sem prompt: Chrome ainda não liberou o beforeinstallprompt
+        // Mostrar mensagem orientando o usuário a usar o Chrome
+        var btn = document.getElementById('installPopupBtn');
+        if (btn) {
+          btn.innerHTML = '&#x23F3; Aguarde... abrindo instalação';
+          btn.disabled = true;
+          // Tentar novamente em 2s — Chrome pode liberar o prompt em breve
+          setTimeout(function() {
+            var p2 = window._pwaPrompt || window.deferredPrompt;
+            if (p2) {
+              p2.prompt();
+            } else {
+              if (btn) {
+                btn.innerHTML = '&#x1F4F2; INSTALAR AGORA';
+                btn.disabled = false;
+              }
+              // Mostrar toast orientando
+              if (typeof showToast === 'function') {
+                showToast('Abra no Chrome para instalar o app', 4000);
+              }
+            }
+          }, 2000);
+        }
       }
     }
   }
   
-  // Inicializar bloqueio visual
+  // Inicializar bloqueio visual + mostrar popup obrigatório automaticamente
   if (!jaInstalou()) {
     // Aplicar após DOM pronto
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', aplicarBloqueioVisual);
+      document.addEventListener('DOMContentLoaded', function() {
+        aplicarBloqueioVisual();
+        // Mostrar popup imediatamente — sem delay
+        var popup = document.getElementById('installBlockPopup');
+        if (popup) popup.classList.remove('hidden');
+      });
     } else {
       aplicarBloqueioVisual();
+      // Mostrar popup imediatamente — sem delay
+      var popup = document.getElementById('installBlockPopup');
+      if (popup) popup.classList.remove('hidden');
     }
     
     // Expor função globalmente para uso externo (faixa, bolha, etc.)
@@ -8016,10 +8121,8 @@ function clearPlatformMetrics() {
     // NOTA: O bloqueio funcional da aba hot está diretamente no handler TAB NAVIGATION
     // e no onclick do sinalAtivoBanner via window._irParaAbaHot()
     
-    // Fechar pop-up ao clicar no overlay (fundo escuro)
-    document.addEventListener('click', function(e) {
-      if (e.target.id === 'installBlockPopup') fecharPopup();
-    });
+    // Bloqueio obrigatório: NÃO fechar ao clicar no overlay
+    // O usuário DEVE instalar para continuar
   } else {
     // App instalado: garantir que bloqueio visual está removido
     removerBloqueioVisual();
