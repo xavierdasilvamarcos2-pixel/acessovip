@@ -4970,7 +4970,7 @@ function _appInstalado() {
   // Critério 3: flag de sessão (instalou nesta sessão ou na anterior imediata)
   // Diferente do localStorage permanente — esta flag é limpa na troca de versão
   var flagSessao = sessionStorage.getItem('av_pwa_ok') === '1'
-    || localStorage.getItem('av_installed_v76') === '1';
+    || localStorage.getItem('av_installed_v77') === '1';
   return standalone || paramPwa || flagSessao;
 }
 // Função global de bloqueio (usada pelo sinalAtivoBanner e outros)
@@ -5224,7 +5224,7 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
   window.addEventListener('appinstalled', function() {
     isInstalled = true;
     _ls.set('av_installed', '1');
-    _ls.set('av_installed_v76', '1');
+    _ls.set('av_installed_v77', '1');
     _ls.set('av_install_counted', '1');
     // Flag de sessão — para liberar acesso imediatamente
     try { sessionStorage.setItem('av_pwa_ok', '1'); } catch(e) {}
@@ -7936,7 +7936,7 @@ function clearPlatformMetrics() {
       || document.referrer.includes('android-app://');
     var paramPwa = window.location.search.indexOf('pwa=1') !== -1;
     var flagSessao = sessionStorage.getItem('av_pwa_ok') === '1'
-      || localStorage.getItem('av_installed_v76') === '1';
+      || localStorage.getItem('av_installed_v77') === '1';
     return standalone || paramPwa || flagSessao;
   }
   
@@ -8005,7 +8005,7 @@ function clearPlatformMetrics() {
         window._pwaPrompt = null;
         if (choice.outcome === 'accepted') {
           localStorage.setItem('av_installed', '1');
-          localStorage.setItem('av_installed_v76', '1');
+          localStorage.setItem('av_installed_v77', '1');
           localStorage.setItem(STORAGE_KEY, '1');
           try { sessionStorage.setItem('av_pwa_ok', '1'); } catch(e) {}
           removerBloqueioVisual();
@@ -8017,12 +8017,36 @@ function clearPlatformMetrics() {
         }
       });
     } else {
-      // iOS ou sem prompt: mostrar guia
-      var iosModal = document.getElementById('iosInstallModal');
-      if (iosModal) { iosModal.style.display = 'flex'; iosModal.classList.add('open'); }
-      else {
-        var guideModal = document.getElementById('installGuideModal');
-        if (guideModal) guideModal.classList.add('open');
+      // Sem prompt disponível: verificar dispositivo antes de mostrar modal
+      var _isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (_isIOS) {
+        // iOS/iPhone: mostrar guia de instalação manual (Compartilhar → Tela Inicial)
+        var iosModal = document.getElementById('iosInstallModal');
+        if (iosModal) { iosModal.style.display = 'flex'; iosModal.classList.add('open'); }
+      } else {
+        // Android sem prompt: Chrome ainda não liberou o beforeinstallprompt
+        // Mostrar mensagem orientando o usuário a usar o Chrome
+        var btn = document.getElementById('installPopupBtn');
+        if (btn) {
+          btn.innerHTML = '&#x23F3; Aguarde... abrindo instalação';
+          btn.disabled = true;
+          // Tentar novamente em 2s — Chrome pode liberar o prompt em breve
+          setTimeout(function() {
+            var p2 = window._pwaPrompt || window.deferredPrompt;
+            if (p2) {
+              p2.prompt();
+            } else {
+              if (btn) {
+                btn.innerHTML = '&#x1F4F2; INSTALAR AGORA';
+                btn.disabled = false;
+              }
+              // Mostrar toast orientando
+              if (typeof showToast === 'function') {
+                showToast('Abra no Chrome para instalar o app', 4000);
+              }
+            }
+          }, 2000);
+        }
       }
     }
   }
