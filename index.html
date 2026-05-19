@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // Se o app estiver com cache antigo, limpa e recarrega
 (function() {
-  var APP_VERSION = 'v78';
+  var APP_VERSION = 'v79';
   try {
     var storedVersion = localStorage.getItem('app_version');
     if (storedVersion !== APP_VERSION) {
@@ -4970,7 +4970,7 @@ function _appInstalado() {
   // Critério 3: flag de sessão (instalou nesta sessão ou na anterior imediata)
   // Diferente do localStorage permanente — esta flag é limpa na troca de versão
   var flagSessao = sessionStorage.getItem('av_pwa_ok') === '1'
-    || localStorage.getItem('av_installed_v78') === '1';
+    || localStorage.getItem('av_installed_v79') === '1';
   return standalone || paramPwa || flagSessao;
 }
 // Função global de bloqueio (usada pelo sinalAtivoBanner e outros)
@@ -5224,7 +5224,7 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
   window.addEventListener('appinstalled', function() {
     isInstalled = true;
     _ls.set('av_installed', '1');
-    _ls.set('av_installed_v78', '1');
+    _ls.set('av_installed_v79', '1');
     _ls.set('av_install_counted', '1');
     // Flag de sessão — para liberar acesso imediatamente
     try { sessionStorage.setItem('av_pwa_ok', '1'); } catch(e) {}
@@ -6444,12 +6444,7 @@ function mostrarPedidoNotificacoes() {
   if (typeof Notification === 'undefined') return;
   if (Notification.permission === 'granted') return;
   if (Notification.permission === 'denied') return;
-  try { if (sessionStorage.getItem('av_notif_asked_s') === '1') return; } catch(e) {}
-  try { sessionStorage.setItem('av_notif_asked_s', '1'); } catch(e) {}
-  var wm = document.getElementById('welcomeModal');
-  if (wm) { wm.classList.add('open'); wm.style.display = ''; return; }
-  var nb = document.getElementById('notifBanner');
-  if (nb) { nb.style.display = 'flex'; return; }
+  // Chamar requestPermission diretamente — faz o diálogo oficial do Android aparecer
   if (typeof requestNotificationPermission === 'function') requestNotificationPermission();
 }
 
@@ -6469,19 +6464,32 @@ function mostrarPedidoNotificacoes() {
 
 function checkWelcomeModal() {
   updateNotifBtn();
-  // Se está instalado e notificações não foram ativadas: mostrar pedido
+  // Verificar se está em modo standalone (app instalado)
   var jaInstalado = window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true
     || document.referrer.includes('android-app://')
     || window.location.search.indexOf('pwa=1') !== -1
     || (function(){ try { return sessionStorage.getItem('av_pwa_ok')==='1'; } catch(e){ return false; } })()
-    || localStorage.getItem('av_installed_v78') === '1'
-    || localStorage.getItem('av_installed_v78') === '1';
+    || localStorage.getItem('av_installed_v79') === '1'
+    || localStorage.getItem('av_installed_v79') === '1'
+    || localStorage.getItem('av_installed_v77') === '1';
   if (!jaInstalado) return;
+  // Verificar permissão atual
   var notifPerm = (typeof Notification !== 'undefined') ? Notification.permission : 'default';
-  if (notifPerm === 'granted') return;
-  if (notifPerm === 'denied') return;
-  setTimeout(mostrarPedidoNotificacoes, 2000);
+  if (notifPerm === 'granted') return; // Já ativou
+  if (notifPerm === 'denied') return;  // Bloqueou permanentemente — não incomodar
+  // Verificar se já pediu nesta sessão (evitar pedir toda vez que abre)
+  try { if (sessionStorage.getItem('av_notif_req') === '1') return; } catch(e) {}
+  // Marcar que vai pedir nesta sessão
+  try { sessionStorage.setItem('av_notif_req', '1'); } catch(e) {}
+  // Chamar requestPermission DIRETAMENTE após 1.5s
+  // Isso faz o diálogo oficial do Android aparecer automaticamente:
+  // "Permitir que o app ACESSO VIP envie notificações?"
+  setTimeout(function() {
+    if (typeof requestNotificationPermission === 'function') {
+      requestNotificationPermission();
+    }
+  }, 1500);
 }
 
 function updateNotifBtn() {
@@ -6616,7 +6624,7 @@ function init() {
   
   // VERSÃO DO CACHE: v74 — qualquer versão diferente limpa o localStorage
   // Isso garante que dispositivos com cache antigo (58 plataformas) sejam atualizados
-  var CACHE_VERSION = 'v78';
+  var CACHE_VERSION = 'v79';
   try {
     var cacheVer = _ls.get('av_cache_version');
     if (cacheVer !== CACHE_VERSION) {
@@ -7973,7 +7981,7 @@ function clearPlatformMetrics() {
       || document.referrer.includes('android-app://');
     var paramPwa = window.location.search.indexOf('pwa=1') !== -1;
     var flagSessao = sessionStorage.getItem('av_pwa_ok') === '1'
-      || localStorage.getItem('av_installed_v78') === '1';
+      || localStorage.getItem('av_installed_v79') === '1';
     return standalone || paramPwa || flagSessao;
   }
   
@@ -8042,7 +8050,7 @@ function clearPlatformMetrics() {
         window._pwaPrompt = null;
         if (choice.outcome === 'accepted') {
           localStorage.setItem('av_installed', '1');
-          localStorage.setItem('av_installed_v78', '1');
+          localStorage.setItem('av_installed_v79', '1');
           localStorage.setItem(STORAGE_KEY, '1');
           try { sessionStorage.setItem('av_pwa_ok', '1'); } catch(e) {}
           removerBloqueioVisual();
