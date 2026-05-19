@@ -5242,10 +5242,9 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     hidePwaBanner();
     installCount++;
     _ls.set('av_installs', installCount);
-    showToast('✅ App instalado! Abrindo...', 3000);
     trackEvent('pwa_installed');
-    setTimeout(function() {
-      if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
+    // Completar barra de progresso para 100% — app realmente instalado
+    if (typeof _completeInstallProgress === 'function') _completeInstallProgress();
     }, 3000);
     setTimeout(function() {
       if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
