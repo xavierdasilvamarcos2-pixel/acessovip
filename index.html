@@ -6004,54 +6004,45 @@ async function sendPushNotification(title, body, tab, overrideIcon, overridePlat
   };
   if (imageUrl) notifData.image = imageUrl;
   if (platId) notifData.platId = platId;
-  // Salva no Firebase
+  // Salva no Firebase em paralelo (fire-and-forget) — NÃO bloqueia o Worker
   const fbUrl = 'https://acessovip-fb4c3-default-rtdb.firebaseio.com/pending_notifications/' + Date.now() + '.json?auth=' + FIREBASE_API_KEY;
-  const fbResp = await fetch(fbUrl, {
+  fetch(fbUrl, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(notifData)
-  });
-  const fbData = await fbResp.json();
-  if (fbData && !fbData.error) {
-    try {
-      // Usa o Cloudflare Worker com Web Push nativo (VAPID)
-      // Buscar logo da plataforma para usar como ícone (overrideIcon tem prioridade)
-      var workerIcon = overrideIcon || 'https://acessoplatafomas.com.br/icons/icon-192.png';
-      if (!overrideIcon && platId) {
-        var _allPlats = (typeof platforms !== 'undefined' && platforms.length > 0) ? platforms : (typeof PLATFORMS_DATA !== 'undefined' ? PLATFORMS_DATA : []);
-        var _fp = _allPlats.find(function(p) { return String(p.id) === String(platId); });
-        if (_fp && _fp.imageUrl) workerIcon = _fp.imageUrl;
-      }
-      // ONESIGNAL: Uma única chamada para enviar para TODOS os assinantes
-      // Sem loop, sem paginação, sem limite de subrequests
-      const payload = {
-        action: 'send_all',
-        title: title,
-        message: body,
-        url: targetUrl,
-        icon: workerIcon
-      };
-      if (platId) payload.platId = platId;
-
-      const resp = await fetch(WORKER_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const data = await resp.json();
-
-      if (data.success) {
-        return { success: true, recipients: data.sent || 0 };
-      } else {
-        return { success: false, error: data.error || 'Falha no envio' };
-      }
-    } catch(e) {
-      // Erro ao chamar Worker - retornar erro real para o painel
-      console.warn('[Push] Erro ao chamar Worker:', e.message || e);
-      return { success: false, error: e.message || 'Erro de conexão com Worker' };
+  }).catch(function(e) { console.warn('[Push] Firebase PUT falhou (não crítico):', e.message); });
+  // Chama o Worker DIRETAMENTE (independente do Firebase)
+  try {
+    var workerIcon = overrideIcon || 'https://acessoplatafomas.com.br/icons/icon-192.png';
+    if (!overrideIcon && platId) {
+      var _allPlats = (typeof platforms !== 'undefined' && platforms.length > 0) ? platforms : (typeof PLATFORMS_DATA !== 'undefined' ? PLATFORMS_DATA : []);
+      var _fp = _allPlats.find(function(p) { return String(p.id) === String(platId); });
+      if (_fp && _fp.imageUrl) workerIcon = _fp.imageUrl;
     }
+    // Uma única chamada para enviar para TODOS os assinantes
+    const payload = {
+      action: 'send_all',
+      title: title,
+      message: body,
+      url: targetUrl,
+      icon: workerIcon
+    };
+    if (platId) payload.platId = platId;
+    const resp = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await resp.json();
+    if (data.success) {
+      return { success: true, recipients: data.sent || 0, failed: data.failed || 0 };
+    } else {
+      return { success: false, error: data.error || 'Falha no envio' };
+    }
+  } catch(e) {
+    console.warn('[Push] Erro ao chamar Worker:', e.message || e);
+    return { success: false, error: e.message || 'Erro de conexão com Worker' };
   }
-  return { success: false, error: 'Firebase error' };
 }
 
 // ============================================================
@@ -6622,7 +6613,7 @@ function init() {
   
   // VERSÃO DO CACHE: v74 — qualquer versão diferente limpa o localStorage
   // Isso garante que dispositivos com cache antigo (58 plataformas) sejam atualizados
-  var CACHE_VERSION = 'v82';
+  var CACHE_VERSION = 'v84';
   try {
     var cacheVer = _ls.get('av_cache_version');
     if (cacheVer !== CACHE_VERSION) {
