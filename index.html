@@ -6686,7 +6686,7 @@ function init() {
           var now = Date.now();
           try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
           try { _ls.set('av_platforms_ts', String(now)); } catch(e) {}
-          try { _ls.set('av_cache_version', 'v74'); } catch(e) {}
+          try { _ls.set('av_cache_version', CACHE_VERSION); } catch(e) {}
           renderHome();
           renderHot();
           console.log('[Firebase] ' + platforms.length + ' plataformas carregadas do servidor.');
