@@ -4706,7 +4706,8 @@ function saveState() {
   try { _ls.set('av_favorites', JSON.stringify(favorites)); } catch(e) {}
   try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
   try { _ls.set('av_platforms_ts', String(now)); } catch(e) {}
-  
+  // Manter a versão do cache atualizada para evitar limpeza indevida
+  try { _ls.set('av_cache_version', typeof CACHE_VERSION !== 'undefined' ? CACHE_VERSION : 'v85'); } catch(e) {}
   // PROTEÇÃO: Função interna que realmente salva no Firebase
   function _doSaveToFirebase(platformsToSave) {
     if (window._fbReady && window._fbDb) {
@@ -6609,34 +6610,37 @@ function trackDailyAccess() {
 function init() {
   // PASSO 1: Usar sempre PLATFORMS_DATA embutido no HTML (61 plataformas garantidas)
   // Nunca depende de Firebase ou localStorage para renderizar
-  platforms = [...PLATFORMS_DATA];
-  
-  // VERSÃO DO CACHE: v74 — qualquer versão diferente limpa o localStorage
-  // Isso garante que dispositivos com cache antigo (58 plataformas) sejam atualizados
-  var CACHE_VERSION = 'v84';
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SISTEMA DE CACHE DEFINITIVO — v85
+  // REGRA: O localStorage NUNCA é limpo por mudança de versão de deploy.
+  // Firebase é SEMPRE a fonte de verdade.
+  // PLATFORMS_DATA é apenas o fallback inicial (primeira abertura ou sem cache).
+  // ═══════════════════════════════════════════════════════════════════════════
+  var CACHE_VERSION = 'v85';
   try {
-    var cacheVer = _ls.get('av_cache_version');
-    if (cacheVer !== CACHE_VERSION) {
-      // Cache de versão diferente — limpar tudo e usar PLATFORMS_DATA
-      _ls.remove('av_platforms');
-      _ls.remove('av_platforms_ts');
-      _ls.set('av_cache_version', CACHE_VERSION);
-      console.log('[Cache] Cache antigo limpo (' + (cacheVer || 'sem versão') + ' → ' + CACHE_VERSION + ')');
-    } else {
-      var saved = _ls.get('av_platforms');
-      if (saved) {
-        var parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length >= PLATFORMS_DATA.length) {
-          platforms = parsed;
-          console.log('[Cache] ' + parsed.length + ' plataformas do cache local (' + CACHE_VERSION + ').');
-        } else {
-          _ls.remove('av_platforms');
-          _ls.remove('av_platforms_ts');
-          console.log('[Cache] Cache com ' + (parsed ? parsed.length : 0) + ' plataformas ignorado — usando PLATFORMS_DATA (' + PLATFORMS_DATA.length + ')');
-        }
+    var saved = _ls.get('av_platforms');
+    if (saved) {
+      var parsed = JSON.parse(saved);
+      // Usar o cache local SE tiver plataformas válidas — independente da versão
+      // NUNCA limpar o cache por mudança de versão de deploy
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        platforms = parsed;
+        console.log('[Cache] ' + parsed.length + ' plataformas do cache local.');
+      } else {
+        // Cache inválido (array vazio ou corrompido) — usar PLATFORMS_DATA
+        platforms = [...PLATFORMS_DATA];
+        _ls.remove('av_platforms');
+        console.log('[Cache] Cache inválido — usando PLATFORMS_DATA (' + PLATFORMS_DATA.length + ')');
       }
+    } else {
+      // Sem cache — usar PLATFORMS_DATA (primeira abertura)
+      platforms = [...PLATFORMS_DATA];
+      console.log('[Cache] Sem cache local — usando PLATFORMS_DATA (' + PLATFORMS_DATA.length + ')');
     }
+    // Sempre atualizar a versão do cache (sem limpar dados)
+    _ls.set('av_cache_version', CACHE_VERSION);
   } catch(e) {
+    platforms = [...PLATFORMS_DATA];
     try { _ls.remove('av_platforms'); } catch(e2) {}
   }
   
@@ -6659,12 +6663,11 @@ function init() {
   // Usa AbortController para cancelar se demorar mais de 5 segundos
   function updateFromFirebase() {
     var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    var timeoutId = controller ? setTimeout(function() { controller.abort(); }, 8000) : null;
+    var timeoutId = controller ? setTimeout(function() { controller.abort(); }, 10000) : null;
     var fetchOptions = controller ? { signal: controller.signal } : {};
     
-    // REGRA CRÍTICA: Firebase é SEMPRE a fonte de verdade.
-    // Nunca sobrescrever o Firebase com dados locais que tenham MENOS plataformas.
-    // O painel admin salva no Firebase — esses dados nunca devem ser perdidos.
+    // Firebase é SEMPRE a fonte de verdade.
+    // O painel admin salva no Firebase — esses dados NUNCA devem ser perdidos.
     fetch('https://acessovip-fb4c3-default-rtdb.firebaseio.com/platforms.json', fetchOptions)
       .then(function(r) {
         if (timeoutId) clearTimeout(timeoutId);
@@ -6679,11 +6682,11 @@ function init() {
           if (arr.length > 0) newList = arr;
         }
         if (newList && newList.length > 0) {
-          // REGRA DEFINITIVA: Firebase é SEMPRE a fonte de verdade.
-          // Aceitar qualquer lista válida do Firebase (sem comparar com hardcoded).
-          // O painel admin salva no Firebase — esses dados nunca devem ser perdidos.
+          // REGRA DEFINITIVA: Aceitar qualquer lista válida do Firebase.
+          // NÃO comparar com PLATFORMS_DATA — Firebase sempre vence.
           platforms = newList;
           var now = Date.now();
+          // Salvar no localStorage com a versão atual (NUNCA hardcoded)
           try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
           try { _ls.set('av_platforms_ts', String(now)); } catch(e) {}
           try { _ls.set('av_cache_version', CACHE_VERSION); } catch(e) {}
@@ -6702,7 +6705,7 @@ function init() {
       })
       .catch(function(e) {
         if (timeoutId) clearTimeout(timeoutId);
-        console.log('Firebase update falhou, mantendo dados locais:', e.message);
+        console.log('[Firebase] Falha ao carregar plataformas, mantendo dados locais:', e.message);
       });
   }
   // Aguarda 500ms para não atrasar a renderização inicial
@@ -6710,6 +6713,8 @@ function init() {
   updateFromFirebase();
   // Segunda tentativa após 2s (para conexões lentas ou app recém-instalado)
   setTimeout(updateFromFirebase, 2000);
+  // Terceira tentativa após 5s (para conexões muito lentas)
+  setTimeout(updateFromFirebase, 5000);
   checkWelcomeModal();
   trackEvent('app_open', { source: document.referrer || 'direct' });
   // Rastrear acesso diário para Analytics
