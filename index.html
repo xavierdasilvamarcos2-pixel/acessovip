@@ -23,31 +23,44 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
   <meta http-equiv="Expires" content="0">
 <script>
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
-// Se o app estiver com cache antigo, limpa e recarrega
+// REGRA DEFINITIVA: ao mudar versão, preservar SEMPRE os dados de notificação
 (function() {
-  var APP_VERSION = 'v83';
+  var APP_VERSION = 'v85';
+  // Chaves que NUNCA devem ser apagadas (dados críticos de notificação e plataformas)
+  var PRESERVE_KEYS = [
+    'av_notif_asked',      // Permissão de notificação já solicitada
+    'av_notif_granted',    // Permissão concedida
+    'av_platforms',        // Plataformas do Firebase (dados do admin)
+    'av_platforms_ts',     // Timestamp das plataformas
+    'av_cache_version',    // Versão do cache de plataformas
+    'av_favorites',        // Favoritos do usuário
+    'av_installed_v79',    // Flag de instalação
+    'av_installed_v77',    // Flag de instalação legado
+    'av_install_counted',  // Contador de instalação
+    'av_install_fb_counted', // Contador Firebase
+    'av_visitor_id',       // ID do visitante (analytics)
+    'av_welcome_seen',     // Modal de boas-vindas já visto
+  ];
   try {
     var storedVersion = localStorage.getItem('app_version');
     if (storedVersion !== APP_VERSION) {
-      // Versão diferente — limpar TODO o localStorage e recarregar
-      console.log('[VERSION] Limpando cache antigo: ' + storedVersion + ' → ' + APP_VERSION);
+      console.log('[VERSION] Atualizando: ' + storedVersion + ' → ' + APP_VERSION);
       // Salvar a nova versão ANTES de limpar para não entrar em loop
       localStorage.setItem('app_version', APP_VERSION);
-      // Limpar dados antigos
+      // Limpar apenas dados temporários/de UI — PRESERVAR dados críticos
       var keysToRemove = [];
       for (var i = 0; i < localStorage.length; i++) {
         var key = localStorage.key(i);
-        if (key && key.startsWith('av_')) {
-          keysToRemove.push(key);
+        if (key && key.startsWith('av_') && PRESERVE_KEYS.indexOf(key) === -1) {
+          // Preservar também anti-spam de notificações (av_notif_high_*, av_notif_launch_*)
+          if (!key.startsWith('av_notif_high_') && !key.startsWith('av_notif_launch_')) {
+            keysToRemove.push(key);
+          }
         }
       }
       keysToRemove.forEach(function(k) { localStorage.removeItem(k); });
-      // Recarregar a página para garantir HTML limpo
-      // Usar replace para não criar histórico de navegação
-      if (storedVersion !== null) {
-        // Só recarrega se já tinha uma versão anterior (não na primeira instalação)
-        window.location.replace(window.location.href.split('?')[0] + '?v=' + APP_VERSION + '&t=' + Date.now());
-      }
+      // NÃO recarregar a página — evita loop e perda de estado
+      console.log('[VERSION] Limpeza seletiva concluída. Dados críticos preservados.');
     }
   } catch(e) {
     // localStorage não disponível — continuar normalmente
@@ -3628,6 +3641,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
           </div>
           <button class="admin-btn-submit red" id="sendNotifBtn">&#128228; ENVIAR PARA TODOS</button>
           <button style="width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;" id="testNotifBtn">🧪 ENVIAR NOTIFICAÇÃO DE TESTE</button>
+          <button style="width:100%;padding:10px;border-radius:12px;border:1px solid rgba(251,191,36,0.3);background:rgba(251,191,36,0.08);color:rgba(251,191,36,0.8);font-size:12px;font-weight:700;cursor:pointer;margin-top:8px;" onclick="(function(){var keys=[];for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&(k.startsWith('av_notif_high_')||k.startsWith('av_notif_launch_')))keys.push(k);}keys.forEach(function(k){localStorage.removeItem(k);});showToast('✅ Anti-spam resetado! Próxima notificação automática já pode ser enviada.');})()">⏱️ RESETAR ANTI-SPAM (liberar envio imediato)</button>
           <div id="notifResult" style="margin-top:12px;font-size:13px;color:rgba(255,255,255,0.4);text-align:center;"></div>
           <div id="notifDeliveryBox" style="display:none;margin-top:10px;padding:14px 16px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.35);border-radius:12px;text-align:center;">
             <div style="font-size:15px;font-weight:900;color:#34D399;margin-bottom:6px;">&#9989; Notificação enviada com sucesso!</div>
@@ -5726,12 +5740,12 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
       p.isHigh = !p.isHigh;
       saveState(); renderAdminPlatforms(); renderHome(); renderHot(); renderSinais();
       showToast(p.isHigh ? `🔥 ${p.name} marcada como Em Alta e adicionada aos Sinais!` : `${p.name} removida de Em Alta e dos Sinais`);
-      // Disparo automático de notificação ao marcar como Em Alta (anti-spam: 30min por plataforma)
+      // Disparo automático de notificação ao marcar como Em Alta (anti-spam: 5min por plataforma)
       if (p.isHigh) {
         var spamKey = 'av_notif_high_' + p.id;
         var lastSent = parseInt(_ls.get(spamKey) || '0');
         var now = Date.now();
-        if (now - lastSent > 30 * 60 * 1000) { // 30 minutos
+        if (now - lastSent > 5 * 60 * 1000) { // 5 minutos
           _ls.set(spamKey, String(now));
           (function() {
             var platName = (p.name || 'Plataforma').toUpperCase();
@@ -5745,7 +5759,7 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
               });
           })();
         } else {
-          showToast('⏳ Aguarde 30min para enviar outra notificação desta plataforma');
+          showToast('⏳ Aguarde 5min para enviar outra notificação desta plataforma (ou clique em Resetar Anti-spam)');
         }
       }
     }
@@ -5756,12 +5770,12 @@ document.getElementById('adminPlatformList').addEventListener('click', (e) => {
       p.isLaunch = !p.isLaunch;
       saveState(); renderAdminPlatforms(); renderHome();
       showToast(`${p.name} ${p.isLaunch ? 'marcada como Lançamento' : 'removida de Lançamento'}`);
-      // Notificação automática ao marcar como Lançamento (anti-spam: 30min)
+      // Notificação automática ao marcar como Lançamento (anti-spam: 5min)
       if (p.isLaunch) {
         var spamKeyL = 'av_notif_launch_' + p.id;
         var lastSentL = parseInt(_ls.get(spamKeyL) || '0');
         var nowL = Date.now();
-        if (nowL - lastSentL > 30 * 60 * 1000) {
+        if (nowL - lastSentL > 5 * 60 * 1000) { // 5 minutos
           _ls.set(spamKeyL, String(nowL));
           sendPushNotification('🆕 NOVO LANÇAMENTO DISPONÍVEL', '🚀 Veja agora a novidade liberada no app', 'home')
             .then(result => {
