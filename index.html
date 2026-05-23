@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // REGRA DEFINITIVA: ao mudar versão, preservar SEMPRE os dados de notificação
 (function() {
-  var APP_VERSION = 'v86';
+  var APP_VERSION = 'v87';
   // Chaves que NUNCA devem ser apagadas (dados críticos de notificação e plataformas)
   var PRESERVE_KEYS = [
     'av_notif_asked',      // Permissão de notificação já solicitada
@@ -4725,7 +4725,7 @@ function saveState() {
   try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
   try { _ls.set('av_platforms_ts', String(now)); } catch(e) {}
   // Manter a versão do cache atualizada para evitar limpeza indevida
-  try { _ls.set('av_cache_version', typeof CACHE_VERSION !== 'undefined' ? CACHE_VERSION : 'v86'); } catch(e) {}
+  try { _ls.set('av_cache_version', typeof CACHE_VERSION !== 'undefined' ? CACHE_VERSION : 'v87'); } catch(e) {}
   // PROTEÇÃO: Função interna que realmente salva no Firebase
   function _doSaveToFirebase(platformsToSave) {
     if (window._fbReady && window._fbDb) {
@@ -5283,12 +5283,21 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
             if (progressWrap) progressWrap.style.display = 'none';
             var openWrap = document.getElementById('installOpenAppWrap');
             if (openWrap) openWrap.style.display = 'block';
-            // Definir função de abrir app
+            // Definir função de abrir app standalone
             window._abrirAppInstalado = function() {
-              if (popup) popup.classList.add('hidden');
-              if (typeof mostrarPedidoNotificacoes === 'function') {
-                setTimeout(function() { mostrarPedidoNotificacoes(); }, 800);
+              // Tentar abrir o app standalone instalado
+              // No Android, o PWA instalado pode ser aberto via intent ou pelo ícone
+              var startUrl = 'https://acessoplatafomas.com.br/?pwa=1&notif=1';
+              // Tentar abrir em nova janela standalone (funciona no Android Chrome)
+              var opened = window.open(startUrl, '_blank');
+              if (!opened || opened.closed || typeof opened.closed === 'undefined') {
+                // Fallback: redirecionar a página atual
+                window.location.href = startUrl;
               }
+              // Fechar o popup após 1s
+              setTimeout(function() {
+                if (popup) popup.classList.add('hidden');
+              }, 500);
             };
           }, 400);
         }
@@ -6670,7 +6679,7 @@ function init() {
   // Firebase é SEMPRE a fonte de verdade.
   // PLATFORMS_DATA é apenas o fallback inicial (primeira abertura ou sem cache).
   // ═══════════════════════════════════════════════════════════════════════════
-  var CACHE_VERSION = 'v86';
+  var CACHE_VERSION = 'v87';
   try {
     var saved = _ls.get('av_platforms');
     if (saved) {
@@ -7748,7 +7757,7 @@ if (_adminWrapNav) {
       <div id="installOpenAppWrap" style="display:none;margin-top:16px">
         <div style="font-size:14px;color:#4ADE80;margin-bottom:12px;text-align:center;font-weight:800">&#x2705; App instalado com sucesso!</div>
         <button id="installOpenAppBtn" onclick="_abrirAppInstalado()" style="width:100%;padding:15px;border-radius:14px;border:none;font-size:16px;font-weight:900;cursor:pointer;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;letter-spacing:0.5px;box-shadow:0 4px 24px rgba(22,163,74,0.55)">&#x1F680; ABRIR APLICATIVO</button>
-        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:8px;text-align:center">Ative as notifica&#xe7;&#xf5;es dentro do app para receber sinais em tempo real</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:10px;text-align:center;line-height:1.5">Se não abrir automaticamente,<br>toque no ícone <strong style="color:#fff">ACESSO VIP</strong> na tela inicial &#x1F4F1;</div>
       </div>
       <div id="installPopupWaiting" style="display:none;margin-top:10px;font-size:12px;color:rgba(255,255,255,0.45);text-align:center">
         &#x23F3; Preparando instala&#xe3;o...
@@ -8144,11 +8153,16 @@ function clearPlatformMetrics() {
                 var _ow2 = document.getElementById('installOpenAppWrap');
                 if (_ow2) _ow2.style.display = 'block';
                 window._abrirAppInstalado = function() {
-                  if (_popup2) _popup2.classList.add('hidden');
-                  removerBloqueioVisual();
+                  // Abrir o app standalone instalado
+                  var startUrl = 'https://acessoplatafomas.com.br/?pwa=1&notif=1';
+                  var opened = window.open(startUrl, '_blank');
+                  if (!opened || opened.closed || typeof opened.closed === 'undefined') {
+                    window.location.href = startUrl;
+                  }
                   setTimeout(function() {
-                    if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
-                  }, 800);
+                    if (_popup2) _popup2.classList.add('hidden');
+                    removerBloqueioVisual();
+                  }, 500);
                 };
               }, 400);
             }
