@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // REGRA DEFINITIVA: ao mudar versão, preservar SEMPRE os dados de notificação
 (function() {
-  var APP_VERSION = 'v87';
+  var APP_VERSION = 'v88';
   // Chaves que NUNCA devem ser apagadas (dados críticos de notificação e plataformas)
   var PRESERVE_KEYS = [
     'av_notif_asked',      // Permissão de notificação já solicitada
@@ -4725,7 +4725,7 @@ function saveState() {
   try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
   try { _ls.set('av_platforms_ts', String(now)); } catch(e) {}
   // Manter a versão do cache atualizada para evitar limpeza indevida
-  try { _ls.set('av_cache_version', typeof CACHE_VERSION !== 'undefined' ? CACHE_VERSION : 'v87'); } catch(e) {}
+  try { _ls.set('av_cache_version', typeof CACHE_VERSION !== 'undefined' ? CACHE_VERSION : 'v88'); } catch(e) {}
   // PROTEÇÃO: Função interna que realmente salva no Firebase
   function _doSaveToFirebase(platformsToSave) {
     if (window._fbReady && window._fbDb) {
@@ -6531,8 +6531,15 @@ function checkWelcomeModal() {
   var notifPerm = (typeof Notification !== 'undefined') ? Notification.permission : 'default';
   if (notifPerm === 'granted') return; // Já ativou
   if (notifPerm === 'denied') return;  // Bloqueou permanentemente — não incomodar
-  // Verificar se já pediu nesta sessão (evitar pedir toda vez que abre)
-  try { if (sessionStorage.getItem('av_notif_req') === '1') return; } catch(e) {}
+  // Verificar se já concedeu permissão anteriormente
+  var jaGranted = _ls.get('av_notif_granted') === '1';
+  if (jaGranted) return; // Já ativou antes — não pedir de novo
+  // Verificar se é a primeira vez (sem av_notif_asked no localStorage)
+  var primeiraVez = !_ls.get('av_notif_asked');
+  if (!primeiraVez) {
+    // Já pediu antes: verificar se já pediu nesta sessão
+    try { if (sessionStorage.getItem('av_notif_req') === '1') return; } catch(e) {}
+  }
   // Marcar que vai pedir nesta sessão
   try { sessionStorage.setItem('av_notif_req', '1'); } catch(e) {}
   // Chamar requestPermission DIRETAMENTE após 1.5s
@@ -6679,7 +6686,7 @@ function init() {
   // Firebase é SEMPRE a fonte de verdade.
   // PLATFORMS_DATA é apenas o fallback inicial (primeira abertura ou sem cache).
   // ═══════════════════════════════════════════════════════════════════════════
-  var CACHE_VERSION = 'v87';
+  var CACHE_VERSION = 'v88';
   try {
     var saved = _ls.get('av_platforms');
     if (saved) {
