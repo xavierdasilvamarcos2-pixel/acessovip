@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // REGRA DEFINITIVA: ao mudar versão, preservar SEMPRE os dados de notificação
 (function() {
-  var APP_VERSION = 'v85';
+  var APP_VERSION = 'v86';
   // Chaves que NUNCA devem ser apagadas (dados críticos de notificação e plataformas)
   var PRESERVE_KEYS = [
     'av_notif_asked',      // Permissão de notificação já solicitada
@@ -739,6 +739,10 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
     @keyframes popup-entrada {
       from { transform: scale(0.88) translateY(24px); opacity: 0; }
       to   { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    @keyframes progress-shimmer {
+      0% { background-position: 200% center; }
+      100% { background-position: -200% center; }
     }
     .install-popup-icon { font-size: 44px; margin-bottom: 8px; display: block; }
     .install-popup-title {
@@ -4721,7 +4725,7 @@ function saveState() {
   try { _ls.set('av_platforms', JSON.stringify(platforms)); } catch(e) {}
   try { _ls.set('av_platforms_ts', String(now)); } catch(e) {}
   // Manter a versão do cache atualizada para evitar limpeza indevida
-  try { _ls.set('av_cache_version', typeof CACHE_VERSION !== 'undefined' ? CACHE_VERSION : 'v85'); } catch(e) {}
+  try { _ls.set('av_cache_version', typeof CACHE_VERSION !== 'undefined' ? CACHE_VERSION : 'v86'); } catch(e) {}
   // PROTEÇÃO: Função interna que realmente salva no Firebase
   function _doSaveToFirebase(platformsToSave) {
     if (window._fbReady && window._fbDb) {
@@ -5246,14 +5250,50 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     hidePwaBanner();
     installCount++;
     _ls.set('av_installs', installCount);
-    showToast('✅ App instalado! Abrindo...', 3000);
     trackEvent('pwa_installed');
-    setTimeout(function() {
-      if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
-    }, 3000);
-    setTimeout(function() {
-      if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
-    }, 3000);
+    // Mostrar barra de progresso no popup
+    (function() {
+      var popup = document.getElementById('installBlockPopup');
+      if (popup) popup.classList.remove('hidden');
+      var btn = document.getElementById('installPopupBtn');
+      if (btn) { btn.style.display = 'none'; }
+      var ready = document.getElementById('installPopupReady');
+      if (ready) ready.style.display = 'none';
+      var waiting = document.getElementById('installPopupWaiting');
+      if (waiting) waiting.style.display = 'none';
+      var progressWrap = document.getElementById('installProgressWrap');
+      if (progressWrap) progressWrap.style.display = 'block';
+      var bar = document.getElementById('installProgressBar');
+      var pct = document.getElementById('installProgressPct');
+      var lbl = document.getElementById('installProgressLabel');
+      var progress = 0;
+      var labels = ['⏳ Instalando aplicativo...','📦 Configurando...','🔔 Preparando notificações...','✅ Quase pronto!'];
+      var labelIdx = 0;
+      var iv = setInterval(function() {
+        progress += Math.random() * 18 + 8;
+        if (progress >= 100) { progress = 100; clearInterval(iv); }
+        if (bar) bar.style.width = progress + '%';
+        if (pct) pct.textContent = Math.round(progress) + '%';
+        if (lbl && progress > 30 * (labelIdx+1) && labelIdx < labels.length-1) {
+          labelIdx++;
+          lbl.textContent = labels[labelIdx];
+        }
+        if (progress >= 100) {
+          setTimeout(function() {
+            if (progressWrap) progressWrap.style.display = 'none';
+            var openWrap = document.getElementById('installOpenAppWrap');
+            if (openWrap) openWrap.style.display = 'block';
+            // Definir função de abrir app
+            window._abrirAppInstalado = function() {
+              if (popup) popup.classList.add('hidden');
+              if (typeof mostrarPedidoNotificacoes === 'function') {
+                setTimeout(function() { mostrarPedidoNotificacoes(); }, 800);
+              }
+            };
+          }, 400);
+        }
+      }, 250);
+    })();
     gtag('event', 'conversion', { event_category: 'PWA', event_label: 'installed' });
     // Remover bloqueio imediatamente (sem esperar standalone)
     if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
@@ -6630,7 +6670,7 @@ function init() {
   // Firebase é SEMPRE a fonte de verdade.
   // PLATFORMS_DATA é apenas o fallback inicial (primeira abertura ou sem cache).
   // ═══════════════════════════════════════════════════════════════════════════
-  var CACHE_VERSION = 'v85';
+  var CACHE_VERSION = 'v86';
   try {
     var saved = _ls.get('av_platforms');
     if (saved) {
@@ -7696,8 +7736,22 @@ if (_adminWrapNav) {
       <div class="install-popup-title">Instale o app para continuar</div>
       <div class="install-popup-sub">&#x1F3C6; Sinais, plataformas e ranking est&#xe3;o dispon&#xed;veis somente no aplicativo instalado.<br><br>&#x2705; Gr&#xe1;tis &nbsp;&#x2022;&nbsp; &#x26A1; Menos de 30 segundos &nbsp;&#x2022;&nbsp; &#x1F514; Notifica&#xe7;&#xf5;es em tempo real</div>
       <button class="install-popup-btn" id="installPopupBtn">&#x1F4F2; INSTALAR AGORA &#x2014; &#xC9; GR&#xC1;TIS</button>
+      <!-- Barra de progresso de instalação -->
+      <div id="installProgressWrap" style="display:none;margin-top:16px">
+        <div id="installProgressLabel" style="font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:8px;text-align:center">&#x23F3; Instalando aplicativo...</div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:100px;height:10px;overflow:hidden">
+          <div id="installProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg,#7C3AED,#A855F7,#7C3AED);background-size:200%;border-radius:100px;transition:width 0.4s ease;animation:progress-shimmer 1.5s linear infinite"></div>
+        </div>
+        <div id="installProgressPct" style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:6px;text-align:center">0%</div>
+      </div>
+      <!-- Botão Abrir App (aparece após instalação concluída) -->
+      <div id="installOpenAppWrap" style="display:none;margin-top:16px">
+        <div style="font-size:14px;color:#4ADE80;margin-bottom:12px;text-align:center;font-weight:800">&#x2705; App instalado com sucesso!</div>
+        <button id="installOpenAppBtn" onclick="_abrirAppInstalado()" style="width:100%;padding:15px;border-radius:14px;border:none;font-size:16px;font-weight:900;cursor:pointer;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;letter-spacing:0.5px;box-shadow:0 4px 24px rgba(22,163,74,0.55)">&#x1F680; ABRIR APLICATIVO</button>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:8px;text-align:center">Ative as notifica&#xe7;&#xf5;es dentro do app para receber sinais em tempo real</div>
+      </div>
       <div id="installPopupWaiting" style="display:none;margin-top:10px;font-size:12px;color:rgba(255,255,255,0.45);text-align:center">
-        &#x23F3; Preparando instala&#xe7;&#xe3;o...
+        &#x23F3; Preparando instala&#xe3;o...
       </div>
       <div id="installPopupReady" style="margin-top:10px;font-size:11px;color:rgba(255,255,255,0.35);text-align:center">Ap&#xf3;s instalar, o acesso ser&#xe1; liberado automaticamente</div>
     </div>
@@ -8061,12 +8115,44 @@ function clearPlatformMetrics() {
           localStorage.setItem('av_installed_v79', '1');
           localStorage.setItem(STORAGE_KEY, '1');
           try { sessionStorage.setItem('av_pwa_ok', '1'); } catch(e) {}
-          removerBloqueioVisual();
-          // Pedir notificações depois (30s) — não imediatamente após instalar
-          // Dar tempo para o usuário explorar o app primeiro
-          setTimeout(function() {
-            if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
-          }, 30000);
+          // Mostrar barra de progresso enquanto o app instala
+          var _popup2 = document.getElementById('installBlockPopup');
+          if (_popup2) _popup2.classList.remove('hidden');
+          var _btn2 = document.getElementById('installPopupBtn');
+          if (_btn2) _btn2.style.display = 'none';
+          var _ready2 = document.getElementById('installPopupReady');
+          if (_ready2) _ready2.style.display = 'none';
+          var _waiting2 = document.getElementById('installPopupWaiting');
+          if (_waiting2) _waiting2.style.display = 'none';
+          var _pw2 = document.getElementById('installProgressWrap');
+          if (_pw2) _pw2.style.display = 'block';
+          var _bar2 = document.getElementById('installProgressBar');
+          var _pct2 = document.getElementById('installProgressPct');
+          var _lbl2 = document.getElementById('installProgressLabel');
+          var _prog2 = 0;
+          var _lbls2 = ['⏳ Instalando aplicativo...','📦 Configurando...','🔔 Preparando notificações...','✅ Quase pronto!'];
+          var _li2 = 0;
+          var _iv2 = setInterval(function() {
+            _prog2 += Math.random() * 18 + 8;
+            if (_prog2 >= 100) { _prog2 = 100; clearInterval(_iv2); }
+            if (_bar2) _bar2.style.width = _prog2 + '%';
+            if (_pct2) _pct2.textContent = Math.round(_prog2) + '%';
+            if (_lbl2 && _prog2 > 30 * (_li2+1) && _li2 < _lbls2.length-1) { _li2++; _lbl2.textContent = _lbls2[_li2]; }
+            if (_prog2 >= 100) {
+              setTimeout(function() {
+                if (_pw2) _pw2.style.display = 'none';
+                var _ow2 = document.getElementById('installOpenAppWrap');
+                if (_ow2) _ow2.style.display = 'block';
+                window._abrirAppInstalado = function() {
+                  if (_popup2) _popup2.classList.add('hidden');
+                  removerBloqueioVisual();
+                  setTimeout(function() {
+                    if (typeof mostrarPedidoNotificacoes === 'function') mostrarPedidoNotificacoes();
+                  }, 800);
+                };
+              }, 400);
+            }
+          }, 250);
         }
       });
     } else {
