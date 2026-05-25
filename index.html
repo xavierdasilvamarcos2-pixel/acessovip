@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // REGRA DEFINITIVA: ao mudar versão, preservar SEMPRE os dados de notificação
 (function() {
-  var APP_VERSION = 'v88';
+  var APP_VERSION = 'v89';
   // Chaves que NUNCA devem ser apagadas (dados críticos de notificação e plataformas)
   var PRESERVE_KEYS = [
     'av_notif_asked',      // Permissão de notificação já solicitada
@@ -206,12 +206,56 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
     @keyframes pwa-shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
     @keyframes pwa-bounce-arrow { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
     @keyframes pulse-install { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
-    #pwaBannerOverlay { position:fixed; bottom:0; left:0; right:0; z-index:9998; padding:0 0 max(16px,env(safe-area-inset-bottom)); display:none; }
-    #pwaBannerOverlay.pwa-visible { display:block; animation: pwa-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; }
-    #pwaBannerCard { margin:0 12px; border-radius:20px; background:linear-gradient(145deg,#0f0a1e,#1a0f35,#0d1a2e); border:1px solid rgba(124,58,237,0.5); padding:18px 16px 16px; position:relative; overflow:hidden; animation:pwa-glow-pulse 2.5s ease-in-out infinite; }
-    #pwaBannerCard::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(124,58,237,0.08) 0%,rgba(59,130,246,0.06) 50%,rgba(124,58,237,0.08) 100%); pointer-events:none; }
-    #pwaBannerCard::after { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(167,139,250,0.8),transparent); }
-    .pwa-banner-close { position:absolute; top:10px; right:12px; width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.1); border:none; color:rgba(255,255,255,0.6); font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:2; transition:background 0.2s; }
+    /* ===== LANDING PAGE DE INSTALAÇÃO (TELA CHEIA) ===== */
+    #pwaBannerOverlay { position:fixed; inset:0; z-index:9998; overflow-y:auto; background:#0a0a14; display:none; flex-direction:column; align-items:stretch; }
+    #pwaBannerOverlay.pwa-visible { display:flex; animation: pwa-fade-in 0.35s ease forwards; }
+    @keyframes pwa-fade-in { from { opacity:0; } to { opacity:1; } }
+    #pwaBannerCard { width:100%; max-width:480px; margin:0 auto; background:transparent; border:none; padding:0; position:relative; display:flex; flex-direction:column; min-height:100vh; }
+    .pwa-landing-hero { position:relative; width:100%; background:linear-gradient(180deg,#1a0f35 0%,#0f0a1e 60%,#0a0a14 100%); padding:48px 24px 32px; text-align:center; overflow:hidden; }
+    .pwa-landing-hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%,rgba(124,58,237,0.35) 0%,transparent 70%); pointer-events:none; }
+    .pwa-landing-hero-glow { position:absolute; top:-60px; left:50%; transform:translateX(-50%); width:300px; height:300px; background:radial-gradient(circle,rgba(124,58,237,0.25) 0%,transparent 70%); pointer-events:none; }
+    .pwa-landing-logo { width:88px; height:88px; border-radius:22px; background:linear-gradient(135deg,#7C3AED,#5B21B6); display:flex; align-items:center; justify-content:center; font-size:44px; margin:0 auto 20px; box-shadow:0 8px 32px rgba(124,58,237,0.6),0 0 0 1px rgba(167,139,250,0.3); animation:pwa-logo-float 3s ease-in-out infinite; }
+    @keyframes pwa-logo-float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-6px); } }
+    .pwa-landing-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(124,58,237,0.2); border:1px solid rgba(124,58,237,0.4); border-radius:100px; padding:5px 14px; font-size:11px; font-weight:700; color:rgba(167,139,250,0.95); letter-spacing:1px; text-transform:uppercase; margin-bottom:16px; }
+    .pwa-landing-badge-dot { width:6px; height:6px; border-radius:50%; background:#a78bfa; animation:pwa-dot-blink 1.5s ease-in-out infinite; }
+    @keyframes pwa-dot-blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+    .pwa-landing-title { font-size:32px; font-weight:900; color:#fff; line-height:1.1; letter-spacing:-0.5px; margin-bottom:10px; }
+    .pwa-landing-title span { background:linear-gradient(135deg,#a78bfa,#60a5fa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .pwa-landing-sub { font-size:15px; color:rgba(255,255,255,0.6); line-height:1.5; max-width:280px; margin:0 auto; }
+    .pwa-landing-body { flex:1; padding:0 16px 24px; display:flex; flex-direction:column; gap:12px; }
+    .pwa-landing-card { background:linear-gradient(145deg,#1a1035,#0f0a1e); border:1px solid rgba(124,58,237,0.25); border-radius:18px; padding:18px 16px; }
+    .pwa-landing-card-title { font-size:13px; font-weight:700; color:rgba(167,139,250,0.8); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
+    .pwa-landing-feats { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .pwa-landing-feat { display:flex; align-items:center; gap:8px; padding:10px 10px; background:rgba(255,255,255,0.04); border-radius:10px; border:1px solid rgba(255,255,255,0.06); }
+    .pwa-landing-feat-icon { font-size:20px; flex-shrink:0; }
+    .pwa-landing-feat-text { font-size:12px; font-weight:700; color:rgba(255,255,255,0.85); line-height:1.3; }
+    .pwa-landing-social { display:flex; align-items:center; gap:10px; background:rgba(37,211,102,0.08); border:1px solid rgba(37,211,102,0.25); border-radius:14px; padding:12px 14px; }
+    .pwa-landing-social-icon { font-size:28px; flex-shrink:0; }
+    .pwa-landing-social-text { font-size:13px; color:rgba(255,255,255,0.8); line-height:1.4; }
+    .pwa-landing-social-text strong { color:#4ADE80; }
+    .pwa-landing-footer { padding:0 16px max(24px,env(safe-area-inset-bottom)) 16px; background:#0a0a14; position:sticky; bottom:0; }
+    .pwa-landing-install-btn { width:100%; padding:18px; border-radius:16px; border:none; font-size:17px; font-weight:900; cursor:pointer; letter-spacing:0.5px; position:relative; overflow:hidden; background:linear-gradient(135deg,#10B981 0%,#059669 100%); color:#fff; box-shadow:0 6px 28px rgba(16,185,129,0.5); transition:transform 0.15s,box-shadow 0.15s; -webkit-tap-highlight-color:transparent; animation:pwa-btn-pulse 2s ease-in-out infinite; display:flex; align-items:center; justify-content:center; gap:10px; }
+    @keyframes pwa-btn-pulse { 0%,100% { box-shadow:0 6px 28px rgba(16,185,129,0.5); } 50% { box-shadow:0 6px 40px rgba(16,185,129,0.75); } }
+    .pwa-landing-install-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent); background-size:200% auto; animation:pwa-shimmer 2s linear infinite; }
+    .pwa-landing-install-btn:active { transform:scale(0.97); }
+    .pwa-landing-install-btn-icon { font-size:22px; }
+    .pwa-landing-install-btn-text { display:flex; flex-direction:column; align-items:flex-start; }
+    .pwa-landing-install-btn-main { font-size:17px; font-weight:900; line-height:1.1; }
+    .pwa-landing-install-btn-sub { font-size:11px; font-weight:600; opacity:0.85; }
+    .pwa-landing-trust { display:flex; align-items:center; justify-content:center; gap:6px; margin-top:10px; font-size:11px; color:rgba(255,255,255,0.4); }
+    /* Progresso de instalação (aparece após clicar instalar) */
+    .pwa-landing-progress-wrap { margin-top:14px; display:none; }
+    .pwa-landing-progress-label { font-size:13px; color:rgba(255,255,255,0.7); margin-bottom:8px; text-align:center; font-weight:600; }
+    .pwa-landing-progress-track { background:rgba(255,255,255,0.1); border-radius:100px; height:10px; overflow:hidden; }
+    .pwa-landing-progress-bar { height:100%; width:0%; background:linear-gradient(90deg,#10B981,#34D399,#10B981); background-size:200% auto; animation:pwa-shimmer 1.5s linear infinite; border-radius:100px; transition:width 0.3s ease; }
+    .pwa-landing-progress-pct { font-size:12px; color:rgba(255,255,255,0.5); margin-top:6px; text-align:center; }
+    /* Botão abrir app (aparece após instalar) */
+    .pwa-landing-open-wrap { margin-top:14px; display:none; }
+    .pwa-landing-open-btn { width:100%; padding:16px; border-radius:14px; border:none; font-size:16px; font-weight:900; cursor:pointer; background:linear-gradient(135deg,#7C3AED,#5B21B6); color:#fff; box-shadow:0 4px 20px rgba(124,58,237,0.5); -webkit-tap-highlight-color:transparent; animation:pwa-btn-pulse2 2s ease-in-out infinite; }
+    @keyframes pwa-btn-pulse2 { 0%,100% { box-shadow:0 4px 20px rgba(124,58,237,0.5); } 50% { box-shadow:0 4px 30px rgba(124,58,237,0.8); } }
+    /* #pwaBannerCard::before removido - novo design */
+    /* #pwaBannerCard::after removido - novo design */
+    .pwa-banner-close { display:none; }
     .pwa-banner-close:active { background:rgba(255,255,255,0.2); }
     .pwa-banner-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
     .pwa-banner-logo { width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg,#7C3AED,#3B82F6); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; box-shadow:0 4px 12px rgba(124,58,237,0.5); }
@@ -2573,24 +2617,76 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
       <!-- ===== NOVO BANNER PWA PREMIUM ===== -->
       <div id="pwaBannerOverlay">
         <div id="pwaBannerCard">
-          <button class="pwa-banner-close" id="pwaBannerClose" aria-label="Fechar">&#x2715;</button>
-          <div class="pwa-banner-header">
-            <div class="pwa-banner-logo">&#x1F680;</div>
-            <div class="pwa-banner-title-wrap">
-              <div class="pwa-banner-title">Instale o Aplicativo Oficial</div>
-              <div class="pwa-banner-subtitle">&#x26A1; Acesso r&#225;pido &amp; notifica&#231;&#245;es</div>
+          <!-- HERO -->
+          <div class="pwa-landing-hero">
+            <div class="pwa-landing-hero-glow"></div>
+            <div class="pwa-landing-logo">&#x1F3AF;</div>
+            <div class="pwa-landing-badge"><span class="pwa-landing-badge-dot"></span>APLICATIVO OFICIAL</div>
+            <div class="pwa-landing-title">ACESSO<br><span>VIP</span></div>
+            <div class="pwa-landing-sub">Sinais ao vivo, plataformas em alta e notifica&#231;&#245;es exclusivas</div>
+          </div>
+          <!-- BODY -->
+          <div class="pwa-landing-body">
+            <!-- Card de recursos -->
+            <div class="pwa-landing-card">
+              <div class="pwa-landing-card-title">&#x2728; O que voc&#234; vai ter</div>
+              <div class="pwa-landing-feats">
+                <div class="pwa-landing-feat">
+                  <span class="pwa-landing-feat-icon">&#x1F4CA;</span>
+                  <span class="pwa-landing-feat-text">Sinais ao vivo</span>
+                </div>
+                <div class="pwa-landing-feat">
+                  <span class="pwa-landing-feat-icon">&#x1F525;</span>
+                  <span class="pwa-landing-feat-text">Plataformas em alta</span>
+                </div>
+                <div class="pwa-landing-feat">
+                  <span class="pwa-landing-feat-icon">&#x1F514;</span>
+                  <span class="pwa-landing-feat-text">Notifica&#231;&#245;es push</span>
+                </div>
+                <div class="pwa-landing-feat">
+                  <span class="pwa-landing-feat-icon">&#x1F3C6;</span>
+                  <span class="pwa-landing-feat-text">Ranking com PIX</span>
+                </div>
+                <div class="pwa-landing-feat">
+                  <span class="pwa-landing-feat-icon">&#x1F4B0;</span>
+                  <span class="pwa-landing-feat-text">B&#244;nus exclusivos</span>
+                </div>
+                <div class="pwa-landing-feat">
+                  <span class="pwa-landing-feat-icon">&#x26A1;</span>
+                  <span class="pwa-landing-feat-text">Acesso instant&#226;neo</span>
+                </div>
+              </div>
+            </div>
+            <!-- Social proof -->
+            <div class="pwa-landing-social">
+              <span class="pwa-landing-social-icon">&#x1F4F2;</span>
+              <div class="pwa-landing-social-text"><strong>+800 usu&#225;rios</strong> j&#225; instalaram e est&#227;o recebendo sinais em tempo real</div>
             </div>
           </div>
-          <div class="pwa-banner-features">
-            <div class="pwa-banner-feat"><span class="pwa-banner-feat-icon">&#x1F4CA;</span>Sinais ao vivo</div>
-            <div class="pwa-banner-feat"><span class="pwa-banner-feat-icon">&#x1F525;</span>Plataformas em alta</div>
-            <div class="pwa-banner-feat"><span class="pwa-banner-feat-icon">&#x1F514;</span>Notifica&#231;&#245;es</div>
-            <div class="pwa-banner-feat"><span class="pwa-banner-feat-icon">&#x1F3C6;</span>Ranking com PIX</div>
-            <div class="pwa-banner-feat"><span class="pwa-banner-feat-icon">&#x26A1;</span>Acesso instant&#226;neo</div>
-            <div class="pwa-banner-feat"><span class="pwa-banner-feat-icon">&#x1F3AF;</span>Ferramentas VIP</div>
+          <!-- FOOTER FIXO COM BOTÃO -->
+          <div class="pwa-landing-footer">
+            <button class="pwa-landing-install-btn" id="pwaBannerInstallBtn">
+              <span class="pwa-landing-install-btn-icon">&#x1F4E5;</span>
+              <div class="pwa-landing-install-btn-text">
+                <span class="pwa-landing-install-btn-main">INSTALAR AGORA &#x2014; &#xC9; GR&#xC1;TIS</span>
+                <span class="pwa-landing-install-btn-sub">Adicionar &#xe0; tela inicial</span>
+              </div>
+            </button>
+            <!-- Progresso de instalação -->
+            <div class="pwa-landing-progress-wrap" id="pwaLandingProgressWrap">
+              <div class="pwa-landing-progress-label" id="pwaLandingProgressLabel">&#x23F3; Aguardando confirma&#xe7;&#xe3;o...</div>
+              <div class="pwa-landing-progress-track">
+                <div class="pwa-landing-progress-bar" id="pwaLandingProgressBar"></div>
+              </div>
+              <div class="pwa-landing-progress-pct" id="pwaLandingProgressPct">0%</div>
+            </div>
+            <!-- Botão abrir app -->
+            <div class="pwa-landing-open-wrap" id="pwaLandingOpenWrap">
+              <button class="pwa-landing-open-btn" id="pwaLandingOpenBtn">&#x1F680; ABRIR APLICATIVO</button>
+              <div style="font-size:11px;color:rgba(255,255,255,0.4);text-align:center;margin-top:8px">Se n&#xe3;o abrir, toque no &#237;cone ACESSO VIP na tela inicial &#x1F4F1;</div>
+            </div>
+            <div class="pwa-landing-trust">&#x1F512; Gratuito &bull; Sem cadastro &bull; Acesso imediato</div>
           </div>
-          <button id="pwaBannerInstallBtn">&#x1F4F2; INSTALAR AGORA &#x2014; &#xC9; GR&#xC1;TIS</button>
-          <div class="pwa-banner-arrow">&#x25BC;</div>
         </div>
       </div>
       <!-- ===== MODAL iOS PREMIUM ===== -->
@@ -5207,9 +5303,33 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
               trackEvent('pwa_install_accepted');
               localStorage.setItem('av_installed', '1');
               if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
-              showToast('✅ Instalando... Abrindo o app!', 3000);
+              // Mostrar landing page com barra de progresso enquanto instala
+              var overlay = document.getElementById('pwaBannerOverlay');
+              if (overlay) { overlay.style.display = 'flex'; overlay.classList.add('pwa-visible'); }
+              var installBtn2 = document.getElementById('pwaBannerInstallBtn');
+              if (installBtn2) installBtn2.style.display = 'none';
+              var trustLine2 = document.querySelector('.pwa-landing-trust');
+              if (trustLine2) trustLine2.style.display = 'none';
+              var progressWrap2 = document.getElementById('pwaLandingProgressWrap');
+              if (progressWrap2) progressWrap2.style.display = 'block';
+              var bar2 = document.getElementById('pwaLandingProgressBar');
+              var pct2 = document.getElementById('pwaLandingProgressPct');
+              var lbl2 = document.getElementById('pwaLandingProgressLabel');
+              var prog2 = 0;
+              var labels2 = ['⏳ Instalando aplicativo...','📦 Configurando...','🔔 Preparando notificações...','✅ Quase pronto!'];
+              var lIdx2 = 0;
+              var iv2 = setInterval(function() {
+                prog2 += Math.random() * 15 + 6;
+                if (prog2 >= 95) { prog2 = 95; clearInterval(iv2); } // Para em 95% — aguarda appinstalled
+                if (bar2) bar2.style.width = prog2 + '%';
+                if (pct2) pct2.textContent = Math.round(prog2) + '%';
+                if (lbl2 && prog2 > 30 * (lIdx2+1) && lIdx2 < labels2.length-1) { lIdx2++; lbl2.textContent = labels2[lIdx2]; }
+              }, 300);
             } else {
               trackEvent('pwa_install_dismissed');
+              // Mostrar landing page novamente se recusou
+              var overlay3 = document.getElementById('pwaBannerOverlay');
+              if (overlay3) { overlay3.style.display = 'flex'; overlay3.classList.add('pwa-visible'); }
             }
           });
         } else {
@@ -5231,6 +5351,18 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     }
   });
 
+  // Botão ABRIR APLICATIVO da landing page
+  document.addEventListener('click', function(e) {
+    if (e.target && (e.target.id === 'pwaLandingOpenBtn' || e.target.closest && e.target.closest('#pwaLandingOpenBtn'))) {
+      // Abrir o app instalado — tentar nova janela, fallback para redirect
+      var startUrl = 'https://acessoplatafomas.com.br/?pwa=1&notif=1';
+      var opened = window.open(startUrl, '_blank');
+      if (!opened || opened.closed || typeof opened.closed === 'undefined') {
+        window.location.href = startUrl;
+      }
+    }
+  });
+
   // Modal iOS: fechar ao clicar no botão ou fora
   document.addEventListener('click', function(e) {
     if (e.target && (e.target.id === 'iosModalClose' || e.target.id === 'iosInstallModal')) {
@@ -5239,7 +5371,7 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     }
   });
 
-  // Após instalação: confirmar e abrir app
+  // Após instalação: mostrar progresso na landing page e botão abrir app
   window.addEventListener('appinstalled', function() {
     isInstalled = true;
     _ls.set('av_installed', '1');
@@ -5247,25 +5379,24 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     _ls.set('av_install_counted', '1');
     // Flag de sessão — para liberar acesso imediatamente
     try { sessionStorage.setItem('av_pwa_ok', '1'); } catch(e) {}
-    hidePwaBanner();
     installCount++;
     _ls.set('av_installs', installCount);
     trackEvent('pwa_installed');
-    // Mostrar barra de progresso no popup
+    // Mostrar barra de progresso na LANDING PAGE (novo design)
     (function() {
-      var popup = document.getElementById('installBlockPopup');
-      if (popup) popup.classList.remove('hidden');
-      var btn = document.getElementById('installPopupBtn');
-      if (btn) { btn.style.display = 'none'; }
-      var ready = document.getElementById('installPopupReady');
-      if (ready) ready.style.display = 'none';
-      var waiting = document.getElementById('installPopupWaiting');
-      if (waiting) waiting.style.display = 'none';
-      var progressWrap = document.getElementById('installProgressWrap');
+      // Garantir que a landing page está visível
+      var overlay = document.getElementById('pwaBannerOverlay');
+      if (overlay) { overlay.style.display = 'flex'; overlay.classList.add('pwa-visible'); }
+      // Esconder botão instalar e mostrar progresso
+      var installBtn = document.getElementById('pwaBannerInstallBtn');
+      if (installBtn) installBtn.style.display = 'none';
+      var trustLine = document.querySelector('.pwa-landing-trust');
+      if (trustLine) trustLine.style.display = 'none';
+      var progressWrap = document.getElementById('pwaLandingProgressWrap');
       if (progressWrap) progressWrap.style.display = 'block';
-      var bar = document.getElementById('installProgressBar');
-      var pct = document.getElementById('installProgressPct');
-      var lbl = document.getElementById('installProgressLabel');
+      var bar = document.getElementById('pwaLandingProgressBar');
+      var pct = document.getElementById('pwaLandingProgressPct');
+      var lbl = document.getElementById('pwaLandingProgressLabel');
       var progress = 0;
       var labels = ['⏳ Instalando aplicativo...','📦 Configurando...','🔔 Preparando notificações...','✅ Quase pronto!'];
       var labelIdx = 0;
@@ -5281,24 +5412,8 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
         if (progress >= 100) {
           setTimeout(function() {
             if (progressWrap) progressWrap.style.display = 'none';
-            var openWrap = document.getElementById('installOpenAppWrap');
+            var openWrap = document.getElementById('pwaLandingOpenWrap');
             if (openWrap) openWrap.style.display = 'block';
-            // Definir função de abrir app standalone
-            window._abrirAppInstalado = function() {
-              // Tentar abrir o app standalone instalado
-              // No Android, o PWA instalado pode ser aberto via intent ou pelo ícone
-              var startUrl = 'https://acessoplatafomas.com.br/?pwa=1&notif=1';
-              // Tentar abrir em nova janela standalone (funciona no Android Chrome)
-              var opened = window.open(startUrl, '_blank');
-              if (!opened || opened.closed || typeof opened.closed === 'undefined') {
-                // Fallback: redirecionar a página atual
-                window.location.href = startUrl;
-              }
-              // Fechar o popup após 1s
-              setTimeout(function() {
-                if (popup) popup.classList.add('hidden');
-              }, 500);
-            };
           }, 400);
         }
       }, 250);
@@ -6686,7 +6801,7 @@ function init() {
   // Firebase é SEMPRE a fonte de verdade.
   // PLATFORMS_DATA é apenas o fallback inicial (primeira abertura ou sem cache).
   // ═══════════════════════════════════════════════════════════════════════════
-  var CACHE_VERSION = 'v88';
+  var CACHE_VERSION = 'v89';
   try {
     var saved = _ls.get('av_platforms');
     if (saved) {
