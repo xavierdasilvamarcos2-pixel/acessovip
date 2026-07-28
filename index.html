@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // REGRA DEFINITIVA: ao mudar versão, preservar SEMPRE os dados de notificação
 (function() {
-  var APP_VERSION = 'v89';
+  var APP_VERSION = 'v90';
   // Chaves que NUNCA devem ser apagadas (dados críticos de notificação e plataformas)
   var PRESERVE_KEYS = [
     'av_notif_asked',      // Permissão de notificação já solicitada
@@ -206,6 +206,19 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
     @keyframes pwa-shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
     @keyframes pwa-bounce-arrow { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
     @keyframes pulse-install { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+    /* ===== TELA INTERMEDIÁRIA "ACESSAR APP" ===== */
+    #pwaAccessScreen { position:fixed; inset:0; z-index:9997; background:linear-gradient(180deg,#1a0f35 0%,#0a0a14 100%); display:none; flex-direction:column; align-items:center; justify-content:center; padding:32px 24px; }
+    #pwaAccessScreen.pwa-visible { display:flex; animation: pwa-fade-in 0.35s ease forwards; }
+    .pwa-access-logo { width:96px; height:96px; border-radius:24px; background:linear-gradient(135deg,#7C3AED,#5B21B6); display:flex; align-items:center; justify-content:center; font-size:48px; margin:0 auto 24px; box-shadow:0 8px 40px rgba(124,58,237,0.7),0 0 0 1px rgba(167,139,250,0.3); animation:pwa-logo-float 3s ease-in-out infinite; }
+    .pwa-access-title { font-size:34px; font-weight:900; color:#fff; text-align:center; line-height:1.1; margin-bottom:8px; }
+    .pwa-access-title span { background:linear-gradient(135deg,#a78bfa,#60a5fa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .pwa-access-sub { font-size:15px; color:rgba(255,255,255,0.55); text-align:center; line-height:1.5; margin-bottom:40px; max-width:280px; }
+    .pwa-access-btn { width:100%; max-width:340px; padding:20px 24px; border-radius:18px; border:none; font-size:18px; font-weight:900; cursor:pointer; letter-spacing:0.3px; background:linear-gradient(135deg,#7C3AED 0%,#5B21B6 100%); color:#fff; box-shadow:0 8px 32px rgba(124,58,237,0.6); -webkit-tap-highlight-color:transparent; animation:pwa-btn-pulse3 2s ease-in-out infinite; display:flex; align-items:center; justify-content:center; gap:12px; position:relative; overflow:hidden; }
+    .pwa-access-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent); background-size:200% auto; animation:pwa-shimmer 2.5s linear infinite; }
+    .pwa-access-btn:active { transform:scale(0.97); }
+    @keyframes pwa-btn-pulse3 { 0%,100% { box-shadow:0 8px 32px rgba(124,58,237,0.6); } 50% { box-shadow:0 8px 48px rgba(124,58,237,0.9); } }
+    .pwa-access-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(124,58,237,0.15); border:1px solid rgba(124,58,237,0.35); border-radius:100px; padding:5px 14px; font-size:11px; font-weight:700; color:rgba(167,139,250,0.9); letter-spacing:1px; text-transform:uppercase; margin-bottom:20px; }
+    .pwa-access-badge-dot { width:6px; height:6px; border-radius:50%; background:#a78bfa; animation:pwa-dot-blink 1.5s ease-in-out infinite; }
     /* ===== LANDING PAGE DE INSTALAÇÃO (TELA CHEIA) ===== */
     #pwaBannerOverlay { position:fixed; inset:0; z-index:9998; overflow-y:auto; background:#0a0a14; display:none; flex-direction:column; align-items:stretch; }
     #pwaBannerOverlay.pwa-visible { display:flex; animation: pwa-fade-in 0.35s ease forwards; }
@@ -2614,6 +2627,17 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
       <!-- Banners antigos mantidos para compatibilidade (ocultos) -->
       <div class="install-banner hidden" id="installBanner" style="display:none!important"></div>
       <div class="install-ios-banner hidden" id="installIosBanner" style="display:none!important"></div>
+      <!-- ===== TELA INTERMEDIÁRIA "ACESSAR APP" ===== -->
+      <div id="pwaAccessScreen">
+        <div class="pwa-access-badge"><span class="pwa-access-badge-dot"></span>APLICATIVO OFICIAL</div>
+        <div class="pwa-access-logo">&#x1F3AF;</div>
+        <div class="pwa-access-title">ACESSO<br><span>VIP</span></div>
+        <div class="pwa-access-sub">Sinais ao vivo, plataformas em alta e notifica&#231;&#245;es exclusivas</div>
+        <button class="pwa-access-btn" id="pwaAccessBtn">
+          <span style="font-size:24px">&#x1F4F2;</span>
+          <span>ACESSAR APP</span>
+        </button>
+      </div>
       <!-- ===== NOVO BANNER PWA PREMIUM ===== -->
       <div id="pwaBannerOverlay">
         <div id="pwaBannerCard">
@@ -5225,11 +5249,29 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
 
   function showPwaBanner() {
     if (_pwaDismissed || isInStandalone || _pwaBannerShown) return;
+    // CORREÇÃO: Mostrar primeiro a tela intermediária "Acessar App"
+    // O overlay principal só abre quando o usuário clicar em "ACESSAR APP"
+    var accessScreen = document.getElementById('pwaAccessScreen');
+    if (accessScreen) {
+      _pwaBannerShown = true;
+      accessScreen.classList.add('pwa-visible');
+      trackEvent('pwa_banner_shown', { platform: isIOS ? 'ios' : isAndroid ? 'android' : 'other' });
+    } else {
+      // Fallback: mostrar overlay direto se tela intermediária não existir
+      var overlay = document.getElementById('pwaBannerOverlay');
+      if (!overlay) return;
+      _pwaBannerShown = true;
+      overlay.classList.add('pwa-visible');
+      trackEvent('pwa_banner_shown', { platform: isIOS ? 'ios' : isAndroid ? 'android' : 'other' });
+    }
+  }
+
+  function showInstallLanding() {
+    // Ocultar tela intermediária e mostrar landing page de instalação
+    var accessScreen = document.getElementById('pwaAccessScreen');
+    if (accessScreen) accessScreen.classList.remove('pwa-visible');
     var overlay = document.getElementById('pwaBannerOverlay');
-    if (!overlay) return;
-    _pwaBannerShown = true;
-    overlay.classList.add('pwa-visible');
-    trackEvent('pwa_banner_shown', { platform: isIOS ? 'ios' : isAndroid ? 'android' : 'other' });
+    if (overlay) { overlay.style.display = 'flex'; overlay.classList.add('pwa-visible'); }
   }
 
   function hidePwaBanner() {
@@ -5264,6 +5306,33 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
     // Mostrar banner apenas se não instalado e não dispensado
     if (!jaInstalado && !isInStandalone && !_pwaDismissed) {
       showPwaBanner();
+    }
+    // CORREÇÃO: Se o usuário já clicou em "INSTALAR" antes do prompt estar pronto,
+    // disparar o prompt imediatamente agora que ele está disponível
+    if (window._installPending && !jaInstalado) {
+      window._installPending = false;
+      // Restaurar botão antes de disparar
+      var _pendingBtn = document.getElementById('pwaBannerInstallBtn');
+      if (_pendingBtn) {
+        _pendingBtn.innerHTML = '<span class="pwa-landing-install-btn-icon">&#x1F4E5;</span><div class="pwa-landing-install-btn-text"><span class="pwa-landing-install-btn-main">INSTALAR AGORA — É GRÁTIS</span><span class="pwa-landing-install-btn-sub">Adicionar à tela inicial</span></div>';
+        _pendingBtn.disabled = false;
+      }
+      // Garantir que a landing page está visível
+      showInstallLanding();
+      // Pequeno delay para garantir que o DOM está pronto
+      setTimeout(function() {
+        try { e.prompt(); } catch(err) { console.error('[PWA] prompt error:', err); }
+        e.userChoice.then(function(choice) {
+          _pwaDeferred = null; window.deferredPrompt = null; window._pwaPrompt = null;
+          if (choice.outcome === 'accepted') {
+            trackEvent('pwa_install_accepted');
+            localStorage.setItem('av_installed', '1');
+            if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
+          } else {
+            trackEvent('pwa_install_dismissed');
+          }
+        });
+      }, 100);
     }
   });
 
@@ -5333,21 +5402,51 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
             }
           });
         } else {
-          // Fallback: instruções manuais claras para Android/Chrome
-          var msg = document.createElement('div');
-          msg.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
-          msg.innerHTML = '<div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border:1px solid rgba(124,58,237,0.5);border-radius:20px;padding:28px 24px;max-width:340px;width:100%;text-align:center;color:#fff;">'
-            + '<div style="font-size:36px;margin-bottom:12px">📲</div>'
-            + '<div style="font-size:18px;font-weight:900;margin-bottom:8px">Instalar o App</div>'
-            + '<div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;margin-bottom:20px">'
-            + 'Para instalar, toque nos <strong>3 pontos ⋮</strong> do Chrome (canto superior direito)<br>e selecione<br><strong>"Instalar app"</strong> ou<br><strong>"Adicionar à tela inicial"</strong>'
-            + '</div>'
-            + '<button onclick="this.closest(\'div[style]\').remove()" style="background:linear-gradient(135deg,#7C3AED,#3B82F6);border:none;color:#fff;padding:12px 32px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;width:100%">Entendido</button>'
-            + '</div>';
-          document.body.appendChild(msg);
-          trackEvent('pwa_install_manual_instructions');
+          // CORREÇÃO: prompt ainda não está disponível — enfileirar o clique
+          // Quando beforeinstallprompt disparar, o prompt será acionado automaticamente
+          window._installPending = true;
+          var _btn = e.target.closest ? e.target.closest('#pwaBannerInstallBtn') : document.getElementById('pwaBannerInstallBtn');
+          if (!_btn) _btn = document.getElementById('pwaBannerInstallBtn');
+          if (_btn) {
+            _btn.innerHTML = '<span class="pwa-landing-install-btn-icon">⏳</span><div class="pwa-landing-install-btn-text"><span class="pwa-landing-install-btn-main">Aguardando...</span><span class="pwa-landing-install-btn-sub">Preparando instalação</span></div>';
+            _btn.disabled = true;
+          }
+          trackEvent('pwa_install_pending');
+          // Timeout de segurança: se em 8s o prompt ainda não chegou, mostrar instruções manuais
+          setTimeout(function() {
+            if (window._installPending) {
+              window._installPending = false;
+              if (_btn) {
+                _btn.innerHTML = '<span class="pwa-landing-install-btn-icon">📲</span><div class="pwa-landing-install-btn-text"><span class="pwa-landing-install-btn-main">INSTALAR AGORA — É GRÁTIS</span><span class="pwa-landing-install-btn-sub">Adicionar à tela inicial</span></div>';
+                _btn.disabled = false;
+              }
+              // Mostrar instruções manuais como fallback
+              var msg = document.createElement('div');
+              msg.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+              msg.innerHTML = '<div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border:1px solid rgba(124,58,237,0.5);border-radius:20px;padding:28px 24px;max-width:340px;width:100%;text-align:center;color:#fff;">'
+                + '<div style="font-size:36px;margin-bottom:12px">📲</div>'
+                + '<div style="font-size:18px;font-weight:900;margin-bottom:8px">Instalar o App</div>'
+                + '<div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;margin-bottom:20px">'
+                + 'Para instalar, toque nos <strong>3 pontos ⋮</strong> do Chrome (canto superior direito)<br>e selecione<br><strong>"Instalar app"</strong> ou<br><strong>"Adicionar à tela inicial"</strong>'
+                + '</div>'
+                + '<button onclick="this.closest(\'div[style]\').remove()" style="background:linear-gradient(135deg,#7C3AED,#3B82F6);border:none;color:#fff;padding:12px 32px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;width:100%">Entendido</button>'
+                + '</div>';
+              document.body.appendChild(msg);
+              trackEvent('pwa_install_manual_instructions');
+            }
+          }, 8000);
         }
       }
+    }
+  });
+
+  // Botão "ACESSAR APP" (tela intermediária) — abre a landing page de instalação
+  document.addEventListener('click', function(e) {
+    var target = e.target;
+    var isAccessBtn = target && (target.id === 'pwaAccessBtn' || (target.closest && target.closest('#pwaAccessBtn')));
+    if (isAccessBtn) {
+      trackEvent('pwa_access_btn_clicked');
+      showInstallLanding();
     }
   });
 
@@ -6801,7 +6900,7 @@ function init() {
   // Firebase é SEMPRE a fonte de verdade.
   // PLATFORMS_DATA é apenas o fallback inicial (primeira abertura ou sem cache).
   // ═══════════════════════════════════════════════════════════════════════════
-  var CACHE_VERSION = 'v89';
+  var CACHE_VERSION = 'v90';
   try {
     var saved = _ls.get('av_platforms');
     if (saved) {
