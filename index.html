@@ -25,7 +25,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // REGRA DEFINITIVA: ao mudar versão, preservar SEMPRE os dados de notificação
 (function() {
-  var APP_VERSION = 'v90';
+  var APP_VERSION = 'v91';
   // Chaves que NUNCA devem ser apagadas (dados críticos de notificação e plataformas)
   var PRESERVE_KEYS = [
     'av_notif_asked',      // Permissão de notificação já solicitada
@@ -4755,6 +4755,7 @@ let installCount = parseInt(_ls.get('av_installs') || '0');
 let pushTokens = parseInt(_ls.get('av_tokens') || '0');
 // ===== LISTENER GLOBAL beforeinstallprompt (captura o evento o mais cedo possível) =====
 window._pwaPrompt = null;
+window._installPending = false;
 window.addEventListener('beforeinstallprompt', function(e) {
   e.preventDefault();
   window._pwaPrompt = e;
@@ -4774,6 +4775,29 @@ window.addEventListener('beforeinstallprompt', function(e) {
   var popup = document.getElementById('installBlockPopup');
   if (popup && popup.classList.contains('hidden') && typeof _appInstalado === 'function' && !_appInstalado()) {
     popup.classList.remove('hidden');
+  }
+  // CORREÇÃO: Se o usuário já clicou no botão antes do prompt estar pronto,
+  // disparar o prompt imediatamente agora que ele está disponível
+  if (window._installPending) {
+    window._installPending = false;
+    var jaInst = typeof _appInstalado === 'function' ? _appInstalado() : false;
+    if (!jaInst) {
+      setTimeout(function() {
+        try {
+          e.prompt();
+          e.userChoice.then(function(choice) {
+            window._pwaPrompt = null;
+            window.deferredPrompt = null;
+            if (choice.outcome === 'accepted') {
+              localStorage.setItem('av_installed', '1');
+              localStorage.setItem('av_installed_v79', '1');
+              try { sessionStorage.setItem('av_pwa_ok', '1'); } catch(ex) {}
+              if (typeof removerBloqueioVisual === 'function') removerBloqueioVisual();
+            }
+          });
+        } catch(err) { console.error('[PWA] prompt error:', err); }
+      }, 80);
+    }
   }
 });
 // =====
@@ -5248,30 +5272,14 @@ document.getElementById('sorteioModal').addEventListener('click', (e) => {
   // CORREÇÃO: NÃO zerar window.deferredPrompt aqui — o listener global já pode ter capturado o prompt
 
   function showPwaBanner() {
-    if (_pwaDismissed || isInStandalone || _pwaBannerShown) return;
-    // CORREÇÃO: Mostrar primeiro a tela intermediária "Acessar App"
-    // O overlay principal só abre quando o usuário clicar em "ACESSAR APP"
-    var accessScreen = document.getElementById('pwaAccessScreen');
-    if (accessScreen) {
-      _pwaBannerShown = true;
-      accessScreen.classList.add('pwa-visible');
-      trackEvent('pwa_banner_shown', { platform: isIOS ? 'ios' : isAndroid ? 'android' : 'other' });
-    } else {
-      // Fallback: mostrar overlay direto se tela intermediária não existir
-      var overlay = document.getElementById('pwaBannerOverlay');
-      if (!overlay) return;
-      _pwaBannerShown = true;
-      overlay.classList.add('pwa-visible');
-      trackEvent('pwa_banner_shown', { platform: isIOS ? 'ios' : isAndroid ? 'android' : 'other' });
-    }
+    // DESATIVADO: O fluxo de instalação é gerenciado exclusivamente pelo installBlockPopup
+    // para evitar duplicação de etapas. Não mostrar pwaAccessScreen nem pwaBannerOverlay.
+    return;
   }
 
   function showInstallLanding() {
-    // Ocultar tela intermediária e mostrar landing page de instalação
-    var accessScreen = document.getElementById('pwaAccessScreen');
-    if (accessScreen) accessScreen.classList.remove('pwa-visible');
-    var overlay = document.getElementById('pwaBannerOverlay');
-    if (overlay) { overlay.style.display = 'flex'; overlay.classList.add('pwa-visible'); }
+    // DESATIVADO: fluxo unificado no installBlockPopup
+    return;
   }
 
   function hidePwaBanner() {
@@ -6900,7 +6908,7 @@ function init() {
   // Firebase é SEMPRE a fonte de verdade.
   // PLATFORMS_DATA é apenas o fallback inicial (primeira abertura ou sem cache).
   // ═══════════════════════════════════════════════════════════════════════════
-  var CACHE_VERSION = 'v90';
+  var CACHE_VERSION = 'v91';
   try {
     var saved = _ls.get('av_platforms');
     if (saved) {
@@ -8333,9 +8341,9 @@ function clearPlatformMetrics() {
   
   // Acionar instalação PWA
   function acionarInstalacao() {
-    fecharPopup();
     var _prompt = window._pwaPrompt || window.deferredPrompt;
     if (_prompt) {
+      fecharPopup();
       _prompt.prompt();
       _prompt.userChoice.then(function(choice) {
         window.deferredPrompt = null;
@@ -8391,36 +8399,33 @@ function clearPlatformMetrics() {
         }
       });
     } else {
-      // Sem prompt disponível: verificar dispositivo antes de mostrar modal
-      var _isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      if (_isIOS) {
-        // iOS/iPhone: mostrar guia de instalação manual (Compartilhar → Tela Inicial)
-        var iosModal = document.getElementById('iosInstallModal');
-        if (iosModal) { iosModal.style.display = 'flex'; iosModal.classList.add('open'); }
+      // CORREÇÃO: prompt ainda não chegou — enfileirar o clique
+      var _isIOS2 = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (_isIOS2) {
+        // iOS: mostrar guia manual
+        var iosModal2 = document.getElementById('iosInstallModal');
+        if (iosModal2) { iosModal2.style.display = 'flex'; iosModal2.classList.add('open'); }
       } else {
-        // Android sem prompt: Chrome ainda não liberou o beforeinstallprompt
-        // Mostrar mensagem orientando o usuário a usar o Chrome
-        var btn = document.getElementById('installPopupBtn');
-        if (btn) {
-          btn.innerHTML = '&#x23F3; Aguarde... abrindo instalação';
-          btn.disabled = true;
-          // Tentar novamente em 2s — Chrome pode liberar o prompt em breve
-          setTimeout(function() {
-            var p2 = window._pwaPrompt || window.deferredPrompt;
-            if (p2) {
-              p2.prompt();
-            } else {
-              if (btn) {
-                btn.innerHTML = '&#x1F4F2; INSTALAR AGORA';
-                btn.disabled = false;
-              }
-              // Mostrar toast orientando
-              if (typeof showToast === 'function') {
-                showToast('Abra no Chrome para instalar o app', 4000);
-              }
-            }
-          }, 2000);
+        // Android: enfileirar o clique e aguardar o beforeinstallprompt
+        window._installPending = true;
+        var _popupBtn = document.getElementById('installPopupBtn');
+        if (_popupBtn) {
+          _popupBtn.innerHTML = '&#x23F3; Aguardando...';
+          _popupBtn.disabled = true;
         }
+        // Timeout de segurança: se em 10s o prompt não chegou, mostrar instruções manuais
+        setTimeout(function() {
+          if (window._installPending) {
+            window._installPending = false;
+            if (_popupBtn) {
+              _popupBtn.innerHTML = '&#x1F4F2; INSTALAR AGORA &#x2014; É GRÁTIS';
+              _popupBtn.disabled = false;
+            }
+            if (typeof showToast === 'function') {
+              showToast('Abra no Chrome para instalar o app', 5000);
+            }
+          }
+        }, 10000);
       }
     }
   }
