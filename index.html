@@ -18,6 +18,88 @@ fbq('track', 'PageView');
 src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
+
+<!-- DETECÇÃO DE WEBVIEW FACEBOOK/INSTAGRAM - roda imediatamente -->
+<script>
+(function() {
+  var ua = navigator.userAgent || '';
+  // Detectar WebView do Facebook, Instagram, Messenger
+  var isFBWebView = /FBAN|FBAV|Instagram|FB_IAB|FBIOS|FB4A|FBDV|FBMD|FBSN|FBSV|FBSS|FBCR|FBID|FBLC|FBOP|FBRV/.test(ua);
+  var isInAppBrowser = isFBWebView || /wv\b/.test(ua) || (ua.indexOf('Android') > -1 && ua.indexOf('Version/') > -1 && ua.indexOf('Chrome') === -1);
+
+  if (!isInAppBrowser) return; // Está no Chrome real — não fazer nada
+
+  // Está no WebView do FB/IG — mostrar tela de redirecionamento imediatamente
+  document.addEventListener('DOMContentLoaded', function() {
+    // Criar overlay de redirecionamento
+    var overlay = document.createElement('div');
+    overlay.id = 'fbWebviewOverlay';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:999999;background:#0f0f1a;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;font-family:system-ui,-apple-system,sans-serif';
+
+    var currentUrl = window.location.href;
+    // Intent URL para abrir no Chrome no Android
+    var intentUrl = 'intent://' + currentUrl.replace(/^https?:\/\//, '') + '#Intent;scheme=https;package=com.android.chrome;end';
+    // Fallback: abrir no Chrome via googlechrome://
+    var chromeUrl = currentUrl.replace('https://', 'googlechrome://') .replace('http://', 'googlechrome://');
+
+    overlay.innerHTML = [
+      '<div style="font-size:52px;margin-bottom:16px">🌐</div>',
+      '<div style="font-size:22px;font-weight:900;color:#fff;text-align:center;margin-bottom:10px">Abrir no Chrome</div>',
+      '<div style="font-size:14px;color:rgba(255,255,255,0.65);text-align:center;line-height:1.6;margin-bottom:28px">Para instalar o aplicativo, você precisa<br>abrir este link no <strong style="color:#fff">Chrome</strong>.</div>',
+      '<button id="fbOpenChromeBtn" style="width:100%;max-width:320px;padding:16px;border-radius:14px;border:none;font-size:17px;font-weight:900;cursor:pointer;background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff;box-shadow:0 4px 24px rgba(124,58,237,0.55);margin-bottom:14px">📲 Abrir no Chrome</button>',
+      '<div style="font-size:12px;color:rgba(255,255,255,0.4);text-align:center;line-height:1.7">Toque no botão acima ou copie o link<br>e cole no Chrome para continuar</div>',
+      '<div id="fbCopyLinkWrap" style="margin-top:16px;width:100%;max-width:320px">',
+      '<div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px">',
+      '<span style="font-size:11px;color:rgba(255,255,255,0.5);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">' + currentUrl + '</span>',
+      '<button id="fbCopyBtn" style="flex-shrink:0;padding:6px 12px;border-radius:8px;border:none;background:#7C3AED;color:#fff;font-size:12px;font-weight:700;cursor:pointer">Copiar</button>',
+      '</div></div>'
+    ].join('');
+
+    document.body.appendChild(overlay);
+
+    // Botão Abrir no Chrome
+    document.getElementById('fbOpenChromeBtn').addEventListener('click', function() {
+      // Tentar intent URL primeiro (Android)
+      try { window.location.href = intentUrl; } catch(e) {}
+      // Fallback após 500ms
+      setTimeout(function() {
+        try { window.location.href = chromeUrl; } catch(e) {}
+      }, 500);
+      // Fallback final: abrir em nova aba
+      setTimeout(function() {
+        try { window.open(currentUrl, '_blank'); } catch(e) {}
+      }, 1200);
+    });
+
+    // Botão Copiar link
+    var copyBtn = document.getElementById('fbCopyBtn');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function() {
+        try {
+          navigator.clipboard.writeText(currentUrl).then(function() {
+            copyBtn.textContent = '✅ Copiado!';
+            setTimeout(function() { copyBtn.textContent = 'Copiar'; }, 2000);
+          });
+        } catch(e) {
+          // Fallback para clipboard
+          var ta = document.createElement('textarea');
+          ta.value = currentUrl;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          copyBtn.textContent = '✅ Copiado!';
+          setTimeout(function() { copyBtn.textContent = 'Copiar'; }, 2000);
+        }
+      });
+    }
+  });
+})();
+</script>
+<!-- FIM DETECÇÃO WEBVIEW -->
+
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -25,7 +107,7 @@ src="https://www.facebook.com/tr?id=1223494943037765&ev=PageView&noscript=1"
 // DETECÇÃO DE VERSÃO — roda antes de qualquer outro código
 // REGRA DEFINITIVA: ao mudar versão, preservar SEMPRE os dados de notificação
 (function() {
-  var APP_VERSION = 'v92';
+  var APP_VERSION = 'v93';
   // Chaves que NUNCA devem ser apagadas (dados críticos de notificação e plataformas)
   var PRESERVE_KEYS = [
     'av_notif_asked',      // Permissão de notificação já solicitada
@@ -6801,7 +6883,7 @@ function init() {
   // Firebase é SEMPRE a fonte de verdade.
   // PLATFORMS_DATA é apenas o fallback inicial (primeira abertura ou sem cache).
   // ═══════════════════════════════════════════════════════════════════════════
-  var CACHE_VERSION = 'v92';
+  var CACHE_VERSION = 'v93';
   try {
     var saved = _ls.get('av_platforms');
     if (saved) {
